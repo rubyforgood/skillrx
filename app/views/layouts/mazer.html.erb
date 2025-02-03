@@ -28,12 +28,12 @@
   </head>
 
   <body>
-      <%= render "layouts/sidebar" %>
-
-      <%= yield %>
-
       <script src="https://cdn.jsdelivr.net/gh/zuramai/mazer@docs/demo/assets/static/js/initTheme.js"></script>
       <!-- Start content here -->
+
+      <%= render "layouts/sidebar" %>
+
+      <div id="main"><%= yield %></div>
 
       <!-- End content -->
       <script src="https://cdn.jsdelivr.net/gh/zuramai/mazer@docs/demo/assets/static/js/components/dark.js"></script>

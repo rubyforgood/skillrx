@@ -1,0 +1,27 @@
+<p style="color: green"><%= notice %></p>
+
+<% content_for :title, "Regions" %>
+
+<h1>Regions</h1>
+
+<div id="regions" class="mt-4 table-responsive">
+  <table class="table table-lg">
+    <thead><th class="w-auto">Name</th><th>Action</th></thead>
+    <% @regions.each do |region| %>
+      <tr>
+        <td>
+            <%= link_to region[:name], region %>
+        </td>
+        <td>
+          <%= link_to edit_region_path(region), class: "btn btn-primary" do %>
+            <i class="bi bi-pencil"></i>
+          <% end %>
+        </td>
+      </tr>
+    <% end %>
+  </table>
+</div>
+
+<div class="mt-4">
+    <%= link_to "New region", new_region_path, class: "btn btn-primary" %>
+</div>

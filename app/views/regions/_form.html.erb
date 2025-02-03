@@ -1,0 +1,24 @@
+<%= form_with(model: region) do |form| %>
+  <% if region.errors.any? %>
+    <div style="color: red">
+      <h2><%= pluralize(region.errors.count, "error") %> prohibited this region from being saved:</h2>
+
+      <ul>
+        <% region.errors.each do |error| %>
+          <li><%= error.full_message %></li>
+        <% end %>
+      </ul>
+    </div>
+  <% end %>
+
+  <div class="col-md-4">
+    <div class="form-group">
+      <%= form.label :name, style: "display: block" %>
+      <%= form.text_field :name, id: "basicInput", class: "form-control" %>
+    </div>
+  </div>
+
+  <div class="mt-4">
+    <%= form.submit class: "btn btn-primary" %>
+  </div>
+<% end %>
