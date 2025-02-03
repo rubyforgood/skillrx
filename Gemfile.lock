@@ -129,10 +129,10 @@ GEM
       raabro (~> 1.4)
     globalid (1.2.1)
       activesupport (>= 6.1)
-    hotwire-livereload (2.0.0)
-      actioncable (>= 7.0.0)
-      listen (>= 3.0.0)
-      railties (>= 7.0.0)
+    hotwire-spark (0.1.13)
+      listen
+      rails (>= 7.0.0)
+      zeitwerk
     i18n (1.14.7)
       concurrent-ruby (~> 1.0)
     importmap-rails (2.1.0)
@@ -408,7 +408,7 @@ DEPENDENCIES
   capybara
   debug
   factory_bot_rails
-  hotwire-livereload
+  hotwire-spark
   importmap-rails
   jbuilder
   kamal
