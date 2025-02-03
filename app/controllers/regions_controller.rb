@@ -1,8 +1,6 @@
 class RegionsController < ApplicationController
   before_action :set_region, only: %i[ show edit update destroy ]
 
-  layout "mazer"
-
   # GET /regions
   def index
     @regions = Region.all
