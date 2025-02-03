@@ -1,0 +1,35 @@
+<h1>User list </h1>
+
+<div class="page-heading">
+    <section class="section">
+        <div class="card">
+            <div class="card-header">
+                <h5 class="card-title">
+                    Simple Datatable
+                </h5>
+            </div>
+            <div class="card-body">
+                <table class="table table-striped" id="table1">
+                    <thead>
+                        <tr>
+                            <th>Email</th>
+                            <th>Administrator</th>
+                            
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <% @users.each do |user| %>
+
+                            <tr>
+                              <td>  <%= user.email %></td>
+                              <td>  <%= user.is_admin %></td>
+                            </tr>
+                        <% end %>
+                    <tbody>
+                </table>
+            </div>
+        </div>
+    </section>
+</div>
+                    
+                           
