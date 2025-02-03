@@ -1,5 +1,6 @@
 Rails.application.routes.draw do
   resources :regions
+  mount Maily::Engine, at: "/maily"
   root "home#index"
   get "home/index", as: :home
   resource :session
