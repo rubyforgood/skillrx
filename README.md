@@ -10,3 +10,54 @@ SkillRX is one of many projects initiated and run by Ruby for Good. You can find
 
 # Welcome Contributors!
 Thank you for checking out our work. We are in the process of setting up the repository, roadmap, values, and contribution guidelines for the project. We will be adding issues and putting out a call for contributions soon.
+
+[Contribution guidelines for this project](CONTRIBUTING.md)
+
+
+# Install & Setup
+
+Clone the codebase 
+```
+git clone git@github.com:rubyforgood/skillrx.git
+``` 
+
+Run the setup script to prepare DB and assets
+```sh
+bin/setup
+```
+
+To run the app locally, use:
+```
+bin/dev
+```
+
+To update dependencies in Gemfile, use:
+```
+bundle install
+```
+
+You should see the seed organization by going to:
+```
+http://localhost:3000/
+```
+
+
+# Running specs
+
+```sh
+# Default: Run all spec files (i.e., those matching spec/**/*_spec.rb)
+$ bundle exec rspec
+
+# Run all spec files in a single directory (recursively)
+$ bundle exec rspec spec/models
+
+# Run a single spec file
+$ bundle exec rspec spec/controllers/accounts_controller_spec.rb
+
+# Run a single example from a spec file (by line number)
+$ bundle exec rspec spec/controllers/accounts_controller_spec.rb:8
+
+# See all options for running specs
+$ bundle exec rspec --help
+```
+
