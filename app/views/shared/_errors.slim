@@ -1,0 +1,6 @@
+- if resource.errors.any?
+  . style="color: red"
+    h4 = "#{pluralize(resource.errors.count, "error")} prohibited this #{resource.class_name} from being saved:"
+    ul
+      - resource.errors.each do |error|
+        li = error.full_message

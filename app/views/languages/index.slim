@@ -1,27 +1,30 @@
-section[class="section"]
-  .[class="row" id="basic-table"]
-    .[class="col-12 col-md-6"]
-      .[class="card"]
-        .[class="card-header"]
-          h4[class="card-title"] Languages
-        .[class="card-content"]
-          .[class="card-body"]
-            p[class="card-text"] List of languages
-            .[class="table-responsive"]
-              table[class="table table-lg"]
+content_for :title, "Languages"
+
+section.section
+  .row#table-striped
+    .col-12.cold-md-12
+      .card
+        .card-header.d-flex.justify-content-between.align-items-center
+          h2.card-title Languages
+          = link_to new_language_path, class: "btn btn-primary" do
+            i.bi.bi-plus
+            |  Add New Language
+        .card-content
+          .card-body
+            p.card-text Some important information or instruction can be placed here.
+            .table-responsive
+              table.table.table-lg.table-striped.mb-0
                 thead
                   tr
                     th Name
                     th File share folder
-                    th
+                    th.text-end Actions
                 tbody
                   - @languages.each do |language|
                     tr
-                      td[class="text-bold-500"] = language.name
-                      td[class="text-bold-500"] = language.file_share_folder
-                      td 
-                        a[href="#{edit_language_path(language)}"] Edit
-            .[class="card-footer"]
-              .[class="d-flex justify-content-end"]
-                = link_to "New language", new_language_path, class: "btn btn-primary"
-
+                      td.text-bold-500 = language.name
+                      td.text-bold-500 = language.file_share_folder
+                      td.text-end
+                        = link_to edit_language_path(language), class: "btn btn-secondary btn-sm" do
+                          i.bi.bi-pencil
+                          |  Edit

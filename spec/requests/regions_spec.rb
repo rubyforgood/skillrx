@@ -15,8 +15,6 @@ require 'rails_helper'
 RSpec.describe "/regions", type: :request do
   let(:user) { create(:user) }
 
-  include AuthHelper
-
   before do
     sign_in(user)
   end

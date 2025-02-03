@@ -1,9 +1,11 @@
-section[id="basic-vertical-layouts"]
-  .[class="row match-height"]
-    .[class="col-md-6 col-12"]
-      .[class="card"]
-        .[class="card-header"]
-          h4[class="card-title"] Edit language
-        .[class="card-content"]
-          .[class="card-body"]
+content_for :title, "Editing language"
+
+section#basic-vertical-layouts
+  .row.match-height
+    .col-md-6.col-12
+      .card
+        .card-header
+          h2.card-title Edit language
+        .card-content
+          .card-body
             = render "form", language: @language
