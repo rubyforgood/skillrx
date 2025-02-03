@@ -7,3 +7,10 @@
 #   ["Action", "Comedy", "Drama", "Horror"].each do |genre_name|
 #     MovieGenre.find_or_create_by!(name: genre_name)
 #   end
+
+[
+  { name: "english", file_share_folder: "languages/english" },
+  { name: "spanish", file_share_folder: "languages/spanish" }
+].each do |language|
+  Language.find_or_create_by!(language)
+end

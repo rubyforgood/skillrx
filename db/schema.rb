@@ -20,6 +20,13 @@ ActiveRecord::Schema[8.0].define(version: 2025_02_03_133408) do
     t.datetime "updated_at", null: false
   end
 
+  create_table "languages", force: :cascade do |t|
+    t.string "name"
+    t.string "file_share_folder"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
+
   create_table "sessions", force: :cascade do |t|
     t.bigint "user_id", null: false
     t.string "ip_address"

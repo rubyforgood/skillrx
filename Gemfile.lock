@@ -124,6 +124,8 @@ GEM
     ffi (1.17.1-x86_64-darwin)
     ffi (1.17.1-x86_64-linux-gnu)
     ffi (1.17.1-x86_64-linux-musl)
+    faker (3.5.1)
+      i18n (>= 1.8.11, < 2)
     fugit (1.11.1)
       et-orbi (~> 1, >= 1.2.11)
       raabro (~> 1.4)
@@ -410,6 +412,7 @@ DEPENDENCIES
   debug
   factory_bot_rails
   hotwire-spark
+  faker
   importmap-rails
   jbuilder
   kamal
