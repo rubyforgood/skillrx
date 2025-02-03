@@ -16,7 +16,6 @@
       <%# Enable PWA manifest for installable apps (make sure to enable in config/routes.rb too!) %>
       <%#= tag.link rel: "manifest", href: pwa_manifest_path(format: :json) %>
 
-      <link rel="shortcut icon" href="https://cdn.jsdelivr.net/gh/zuramai/mazer@docs/demo/assets/compiled/svg/favicon.svg" type="image/x-icon">
 
       <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/zuramai/mazer@docs/demo/assets/compiled/css/app.css">
       <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/zuramai/mazer@docs/demo/assets/compiled/css/app-dark.css">
@@ -28,12 +27,12 @@
   </head>
 
   <body>
-      <%= render "layouts/sidebar" %>
-
-      <%= yield %>
-
       <script src="https://cdn.jsdelivr.net/gh/zuramai/mazer@docs/demo/assets/static/js/initTheme.js"></script>
       <!-- Start content here -->
+
+      <%= render "layouts/sidebar" %>
+
+      <div id="main"><%= yield %></div>
 
       <!-- End content -->
       <script src="https://cdn.jsdelivr.net/gh/zuramai/mazer@docs/demo/assets/static/js/components/dark.js"></script>
