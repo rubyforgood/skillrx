@@ -11,7 +11,6 @@ RSpec.describe "regions/new", type: :view do
     render
 
     assert_select "form[action=?][method=?]", regions_path, "post" do
-
       assert_select "input[name=?]", "region[name]"
     end
   end
