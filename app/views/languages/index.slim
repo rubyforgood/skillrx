@@ -1,0 +1,27 @@
+section[class="section"]
+  .[class="row" id="basic-table"]
+    .[class="col-12 col-md-6"]
+      .[class="card"]
+        .[class="card-header"]
+          h4[class="card-title"] Languages
+        .[class="card-content"]
+          .[class="card-body"]
+            p[class="card-text"] List of languages
+            .[class="table-responsive"]
+              table[class="table table-lg"]
+                thead
+                  tr
+                    th Name
+                    th File share folder
+                    th
+                tbody
+                  - @languages.each do |language|
+                    tr
+                      td[class="text-bold-500"] = language.name
+                      td[class="text-bold-500"] = language.file_share_folder
+                      td 
+                        a[href="#{edit_language_path(language)}"] Edit
+            .[class="card-footer"]
+              .[class="d-flex justify-content-end"]
+                = link_to "New language", new_language_path, class: "btn btn-primary"
+

@@ -1,0 +1,14 @@
+
+= form_for language do |f|
+  .[class="form-body"]
+    .[class="row"]
+      .[class="col-12"]
+        .[class="form-group"]
+          = f.label :name
+          = f.text_field :name, class: "form-control", placeholder: "Name"
+        .[class="form-group"]
+          = f.label :file_share_folder
+          = f.text_field :file_share_folder, class: "form-control", placeholder: "Folder"
+        .[class="col-12 d-flex justify-content-end"]
+          = f.submit "Save", class: "btn btn-primary me-1 mb-1"
+          = link_to "Cancel", languages_path, class: "btn btn-light-secondary me-1 mb-1"
