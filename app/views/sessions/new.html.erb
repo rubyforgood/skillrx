@@ -1,11 +1,30 @@
 <%= tag.div(flash[:alert], style: "color:red") if flash[:alert] %>
-<%= tag.div(flash[:notice], style: "color:green") if flash[:notice] %>
-
-<%= form_with url: session_path do |form| %>
-  <%= form.email_field :email, required: true, autofocus: true, autocomplete: "username", placeholder: "Enter your email address", value: params[:email] %><br>
-  <%= form.password_field :password, required: true, autocomplete: "current-password", placeholder: "Enter your password", maxlength: 72 %><br>
-  <%= form.submit "Sign in" %>
-<% end %>
-<br>
-
-<%= link_to "Forgot password?", new_password_path %>
+<%= tag.div(flash[:notice], style: "color:green") if flash[:notice] %> 
+<div class="row h-100 px-3">
+    <div class="col-lg-5 col-12">
+        <div id="auth-left">
+            <div class="auth-logo">
+        </div>
+            <h1 class="auth-title">Log in.</h1>
+            <p class="auth-subtitle mb-5">Log in with your data that you entered during registration.</p>
+            <%= form_with url: session_path do |form| %>
+                <div class="form-group position-relative has-icon-left mb-4">
+                    <%= form.email_field :email, required: true, class:'form-control form-control-xl', autofocus: true, autocomplete: "username", placeholder: "Enter your email address", value: params[:email] %><br>
+                    <div class="form-control-icon">
+                        <i class="bi bi-person"></i>
+                    </div>
+                </div>
+                <div class="form-group position-relative has-icon-left mb-4">
+                    <%= form.password_field :password, required: true, class:'form-control form-control-xl', autocomplete: "current-password", placeholder: "Enter your password", maxlength: 72 %><br>
+                    <div class="form-control-icon">
+                        <i class="bi bi-shield-lock"></i>
+                    </div>
+                </div>
+                <%= form.submit "Sign in", class:'btn btn-primary btn-block btn-lg shadow-lg mt-5'%>
+            <% end %>
+            <div class="text-center mt-5 text-lg fs-4">
+                <p><%= link_to "Forgot password?",new_password_path, class:'font-bold'%></p>
+            </div>
+        </div>
+    </div>
+</div>
