@@ -1,0 +1,10 @@
+<% content_for :title, "Editing region" %>
+
+<h1>Editing region</h1>
+
+<%= render "form", region: @region %>
+
+<div class="mt-4">
+  <%= link_to "Show this region", @region %> |
+  <%= link_to "Back to regions", regions_path %>
+</div>

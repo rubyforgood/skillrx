@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
   <head>
-    <title><%= content_for(:title) || "Skillrx" %></title>
+    <title><%= content_for(:title) || "SkillRx" %></title>
     <meta name="viewport" content="width=device-width,initial-scale=1">
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="mobile-web-app-capable" content="yes">
@@ -18,11 +18,81 @@
     <link rel="apple-touch-icon" href="/icon.png">
 
     <%# Includes all stylesheet files in app/assets/stylesheets %>
-    <%= stylesheet_link_tag :app, "data-turbo-track": "reload" %>
-    <%= javascript_importmap_tags %>
+
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SkillRx</title>
+
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/zuramai/mazer@docs/demo/assets/compiled/css/app.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/zuramai/mazer@docs/demo/assets/compiled/css/app-dark.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/zuramai/mazer@docs/demo/assets/compiled/css/iconly.css">
+
+    <style>
+      #app {
+        display: flex;
+        min-height: 100vh;
+      }
+
+      #main {
+        flex: 1;
+        display: flex;
+        flex-direction: column;
+        min-height: 100vh;
+        position: relative;
+        padding-bottom: 60px; /* Height of footer */
+      }
+
+      #main-content {
+        flex: 1;
+        overflow-x: hidden; /* Prevent horizontal scroll */
+        margin-bottom: 1rem;
+      }
+
+      footer {
+        position: absolute;
+        bottom: 0;
+        width: 100%;
+        height: 60px; /* Fixed height */
+        background: white;
+        border-top: 1px solid #eee;
+        padding: 1rem;
+        z-index: 1000;
+      }
+
+      .section {
+        padding-bottom: 2rem; /* Add space before footer */
+      }
+    </style>
   </head>
 
   <body>
-    <%= yield %>
+    <script src="https://cdn.jsdelivr.net/gh/zuramai/mazer@docs/demo/assets/static/js/initTheme.js"></script>
+    <script src="https://cdn.jsdelivr.net/gh/zuramai/mazer@docs/demo/assets/static/js/components/dark.js"></script>
+    <script src="https://cdn.jsdelivr.net/gh/zuramai/mazer@docs/demo/assets/extensions/perfect-scrollbar/perfect-scrollbar.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/gh/zuramai/mazer@docs/demo/assets/compiled/js/app.js"></script>
+    <div id="app">
+      <%= render "layouts/sidebar" %>
+      <div id="main" class='layout-navbar navbar-fixed'>
+        <div id="main-content">
+          <%= yield %>
+        </div>
+        <footer>
+          <div class="footer clearfix mb-0 text-muted">
+            <div class="float-start">
+              <p></p>
+            </div>
+            <div class="float-end">
+              <p>Built with <span class="text-danger"><i class="bi bi-heart-fill icon-mid"></i></span>
+                by <a href="https://rubyforgood.org">Ruby for Good</a></p>
+            </div>
+          </div>
+        </footer>
+      </div>
+    </div>
+
+    <!-- Need: Apexcharts -->
+    <script src="https://cdn.jsdelivr.net/gh/zuramai/mazer@docs/demo/assets/extensions/apexcharts/apexcharts.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/gh/zuramai/mazer@docs/demo/assets/static/js/pages/dashboard.js"></script>
+
   </body>
 </html>
