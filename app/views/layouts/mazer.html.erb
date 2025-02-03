@@ -27,7 +27,7 @@
   </head>
 
   <body>
-  <% unless current_page?('/connexion') %>
+  <% unless current_page?('/connexion') || current_page?('/reset_password') %>
       <%= render "layouts/sidebar" %>
 
  <% end %>

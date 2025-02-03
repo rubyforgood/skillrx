@@ -1,8 +1,35 @@
-<h1>Forgot your password?</h1>
-
 <%= tag.div(flash[:alert], style: "color:red") if flash[:alert] %>
 
-<%= form_with url: passwords_path do |form| %>
-  <%= form.email_field :email, required: true, autofocus: true, autocomplete: "username", placeholder: "Enter your email address", value: params[:email] %><br>
-  <%= form.submit "Email reset instructions" %>
-<% end %>
+<div class="row h-100">
+    <div class="col-lg-5 col-12">
+        <div id="auth-left">
+            <div class="auth-logo">
+               
+            </div>
+            <h1 class="auth-title">Forgot Password</h1>
+            <p class="auth-subtitle mb-5">Input your email and we will send you reset password link.</p>
+
+          <%= form_with url: passwords_path do |form| %>
+                <div class="form-group position-relative has-icon-left mb-4">
+                      <%= form.email_field :email, required: true, class:'form-control form-control-xl', autofocus: true, autocomplete: "username", placeholder: "Enter your email address", value: params[:email] %><br>
+
+                    <div class="form-control-icon">
+                        <i class="bi bi-envelope"></i>
+                    </div>
+                </div>
+              
+                  <%= form.submit "Email reset instructions", class:'btn btn-primary btn-block btn-lg shadow-lg mt-5'%>
+          <%end%>
+            </form>
+            <div class="text-center mt-5 text-lg fs-4">
+                <p class='text-gray-600'>Remember your account? <%= link_to "Login",connexion_path, class:'font-bold'%>
+                </p>
+            </div>
+        </div>
+    </div>
+    <div class="col-lg-7 d-none d-lg-block">
+        <div id="auth-right">
+
+        </div>
+    </div>
+</div>
