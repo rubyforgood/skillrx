@@ -15,20 +15,22 @@ require 'rails_helper'
 RSpec.describe "/regions", type: :request do
   let(:user) { create(:user) }
 
+  include AuthHelper
+
+  before do
+    sign_in(user)
+  end
+
   # This should return the minimal set of attributes required to create a valid
   # Region. As you add validations to Region, be sure to
   # adjust the attributes here as well.
-  let(:valid_attributes) {
-    skip("Add a hash of attributes valid for your model")
-  }
+  let(:valid_attributes) { { name: "Old Region" } }
 
-  let(:invalid_attributes) {
-    skip("Add a hash of attributes invalid for your model")
-  }
+  let(:invalid_attributes) { { name: "" } }
 
   describe "GET /index" do
     it "renders a successful response" do
-      Region.create! valid_attributes
+      region = FactoryBot.create(:region)
       get regions_url
       expect(response).to be_successful
     end
@@ -36,7 +38,7 @@ RSpec.describe "/regions", type: :request do
 
   describe "GET /show" do
     it "renders a successful response" do
-      region = Region.create! valid_attributes
+      region = FactoryBot.create(:region)
       get region_url(region)
       expect(response).to be_successful
     end
@@ -44,7 +46,6 @@ RSpec.describe "/regions", type: :request do
 
   describe "GET /new" do
     it "renders a successful response" do
-      user.sessions.create!
       get new_region_url
       expect(response).to be_successful
     end
@@ -52,7 +53,7 @@ RSpec.describe "/regions", type: :request do
 
   describe "GET /edit" do
     it "renders a successful response" do
-      region = Region.create! valid_attributes
+      region = FactoryBot.create(:region)
       get edit_region_url(region)
       expect(response).to be_successful
     end
@@ -88,15 +89,13 @@ RSpec.describe "/regions", type: :request do
 
   describe "PATCH /update" do
     context "with valid parameters" do
-      let(:new_attributes) {
-        skip("Add a hash of attributes valid for your model")
-      }
+      let(:new_attributes) { { name: "Updated Region" } }
 
       it "updates the requested region" do
         region = Region.create! valid_attributes
         patch region_url(region), params: { region: new_attributes }
         region.reload
-        skip("Add assertions for updated state")
+        expect(region.name).to eq("Updated Region")
       end
 
       it "redirects to the region" do
