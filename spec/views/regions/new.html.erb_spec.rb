@@ -1,10 +1,8 @@
-require 'rails_helper'
+require "rails_helper"
 
 RSpec.describe "regions/new", type: :view do
   before(:each) do
-    assign(:region, Region.new(
-      name: "MyString"
-    ))
+    assign(:region, Region.new(name: "MyString"))
   end
 
   it "renders new region form" do
