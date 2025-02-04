@@ -20,16 +20,17 @@
                             <tr>
                               <td>  <%= user.email %></td>
                               <td>  <%= user.is_admin %></td>
-                                   <td class="text-end">
-
-                        <%= link_to edit_user_path(user), class: "btn btn-secondary btn-sm" do %>
-                          <i class="bi bi-pencil"></i> Edit
-                        <% end %>
-                     <%= button_to  user, data: { confirm: "Are you sure?" }, method: :delete,  class: "btn btn-danger btn-sm" do %>
-                            <i class="bi bi-trash"></i> Delete
-                        <% end %>
+                              <td class="text-end">
+                                <%= link_to edit_user_path(user), class: "btn btn-secondary btn-sm pr-2" do %>
+                                    <i class="bi bi-pencil"></i> Edit
+                                <% end %>
+                                <%= button_to  user, data: { confirm: "Are you sure?" }, method: :delete,form_class:"d-inline",  class: "btn btn-danger btn-sm " do %>
+                                    <i class="bi bi-trash"></i> Delete
+                                <% end %>
+                              </td>
                             </tr>
                         <% end %>
+
                     <tbody>
                 </table>
             </div>
