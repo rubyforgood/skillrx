@@ -1,9 +1,9 @@
-require 'rails_helper'
+require "rails_helper"
 
 RSpec.describe "regions/edit", type: :view do
   let(:region) {
     Region.create!(
-      name: "MyString"
+      name: "MyString",
     )
   }
 

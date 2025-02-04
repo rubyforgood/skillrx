@@ -1,10 +1,8 @@
-require 'rails_helper'
+require "rails_helper"
 
 RSpec.describe "regions/show", type: :view do
   before(:each) do
-    assign(:region, Region.create!(
-      name: "Name"
-    ))
+    assign(:region, Region.create!(name: "Name"))
   end
 
   it "renders attributes in <p>" do
