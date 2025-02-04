@@ -1,0 +1,18 @@
+<div style="color: green"><%= notice %></div>
+
+<%= render @topic %>
+
+<div class="mt-4">
+  <%= link_to "Edit this topic", edit_topic_path(@topic) %> |
+  <%= link_to "Back to topics", topics_path %>
+</div>
+
+<div>
+  <%= button_to "Archive this topic", archive_topic_path(@topic), method: :put, class: "btn btn-danger mt-4" %>
+</div>
+
+<% if Current.user.is_admin? %>
+  <div>
+    <%= button_to "Delete this topic", @topic, method: :delete, class: "btn btn-danger mt-4" %>
+  </div>
+<% end %>
