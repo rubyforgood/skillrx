@@ -4,4 +4,9 @@
     <%= training_resource.state %>
   </p>
 
+  <p>
+    <strong>Document:</strong>
+    <%= link_to training_resource.document.filename, training_resource.document if training_resource.document.attached? %>
+  </p>
+
 </div>

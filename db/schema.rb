@@ -109,6 +109,12 @@ ActiveRecord::Schema[8.0].define(version: 2025_02_04_141359) do
     t.index ["provider_id"], name: "index_topics_on_provider_id"
   end
 
+  create_table "training_resources", force: :cascade do |t|
+    t.integer "state"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
+
   create_table "users", force: :cascade do |t|
     t.string "email", null: false
     t.string "password_digest", null: false
