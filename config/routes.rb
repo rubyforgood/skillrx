@@ -1,4 +1,7 @@
 Rails.application.routes.draw do
+  # Define your application routes per the DSL in https://guides.rubyonrails.org/routing.html
+  resource :session
+  resources :topics
   root "home#index"
   get "home/index", as: :home
   resources :languages, only: %i[index show new create edit update]

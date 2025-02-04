@@ -1,0 +1,32 @@
+<% content_for :title, @topic.title %>
+
+<h1><%= @topic.title %></h1>
+
+<p>
+  <strong>Description:</strong>
+  <%= @topic.description %>
+</p>
+
+<p>
+  <strong>Language:</strong>
+  <%= @topic.language.name %>
+</p>
+
+<p>
+  <strong>Provider:</strong>
+  <%= @topic.provider.name %>
+</p>
+
+<p>
+  <strong>Archived:</strong>
+  <%= @topic.archived ? "Yes" : "No" %>
+</p>
+
+<div class="mt-4">
+  <%= link_to "Edit this topic", edit_topic_path(@topic) %> |
+  <%= link_to "Back to topics", topics_path %>
+</div>
+
+<div>
+  <%= button_to "Destroy this topic", @topic, method: :delete, class: "btn btn-danger mt-4" %>
+</div>

@@ -1,0 +1,55 @@
+<%= form_with(model: topic) do |form| %>
+  <% if topic.errors.any? %>
+    <div style="color: red">
+      <h2><%= pluralize(topic.errors.count, "error") %> prohibited this topic from being saved:</h2>
+
+      <ul>
+        <% topic.errors.each do |error| %>
+          <li><%= error.full_message %></li>
+        <% end %>
+      </ul>
+    </div>
+  <% end %>
+
+  <div class="col-md-4">
+    <div class="form-group">
+      <%= form.label :title, style: "display: block" %>
+      <%= form.text_field :title, id: "basicInput", class: "form-control", autofocus: true %>
+    </div>
+  </div>
+
+  <div class="col-md-4">
+    <div class="form-group">
+      <%= form.label :description, style: "display: block" %>
+      <%= form.text_area :description, id: "basicInput", class: "form-control" %>
+    </div>
+  </div>
+
+  <div class="col-md-4">
+    <div class="form-group">
+      <%= form.label :language_id, style: "display: block" %>
+      <%= form.collection_select :language_id, Language.all, :id, :name, id: "basicInput", class: "form-control" %>
+    </div>
+  </div>
+
+  <div class="col-md-4">
+    <div class="form-group">
+      <%= form.label :provider_id, style: "display: block" %>
+      <%= form.collection_select :provider_id, Provider.all, :id, :name, id: "basicInput", class: "form-control" %>
+    </div>
+  </div>
+
+  <div class="col-md-4">
+    <div class="form-group">
+      <%= form.label :archived, style: "display: block" %>
+      <%= form.check_box :archived, id: "basicInput", class: "form-control" %>
+    </div>
+  </div>
+
+  <div class="mt-4">
+    <div class="col-12 d-flex justify-content-end">
+      <%= form.submit "Create Topic", class: "btn btn-primary me-1 mb-1" %>
+      <%= link_to "Cancel", topics_path, class: "btn btn-light-secondary me-1 mb-1" %>
+    </div>
+  </div>
+<% end %>
