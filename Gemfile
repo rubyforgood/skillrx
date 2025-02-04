@@ -56,6 +56,8 @@ end
 
 group :development do
   gem "hotwire-spark"
+  gem "bullet"
+  gem "letter_opener"
   # Use console on exceptions pages [https://github.com/rails/web-console]
   gem "web-console"
 end
