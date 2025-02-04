@@ -1,0 +1,16 @@
+<p style="color: green"><%= notice %></p>
+
+<% content_for :title, "Training resources" %>
+
+<h1>Training resources</h1>
+
+<div id="training_resources">
+  <% @training_resources.each do |training_resource| %>
+    <%= render training_resource %>
+    <p>
+      <%= link_to "Show this training resource", training_resource %>
+    </p>
+  <% end %>
+</div>
+
+<%= link_to "New training resource", new_training_resource_path %>

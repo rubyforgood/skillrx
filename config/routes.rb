@@ -1,4 +1,6 @@
 Rails.application.routes.draw do
+  resources :training_resources
+  resources :regions
   root "home#index"
   get "home/index", as: :home
   get "dashboard/index", as: :dashboard
