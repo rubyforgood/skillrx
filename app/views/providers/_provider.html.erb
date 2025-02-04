@@ -9,4 +9,16 @@
     <%= provider.provider_type %>
   </p>
 
+  <p>
+    <strong>Provider regions:</strong>
+    <ul>
+      <% provider.regions.each do |region| %>
+        <li>
+          <%= link_to region_path(region) do %>
+            <%= region.name %>
+          <% end %>
+        </li>
+      <% end %>
+    </ul>
+  </p>
 </div>

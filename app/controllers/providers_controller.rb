@@ -60,6 +60,6 @@ class ProvidersController < ApplicationController
 
     # Only allow a list of trusted parameters through.
     def provider_params
-      params.expect(provider: [ :name, :provider_type ])
+      params.expect(provider: [ :name, :provider_type, region_ids: [] ])
     end
 end

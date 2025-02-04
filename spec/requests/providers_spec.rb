@@ -15,17 +15,17 @@ require 'rails_helper'
 RSpec.describe "/providers", type: :request do
   let(:user) { create(:user) }
 
-  include AuthHelper
-
   before do
     sign_in(user)
   end
 
+  let(:region_ids) { [create(:region).id, create(:region).id] }
+  let(:updated_region_ids) { [create(:region).id] }
   # This should return the minimal set of attributes required to create a valid
   # Provider. As you add validations to Provider, be sure to
   # adjust the attributes here as well.
   let(:valid_attributes) {
-    { name: "MyString", provider_type: "MyString" }
+    { name: "MyString", provider_type: "MyString", region_ids: region_ids }
   }
 
   let(:invalid_attributes) {
@@ -71,6 +71,12 @@ RSpec.describe "/providers", type: :request do
         }.to change(Provider, :count).by(1)
       end
 
+      it "creates two new Branches" do
+        expect {
+          post providers_url, params: { provider: valid_attributes }
+        }.to change(Branch, :count).by(2)
+      end
+
       it "redirects to the created provider" do
         post providers_url, params: { provider: valid_attributes }
         expect(response).to redirect_to(provider_url(Provider.last))
@@ -94,7 +100,7 @@ RSpec.describe "/providers", type: :request do
   describe "PATCH /update" do
     context "with valid parameters" do
       let(:new_attributes) {
-        { name: "MyString", provider_type: "MyType" }
+        { name: "MyString", provider_type: "MyType", region_ids: updated_region_ids }
       }
 
       it "updates the requested provider" do
@@ -103,6 +109,7 @@ RSpec.describe "/providers", type: :request do
         provider.reload
         expect(provider.name).to eq("MyString")
         expect(provider.provider_type).to eq("MyType")
+        expect(provider.regions.length).to eq(updated_region_ids.length)
       end
 
       it "redirects to the provider" do

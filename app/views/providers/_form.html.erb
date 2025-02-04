@@ -25,6 +25,13 @@
     </div>
   </div>
 
+  <div class="col-md-4">
+    <div class="form-group">
+      <%= form.label :region, style: "display: block" %>
+      <%= form.collection_select :region_ids, Region.order(:name), :id, :name, { include_hidden: false }, class: "form-select", multiple: true %>
+    </div>
+  </div>
+
   <div class="mt-4">
     <div class="col-12 d-flex justify-content-end">
       <%= form.submit "Create Provider", class: "btn btn-primary me-1 mb-1" %>

@@ -1,4 +1,4 @@
 class Branch < ApplicationRecord
-  has_many :providers
-  has_many :regions
+  belongs_to :provider
+  belongs_to :region
 end
