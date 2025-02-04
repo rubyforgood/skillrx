@@ -1,6 +1,24 @@
 # Omakase Ruby styling for Rails
 inherit_gem: { rubocop-rails-omakase: rubocop.yml }
 
+Style/TrailingCommaInArguments:
+  EnforcedStyleForMultiline: consistent_comma
+Style/TrailingCommaInArrayLiteral:
+  EnforcedStyleForMultiline: consistent_comma
+Style/TrailingCommaInHashLiteral:
+  EnforcedStyleForMultiline: consistent_comma
+Style/StringLiterals:
+  Enabled: true
+  EnforcedStyle: double_quotes
+  Include:
+    - "app/**/*"
+    - "config/**/*"
+    - "lib/**/*"
+    - "spec/**/*"
+    - "Gemfile"
+Bundler/OrderedGems:
+  Enabled: true
+
 # Overwrite or add rules to create your own house style
 #
 # # Use `[a, [b, c]]` not `[ a, [ b, c ] ]`
