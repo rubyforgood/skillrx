@@ -6,4 +6,12 @@ class ApplicationController < ActionController::Base
   def check_admin!
     redirect_to root_path unless Current.user.is_admin?
   end
+
+  def after_authentication_url
+    if Current.user.is_admin?
+      users_path
+    else
+      topics_path
+    end
+  end
 end

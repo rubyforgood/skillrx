@@ -2,7 +2,7 @@ require "rails_helper"
 
 describe "Languages", type: :request do
   describe "POST /languages" do
-    let(:user) { create(:user) }
+    let(:user) { create(:user, :admin) }
     let(:language_params) { { name: "french", file_share_folder: "languages/french" } }
 
     before { sign_in(user) }

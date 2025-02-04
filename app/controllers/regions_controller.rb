@@ -1,5 +1,6 @@
 class RegionsController < ApplicationController
   before_action :set_region, only: %i[ show edit update destroy ]
+  before_action :check_admin!
 
   # GET /regions
   def index
