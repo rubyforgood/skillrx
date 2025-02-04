@@ -3,8 +3,6 @@ class UsersController < ApplicationController
 
   def index
     @users = User.all
-    #users = User.all
-
   end
 
   def create
@@ -49,6 +47,6 @@ class UsersController < ApplicationController
   end
 
   def user_params
-    params.expect(user: [:email, :password, :is_admin])
+    params.expect(user: [ :email, :password, :is_admin ])
   end
 end
