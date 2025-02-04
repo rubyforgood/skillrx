@@ -1,0 +1,19 @@
+<% content_for :title, "Editing topic" %>
+
+<section id="basic-vertical-layouts">
+  <div class="row match-height">
+    <div class="col-md-6 col-12">
+      <div class="card">
+        <div class="card-header">
+          <h2 class="card-title">Edit topic</h2>
+        </div>
+        <div class="card-content">
+          <div class="card-body">
+            <%= render "form", topic: @topic %>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+

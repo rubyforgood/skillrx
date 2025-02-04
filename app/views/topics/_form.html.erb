@@ -1,0 +1,34 @@
+
+<%= form_for topic do |f| %>
+  <div class="form-body">
+    <div class="row">
+      <%= render "shared/errors", resource: topic %>
+      <div class="col-12">
+        <div class="form-group">
+          <%= f.label :title %>
+          <%= f.text_field :title, class: "form-control", placeholder: "Title" %>
+        </div>
+        <div class="form-group">
+          <%= f.label :description %>
+          <%= f.text_area :description, class: "form-control", placeholder: "Descripion" %>
+        </div>
+        <div class="form-group">
+          <%= f.label :language %>
+          <%= f.collection_select :language_id, Language.all, :id, :name, { prompt: "Select Language" }, class: "form-select" %>
+        </div>
+        <div class="form-group">
+          <%= f.label :provider %>
+          <%= f.collection_select :provider_id, Provider.all, :id, :name, { prompt: "Select Provider" }, class: "form-select" %>
+        </div>
+        <div class="form-group">
+          <%= f.label :description %>
+          <%= f.text_area :description, class: "form-control", placeholder: "Descripion" %>
+        </div>
+        <div class="col-12 d-flex justify-content-end">
+          <%= f.submit "Save", class: "btn btn-primary me-1 mb-1" %>
+          <%= link_to "Cancel", topics_path, class: "btn btn-light-secondary me-1 mb-1" %>
+        </div>
+      </div>
+    </div>
+  </div>
+<% end %>

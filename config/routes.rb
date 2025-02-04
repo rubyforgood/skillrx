@@ -8,6 +8,9 @@ Rails.application.routes.draw do
   resource :registration, only: %i[new create]
   resource :session
   resources :users
+  resources :topics do
+    put :archive, on: :member
+  end
 
   # Render dynamic PWA files from app/views/pwa/* (remember to link manifest in application.html.erb)
   # get "manifest" => "rails/pwa#manifest", as: :pwa_manifest

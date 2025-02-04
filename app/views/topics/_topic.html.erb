@@ -1,0 +1,26 @@
+<div id="<%= dom_id topic %>">
+  <p>
+    <strong>Title:</strong>
+    <%= topic.title %>
+  </p>
+
+  <p>
+    <strong>Description:</strong>
+    <%= topic.description %>
+  </p>
+
+  <p>
+    <strong>UID:</strong>
+    <%= topic.uid %>
+  </p>
+
+  <p>
+    <strong>Language:</strong>
+    <%= link_to topic.language.name, topic.language %>
+  </p>
+
+  <p>
+    <strong>Provider:</strong>
+    <%= link_to topic.provider.name, topic.provider %>
+  </p>
+</div>
