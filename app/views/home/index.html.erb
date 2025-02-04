@@ -1,2 +1,123 @@
-<h1>Home#index</h1>
-<p>Find me in app/views/home/index.html.erb</p>
+<body class="d-flex flex-column min-vh-100">
+    <nav class="navbar navbar-expand-lg navbar-light bg-white shadow-sm">
+        <div class="container">
+            <a class="navbar-brand fw-bold" href="#">SkillRx</a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav ms-auto">
+                    <li class="nav-item"><a class="nav-link" href="#about">About</a></li>
+                    <li class="nav-item"><a class="nav-link" href="#features">Features</a></li>
+                    <li class="nav-item"><a class="nav-link" href="#contact">Contact</a></li>
+                    <!-- New Sign In link using Rails 8 authentication -->
+                    <li class="nav-item">
+                        <%= link_to "Sign In", new_session_path, class: "nav-link" %>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <header class="bg-primary text-white py-5">
+        <div class="container">
+            <div class="row align-items-center">
+                <div class="col-lg-6">
+                    <h1 class="display-4 fw-bold">Medical Education Without Borders</h1>
+                    <p class="lead">Empowering healthcare professionals worldwide with accessible continuing medical education</p>
+                    <%= link_to "Get Started", new_session_path, class: "btn btn-light btn-lg" %>
+                </div>
+                <div class="col-lg-6">
+                    <img src="/api/placeholder/600/400" alt="Medical professionals using SkillRx" class="img-fluid rounded">
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- Features Section -->
+    <section id="features" class="py-5">
+        <div class="container">
+            <h2 class="text-center mb-5">How SkillRx Works</h2>
+            <div class="row g-4">
+                <div class="col-md-4">
+                    <div class="card h-100">
+                        <div class="card-body">
+                            <h3 class="card-title h5">Offline Access</h3>
+                            <p class="card-text">Access medical education content anytime, anywhere - no internet required</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="card h-100">
+                        <div class="card-body">
+                            <h3 class="card-title h5">Smart Sync</h3>
+                            <p class="card-text">Automatically update content when connected to optimize your learning</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="card h-100">
+                        <div class="card-body">
+                            <h3 class="card-title h5">Multi-Platform</h3>
+                            <p class="card-text">Available via USB drive, mobile app, or local server for maximum flexibility</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- About Section -->
+    <section id="about" class="bg-light py-5">
+        <div class="container">
+            <div class="row align-items-center">
+                <div class="col-lg-6">
+                    <h2>Our Mission</h2>
+                    <p class="lead">Enabling medical practitioners in resource-constrained areas to maintain competence and improve patient care through accessible continuing education.</p>
+                    <ul class="list-unstyled">
+                        <li class="mb-2">✓ Free and open access</li>
+                        <li class="mb-2">✓ Cutting-edge medical literature</li>
+                        <li class="mb-2">✓ Adaptable to local needs</li>
+                    </ul>
+                </div>
+                <div class="col-lg-6">
+                    <img src="/api/placeholder/600/400" alt="Healthcare professionals collaborating" class="img-fluid rounded">
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Contact Section -->
+    <section id="contact" class="py-5">
+        <div class="container">
+            <div class="row justify-content-center">
+                <div class="col-lg-6 text-center">
+                    <h2>Get In Touch</h2>
+                    <p class="lead mb-4">Questions? We're here to help.</p>
+                    <div class="d-grid gap-2">
+                        <a href="mailto:contact@skillrx.org" class="btn btn-primary">Email Us</a>
+                        <a href="#survey" class="btn btn-outline-primary">Take Our Survey</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Ensure main content takes available space -->
+    <main class="flex-fill">
+        <!-- Footer anchored at the bottom -->
+        <footer class="bg-dark text-white py-4 mt-auto">
+            <div class="container">
+                <div class="row">
+                    <div class="col-md-6">
+                        <p class="mb-0">© 2025 SkillRx</p>
+                    </div>
+                    <div class="col-md-6 text-md-end">
+                        <a href="#privacy" class="text-white me-3">Privacy Policy</a>
+                        <a href="#terms" class="text-white">Terms of Use</a>
+                    </div>
+                </div>
+            </div>
+        </footer>
+    </main>
