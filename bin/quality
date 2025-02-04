@@ -1,0 +1,27 @@
+#!/usr/bin/env ruby
+
+require 'pathname'
+require 'fileutils'
+include FileUtils
+
+# path to your application root.
+APP_ROOT = Pathname.new File.expand_path('../../', __FILE__)
+
+def system!(*args)
+  system(*args) || abort("\n== Command #{args} failed ==")
+end
+
+# rubocop
+chdir APP_ROOT do
+  system! 'bin/rubocop --config .rubocop.yml'
+end
+
+# brakeman
+chdir APP_ROOT do
+  system! 'bin/brakeman --no-pager --no-progress'
+end
+
+# js
+chdir APP_ROOT do
+  system! 'bin/importmap audit'
+end

@@ -11,7 +11,6 @@ SkillRX is one of many projects initiated and run by Ruby for Good. You can find
 # Welcome Contributors!
 Thank you for checking out our work. We are in the process of setting up the repository, roadmap, values, and contribution guidelines for the project. We will be adding issues and putting out a call for contributions soon.
 
-
 [Contribution guidelines for this project](CONTRIBUTING.md)
 
 
@@ -62,6 +61,9 @@ $ bundle exec rspec spec/controllers/accounts_controller_spec.rb:8
 $ bundle exec rspec --help
 ```
 
+# Setup
+
+Clone this repo and run `bin/setup`. Run `bin/dev` or `bin/server` (if you like Overmind) to start working with app.
 
 # Testing
 
@@ -70,8 +72,4 @@ This project uses:
 * `shoulda-matchers` for expectations
 * `factory_bot` for making records
 
-To run tests execute
-```
-bin/rspec
-```
-
+To run tests simply use `bin/rspec`. You can also you `bin/quality` to check for code style issues.
