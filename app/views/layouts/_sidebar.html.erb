@@ -1,4 +1,3 @@
-
 <div id="sidebar">
   <div class="sidebar-wrapper active">
     <div class="sidebar-header position-relative">
@@ -42,11 +41,19 @@
 
     <div class="sidebar-menu">
       <ul class="menu">
+
+        <li class="sidebar-item">
+          <a href="application-chat.html" class="sidebar-link">
+            <i class="bi bi-grid-fill"></i>
+            <span>Dashboard</span>
+          </a>
+        </li>
+
         <li class="sidebar-title">Administration</li>
 
         <li class="sidebar-item">
           <%= link_to regions_path, class: "sidebar-link" do %>
-            <i class="bi bi-hospital-fill"></i>
+            <i class="bi bi-globe"></i>
             <span>Regions</span>
           <% end %>
         </li>
@@ -59,10 +66,10 @@
         </li>
 
         <li class="sidebar-item">
-          <a href="ui-file-uploader.html" class="sidebar-link">
+          <%= link_to topics_path, class: "sidebar-link" do %>
             <i class="bi bi-tags-fill"></i>
             <span>Topics</span>
-          </a>
+          <% end %>
         </li>
 
         <li class="sidebar-item">

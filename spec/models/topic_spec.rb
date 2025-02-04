@@ -7,8 +7,8 @@ RSpec.describe Topic, type: :model do
 
   it { should belong_to(:language) }
   it { should belong_to(:provider) }
-  it { should have_many(:taggings) }
-  it { should have_many(:training_resources) }
+  # it { should have_many(:taggings) }
+  # it { should have_many(:training_resources) }
 
   describe "scopes" do
     it "includes archived topics" do

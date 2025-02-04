@@ -1,7 +1,5 @@
 class TopicsController < ApplicationController
   before_action :set_topic, only: %i[show edit update destroy]
-  before_action :authenticate_user!
-  before_action :authorize_user!, only: %i[edit update destroy]
 
   def index
     @topics = Topic.all
@@ -55,9 +53,5 @@ class TopicsController < ApplicationController
 
   def topic_params
     params.require(:topic).permit(:title, :description, :language_id, :provider_id, :archived)
-  end
-
-  def authorize_user!
-    redirect_to topics_path, alert: "You are not authorized to perform this action." unless current_user == @topic.provider.user
   end
 end

@@ -7,8 +7,26 @@ RSpec.describe "/topics", type: :request do
     sign_in(user)
   end
 
-  let(:valid_attributes) { { title: "New Topic", description: "Topic description", language_id: 1, provider_id: 1, archived: false } }
-  let(:invalid_attributes) { { title: "", language_id: nil, provider_id: nil } }
+  let(:language) { FactoryBot.create(:language) }
+  let(:provider) { FactoryBot.create(:provider) }
+  let(:valid_attributes) do
+    {
+      title: "My Topic Title",
+      description: "A valid description",
+      language_id: language.id,
+      provider_id: provider.id,
+      archived: false,
+    }
+  end
+  let(:invalid_attributes) do
+    {
+      title: "",
+      description: "A valid description",
+      language_id: language.id,
+      provider_id: provider.id,
+      archived: false,
+    }
+  end
 
   describe "GET /index" do
     it "renders a successful response" do

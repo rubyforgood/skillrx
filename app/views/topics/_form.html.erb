@@ -11,38 +11,40 @@
     </div>
   <% end %>
 
-  <div class="col-md-4">
-    <div class="form-group">
-      <%= form.label :title, style: "display: block" %>
-      <%= form.text_field :title, id: "basicInput", class: "form-control", autofocus: true %>
+  <div class="row">
+    <div class="col-md-4">
+      <div class="form-group">
+        <%= form.label :title, style: "display: block" %>
+        <%= form.text_field :title, id: "basicInput", class: "form-control", autofocus: true %>
+      </div>
     </div>
-  </div>
 
-  <div class="col-md-4">
-    <div class="form-group">
-      <%= form.label :description, style: "display: block" %>
-      <%= form.text_area :description, id: "basicInput", class: "form-control" %>
+    <div class="col-md-4">
+      <div class="form-group">
+        <%= form.label :description, style: "display: block" %>
+        <%= form.text_area :description, id: "basicInput", class: "form-control" %>
+      </div>
     </div>
-  </div>
 
-  <div class="col-md-4">
-    <div class="form-group">
-      <%= form.label :language_id, style: "display: block" %>
-      <%= form.collection_select :language_id, Language.all, :id, :name, id: "basicInput", class: "form-control" %>
+    <div class="col-md-4">
+      <div class="form-group">
+        <%= form.label :language_id, style: "display: block" %>
+        <%= form.collection_select :language_id, Language.all, :id, :name, {}, { id: "basicInput", class: "form-control" } %>
+      </div>
     </div>
-  </div>
 
-  <div class="col-md-4">
-    <div class="form-group">
-      <%= form.label :provider_id, style: "display: block" %>
-      <%= form.collection_select :provider_id, Provider.all, :id, :name, id: "basicInput", class: "form-control" %>
+    <div class="col-md-4">
+      <div class="form-group">
+        <%= form.label :provider_id, style: "display: block" %>
+        <%= form.collection_select :provider_id, Provider.all, :id, :name, {}, { id: "basicInput", class: "form-control" } %>
+      </div>
     </div>
-  </div>
 
-  <div class="col-md-4">
-    <div class="form-group">
-      <%= form.label :archived, style: "display: block" %>
-      <%= form.check_box :archived, id: "basicInput", class: "form-control" %>
+    <div class="col-md-4">
+      <div class="form-group">
+        <%= form.label :archived, "Archived", for: "checkbox1", style: "display: block" %>
+        <%= form.check_box :archived, { id: "checkbox1", class: "form-check-input", checked: false } %>
+      </div>
     </div>
   </div>
 
