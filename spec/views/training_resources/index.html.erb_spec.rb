@@ -4,8 +4,8 @@ RSpec.describe "training_resources/index", type: :view do
   before(:each) do
     assign(:training_resources, [
       create(:training_resource),
-      create(:training_resource)
-    ])
+      create(:training_resource),
+    ],)
   end
 
   it "renders a list of training_resources" do
