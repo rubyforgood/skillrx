@@ -1,4 +1,4 @@
-      
+
 <div id="sidebar">
   <div class="sidebar-wrapper active">
     <div class="sidebar-header position-relative">
@@ -73,10 +73,10 @@
         </li>
 
         <li class="sidebar-item">
-          <a href="application-chat.html" class="sidebar-link">
+          <%= link_to users_path, class: 'sidebar-link' do %>
             <i class="bi bi-people"></i>
             <span>Users</span>
-          </a>
+          <% end %>
         </li>
       </ul>
     </div>
