@@ -1,0 +1,41 @@
+<%= form_with(model: provider) do |form| %>
+  <% if provider.errors.any? %>
+    <div style="color: red">
+      <h2><%= pluralize(provider.errors.count, "error") %> prohibited this provider from being saved:</h2>
+
+      <ul>
+        <% provider.errors.each do |error| %>
+          <li><%= error.full_message %></li>
+        <% end %>
+      </ul>
+    </div>
+  <% end %>
+
+  <div class="col-md-4">
+    <div class="form-group">
+      <%= form.label :name, style: "display: block" %>
+      <%= form.text_field :name, id: "basicInput", class: "form-control", autofocus: true %>
+    </div>
+  </div>
+
+  <div class="col-md-4">
+    <div class="form-group">
+      <%= form.label :provider_type, style: "display: block" %>
+      <%= form.text_field :provider_type, id: "basicInput", class: "form-control" %>
+    </div>
+  </div>
+
+  <div class="col-md-4">
+    <div class="form-group">
+      <%= form.label :region, style: "display: block" %>
+      <%= form.collection_select :region_ids, Region.order(:name), :id, :name, { include_hidden: false }, class: "form-select", multiple: true %>
+    </div>
+  </div>
+
+  <div class="mt-4">
+    <div class="col-12 d-flex justify-content-end">
+      <%= form.submit "Create Provider", class: "btn btn-primary me-1 mb-1" %>
+      <%= link_to "Cancel", providers_path, class: "btn btn-light-secondary me-1 mb-1" %>
+    </div>
+  </div>
+<% end %>

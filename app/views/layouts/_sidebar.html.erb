@@ -45,17 +45,17 @@
         <li class="sidebar-title">Administration</li>
 
         <li class="sidebar-item">
-          <a href="<%= regions_path %>" class="sidebar-link">
-            <i class="bi bi-globe"></i>
+          <%= link_to regions_path, class: "sidebar-link" do %>
+            <i class="bi bi-hospital-fill"></i>
             <span>Regions</span>
-          </a>
+          <% end %>
         </li>
 
         <li class="sidebar-item">
-          <a href="table.html" class="sidebar-link">
+          <%= link_to providers_path, class: "sidebar-link" do %>
             <i class="bi bi-hospital-fill"></i>
             <span>Providers</span>
-          </a>
+          <% end %>
         </li>
 
         <li class="sidebar-item">
@@ -66,10 +66,10 @@
         </li>
 
         <li class="sidebar-item">
-          <a href="<%= languages_path %>" class="sidebar-link">
+          <%= link_to languages_path, class: "sidebar-link" do %>
             <i class="bi bi-translate"></i>
             <span>Languages</span>
-          </a>
+          <% end %>
         </li>
 
         <li class="sidebar-item">

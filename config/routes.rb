@@ -5,6 +5,7 @@ Rails.application.routes.draw do
   resources :users, only: :create
   resource :registration, only: %i[new create]
   resources :regions
+  resources :providers
   resources :languages, only: %i[index show new create edit update]
 
   # Render dynamic PWA files from app/views/pwa/* (remember to link manifest in application.html.erb)
