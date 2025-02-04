@@ -1,0 +1,38 @@
+<%= form_with(model: user) do |form| %>
+  <% if user.errors.any? %>
+    <div style="color: red">
+      <h2><%= pluralize(user.errors.count, "error") %> prohibited this user from being saved:</h2>
+
+      <ul>
+        <% user.errors.each do |error| %>
+          <li><%= error.full_message %></li>
+        <% end %>
+      </ul>
+    </div>
+  <% end %>
+
+  <div class="col-md-4">
+    <div class="form-group">
+      <%= form.label :email, style: "display: block" %>
+      <%= form.text_field :email, id: "basicInput", class: "form-control", autofocus: true %>
+    </div>
+  </div>
+  <div class="col-md-4">
+    <div class="form-group">
+      <%= form.label :password, style: "display: block" %>
+      <%= form.text_field :password, id: "basicInput", class: "form-control", autofocus: true %>
+    </div>
+  </div>
+    <div class="col-md-4">
+    <div class="form-group">
+      <%= form.label :is_admin, style: "display: block" %>
+      <%= form.check_box :is_admin, autofocus: true %>
+    </div>
+  </div>
+  <div class="mt-4">
+    <div class="col-12 d-flex justify-content-end">
+      <%= form.submit "Save User", class: "btn btn-primary me-1 mb-1" %>
+      <%= link_to "Cancel", users_path, class: "btn btn-light-secondary me-1 mb-1" %>
+    </div>
+  </div>
+<% end %>

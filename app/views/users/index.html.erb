@@ -4,12 +4,14 @@
     <section class="section">
         <div class="card">
             <div class="card-body">
+               
+         <i class="bi bi-plus"></i> <%= link_to "New User?",new_user_path, class:'btn btn-primary'%> </i>
                 <table class="table table-striped" id="table1">
                     <thead>
                         <tr>
                             <th>Email</th>
                             <th>Administrator</th>
-                            
+                            <th> Users actions </th>
                         </tr>
                     </thead>
                     <tbody>
@@ -18,6 +20,14 @@
                             <tr>
                               <td>  <%= user.email %></td>
                               <td>  <%= user.is_admin %></td>
+                                   <td class="text-end">
+
+                        <%= link_to edit_user_path(user), class: "btn btn-secondary btn-sm" do %>
+                          <i class="bi bi-pencil"></i> Edit
+                        <% end %>
+                     <%= button_to  user, data: { confirm: "Are you sure?" }, method: :delete,  class: "btn btn-danger btn-sm" do %>
+                            <i class="bi bi-trash"></i> Delete
+                        <% end %>
                             </tr>
                         <% end %>
                     <tbody>

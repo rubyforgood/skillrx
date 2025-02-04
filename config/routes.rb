@@ -1,8 +1,10 @@
 Rails.application.routes.draw do
-  # Define your application routes per the DSL in https://guides.rubyonrails.org/routing.html
-  resource :session
+  resources :providers
+  resources :regions
+  root "home#index"
+  get "home/index", as: :home
+  resource :session, except:[:new]
   resources :passwords, except: [:new], param: :token
-  resources :users, only: :create
   resource :registration, only: %i[new create]
   resources :regions
   resources :providers
