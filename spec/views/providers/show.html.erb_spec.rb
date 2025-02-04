@@ -1,11 +1,11 @@
-require 'rails_helper'
+require "rails_helper"
 
 RSpec.describe "providers/show", type: :view do
   before(:each) do
     assign(:provider, Provider.create!(
       name: "Name",
-      provider_type: "Provider Type"
-    ))
+      provider_type: "Provider Type",
+    ),)
   end
 
   it "renders attributes in <p>" do
