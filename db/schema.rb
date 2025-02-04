@@ -23,6 +23,15 @@ ActiveRecord::Schema[8.0].define(version: 2025_02_04_140110) do
     t.index ["region_id"], name: "index_branches_on_region_id"
   end
 
+  create_table "contributors", force: :cascade do |t|
+    t.bigint "provider_id"
+    t.bigint "user_id"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["provider_id"], name: "index_contributors_on_provider_id"
+    t.index ["user_id"], name: "index_contributors_on_user_id"
+  end
+
   create_table "languages", force: :cascade do |t|
     t.string "name"
     t.string "file_share_folder"

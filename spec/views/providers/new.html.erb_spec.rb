@@ -1,6 +1,11 @@
 require "rails_helper"
 
 RSpec.describe "providers/new", type: :view do
+  let(:user) { create(:user) }
+  before do
+    allow(Current).to receive(:user).and_return(user)
+  end
+
   before(:each) do
     assign(:provider, Provider.new(
       name: "MyString",

@@ -8,4 +8,10 @@ FactoryBot.define do
       is_admin { true }
     end
   end
+
+  factory :admin do
+    email { "john@doe.com" }
+    password { "password" }
+    is_admin { true }
+  end
 end
