@@ -1,0 +1,45 @@
+<% content_for :title, "Languages" %>
+
+<section class="section">
+  <div class="row" id="table-striped">
+    <div class="col-12 cold-md-12">
+      <div class="card">
+        <div class="card-header d-flex justify-content-between align-items-center">
+          <h2 class="card-title">Languages</h2>
+          <%= link_to new_language_path, class: "btn btn-primary" do %>
+            <i class="bi bi-plus"></i> Add New Language
+          <% end %>
+        </div>
+        <div class="card-content">
+          <div class="card-body">
+            <p class="card-text"> Some important information or instruction can be placed here.</p>
+            <div class="table-responsive">
+              <table class="table table-lg table-striped mb-0">
+                <thead>
+                  <tr>
+                    <th>Name</th>
+                    <th>File share folder</th>
+                    <th class="text-end">Actions</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <% @languages.each do |language| %>
+                    <tr>
+                      <td class="text-bold-500"><%= language.name %></td>
+                      <td class="text-bold-500"><%= language.file_share_folder %></td>
+                      <td class="text-end">
+                        <%= link_to edit_language_path(language), class: "btn btn-secondary btn-sm" do %>
+                          <i class="bi bi-pencil"></i> Edit
+                        <% end %>
+                      </td>
+                    </tr>
+                  <% end %>
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>

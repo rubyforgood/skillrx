@@ -10,6 +10,8 @@
 # Ignore all environment files.
 /.env*
 
+db/structure.sql
+
 # Ignore all logfiles and tempfiles.
 /log/*
 /tmp/*

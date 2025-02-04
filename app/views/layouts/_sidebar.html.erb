@@ -42,48 +42,38 @@
 
     <div class="sidebar-menu">
       <ul class="menu">
-        <li class="sidebar-title">Menu</li>
-
-        <li class="sidebar-item  ">
-          <a href="index.html" class='sidebar-link'>
-            <i class="bi bi-grid-fill"></i>
-            <span>Dashboard</span>
-          </a>
-
-        </li>
-
         <li class="sidebar-title">Administration</li>
 
-        <li class="sidebar-item  ">
-          <%= link_to regions_path, class: 'sidebar-link' do %>
+        <li class="sidebar-item">
+          <%= link_to regions_path, class: "sidebar-link" do %>
             <i class="bi bi-hospital-fill"></i>
             <span>Regions</span>
           <% end %>
         </li>
 
-        <li class="sidebar-item  ">
-          <%= link_to providers_path, class: 'sidebar-link' do %>
+        <li class="sidebar-item">
+          <%= link_to providers_path, class: "sidebar-link" do %>
             <i class="bi bi-hospital-fill"></i>
             <span>Providers</span>
           <% end %>
         </li>
 
-        <li class="sidebar-item  ">
-          <a href="ui-file-uploader.html" class='sidebar-link'>
+        <li class="sidebar-item">
+          <a href="ui-file-uploader.html" class="sidebar-link">
             <i class="bi bi-tags-fill"></i>
             <span>Topics</span>
           </a>
         </li>
 
-        <li class="sidebar-item  ">
-          <a href="application-email.html" class='sidebar-link'>
+        <li class="sidebar-item">
+          <%= link_to languages_path, class: "sidebar-link" do %>
             <i class="bi bi-translate"></i>
             <span>Languages</span>
-          </a>
+          <% end %>
         </li>
 
-        <li class="sidebar-item  ">
-          <a href="application-chat.html" class='sidebar-link'>
+        <li class="sidebar-item">
+          <a href="application-chat.html" class="sidebar-link">
             <i class="bi bi-people"></i>
             <span>Users</span>
           </a>
