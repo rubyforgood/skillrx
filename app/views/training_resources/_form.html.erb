@@ -11,17 +11,24 @@
     </div>
   <% end %>
 
-  <div>
-    <%= form.label :state, style: "display: block" %>
-    <%= form.number_field :state %>
+  <div class="col-md-4">
+    <div class="form-group">
+      <%= form.label :state, style: "display: block" %>
+      <%= form.number_field :state, class: "form-control", autofocus: true %>
+    </div>
   </div>
 
-  <div>
-    <%= form.label :document, style: "display: block" %>
-    <%= form.file_field :document %>
+  <div class="col-md-4">
+    <div class="form-group">
+      <%= form.label :document, style: "display: block" %>
+      <%= form.file_field :document, class: "form-control" %>
+    </div>
   </div>
 
-  <div>
-    <%= form.submit %>
+  <div class="mt-4">
+    <div class="col-12 d-flex justify-content-end">
+      <%= form.submit "Create Training Resource", class: "btn btn-primary me-1 mb-1" %>
+      <%= link_to "Cancel", training_resources_path, class: "btn btn-light-secondary me-1 mb-1" %>
+    </div>
   </div>
 <% end %>
