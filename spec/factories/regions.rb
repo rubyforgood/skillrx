@@ -1,5 +1,5 @@
 FactoryBot.define do
   factory :region do
-    name { "The Region" }
+    name { Faker::Address.state }
   end
 end
