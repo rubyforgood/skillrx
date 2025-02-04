@@ -183,8 +183,6 @@ GEM
       net-imap
       net-pop
       net-smtp
-    maily (2.1.0)
-      rails (>= 4.2)
     marcel (1.0.4)
     matrix (0.4.2)
     mini_mime (1.1.5)
@@ -429,7 +427,6 @@ DEPENDENCIES
   jbuilder
   kamal
   letter_opener
-  maily
   pg (~> 1.1)
   propshaft
   puma (>= 5.0)
