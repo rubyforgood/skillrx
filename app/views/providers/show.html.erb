@@ -1,0 +1,12 @@
+<p style="color: green"><%= notice %></p>
+
+<%= render @provider %>
+
+<div>
+  <%= link_to "Edit this provider", edit_provider_path(@provider) %> |
+  <%= link_to "Back to providers", providers_path %>
+</div>
+
+<div>
+  <%= button_to "Destroy this provider", @provider, method: :delete, class: "btn btn-danger mt-4" %>
+</div>

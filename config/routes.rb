@@ -1,4 +1,5 @@
 Rails.application.routes.draw do
+  resources :providers
   resources :regions
   root "home#index"
   get "home/index", as: :home

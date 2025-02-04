@@ -1,0 +1,12 @@
+<% content_for :title, "Editing provider" %>
+
+<h1>Editing provider</h1>
+
+<%= render "form", provider: @provider %>
+
+<br>
+
+<div>
+  <%= link_to "Show this provider", @provider %> |
+  <%= link_to "Back to providers", providers_path %>
+</div>
