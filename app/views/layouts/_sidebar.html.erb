@@ -1,4 +1,4 @@
-      
+
 <div id="sidebar">
   <div class="sidebar-wrapper active">
     <div class="sidebar-header position-relative">
@@ -72,16 +72,11 @@
           <% end %>
         </li>
 
-<<<<<<< HEAD
         <li class="sidebar-item">
-          <a href="application-chat.html" class="sidebar-link">
-=======
-        <li class="sidebar-item  ">
-          <a href="<%= users_path%>" class='sidebar-link'>
->>>>>>> add user crud action
+          <%= link_to users_path, class: 'sidebar-link' do %>
             <i class="bi bi-people"></i>
             <span>Users</span>
-          </a>
+          <% end %>
         </li>
       </ul>
     </div>

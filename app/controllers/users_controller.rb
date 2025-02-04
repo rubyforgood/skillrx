@@ -5,6 +5,10 @@ class UsersController < ApplicationController
     @users = User.all
   end
 
+  def new
+    @user = User.new
+  end
+
   def create
     @user = User.new(user_params)
 
@@ -17,10 +21,6 @@ class UsersController < ApplicationController
     end
   end
 
-
-  def new
-    @user = User.new
-  end
   def edit
   end
 
@@ -33,6 +33,7 @@ class UsersController < ApplicationController
       end
     end
   end
+
   def destroy
     @user.destroy!
 
@@ -42,6 +43,7 @@ class UsersController < ApplicationController
   end
 
   private
+
   def set_user
     @user = User.find(params.expect(:id))
   end
