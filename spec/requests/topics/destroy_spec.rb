@@ -14,13 +14,13 @@ describe "Topics", type: :request do
       expect(Topic.count).to be_zero
     end
 
-    context "when user is not ad admin" do
+    context "when user is not an admin" do
       let(:user) { create(:user) }
 
       it "does not delete a Topic" do
         delete topic_url(topic)
 
-        expect(response).to redirect_to(root_url)
+        expect(response).to redirect_to(topics_url)
         expect(Topic.count).to eq(1)
       end
     end
