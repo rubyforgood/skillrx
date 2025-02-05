@@ -1,4 +1,5 @@
 class UsersController < ApplicationController
+  before_action :redirect_contributors
   before_action :set_user, only: %i[ edit update destroy ]
 
   def index

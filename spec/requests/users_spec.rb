@@ -1,12 +1,12 @@
 require "rails_helper"
 
 RSpec.describe "/users", type: :request do
-  let(:user) { create(:user) }
+  let(:admin) { create(:user, :admin) }
   let(:valid_attributes) { { email: "john@doe.com", password: "123" } }
   let(:invalid_attributes) { { email: "" } }
 
   before do
-    sign_in(user)
+    sign_in(admin)
   end
 
   describe "GET /index" do

@@ -1,4 +1,5 @@
 class LanguagesController < ApplicationController
+  before_action :redirect_contributors
   before_action :set_language, only: [ :edit, :update ]
 
   def index

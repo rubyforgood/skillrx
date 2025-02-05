@@ -1,4 +1,5 @@
 class RegionsController < ApplicationController
+  before_action :redirect_contributors
   before_action :set_region, only: %i[ show edit update destroy ]
 
   # GET /regions

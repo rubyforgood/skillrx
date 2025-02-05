@@ -1,5 +1,6 @@
 class ProvidersController < ApplicationController
   before_action :set_provider, only: %i[ show edit update destroy ]
+  before_action :redirect_contributors
 
   def index
     @providers = Provider.all

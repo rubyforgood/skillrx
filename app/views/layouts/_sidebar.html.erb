@@ -4,7 +4,7 @@
     <div class="sidebar-header position-relative">
       <div class="d-flex justify-content-between align-items-center">
         <div class="logo">
-          <%= link_to("SkillRx", root_path) %>
+          <%= link_to("SkillRx", dashboard_path) %>
         </div>
         <div class="theme-toggle d-flex gap-2  align-items-center mt-2">
           <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" aria-hidden="true"
@@ -45,22 +45,6 @@
 
     <div class="sidebar-menu">
       <ul class="menu">
-        <li class="sidebar-title">Administration</li>
-
-        <li class="sidebar-item">
-          <%= link_to regions_path, class: "sidebar-link" do %>
-            <i class="bi bi-globe"></i>
-            <span>Regions</span>
-          <% end %>
-        </li>
-
-        <li class="sidebar-item">
-          <%= link_to providers_path, class: "sidebar-link" do %>
-            <i class="bi bi-hospital-fill"></i>
-            <span>Providers</span>
-          <% end %>
-        </li>
-
         <li class="sidebar-item">
           <%= link_to topics_path, class: "sidebar-link" do %>
             <i class="bi bi-tags-fill"></i>
@@ -68,19 +52,37 @@
           <% end %>
         </li>
 
-        <li class="sidebar-item">
-          <%= link_to languages_path, class: "sidebar-link" do %>
-            <i class="bi bi-translate"></i>
-            <span>Languages</span>
-          <% end %>
-        </li>
+        <% if Current.user.is_admin? %>
+          <li class="sidebar-title">Administration</li>
+            <li class="sidebar-item">
+              <%= link_to regions_path, class: "sidebar-link" do %>
+                <i class="bi bi-globe"></i>
+                <span>Regions</span>
+              <% end %>
+            </li>
 
-        <li class="sidebar-item">
-          <%= link_to users_path, class: 'sidebar-link' do %>
-            <i class="bi bi-people"></i>
-            <span>Users</span>
-          <% end %>
-        </li>
+            <li class="sidebar-item">
+              <%= link_to providers_path, class: "sidebar-link" do %>
+                <i class="bi bi-hospital-fill"></i>
+                <span>Providers</span>
+              <% end %>
+            </li>
+
+            <li class="sidebar-item">
+              <%= link_to languages_path, class: "sidebar-link" do %>
+                <i class="bi bi-translate"></i>
+                <span>Languages</span>
+              <% end %>
+            </li>
+
+            <li class="sidebar-item">
+              <%= link_to users_path, class: 'sidebar-link' do %>
+                <i class="bi bi-people"></i>
+                <span>Users</span>
+              <% end %>
+            </li>
+          </li>
+        <% end %>
       </ul>
     </div>
   </div>

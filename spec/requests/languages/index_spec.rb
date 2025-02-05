@@ -2,7 +2,7 @@ require "rails_helper"
 
 describe "Languages", type: :request do
   describe "GET /languages" do
-    let(:user) { create(:user) }
+    let(:user) { create(:user, :admin) }
 
     before { sign_in(user) }
 

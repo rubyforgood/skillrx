@@ -1,6 +1,5 @@
 class TopicsController < ApplicationController
   before_action :set_topic, only: [ :show, :edit, :update, :destroy, :archive ]
-  before_action :check_admin!, only: :destroy
 
   def index
     @topics = scope.includes(:language, :provider)
@@ -32,6 +31,7 @@ class TopicsController < ApplicationController
   end
 
   def destroy
+    redirect_to topics_path and return unless Current.user.is_admin?
     @topic.destroy
     redirect_to topics_path
   end

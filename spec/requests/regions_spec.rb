@@ -13,7 +13,7 @@ require "rails_helper"
 # sticking to rails and rspec-rails APIs to keep things simple and stable.
 
 RSpec.describe "/regions", type: :request do
-  let(:user) { create(:user) }
+  let(:user) { create(:user, :admin) }
 
   before do
     sign_in(user)

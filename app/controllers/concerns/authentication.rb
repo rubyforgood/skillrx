@@ -12,6 +12,10 @@ module Authentication
     end
   end
 
+  def redirect_contributors
+    redirect_to dashboard_path unless Current.user.is_admin?
+  end
+
   private
     def authenticated?
       resume_session
@@ -35,7 +39,7 @@ module Authentication
     end
 
     def after_authentication_url
-      session.delete(:return_to_after_authenticating) || regions_url
+      session.delete(:return_to_after_authenticating) || dashboard_url
     end
 
     def start_new_session_for(user)
