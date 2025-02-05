@@ -65,6 +65,6 @@ class TrainingResourcesController < ApplicationController
 
     # Only allow a list of trusted parameters through.
     def training_resource_params
-      params.expect(training_resource: [ :state, :document ])
+      params.expect(training_resource: [ :state, :document, :topic_id, :file_name_override ])
     end
 end

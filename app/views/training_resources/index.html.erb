@@ -27,14 +27,20 @@
               <table class="table table-lg table-striped mb-0">
                 <thead>
                 <tr>
-                  <th>Training Resource</th>
+                  <th class="text-start">Topic</th>
                   <th class="text-end">State</th>
+                  <th class="text-end">Filename Override</th>
+                  <th class="text-end">Document</th>
+                  <th class="text-end">Actions</th>
                 </tr>
                 </thead>
                 <tbody>
                 <% @training_resources.each do |training_resource| %>
                   <tr>
+                    <td class="text-bold-500"><%= training_resource.topic.title %></td>
                     <td class="text-bold-500"><%= training_resource.state %></td>
+                    <td class="text-bold-500"><%= training_resource.file_name_override %></td>
+                    <td class="text-bold-500"><%= training_resource.document.key %></td>
                     <td class="text-end">
                       <%= link_to training_resource, class: "btn btn-primary btn-sm" do %>
                         <i class="bi bi-search"></i> View

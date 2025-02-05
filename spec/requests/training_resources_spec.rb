@@ -14,6 +14,7 @@ require "rails_helper"
 
 RSpec.describe "/training_resources", type: :request do
   let(:user) { create(:user) }
+  let(:topic) { create(:topic) }
 
   before do
     sign_in(user)
@@ -23,7 +24,7 @@ RSpec.describe "/training_resources", type: :request do
   # TrainingResource. As you add validations to TrainingResource, be sure to
   # adjust the attributes here as well.
   let(:valid_attributes) {
-    { state: 1 }
+    { state: 1,  topic_id:  topic.id, file_name_override: "test.jpg" }
   }
 
   let(:invalid_attributes) { { state: "" } }
