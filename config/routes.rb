@@ -1,6 +1,7 @@
 Rails.application.routes.draw do
   root "home#index"
   get "home/index", as: :home
+  get "dashboard/index", as: :dashboard
   resources :languages, only: %i[index show new create edit update]
   resources :passwords, param: :token
   resources :providers
