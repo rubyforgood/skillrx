@@ -4,4 +4,5 @@ class TrainingResource < ApplicationRecord
 
   validates :state, presence: true
   validates_with DocumentValidator
+  validates_with ResourceLanguageValidator
 end
