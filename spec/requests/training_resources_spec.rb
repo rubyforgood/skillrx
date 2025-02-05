@@ -15,6 +15,8 @@ require "rails_helper"
 RSpec.describe "/training_resources", type: :request do
   let(:user) { create(:user) }
   let(:topic) { create(:topic) }
+  let(:other_topic) { create(:topic, language_id: topic.language_id) }
+  let(:diff_language_topic) { create(:topic) }
 
   before do
     sign_in(user)
@@ -130,6 +132,20 @@ RSpec.describe "/training_resources", type: :request do
       training_resource = TrainingResource.create! valid_attributes
       delete training_resource_url(training_resource)
       expect(response).to redirect_to(training_resources_url)
+    end
+  end
+
+  describe "duplicated language" do
+    it "should not allow create resources with the same file_name_override in the same language" do
+      TrainingResource.create! valid_attributes
+      post training_resources_url, params: { training_resource: valid_attributes.merge(topic_id: other_topic.id) }
+      expect(response).to have_http_status(:unprocessable_entity)
+    end
+
+    it "should create resources with the same file_name_override but different language" do
+      TrainingResource.create! valid_attributes
+      post training_resources_url, params: { training_resource: valid_attributes.merge(topic_id: diff_language_topic.id) }
+      expect(response).to have_http_status(:redirect)
     end
   end
 end
