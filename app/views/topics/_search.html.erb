@@ -11,19 +11,19 @@
             <div class="col-12">
               <div class="form-group">
                 <%= f.label :provider %>
-                <%= f.collection_select :provider_id, providers, :id, :name, { prompt: "Select provider" }, class: "form-select" %>
+                <%= f.select :provider_id, options_from_collection_for_select(providers, :id, :name, params[:provider_id]), { prompt: "Select provider" }, class: "form-select" %>
               </div>
               <div class="form-group">
                 <%= f.label :language %>
-                <%= f.collection_select :language_id, languages, :id, :name, { prompt: "Select language" }, class: "form-select" %>
+                <%= f.select :language_id, options_from_collection_for_select(languages, :id, :name, params[:provider_id]),  { prompt: "Select language" }, class: "form-select" %>
               </div>
               <div class="form-group">
                 <%= f.label :query %>
-                <%= f.text_field :query, class: "form-control" %>
+                <%= f.text_field :query, value: params[:query], class: "form-control" %>
               </div>
               <div class="form-group">
                 <%= f.label :year %>
-                <%= f.select :year, options_for_select((Date.today.year-10..Date.today.year).to_a, params[:year].to_i), { prompt: "Select year" }, class: "form-select" %>
+                <%= f.select :year, options_for_select((Date.today.year-10..Date.today.year).to_a, params[:year]), { prompt: "Select year" }, class: "form-select" %>
               </div>
               <div class="form-group">
                 <%= f.label :month %>

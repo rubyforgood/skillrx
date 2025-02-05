@@ -4,7 +4,6 @@ class TopicsController < ApplicationController
 
   def index
     @topics = scope.search_with_params(search_params)
-    @search = Topic::SEARCH.new(**search_params)
     @providers = scope.map(&:provider).uniq.sort_by(&:name)
     @languages = scope.map(&:language).uniq.sort_by(&:name)
   end
@@ -50,6 +49,7 @@ class TopicsController < ApplicationController
     params.require(:topic).permit(:title, :description, :uid, :language_id, :provider_id)
   end
 
+  helper_method :search_params
   def search_params
     default_search_params
       .then do |def_params|

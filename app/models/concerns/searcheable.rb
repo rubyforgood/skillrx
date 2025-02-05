@@ -1,7 +1,6 @@
 module Searcheable
   extend ActiveSupport::Concern
 
-  SEARCH = Data.define(:query, :state, :provider_id, :language_id, :year, :month, :order)
   SORTS = %i[asc desc].freeze
 
   class_methods do
@@ -29,7 +28,7 @@ module Searcheable
       where(state: state)
     end
 
-    def order(order_from_params)
+    def sort_order(order_from_params)
       return :desc unless SORTS.include?(order_from_params)
 
       order_from_params
@@ -43,7 +42,7 @@ module Searcheable
         .then { |scope| params[:year].present? ? scope.by_year(params[:year]) : scope }
         .then { |scope| params[:month].present? ? scope.by_month(params[:month]) : scope }
         .then { |scope| params[:query].present? ? scope.search(params[:query]) : scope }
-        .then { |scope| scope.order(created_at: order(params[:order])) }
+        .then { |scope| scope.order(created_at: sort_order(params[:order])) }
     end
   end
 end
