@@ -7,6 +7,14 @@
 #   ["Action", "Comedy", "Drama", "Horror"].each do |genre_name|
 #     MovieGenre.find_or_create_by!(name: genre_name)
 #   end
+puts "Destroying current records..."
+
+Topic.destroy_all
+Provider.destroy_all
+Language.destroy_all
+User.destroy_all
+
+puts "Creating languages..."
 
 [
   { name: "english", file_share_folder: "languages/english" },
@@ -15,11 +23,17 @@
   Language.find_or_create_by!(language)
 end
 
+puts "Languages created!"
+puts "Creating providers..."
+
 [
   { name: "Provided by the government", provider_type: "government" },
 ].each do |provider|
   Provider.find_or_create_by!(provider)
 end
+
+puts "Providers created!"
+puts "Creating topics..."
 
 [
   {
@@ -41,3 +55,18 @@ end
 ].each do |topic|
   Topic.find_or_create_by!(topic)
 end
+
+puts "Topics created!"
+puts "Creating users..."
+
+User.create(email: "me@mail.com", password: "test123")
+
+10.times do
+  User.create(
+    email: Faker::Internet.email,
+    password: "password",
+    is_admin: false,
+  )
+end
+
+puts "Users created!"
