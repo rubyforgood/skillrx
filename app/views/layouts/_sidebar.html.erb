@@ -4,7 +4,7 @@
     <div class="sidebar-header position-relative">
       <div class="d-flex justify-content-between align-items-center">
         <div class="logo">
-          <a href="index.html">Logo</a>
+          <%= link_to("SkillRx", root_path) %>
         </div>
         <div class="theme-toggle d-flex gap-2  align-items-center mt-2">
           <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" aria-hidden="true"
@@ -38,6 +38,9 @@
           <a href="#" class="sidebar-hide d-xl-none d-block"><i class="bi bi-x bi-middle"></i></a>
         </div>
       </div>
+      <%= button_to session_path, method: :delete, class: "btn btn-danger mt-2" do %>
+        <i class="bi bi-box-arrow-right"></i> Log out
+      <% end %>
     </div>
 
     <div class="sidebar-menu">

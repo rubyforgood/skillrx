@@ -34,4 +34,15 @@ RSpec.describe "User Login", type: :system do
       expect(page).to have_link("Login", href: new_session_path)
     end
   end
+
+  context "after logging in" do
+    it "allows users to log out" do
+      visit new_session_path
+      fill_in "email", with: user.email
+      fill_in "password", with: user.password
+      click_button("Sign in")
+      click_button("Log out")
+      expect(page).to have_button("Sign in")
+    end
+  end
 end
