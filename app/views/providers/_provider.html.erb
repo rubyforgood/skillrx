@@ -21,4 +21,17 @@
       <% end %>
     </ul>
   </p>
+
+  <p>
+    <strong>Provider contributors:</strong>
+    <ul>
+      <% provider.users.each do |user| %>
+        <li>
+          <%= link_to user_path(user) do %>
+            <%= user.email %>
+          <% end %>
+        </li>
+      <% end %>
+    </ul>
+  </p>
 </div>
