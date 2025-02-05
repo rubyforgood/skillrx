@@ -15,6 +15,11 @@ RSpec.describe "/users", type: :request do
       get users_url
       expect(response).to be_successful
     end
+
+    it "has a link to add a new user" do
+      get users_url
+      expect(page).to have_link("Add New User", href: new_user_path)
+    end
   end
 
   describe "GET /new" do
