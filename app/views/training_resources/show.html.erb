@@ -1,0 +1,12 @@
+<p style="color: green"><%= notice %></p>
+
+<%= render @training_resource %>
+
+<div class="mt-4">
+  <%= link_to "Edit this training resource", edit_training_resource_path(@training_resource) %> |
+  <%= link_to "Back to training resources", training_resources_path %>
+</div>
+
+<div>
+  <%= button_to "Destroy this training resource", @training_resource, method: :delete, class: "btn btn-danger mt-4" %>
+</div>
