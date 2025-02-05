@@ -1,10 +1,13 @@
 require "rails_helper"
 
 RSpec.describe "training_resources/edit", type: :view do
+  let(:topic) { create(:topic) }
   let(:training_resource) {
     TrainingResource.create!(
       state: 1,
       document: nil,
+      topic: topic,
+      file_name_override: "test.jpg",
     )
   }
 

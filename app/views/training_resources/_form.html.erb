@@ -13,8 +13,22 @@
 
   <div class="col-md-4">
     <div class="form-group">
+      <%= form.label :topic, style: "display: block" %>
+      <%= form.collection_select :topic_id, Topic.order(:title), :id, :title, { prompt: "Select topic" }, class: "form-select" %>
+    </div>
+  </div>
+
+  <div class="col-md-4">
+    <div class="form-group">
       <%= form.label :state, style: "display: block" %>
       <%= form.number_field :state, class: "form-control", autofocus: true %>
+    </div>
+  </div>
+
+  <div class="col-md-4">
+    <div class="form-group">
+      <%= form.label :file_name_override, style: "display: block" %>
+      <%= form.text_field :file_name_override, class: "form-control" %>
     </div>
   </div>
 

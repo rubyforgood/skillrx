@@ -104,8 +104,11 @@ ActiveRecord::Schema[8.0].define(version: 2025_02_04_141359) do
 
   create_table "training_resources", force: :cascade do |t|
     t.integer "state"
+    t.string "file_name_override"
+    t.bigint "topic_id"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.index ["topic_id"], name: "index_training_resources_on_topic_id"
   end
 
   create_table "users", force: :cascade do |t|
