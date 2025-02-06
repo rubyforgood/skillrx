@@ -59,7 +59,11 @@ end
 puts "Topics created!"
 puts "Creating users..."
 
-User.create(email: "me@mail.com", password: "test123")
+User.create(email: "admin@mail.com", password: "test123", is_admin: true)
+me = User.create(email: "me@mail.com", password: "test123")
+Provider.each do |provider|
+  provider.users << me
+end
 
 10.times do
   User.create(

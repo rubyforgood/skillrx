@@ -1,4 +1,6 @@
 class Topic < ApplicationRecord
+  include Searcheable
+
   belongs_to :language
   belongs_to :provider
 

@@ -2,7 +2,9 @@ class TopicsController < ApplicationController
   before_action :set_topic, only: [ :show, :edit, :update, :destroy, :archive ]
 
   def index
-    @topics = scope.includes(:language, :provider)
+    @topics = scope.search_with_params(search_params)
+    @providers = scope.map(&:provider).uniq.sort_by(&:name)
+    @languages = scope.map(&:language).uniq.sort_by(&:name)
   end
 
   def new
@@ -47,6 +49,13 @@ class TopicsController < ApplicationController
     params.require(:topic).permit(:title, :description, :uid, :language_id, :provider_id)
   end
 
+  helper_method :search_params
+  def search_params
+    return {} unless params[:search].present?
+
+    params.require(:search).permit(:query, :state, :provider_id, :language_id, :year, :month, :order)
+  end
+
   def set_topic
     @topic = Topic.find(params[:id])
   end
@@ -55,7 +64,7 @@ class TopicsController < ApplicationController
     @scope ||= if Current.user.is_admin?
       Topic.all
     else
-      Topic.active
-    end
+      Current.user.topics
+    end.includes(:language, :provider)
   end
 end
