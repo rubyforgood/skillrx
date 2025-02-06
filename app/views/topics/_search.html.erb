@@ -35,7 +35,7 @@
               </div>
               <div class="form-group">
                 <%= f.label :order %>
-                <%= f.select :order, options_for_select(Topic::SORTS.index_with(&:itself), params[:order]), { prompt: "Select order" }, class: "form-select" %>
+                <%= f.select :order, options_for_select(Topic::SORTS.reverse.index_with(&:itself), params[:order]), {}, class: "form-select" %>
               </div>
               <div class="col-12 d-flex justify-content-end">
                 <%= f.submit "Search", class: "btn btn-primary me-1 mb-1" %>

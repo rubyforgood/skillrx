@@ -51,16 +51,9 @@ class TopicsController < ApplicationController
 
   helper_method :search_params
   def search_params
-    default_search_params
-      .then do |def_params|
-        params[:search].present? ? def_params.merge(
-          params.require(:search).permit(:query, :state, :provider_id, :language_id, :year, :month, :order).to_h.symbolize_keys,
-        ) : def_params
-      end
-  end
+    return {} unless params[:search].present?
 
-  def default_search_params
-    { query: nil, state: nil, provider_id: nil, language_id: nil, year: nil, month: nil, order: :desc }
+    params.require(:search).permit(:query, :state, :provider_id, :language_id, :year, :month, :order)
   end
 
   def set_topic

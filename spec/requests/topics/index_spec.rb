@@ -2,7 +2,7 @@ require "rails_helper"
 
 describe "Topics", type: :request do
   describe "GET /topics" do
-    let(:provider) { create(:provider, :with_user) }
+    let(:provider) { create(:provider) }
     let(:user) { create(:user) }
 
     before do
