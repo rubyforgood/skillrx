@@ -3,7 +3,7 @@
 <section class="section">
   <div class="row" id="table-striped">
     <div class="col-12 cold-md-12">
-      <%= render "topics/search", providers: @providers, languages: @languages, params: search_params  %>
+      <%= render "search", providers: @providers, languages: @languages, params: search_params  %>
       <div class="card">
         <div class="card-header d-flex justify-content-between align-items-center">
           <h2 class="card-title">Topics</h2>
@@ -27,36 +27,9 @@
                     <th class="text-end">Actions</th>
                   </tr>
                 </thead>
-                <tbody>
-                  <% @topics.each do |topic| %>
-                    <tr>
-                      <td class="text-bold-500"><%= topic.title %></td>
-                      <td class="text-bold-500"><%= topic.description.truncate(25, omission: "...") %></td>
-                      <td class="text-bold-500"><%= topic.uid.truncate(10, omission: "...") %></td>
-                      <td class="text-bold-500"><%= topic.language.name %></td>
-                      <td class="text-bold-500"><%= topic.provider.name %></td>
-                      <td class="text-bold-500"><%= topic.state %></td>
-                      <td class="text-end">
-                        <%= link_to topic, class: "btn btn-primary btn-sm" do %>
-                          <i class="bi bi-search"></i> View
-                        <% end %>
-                        <%= link_to edit_topic_path(topic), class: "btn btn-secondary btn-sm" do %>
-                          <i class="bi bi-pencil"></i> Edit
-                        <% end %>
-                        <% unless topic.archived? %>
-                          <%= link_to archive_topic_path(topic), method: :put, data: { confirm: "Are you sure?" }, class: "btn btn-danger btn-sm" do %>
-                            <i class="bi bi-archive"></i> Archive
-                          <% end %>
-                        <% end %>
-                        <% if Current.user.is_admin? %>
-                          <%= link_to topic, method: :delete, data: { confirm: "Are you sure?" }, class: "btn btn-danger btn-sm" do %>
-                            <i class="bi bi-trash"></i> Delete
-                          <% end %>
-                        <% end %>
-                      </td>
-                    </tr>
-                  <% end %>
-                </tbody>
+                <%= turbo_frame_tag "topic-list" do %>
+                  <%= render "list", topics: @topics %>
+                <% end %>
               </table>
             </div>
           </div>
