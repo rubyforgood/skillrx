@@ -9,8 +9,12 @@ RSpec.describe "training_resources/index", type: :view do
   end
 
   it "renders a list of training_resources" do
+    create(:training_resource)
+
     cell_selector = "table>tbody>tr"
+
     render
+
     assert_select cell_selector, text: Regexp.new(/filename_/), count: 2
   end
 end

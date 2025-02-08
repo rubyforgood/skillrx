@@ -1,6 +1,6 @@
 FactoryBot.define do
   factory :provider do
-    name { "ACME" }
+    sequence(:name) { |n| "provider_#{n}" }
     provider_type { "provider" }
   end
 end
