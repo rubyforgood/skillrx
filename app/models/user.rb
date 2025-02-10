@@ -8,4 +8,8 @@ class User < ApplicationRecord
 
   validates :email, presence: true, uniqueness: true, format: URI::MailTo::EMAIL_REGEXP
   validates :password_digest, presence: true
+
+  def topics
+    Topic.where(provider_id: providers.pluck(:id))
+  end
 end
