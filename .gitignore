@@ -37,3 +37,4 @@ db/structure.sql
 
 # Ignore IDE config files
 .idea/
+.DS_Store
