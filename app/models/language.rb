@@ -1,4 +1,5 @@
 class Language < ApplicationRecord
+  has_many :topics, dependent: :destroy
   validates :name, presence: true, uniqueness: true
 
   def file_storage_prefix
