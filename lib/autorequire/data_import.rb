@@ -76,7 +76,8 @@ class DataImport
 
     data.each do |row|
       # FIXME we need to search for LIKE name since the Topic_Language is 2 letter abbreviated
-      language = Language.find_by(name: "english")# row["Topic_Language"][0..1].downcase)
+      language = Language.where("name like ?", "#{row["Topic_Language"]}%").first
+      puts "Language #{row["Topic_Language"]} not found" unless language
       provider = Provider.find_by(old_id: row["Provider_ID"])
 
       topic = Topic.find_or_initialize_by(old_id: row["Topic_ID"])
