@@ -12,4 +12,9 @@ class User < ApplicationRecord
   def topics
     Topic.where(provider_id: providers.pluck(:id))
   end
+
+  def default_provider
+    providers.first
+  end
+  
 end
