@@ -11,9 +11,10 @@ class DataImport
   def self.import_all
     import_regions
     import_providers
-    # import_languages
+    import_languages
     # import_branches
     # import_contributors
+    import_topics
   end
 
   def self.file_path(file_name)
@@ -38,8 +39,10 @@ class DataImport
       # First, create the new provider
       # We need to also store the provider's old id
       provider = Provider.find_or_initialize_by(name: row["Provider_Name"], provider_type: row["Provider_Type"])
-      provider.save! if provider.new_record?
-      puts "#{provider.name} #{provider.new_record? ? "created" : "already exists"}"
+      provider.old_id = row["Provider_ID"]
+      new_record = provider.new_record?
+      provider.save! if new_record
+      puts "#{provider.name} #{new_record ? "created" : "already exists"}"
 
       # associate the provider with the region
       region_name = row["region_name"]
@@ -70,11 +73,23 @@ class DataImport
 
   def self.import_topics
     data = CSV.read(file_path("topics_obfuscated.csv"), headers: true)
-    language = Language.find_by(name: row["Topic_Language"][0..1].capitalize)
 
     data.each do |row|
-      topic = Topic.find_or_initialize_by(name: row["name"], language_id: language.id)
-      puts "#{contributor.name} #{contributor.new_record? ? "created" : "already exists"}"
+      # FIXME we need to search for LIKE name since the Topic_Language is 2 letter abbreviated
+      language = Language.find_by(name: "english")# row["Topic_Language"][0..1].downcase)
+      provider = Provider.find_by(old_id: row["Provider_ID"])
+
+      topic = Topic.find_or_initialize_by(old_id: row["Topic_ID"])
+      topic.assign_attributes(
+        title: row["Topic_Original_Title"],
+        language: language,
+        provider: provider,
+        description: row["Topic_Desc"],
+        uid: row["Topic_UID"],
+        state: row["Topic_Archived"].to_i,
+      )
+      topic.save!
+      puts "#{topic.title} #{topic.new_record? ? "created" : "already exists"}"
     end
   end
 end
