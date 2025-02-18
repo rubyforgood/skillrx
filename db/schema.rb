@@ -94,7 +94,7 @@ ActiveRecord::Schema[8.0].define(version: 2025_02_22_124508) do
     t.bigint "provider_id"
     t.bigint "language_id"
     t.string "title", null: false
-    t.text "description", null: false
+    t.text "description"
     t.uuid "uid", default: -> { "gen_random_uuid()" }, null: false
     t.integer "state", default: 0, null: false
     t.datetime "created_at", null: false
