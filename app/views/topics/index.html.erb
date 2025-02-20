@@ -14,24 +14,24 @@
         <div class="card-content">
           <div class="card-body">
             <p class="card-text"> Some important information or instruction can be placed here.</p>
-            <div class="table-responsive">
-              <table class="table table-lg table-striped mb-0">
-                <thead>
-                  <tr>
-                    <th>Title</th>
-                    <th>Description</th>
-                    <th>UID</th>
-                    <th>Language</th>
-                    <th>Provider</th>
-                    <th>State</th>
-                    <th class="text-end">Actions</th>
-                  </tr>
-                </thead>
-                <%= turbo_frame_tag "topic-list" do %>
+            <%= turbo_frame_tag "topic-list" do %>
+              <div class="table-responsive">
+                <table class="table table-lg table-striped mb-0">
+                  <thead>
+                    <tr>
+                      <th>Title</th>
+                      <th>Description</th>
+                      <th>UID</th>
+                      <th>Language</th>
+                      <th>Provider</th>
+                      <th>State</th>
+                      <th class="text-end">Actions</th>
+                    </tr>
+                  </thead>
                   <%= render "list", topics: @topics %>
-                <% end %>
-              </table>
-            </div>
+                </table>
+              </div>
+            <% end %>
           </div>
         </div>
       </div>
