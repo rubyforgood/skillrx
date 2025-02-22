@@ -6,6 +6,7 @@ RSpec.describe Language, type: :model do
   context "validations" do
     let(:name) { Faker::Name.name }
     it { should validate_presence_of(:name) }
+    it { should validate_length_of(:name).is_at_least(2) }
   end
 
   describe ".file_storage_prefix" do
