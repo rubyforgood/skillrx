@@ -61,7 +61,7 @@ puts "Creating users..."
 
 User.create(email: "admin@mail.com", password: "test123", is_admin: true)
 me = User.create(email: "me@mail.com", password: "test123")
-Provider.each do |provider|
+Provider.all.each do |provider|
   provider.users << me
 end
 
