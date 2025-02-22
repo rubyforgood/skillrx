@@ -26,7 +26,7 @@
                   <% @languages.each do |language| %>
                     <tr>
                       <td class="text-bold-500"><%= language.name %></td>
-                      <td class="text-bold-500"><%= language.file_share_folder %></td>
+                      <td class="text-bold-500"><%= language.file_storage_prefix %></td>
                       <td class="text-end">
                         <%= link_to edit_language_path(language), class: "btn btn-secondary btn-sm" do %>
                           <i class="bi bi-pencil"></i> Edit

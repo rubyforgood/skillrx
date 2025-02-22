@@ -8,14 +8,14 @@ describe "Languages", type: :request do
 
     it "updates a Language" do
       language = create(:language)
-      language_params = { name: "french", file_share_folder: "languages/french" }
+      language_params = { name: "french" }
 
       put language_url(language), params: { language: language_params }
 
       language.reload
       expect(response).to redirect_to(languages_path)
       expect(language.name).to eq("french")
-      expect(language.file_share_folder).to eq("languages/french")
+      expect(language.file_storage_prefix).to eq("FR_")
     end
   end
 end

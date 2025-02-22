@@ -31,7 +31,7 @@ class LanguagesController < ApplicationController
   private
 
   def language_params
-    params.require(:language).permit(:name, :file_share_folder)
+    params.require(:language).permit(:name)
   end
 
   def set_language
