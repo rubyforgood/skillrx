@@ -8,7 +8,7 @@ describe "Languages", type: :request do
 
     it "updates a Language" do
       language = create(:language)
-      language_params = { name: "french", file_share_folder: "languages/french" }
+      language_params = { name: "french" }
 
       put language_url(language), params: { language: language_params }
 

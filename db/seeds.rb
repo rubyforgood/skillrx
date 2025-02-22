@@ -17,8 +17,8 @@ User.destroy_all
 puts "Creating languages..."
 
 [
-  { name: "english", file_share_folder: "languages/english" },
-  { name: "spanish", file_share_folder: "languages/spanish" },
+  { name: "english" },
+  { name: "spanish" },
 ].each do |language|
   Language.find_or_create_by!(language)
 end
