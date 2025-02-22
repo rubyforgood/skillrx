@@ -12,7 +12,7 @@ describe "Languages", type: :request do
 
       expect(response).to redirect_to(languages_path)
       expect(Language.last.name).to eq("french")
-      expect(Language.last.file_share_folder).to eq("languages/french")
+      expect(Language.last.file_storage_prefix).to eq("FR_")
     end
   end
 end
