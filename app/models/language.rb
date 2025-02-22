@@ -8,6 +8,7 @@
 #  updated_at :datetime         not null
 #
 class Language < ApplicationRecord
+  has_many :topics, dependent: :destroy
   validates :name, presence: true, uniqueness: true, length: { minimum: 2 }
 
   def file_storage_prefix
