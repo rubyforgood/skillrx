@@ -56,6 +56,7 @@ group :development, :test do
 end
 
 group :development do
+  gem "annotaterb"
   gem "bullet"
   gem "hotwire-spark"
   gem "letter_opener"
