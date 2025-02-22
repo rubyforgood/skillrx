@@ -1,8 +1,8 @@
 class Language < ApplicationRecord
-  validates :name, presence: true, uniqueness: true
+  validates :name, presence: true, uniqueness: true, length: { minimum: 2 }
 
   def file_storage_prefix
-    return "" if name == "English" || name.nil?
+    return "" if name.downcase == "english" || name.nil?
 
     "#{name.first(2).upcase}_"
   end
