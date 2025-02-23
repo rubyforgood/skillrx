@@ -3,7 +3,7 @@ require "rails_helper"
 describe "Languages", type: :request do
   describe "POST /languages" do
     let(:user) { create(:user, :admin) }
-    let(:language_params) { { name: "french", file_share_folder: "languages/french" } }
+    let(:language_params) { { name: "french" } }
 
     before { sign_in(user) }
 
@@ -12,7 +12,7 @@ describe "Languages", type: :request do
 
       expect(response).to redirect_to(languages_path)
       expect(Language.last.name).to eq("french")
-      expect(Language.last.file_share_folder).to eq("languages/french")
+      expect(Language.last.file_storage_prefix).to eq("FR_")
     end
   end
 end

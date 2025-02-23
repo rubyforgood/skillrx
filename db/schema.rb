@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.0].define(version: 2025_02_04_141359) do
+ActiveRecord::Schema[8.0].define(version: 2025_02_22_124508) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_catalog.plpgsql"
 
@@ -62,7 +62,6 @@ ActiveRecord::Schema[8.0].define(version: 2025_02_04_141359) do
 
   create_table "languages", force: :cascade do |t|
     t.string "name"
-    t.string "file_share_folder"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
   end
@@ -72,6 +71,8 @@ ActiveRecord::Schema[8.0].define(version: 2025_02_04_141359) do
     t.string "provider_type"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.integer "old_id"
+    t.index ["old_id"], name: "index_providers_on_old_id", unique: true
   end
 
   create_table "regions", force: :cascade do |t|
@@ -93,12 +94,14 @@ ActiveRecord::Schema[8.0].define(version: 2025_02_04_141359) do
     t.bigint "provider_id"
     t.bigint "language_id"
     t.string "title", null: false
-    t.text "description", null: false
+    t.text "description"
     t.uuid "uid", default: -> { "gen_random_uuid()" }, null: false
     t.integer "state", default: 0, null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.integer "old_id"
     t.index ["language_id"], name: "index_topics_on_language_id"
+    t.index ["old_id"], name: "index_topics_on_old_id", unique: true
     t.index ["provider_id"], name: "index_topics_on_provider_id"
   end
 
