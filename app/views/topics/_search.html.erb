@@ -4,42 +4,53 @@
   </div>
   <div class="card-content">
     <div class="card-body">
-      <p class="card-text"> Use these params settings to search topics</p>
       <%= form_for :search, url: topics_path, method: :get, data: { controller: "topics", topics_target: "form", turbo_frame: "topic-list", turbo_action: "advance" } do |f| %>
         <div class="form-body">
           <div class="row">
-            <div class="col-12">
+            <div class="col-md-6 col-12">
               <div class="form-group">
                 <%= f.label :provider %>
                 <%= f.select :provider_id, options_from_collection_for_select(providers, :id, :name, params[:provider_id]), { prompt: "Select provider" }, class: "form-select", data: { action: "change->topics#search" } %>
               </div>
+            </div>
+            <div class="col-md-6 col-12">
               <div class="form-group">
                 <%= f.label :language %>
                 <%= f.select :language_id, options_from_collection_for_select(languages, :id, :name, params[:provider_id]),  { prompt: "Select language" }, class: "form-select", data: { action: "change->topics#search" } %>
               </div>
+            </div>
+            <div class="col-md-6 col-12">
               <div class="form-group">
                 <%= f.label :query %>
                 <%= f.text_field :query, value: params[:query], class: "form-control", data: { action: "input->topics#search" } %>
               </div>
+            </div>
+            <div class="col-md-3 col-12">
               <div class="form-group">
                 <%= f.label :year %>
                 <%= f.select :year, options_for_select((Date.today.year-10..Date.today.year).to_a, params[:year]), { prompt: "Select year" }, class: "form-select", data: { action: "change->topics#search" } %>
               </div>
+            </div>
+            <div class="col-md-3 col-12">
               <div class="form-group">
                 <%= f.label :month %>
                 <%= f.select :month, options_for_select((1..12).to_a, params[:month]), { prompt: "Select month" }, class: "form-select", data: { action: "change->topics#search" } %>
               </div>
+            </div>
+            <div class="col-md-6 col-12">
               <div class="form-group">
                 <%= f.label :state %>
                 <%= f.select :state, options_for_select(Topic::STATES.index_with(&:itself), params[:state]), { prompt: "Select state" }, class: "form-select", data: { action: "change->topics#search" } %>
               </div>
+            </div>
+            <div class="col-md-6 col-12">
               <div class="form-group">
                 <%= f.label :order %>
                 <%= f.select :order, options_for_select(Topic::SORTS.reverse.index_with(&:itself), params[:order]), {}, class: "form-select", data: { action: "change->topics#search" } %>
               </div>
-              <div class="col-12 d-flex justify-content-end">
-                <%= link_to "Clear", topics_path, class: "btn btn-light-secondary me-1 mb-1" %>
-              </div>
+            </div>
+            <div class="col-12 d-flex justify-content-end">
+              <%= link_to "Clear", topics_path, class: "btn btn-light-secondary me-1 mb-1" %>
             </div>
           </div>
         </div>
