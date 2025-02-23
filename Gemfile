@@ -42,7 +42,8 @@ gem "thruster", require: false
 # Use Active Storage variants [https://guides.rubyonrails.org/active_storage_overview.html#transforming-images]
 gem "image_processing", "~> 1.14"
 
-gem 'azure-storage-blob'
+gem "azure-storage-blob"
+gem "dotenv-rails"
 gem "rest-client"
 
 group :development, :test do
