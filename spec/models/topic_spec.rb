@@ -23,7 +23,7 @@ require "rails_helper"
 
 RSpec.describe Topic, type: :model do
   subject { create(:topic) }
-  
+
   context "validations" do
     it { should validate_presence_of(:title) }
     it { should validate_presence_of(:language_id) }
@@ -32,5 +32,7 @@ RSpec.describe Topic, type: :model do
 
   context "associations" do
     it { should have_many_attached(:documents) }
+    it { is_expected.to validate_content_type_of(:documents).allowing("image/png", "image/jpeg", "image/svg+xml", "image/webp", "image/avif", "image/gif", "video/mp4") }
+    it { is_expected.to validate_size_of(:documents).less_than(10.megabytes) }
   end
 end
