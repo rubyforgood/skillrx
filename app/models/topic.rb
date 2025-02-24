@@ -28,6 +28,7 @@ class Topic < ApplicationRecord
   has_many_attached :documents
 
   validates :title, :language_id, :provider_id, presence: true
+  validates :documents, content_type: %w[jpeg jpg png svg webp avif gif mp4]
 
   STATES = %i[active archived].freeze
 

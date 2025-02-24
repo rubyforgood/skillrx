@@ -46,7 +46,7 @@ class TopicsController < ApplicationController
   private
 
   def topic_params
-    params.require(:topic).permit(:title, :description, :uid, :language_id, :provider_id)
+    params.require(:topic).permit(:title, :description, :uid, :language_id, :provider_id, documents: [])
   end
 
   helper_method :search_params

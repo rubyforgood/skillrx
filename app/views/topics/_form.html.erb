@@ -24,6 +24,10 @@
           <%= f.label :description %>
           <%= f.text_area :description, class: "form-control", placeholder: "Descripion" %>
         </div>
+        <div class="form-group">
+          <%= f.label :documents, style: "display: block" %>
+          <%= f.file_field :documents, multiple: true, class: "form-control" %>
+        </div>
         <div class="col-12 d-flex justify-content-end">
           <%= f.submit "Save", class: "btn btn-primary me-1 mb-1" %>
           <%= link_to "Cancel", topics_path, class: "btn btn-light-secondary me-1 mb-1" %>
