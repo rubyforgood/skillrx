@@ -1,0 +1,12 @@
+<%= form_for :provider , url: provider_settings_path, method: :put, data: { controller: "topics", topics_target: "chooseForm" } do |f| %>
+  <div class="form-body">
+    <div class="row">
+      <div class="col-md-6 col-12">
+        <div class="form-group">
+          <%= f.label :provider %>
+          <%= f.select :id, options_from_collection_for_select(providers, :id, :name), { prompt: "Change provider" }, class: "form-select", data: { action: "change->topics#chooseProvider" } %>
+        </div>
+      </div>
+    </div>
+  </div>
+<% end %>

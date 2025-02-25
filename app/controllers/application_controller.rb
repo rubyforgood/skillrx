@@ -10,4 +10,5 @@ class ApplicationController < ActionController::Base
       Current.user.providers.first
     end
   end
+  helper_method :current_provider
 end
