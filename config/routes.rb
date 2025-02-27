@@ -5,7 +5,6 @@ Rails.application.routes.draw do
   resources :regions
   resource :registration, only: %i[new create]
   resource :session
-  resources :training_resources
   resources :users
   resources :topics do
     put :archive, on: :member

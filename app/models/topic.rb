@@ -24,7 +24,6 @@ class Topic < ApplicationRecord
 
   belongs_to :language
   belongs_to :provider
-  has_many :training_resources
   has_many_attached :documents
 
   validates :title, :language_id, :provider_id, presence: true
