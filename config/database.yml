@@ -78,21 +78,18 @@ test:
 # for a full overview on how database connection configuration can be specified.
 #
 production:
-  primary: &primary_production
+  primary:
     <<: *default
     url: <%= ENV['DATABASE_URL'] %>
   cache:
     <<: *default
     url: <%= ENV['HEROKU_POSTGRESQL_CACHE_URL'] || ENV['DATABASE_URL'] %>
-    database: skillrx_production_cache
     migrations_paths: db/cache_migrate
   queue:
     <<: *default
     url: <%= ENV['HEROKU_POSTGRESQL_QUEUE_URL'] || ENV['DATABASE_URL'] %>
-    database: skillrx_production_queue
     migrations_paths: db/queue_migrate
   cable:
     <<: *default
     url: <%= ENV['HEROKU_POSTGRESQL_CABLE_URL'] || ENV['DATABASE_URL'] %>
-    database: skillrx_production_cable
     migrations_paths: db/cable_migrate
