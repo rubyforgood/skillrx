@@ -9,7 +9,7 @@ describe "Settings", type: :request do
 
     context "when provider cannot be found" do
       it "does not update current provider" do
-        put provider_settings_url, params: { id: provider.id }
+        put provider_settings_url, params: { provider: { id: provider.id } }
 
         expect(response).to have_http_status(:not_found)
       end
@@ -21,7 +21,7 @@ describe "Settings", type: :request do
       end
 
       it "updates current provider" do
-        put provider_settings_url, params: { id: provider.id }
+        put provider_settings_url, params: { provider: { id: provider.id } }
 
         signed_cookies = ActionDispatch::Request.new(Rails.application.env_config).cookie_jar
 

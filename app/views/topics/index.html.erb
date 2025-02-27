@@ -7,7 +7,7 @@
       <%= turbo_frame_tag "topics" do %>
         <div class="card">
           <div class="card-header d-flex justify-content-between align-items-center">
-            <h2 class="card-title"><%= current_provider.name %>'s topics</h2>
+            <h2 class="card-title"><%= topics_title %></h2>
             <%= link_to new_topic_path, class: "btn btn-primary" do %>
               <i class="bi bi-plus"></i> Add New Topic
             <% end %>

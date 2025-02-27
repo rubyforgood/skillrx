@@ -46,7 +46,7 @@ class TopicsController < ApplicationController
   private
 
   def other_available_providers
-    return unless Current.user.providers.any?
+    return [] unless Current.user.providers.any?
 
     Current.user.providers.where.not(id: current_provider.id)
   end
@@ -69,8 +69,15 @@ class TopicsController < ApplicationController
   def scope
     @scope ||= if Current.user.is_admin?
       Topic.all
-    else
+    elsif current_provider.present?
       current_provider.topics
+    else
+      Current.user.topics
     end.includes(:language, :provider)
   end
+
+  def topics_title
+    current_provider.present? ? "#{current_provider.name}/topics" : "Topics"
+  end
+  helper_method :topics_title
 end
