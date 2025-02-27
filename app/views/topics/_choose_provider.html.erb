@@ -1,4 +1,4 @@
-<%= form_for :provider , url: provider_settings_path, method: :put, data: { controller: "topics", topics_target: "chooseForm" } do |f| %>
+<%= form_for :provider , url: provider_settings_path, method: :put, data: { controller: "topics", topics_target: "chooseForm", turbo_frame: "topics", turbo_action: "advance" } do |f| %>
   <div class="form-body">
     <div class="row">
       <div class="col-md-6 col-12">

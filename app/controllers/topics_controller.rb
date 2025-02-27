@@ -70,7 +70,7 @@ class TopicsController < ApplicationController
     @scope ||= if Current.user.is_admin?
       Topic.all
     else
-      Current.user.topics
+      current_provider.topics
     end.includes(:language, :provider)
   end
 end

@@ -1,6 +1,6 @@
 class SettingsController < ApplicationController
   def provider
-    provider = provider_scope.find(provider_params[:id])
+    provider = provider_scope.find_by(id: provider_params[:id])
     cookies.signed[:current_provider_id] = provider.id if provider
     redirect_to request.referer || root_path
   end
