@@ -5,7 +5,11 @@ class DataImport
   # Regions must be imported before providers
 
   def self.destroy_all_data
-    ActiveRecord::Base.descendants.each(&:delete_all)
+    Topic.destroy_all
+    Provider.destroy_all
+    Language.destroy_all
+    Region.destroy_all
+    User.destroy_all
   end
 
   def self.import_all
@@ -15,6 +19,7 @@ class DataImport
     # import_branches
     # import_contributors
     import_topics
+    restore_default_admin
   end
 
   def self.file_path(file_name)
@@ -53,8 +58,8 @@ class DataImport
 
       # Then, create the user that will be associated with the provider
       puts "Creating user for #{provider.name}"
-      user = User.find_or_initialize_by(email: "#{row["Provider_Name"]}@test.test", password_digest: BCrypt::Password.create(row["Provider_Password"]))
-      user.save! if user.new_record?
+      user = User.find_by(email: "#{row["Provider_Name"]}@test.test")
+      user = User.create(email: "#{row["Provider_Name"]}@test.test", password_digest: BCrypt::Password.create(row["Provider_Password"])) if user.blank?
 
       # Then, associate the user with the provider
       provider.users << user unless provider.users.include?(user)
@@ -63,8 +68,8 @@ class DataImport
 
   def self.import_languages
     [
-      { name: "english", file_share_folder: "languages/english" },
-      { name: "spanish", file_share_folder: "languages/spanish" },
+      { name: "english" },
+      { name: "spanish" },
     ].each do |language|
       language = Language.find_or_create_by!(language)
       puts "#{language.name} #{language.new_record? ? "created" : "already exists"}"
@@ -81,16 +86,25 @@ class DataImport
       provider = Provider.find_by(old_id: row["Provider_ID"])
 
       topic = Topic.find_or_initialize_by(old_id: row["Topic_ID"])
+      debugger if row["Topic_UID"].empty?
+      # uid = row["Topic_UID"].nil? ? SecureRandom.uuid : row["Topic_UID"]
       topic.assign_attributes(
         title: row["Topic_Original_Title"],
         language: language,
         provider: provider,
         description: row["Topic_Desc"],
-        uid: row["Topic_UID"],
+        # uid: uid,
         state: row["Topic_Archived"].to_i,
       )
-      topic.save!
+      puts "#{topic.id} - #{topic.uid} - #{row["Topic_UID"]}"
+      # topic.save!
       puts "#{topic.title} #{topic.new_record? ? "created" : "already exists"}"
     end
+  end
+
+  def self.restore_default_admin
+    return if User.find_by_email("admin@email.com")
+
+    User.create(email: "admin@mail.com", password: "test123", is_admin: true)
   end
 end
