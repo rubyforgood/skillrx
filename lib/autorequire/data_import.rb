@@ -111,5 +111,6 @@ class DataImport
     return if User.find_by_email("admin@email.com")
 
     User.create(email: "admin@mail.com", password: "test123", is_admin: true)
-  end
+    me = User.create(email: "me@mail.com", password: "test123")
+    Provider.first.users << me
 end
