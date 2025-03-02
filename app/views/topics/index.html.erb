@@ -4,37 +4,42 @@
   <div class="row" id="table-striped">
     <div class="col-12 cold-md-12">
       <%= render "search", providers: @providers, languages: @languages, params: search_params  %>
-      <div class="card">
-        <div class="card-header d-flex justify-content-between align-items-center">
-          <h2 class="card-title">Topics</h2>
-          <%= link_to new_topic_path, class: "btn btn-primary" do %>
-            <i class="bi bi-plus"></i> Add New Topic
-          <% end %>
-        </div>
-        <div class="card-content">
-          <div class="card-body">
-            <p class="card-text"> Some important information or instruction can be placed here.</p>
-            <%= turbo_frame_tag "topic-list" do %>
-              <div class="table-responsive">
-                <table class="table table-lg table-striped mb-0">
-                  <thead>
-                    <tr>
-                      <th>Title</th>
-                      <th>Description</th>
-                      <th>UID</th>
-                      <th>Language</th>
-                      <th>Provider</th>
-                      <th>State</th>
-                      <th class="text-end">Actions</th>
-                    </tr>
-                  </thead>
-                  <%= render "list", topics: @topics %>
-                </table>
-              </div>
+      <%= turbo_frame_tag "topics" do %>
+        <div class="card">
+          <div class="card-header d-flex justify-content-between align-items-center">
+            <h2 class="card-title"><%= topics_title %></h2>
+            <%= link_to new_topic_path, class: "btn btn-primary" do %>
+              <i class="bi bi-plus"></i> Add New Topic
             <% end %>
           </div>
+          <div class="card-content">
+            <div class="card-body">
+              <% if @available_providers.any? %>
+                <%= render "choose_provider", providers: @available_providers %>
+              <% end %>
+              <p class="card-text"> Some important information or instruction can be placed here.</p>
+              <%= turbo_frame_tag "topic-list" do %>
+                <div class="table-responsive">
+                  <table class="table table-lg table-striped mb-0">
+                    <thead>
+                      <tr>
+                        <th>Title</th>
+                        <th>Description</th>
+                        <th>UID</th>
+                        <th>Language</th>
+                        <th>Provider</th>
+                        <th>State</th>
+                        <th class="text-end">Actions</th>
+                      </tr>
+                    </thead>
+                    <%= render "list", topics: @topics %>
+                  </table>
+                </div>
+              <% end %>
+            </div>
+          </div>
         </div>
-      </div>
+      <% end %>
     </div>
   </div>
 </section>
