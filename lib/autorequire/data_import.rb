@@ -19,7 +19,7 @@ class DataImport
     # import_branches
     # import_contributors
     import_topics
-    restore_default_admin
+    restore_default_users
   end
 
   def self.file_path(file_name)
@@ -101,17 +101,27 @@ class DataImport
         # uid: uid,
         state: row["Topic_Archived"].to_i,
       )
-      puts "#{topic.id} - #{topic.uid} - #{row["Topic_UID"]}"
-      topic.save!
       puts "#{topic.title} #{topic.new_record? ? "created" : "already exists"}"
+      topic.save!
     end
   end
 
-  def self.restore_default_admin
+  def self.restore_default_users
     return if User.find_by_email("admin@email.com")
 
-    User.create(email: "admin@mail.com", password: "test123", is_admin: true)
-    me = User.create(email: "me@mail.com", password: "test123")
-    Provider.first.users << me
+    admin = User.find_by(email: "admin@mail.com")
+    if admin.nil?
+      User.create!(email: "admin@mail.com", password: "test123", is_admin: true)
+    end
+    Provider.all.each do |provider|
+      provider.users << admin unless provider.users.include?(admin)
+    end
+
+    me = User.find_by(email: "me@mail.com")
+    if me.nil?
+     me = User.create!(email: "me@mail.com", password: "test123")
+    end
+
+    Provider.first.users << me unless Provider.first.users.include?(me)
   end
 end
