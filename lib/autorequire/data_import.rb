@@ -42,11 +42,15 @@ class DataImport
 
     data.each do |row|
       # First, create the new provider
-      # We need to also store the provider's old id
-      provider = Provider.find_or_initialize_by(name: row["Provider_Name"], provider_type: row["Provider_Type"])
-      provider.old_id = row["Provider_ID"]
+      provider = Provider.find_or_initialize_by(id: row["Provider_ID"])
       new_record = provider.new_record?
-      provider.save! if new_record
+      if new_record
+        provider.assign_attributes(
+          name: row["Provider_Name"],
+          provider_type: row["Provider_Type"],
+        )
+        provider.save!
+      end
       puts "#{provider.name} #{new_record ? "created" : "already exists"}"
 
       # associate the provider with the region
@@ -83,12 +87,13 @@ class DataImport
       # FIXME we need to search for LIKE name since the Topic_Language is 2 letter abbreviated
       language = Language.where("name like ?", "#{row["Topic_Language"]}%").first
       puts "Language #{row["Topic_Language"]} not found" unless language
-      provider = Provider.find_by(old_id: row["Provider_ID"])
+      provider = Provider.find_by(id: row["Provider_ID"])
 
-      topic = Topic.find_or_initialize_by(old_id: row["Topic_ID"])
+      topic = Topic.find_or_initialize_by(id: row["Topic_ID"])
       debugger if row["Topic_UID"].empty?
       # uid = row["Topic_UID"].nil? ? SecureRandom.uuid : row["Topic_UID"]
       topic.assign_attributes(
+        id: row["Topic_ID"],
         title: row["Topic_Original_Title"],
         language: language,
         provider: provider,
@@ -97,7 +102,7 @@ class DataImport
         state: row["Topic_Archived"].to_i,
       )
       puts "#{topic.id} - #{topic.uid} - #{row["Topic_UID"]}"
-      # topic.save!
+      topic.save!
       puts "#{topic.title} #{topic.new_record? ? "created" : "already exists"}"
     end
   end
