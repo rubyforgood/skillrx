@@ -113,4 +113,5 @@ class DataImport
     User.create(email: "admin@mail.com", password: "test123", is_admin: true)
     me = User.create(email: "me@mail.com", password: "test123")
     Provider.first.users << me
+  end
 end
