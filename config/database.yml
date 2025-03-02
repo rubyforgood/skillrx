@@ -83,7 +83,6 @@ production:
     url: <%= ENV['DATABASE_URL'] %>
   cache:
     <<: *default
-    url: <%= ENV['HEROKU_POSTGRESQL_CACHE_URL'] || ENV['DATABASE_URL'] %>
     migrations_paths: db/cache_migrate
   queue:
     <<: *default
