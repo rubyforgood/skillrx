@@ -20,7 +20,12 @@
 #  index_topics_on_provider_id  (provider_id)
 #
 class Topic < ApplicationRecord
+  STATES = %i[active archived].freeze
+
+  acts_as_taggable_on :tags
+
   include Searcheable
+  include LocalizedTaggable
 
   belongs_to :language
   belongs_to :provider
@@ -28,8 +33,6 @@ class Topic < ApplicationRecord
 
   validates :title, :language_id, :provider_id, presence: true
   validates :documents, content_type: %w[image/jpeg image/png image/svg+xml image/webp image/avif image/gif video/mp4], size: { less_than: 10.megabytes }
-
-  STATES = %i[active archived].freeze
 
   enum :state, STATES.map.with_index.to_h
 

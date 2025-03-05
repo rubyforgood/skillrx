@@ -1,3 +1,8 @@
+<script type="module">
+  import Tags from "bootstrap5-tags";
+
+  Tags.init("select#topic_tag_list");
+</script>
 
 <%= form_for topic do |f| %>
   <div class="form-body">
@@ -10,19 +15,36 @@
         </div>
         <div class="form-group">
           <%= f.label :description %>
-          <%= f.text_area :description, class: "form-control", placeholder: "Descripion" %>
-        </div>
-        <div class="form-group">
-          <%= f.label :language %>
-          <%= f.collection_select :language_id, Language.all, :id, :name, { prompt: "Select Language" }, class: "form-select" %>
+          <%= f.text_area :description, class: "form-control", placeholder: "Description" %>
         </div>
         <div class="form-group">
           <%= f.label :provider %>
           <%= f.collection_select :provider_id, Provider.all, :id, :name, { prompt: "Select Provider" }, class: "form-select" %>
         </div>
         <div class="form-group">
-          <%= f.label :description %>
-          <%= f.text_area :description, class: "form-control", placeholder: "Descripion" %>
+          <%= f.label :language %>
+          <%= f.collection_select :language_id,
+                                  Language.all,
+                                  :id,
+                                  :name,
+                                  { prompt: "Select Language" },
+                                  class: "form-select"
+          %>
+        </div>
+        <div class="form-group">
+          <%= f.label :tag_list %>
+          <%= f.select :tag_list,
+                       options_from_collection_for_select(
+                         topic.available_tags,
+                         :name,
+                         :name,
+                         topic.current_tags
+                       ),
+                       { prompt: "Select tags", include_blank: true },
+                       multiple: true,
+                       class: "form-select",
+                       data: { "allow-new": "true", "allow-clear": "true" }
+          %>
         </div>
         <div class="form-group">
           <%= f.label :documents, style: "display: block" %>
