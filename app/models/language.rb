@@ -14,6 +14,10 @@ class Language < ApplicationRecord
   def file_storage_prefix
     return "" if name.downcase == "english" || name.nil?
 
-    "#{name.first(2).upcase}_"
+    "#{code.upcase}_"
+  end
+
+  def code
+    name.first(2).downcase
   end
 end
