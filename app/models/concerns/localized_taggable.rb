@@ -18,8 +18,10 @@ module LocalizedTaggable
   # @return [Symbol] the language context for tagging
   # @raise [LanguageContextError] if language or code is not present
   def language_tag_context
+    return nil if new_record?
+
     raise LanguageContextError, "Language must be present" if language.nil?
-    raise LanguageContextError, "Language ISO code must be present" if !new_record? && language.code.blank?
+    raise LanguageContextError, "Language code must be present" if language.code.blank?
 
     language.code.to_sym
   end
@@ -28,6 +30,8 @@ module LocalizedTaggable
   #
   # @return [ActiveRecord::Relation] collection of ActsAsTaggableOn::Tag
   def available_tags
+    return [] if language_tag_context.nil?
+
     ActsAsTaggableOn::Tag.for_context(language_tag_context)
   end
 
@@ -35,6 +39,8 @@ module LocalizedTaggable
   #
   # @return [ActiveRecord::Relation] collection of ActsAsTaggableOn::Tag
   def current_tags
+    return [] if language_tag_context.nil?
+
     tag_list_on(language_tag_context)
   end
 end
