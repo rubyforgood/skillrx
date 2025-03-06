@@ -8,19 +8,19 @@
       <td class="text-bold-500"><%= topic.provider.name %></td>
       <td class="text-bold-500"><%= topic.state %></td>
       <td class="text-end">
-        <%= link_to topic, class: "btn btn-primary btn-sm" do %>
+        <%= link_to topic, class: "btn btn-primary btn-sm", data: {turbo: false } do %>
           <i class="bi bi-search"></i> View
         <% end %>
-        <%= link_to edit_topic_path(topic), class: "btn btn-secondary btn-sm" do %>
+        <%= link_to edit_topic_path(topic), class: "btn btn-secondary btn-sm", data: {turbo: false } do %>
           <i class="bi bi-pencil"></i> Edit
         <% end %>
         <% unless topic.archived? %>
-          <%= link_to archive_topic_path(topic), method: :put, data: { confirm: "Are you sure?" }, class: "btn btn-danger btn-sm" do %>
+          <%= link_to archive_topic_path(topic), method: :put, data: { confirm: "Are you sure?" }, class: "btn btn-danger btn-sm", data: {turbo: false } do %>
             <i class="bi bi-archive"></i> Archive
           <% end %>
         <% end %>
         <% if Current.user.is_admin? %>
-          <%= link_to topic, method: :delete, data: { confirm: "Are you sure?" }, class: "btn btn-danger btn-sm" do %>
+          <%= link_to topic, method: :delete, data: { confirm: "Are you sure?" }, class: "btn btn-danger btn-sm", data: {turbo: false } do %>
             <i class="bi bi-trash"></i> Delete
           <% end %>
         <% end %>
