@@ -16,10 +16,12 @@
           <%= f.label :language %>
           <%= f.collection_select :language_id, Language.all, :id, :name, { prompt: "Select Language" }, class: "form-select" %>
         </div>
-        <div class="form-group">
-          <%= f.label :provider %>
-          <%= f.collection_select :provider_id, Provider.all, :id, :name, { prompt: "Select Provider" }, class: "form-select" %>
-        </div>
+        <% if Current.user.is_admin? %>
+          <div class="form-group">
+            <%= f.label :provider %>
+            <%= f.collection_select :provider_id, Provider.all, :id, :name, { prompt: "Select Provider" }, class: "form-select" %>
+          </div>
+        <% end %>
         <div class="form-group">
           <%= f.label :description %>
           <%= f.text_area :description, class: "form-control", placeholder: "Descripion" %>
