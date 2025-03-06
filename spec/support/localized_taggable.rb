@@ -33,10 +33,10 @@ RSpec.shared_examples "localized taggable" do
     end
   end
 
-  describe "#current_tags" do
+  describe "#current_tags_list" do
     it "returns tags for the language context" do
       expect(instance).to receive(:tag_list_on).with(:en)
-      instance.current_tags
+      instance.current_tags_list
     end
   end
 end
