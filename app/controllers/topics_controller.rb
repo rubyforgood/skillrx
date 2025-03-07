@@ -1,4 +1,6 @@
 class TopicsController < ApplicationController
+  include Taggable
+
   before_action :set_topic, only: [ :show, :edit, :update, :destroy, :archive ]
 
   def index
@@ -14,7 +16,7 @@ class TopicsController < ApplicationController
   def create
     @topic = scope.new(topic_params)
 
-    if @topic.save
+    if save_with_tags(@topic, topic_params)
       redirect_to topics_path
     else
       render :new
@@ -28,8 +30,11 @@ class TopicsController < ApplicationController
   end
 
   def update
-    @topic.update(topic_params)
-    redirect_to topics_path
+    if save_with_tags(@topic, topic_params)
+      redirect_to topics_path
+    else
+      render :edit
+    end
   end
 
   def destroy
@@ -52,7 +57,7 @@ class TopicsController < ApplicationController
   end
 
   def topic_params
-    params.require(:topic).permit(:title, :description, :uid, :language_id, :provider_id, documents: [])
+    params.require(:topic).permit(:title, :description, :uid, :language_id, :provider_id, tag_list: [], documents: [])
   end
 
   def search_params
