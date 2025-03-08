@@ -6,7 +6,7 @@
 #  description :text
 #  state       :integer          default("active"), not null
 #  title       :string           not null
-#  uid         :uuid             not null
+#  uid         :string
 #  created_at  :datetime         not null
 #  updated_at  :datetime         not null
 #  language_id :bigint
@@ -23,9 +23,8 @@ FactoryBot.define do
   factory :topic do
     association :provider
     association :language
-    title { "topic" }
-    description { "details" }
-    uid { SecureRandom.uuid }
+    title { "topic title" }
+    description { "many topic details" }
     state { 0 }
 
     trait :archived do

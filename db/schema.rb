@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.0].define(version: 2025_02_26_181219) do
+ActiveRecord::Schema[8.0].define(version: 2025_03_08_200109) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_catalog.plpgsql"
 
@@ -95,11 +95,11 @@ ActiveRecord::Schema[8.0].define(version: 2025_02_26_181219) do
     t.bigint "language_id"
     t.string "title", null: false
     t.text "description"
-    t.uuid "uid", default: -> { "gen_random_uuid()" }, null: false
     t.integer "state", default: 0, null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.integer "old_id"
+    t.string "uid"
     t.index ["language_id"], name: "index_topics_on_language_id"
     t.index ["old_id"], name: "index_topics_on_old_id", unique: true
     t.index ["provider_id"], name: "index_topics_on_provider_id"
