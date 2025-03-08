@@ -3,7 +3,7 @@
     <tr>
       <td class="text-bold-500"><%= topic.title %></td>
       <td class="text-bold-500"><%= topic.description.present? && topic.description.truncate(25, omission: "...") %></td>
-      <td class="text-bold-500"><%= topic.uid.truncate(10, omission: "...") %></td>
+      <td class="text-bold-500"><%= topic.uid.truncate(10, omission: "...") if topic.uid %></td>
       <td class="text-bold-500"><%= topic.language.name %></td>
       <td class="text-bold-500"><%= topic.provider.name %></td>
       <td class="text-bold-500"><%= topic.state %></td>

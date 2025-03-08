@@ -17,8 +17,8 @@ describe "Topics", type: :request do
 
       expect(response).to redirect_to(topics_url)
       topic = Topic.last
-      expect(topic.title).to eq("topic")
-      expect(topic.description).to eq("details")
+      expect(topic.title).to eq("topic title")
+      expect(topic.description).to eq("many topic details")
       expect(topic.state).to eq("active")
     end
 
