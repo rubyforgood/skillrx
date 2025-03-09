@@ -22,6 +22,20 @@ describe "Topics", type: :request do
       expect(topic.state).to eq("active")
     end
 
+    context "when user is ad admin" do
+      let(:new_provider) { create(:provider) }
+
+      before { user.update(is_admin: true) }
+
+      it "creates a Topic" do
+        post topics_url, params: { topic: topic_params.merge(provider_id: new_provider.id) }
+
+        expect(response).to redirect_to(topics_url)
+        topic = Topic.last
+        expect(topic.provider_id).to eq(new_provider.id)
+      end
+    end
+
     context "when current provider is set" do
       let(:current_provider) { create(:provider) }
 
