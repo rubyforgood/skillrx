@@ -10,12 +10,4 @@ class SettingsController < ApplicationController
   def provider_params
     params.expect(provider: :id)
   end
-
-  def provider_scope
-    @provider_scope ||= if Current.user.is_admin?
-      Provider.all
-    else
-      Current.user.providers
-    end
-  end
 end
