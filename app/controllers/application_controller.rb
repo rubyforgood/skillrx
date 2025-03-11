@@ -3,11 +3,19 @@ class ApplicationController < ActionController::Base
   # Only allow modern browsers supporting webp images, web push, badges, import maps, CSS nesting, and CSS :has.
   allow_browser versions: :modern
 
+  def provider_scope
+    @provider_scope ||= if Current.user.is_admin?
+      Provider.all
+    else
+      Current.user.providers
+    end
+  end
+
   def current_provider
     @current_provider ||= begin
-      Current.user.providers.find(cookies.signed[:current_provider_id])
+      provider_scope.find(cookies.signed[:current_provider_id])
     rescue ActiveRecord::RecordNotFound
-      Current.user.providers.first
+      provider_scope.first
     end
   end
   helper_method :current_provider

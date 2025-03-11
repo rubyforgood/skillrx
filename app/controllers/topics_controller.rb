@@ -46,9 +46,9 @@ class TopicsController < ApplicationController
   private
 
   def other_available_providers
-    return [] unless Current.user.providers.any?
+    return [] unless provider_scope.any?
 
-    Current.user.providers.where.not(id: current_provider.id)
+    provider_scope.where.not(id: current_provider.id)
   end
 
   def topic_params
@@ -56,7 +56,7 @@ class TopicsController < ApplicationController
       .require(:topic)
       .permit(:title, :description, :uid, :language_id, :provider_id, documents: []).tap do |perm_params|
         if perm_params["provider_id"].present?
-          perm_params["provider_id"] = Current.user.providers.find(perm_params["provider_id"]).id
+          perm_params["provider_id"] = provider_scope.find(perm_params["provider_id"]).id
           perm_params["provider_id"] = current_provider.id if current_provider && !Current.user.is_admin?
         end
       end
