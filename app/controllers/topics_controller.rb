@@ -52,7 +52,14 @@ class TopicsController < ApplicationController
   end
 
   def topic_params
-    params.require(:topic).permit(:title, :description, :uid, :language_id, :provider_id, documents: [])
+    params
+      .require(:topic)
+      .permit(:title, :description, :uid, :language_id, :provider_id, documents: []).tap do |perm_params|
+        if perm_params["provider_id"].present?
+          perm_params["provider_id"] = Current.user.providers.find(perm_params["provider_id"]).id
+          perm_params["provider_id"] = current_provider.id if current_provider && !Current.user.is_admin?
+        end
+      end
   end
 
   def search_params
