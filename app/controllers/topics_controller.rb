@@ -48,6 +48,14 @@ class TopicsController < ApplicationController
     redirect_to topics_path
   end
 
+  def tags
+    return [] unless params[:id].present? && topic_tags_params[:language_id].present?
+
+    set_topic
+    @tags = @topic.current_tags_for_context(topic_tags_params[:language_id])
+    render json: @tags
+  end
+
   private
 
   def other_available_providers
@@ -68,6 +76,11 @@ class TopicsController < ApplicationController
       end
   end
 
+  def topic_tags_params
+    params.permit(:language_id)
+  end
+
+  helper_method :search_params
   def search_params
     return {} unless params[:search].present?
 

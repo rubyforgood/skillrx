@@ -7,7 +7,10 @@ Rails.application.routes.draw do
   resource :session
   resources :users
   resources :topics do
-    put :archive, on: :member
+    member do
+      put :archive
+      get :tags
+    end
   end
   resource :settings, only: [] do
     put :provider, on: :collection
