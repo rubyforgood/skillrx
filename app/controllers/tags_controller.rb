@@ -15,8 +15,4 @@ class TagsController < ApplicationController
   def language_tag_context
     Language.find(params[:language_id]).code.to_sym
   end
-
-  def tags_for(taggable_type, taggable_id, language_tag_context)
-    ActsAsTaggableOn::Tagging.find_by(taggable_type:, taggable_id:, context: language_tag_context).tag
-  end
 end
