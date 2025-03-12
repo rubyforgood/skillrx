@@ -35,12 +35,23 @@ module LocalizedTaggable
     ActsAsTaggableOn::Tag.for_context(language_tag_context)
   end
 
-  # Retrieves all available tags for the current language context
+  # Retrieves associated tags for the current language context
   #
-  # @return [ActiveRecord::Relation] collection of ActsAsTaggableOn::Tag
-  def current_tags
+  # @return [Array<String>] list of tag names
+  def current_tags_list
     return [] if language_tag_context.nil?
 
     tag_list_on(language_tag_context)
+  end
+
+  # Retrieves associated tags for a specific language
+  # @param language_id [Integer] the ID of the language
+  # @return [ActiveRecord::Relation] collection of ActsAsTaggableOn::Tag
+  def current_tags_for_language(language_id)
+    return [] if language_id.nil?
+
+    language = Language.find(language_id)
+
+    tags_on(language.code.to_sym)
   end
 end

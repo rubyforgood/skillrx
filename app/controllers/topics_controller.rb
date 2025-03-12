@@ -33,7 +33,7 @@ class TopicsController < ApplicationController
     if save_with_tags(@topic, topic_params)
       redirect_to topics_path
     else
-      render :edit
+      render :edit, status: :unprocessable_entity
     end
   end
 
@@ -52,7 +52,7 @@ class TopicsController < ApplicationController
     return [] unless params[:id].present? && topic_tags_params[:language_id].present?
 
     set_topic
-    @tags = @topic.current_tags_for_context(topic_tags_params[:language_id])
+    @tags = @topic.current_tags_for_language(topic_tags_params[:language_id])
     render json: @tags
   end
 
@@ -65,10 +65,9 @@ class TopicsController < ApplicationController
   end
 
   def topic_params
-    params.require(:topic).permit(:title, :description, :uid, :language_id, :provider_id, tag_list: [], documents: [])
     params
       .require(:topic)
-      .permit(:title, :description, :uid, :language_id, :provider_id, documents: []).tap do |perm_params|
+      .permit(:title, :description, :uid, :language_id, :provider_id, tag_list: [], documents: []).tap do |perm_params|
         if perm_params["provider_id"].present?
           perm_params["provider_id"] = provider_scope.find(perm_params["provider_id"]).id
           perm_params["provider_id"] = current_provider.id if current_provider && !Current.user.is_admin?
@@ -80,7 +79,6 @@ class TopicsController < ApplicationController
     params.permit(:language_id)
   end
 
-  helper_method :search_params
   def search_params
     return {} unless params[:search].present?
 
