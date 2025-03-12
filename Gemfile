@@ -51,6 +51,8 @@ gem "image_processing", "~> 1.14"
 # Add tagging functionality
 gem "acts-as-taggable-on"
 
+gem "requestjs-rails"
+
 group :development, :test do
   # See https://guides.rubyonrails.org/debugging_rails_applications.html#debugging-with-the-debug-gem
   gem "debug", platforms: %i[ mri windows ], require: "debug/prelude"
