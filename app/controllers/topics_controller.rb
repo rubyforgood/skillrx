@@ -52,7 +52,7 @@ class TopicsController < ApplicationController
     return [] unless params[:id].present? && topic_tags_params[:language_id].present?
 
     set_topic
-    @tags = @topic.current_tags_for_context(topic_tags_params[:language_id])
+    @tags = @topic.current_tags_for_language(topic_tags_params[:language_id])
     render json: @tags
   end
 
