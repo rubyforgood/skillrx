@@ -4,7 +4,7 @@ module Taggable
   private
 
   def save_with_tags(record, params)
-    tag_list_param = params.slice!(:tag_list)
+    tag_list_param = params.extract!(:tag_list)
 
     ActiveRecord::Base.transaction do
       if record.update(params)
