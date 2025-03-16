@@ -9,13 +9,9 @@ RSpec.describe XmlGenerator::SingleProvider do
     expect(subject.perform).to eq(
       <<~TEXT
         <?xml version="1.0"?>
-        <root>
-          <provider>
-            <name>#{provider.name}</name>
-            <type>#{provider.provider_type}</type>
-          </provider>
-          <topics/>
-        </root>
+        <cmes>
+          <content_provider name="#{provider.name}"/>
+        </cmes>
       TEXT
     )
   end
@@ -27,20 +23,21 @@ RSpec.describe XmlGenerator::SingleProvider do
       expect(subject.perform).to eq(
         <<~TEXT
           <?xml version="1.0"?>
-          <root>
-            <provider>
-              <name>#{provider.name}</name>
-              <type>#{provider.provider_type}</type>
-            </provider>
-            <topics>
-              <topic>
-                <title>#{topic.title}</title>
-                <description>#{topic.description}</description>
-                <state>#{topic.state}</state>
-                <uid/>
-              </topic>
-            </topics>
-          </root>
+          <cmes>
+            <content_provider name="#{provider.name}">
+              <topic_year year="#{topic.created_at.year}">
+                <topic_month month="#{topic.created_at.strftime("%m_%B")}">
+                  <title name="#{topic.title}">
+                    <topic_id>#{topic.id}</topic_id>
+                    <counter>0</counter>
+                    <topic_volume>#{topic.created_at.year}</topic_volume>
+                    <topic_issue>0</topic_issue>
+                    <topic_files files="Files"/>
+                  </title>
+                </topic_month>
+              </topic_year>
+            </content_provider>
+          </cmes>
         TEXT
       )
     end

@@ -1,11 +1,13 @@
 class XmlGenerator::Base
   def perform
-    generate
+    builder.to_xml
   end
 
   private
 
-  def generate
-    Nokogiri::XML::Builder.new { xml_data(it) }.to_xml
+  def builder
+    Nokogiri::XML::Builder.new do |xml|
+      xml.cmes { xml_content(xml) }
+    end
   end
 end
