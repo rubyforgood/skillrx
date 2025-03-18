@@ -1,0 +1,13 @@
+#!/bin/bash -e
+
+# Remove any existing server.pid file
+rm -f /app/tmp/pids/server.pid
+
+# Install new gems if any
+bundle check || bundle install
+
+# If running the rails server then create or migrate existing database
+./bin/rails db:prepare
+
+# Execute the main command passed to docker run
+exec "$@"

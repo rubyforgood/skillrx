@@ -1,0 +1,48 @@
+# Use Ruby 3.x with Alpine as base image for smaller size
+FROM ruby:3.4.1-alpine
+
+# Set environment variables for Rails
+ENV RAILS_ENV=development \
+    RACK_ENV=development \
+    BUNDLE_PATH=/usr/local/bundle \
+    BUNDLE_JOBS=4 \
+    BUNDLE_RETRY=3
+
+# Install system dependencies and development tools
+RUN apk add --no-cache \
+    build-base \
+    postgresql-dev \
+    git \
+    tzdata \
+    bash \
+    nss \
+    freetype \
+    freetype-dev \
+    harfbuzz \
+    ca-certificates \
+    ttf-freefont \
+    chromium \
+    chromium-chromedriver
+
+# Set Chrome environment variables
+ENV CHROME_BIN=/usr/bin/chromium-browser \
+    CHROME_PATH=/usr/lib/chromium/
+
+# Create and set working directory
+WORKDIR /app
+
+# Install Ruby dependencies
+COPY Gemfile Gemfile.lock ./
+RUN bundle install
+
+# Add bind mount point for code
+VOLUME /app
+
+# Port used by Rails server
+EXPOSE 3000
+
+# Configure entrypoint to run Rails
+ENTRYPOINT ["./bin/docker-entrypoint.dev"]
+
+# Start Rails server by default
+CMD ["bundle", "exec", "rails", "server", "-b", "0.0.0.0"]
