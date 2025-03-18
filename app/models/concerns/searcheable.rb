@@ -33,8 +33,10 @@ module Searcheable
 
       order_from_params
     end
+  end
 
-    def search_with_params(params)
+  included do
+    scope :search_with_params, ->(params) do
       self
         .then { |scope| params[:state].present? ? scope.by_state(params[:state]) : scope }
         .then { |scope| params[:provider_id].present? ? scope.by_provider(params[:provider_id]) : scope }
@@ -42,7 +44,7 @@ module Searcheable
         .then { |scope| params[:year].present? ? scope.by_year(params[:year]) : scope }
         .then { |scope| params[:month].present? ? scope.by_month(params[:month]) : scope }
         .then { |scope| params[:query].present? ? scope.search(params[:query]) : scope }
-        .then { |scope| scope.order(created_at: sort_order(params[:order])) }
+        .then { |scope| params[:order].present? ? scope.order(created_at: sort_order(params[:order].to_sym)) : scope }
     end
   end
 end
