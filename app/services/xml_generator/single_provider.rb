@@ -19,9 +19,6 @@ class XmlGenerator::SingleProvider < XmlGenerator::Base
             topics.each do |topic|
               xml.title(name: topic.title) {
                 xml.topic_id topic.id
-                xml.counter 0
-                xml.topic_volume topic.created_at.year
-                xml.topic_issue 0
                 xml.topic_files(files: "Files") {
                   topic.documents.each_with_index do |document, index|
                     xml.send("file_name_#{index + 1}", file_size: document.byte_size) {
@@ -29,6 +26,7 @@ class XmlGenerator::SingleProvider < XmlGenerator::Base
                     }
                   end
                 }
+                xml.topic_tags
               }
             end
           }
