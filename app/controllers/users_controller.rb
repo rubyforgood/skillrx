@@ -3,7 +3,7 @@ class UsersController < ApplicationController
   before_action :set_user, only: %i[ edit update destroy ]
 
   def index
-    @users = User.all
+    @users = User.all.search_with_params(user_search_params)
   end
 
   def new
@@ -51,5 +51,10 @@ class UsersController < ApplicationController
 
   def user_params
     params.expect(user: [ :email, :password, :is_admin ])
+  end
+
+  def user_search_params
+    return {} unless params[:search].present?
+    params.expect(search: [ :email, :is_admin, :order ])
   end
 end

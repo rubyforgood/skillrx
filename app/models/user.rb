@@ -24,6 +24,13 @@ class User < ApplicationRecord
   validates :email, presence: true, uniqueness: true, format: URI::MailTo::EMAIL_REGEXP
   validates :password_digest, presence: true
 
+  scope :search_with_params, ->(params) do
+    self
+      .then { |scope| params[:email].present? ? scope.where("email ILIKE ?", "%#{params[:email]}%") : scope }
+      .then { |scope| params[:is_admin].present? ? scope.where(is_admin: params[:is_admin]) : scope }
+      .then { |scope| scope.order(created_at: params[:order]&.to_sym || :desc) }
+  end
+
   def topics
     Topic.where(provider_id: providers.pluck(:id))
   end
