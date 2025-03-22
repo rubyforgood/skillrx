@@ -35,4 +35,8 @@ RSpec.describe Topic, type: :model do
     it { is_expected.to validate_content_type_of(:documents).allowing("image/png", "image/jpeg", "image/svg+xml", "image/webp", "image/avif", "image/gif", "video/mp4") }
     it { is_expected.to validate_size_of(:documents).less_than(10.megabytes) }
   end
+
+  context "tagging" do
+    it_behaves_like "localized taggable"
+  end
 end

@@ -57,6 +57,15 @@ puts "Creating topics..."
 end
 
 puts "Topics created!"
+Topic.all.each do |topic|
+  language_code = topic.language.code
+  3.times do
+    topic.tag_list_on(language_code.to_sym).add(Faker::ProgrammingLanguage.name)
+    topic.save
+  end
+end
+
+puts "Tags created!"
 puts "Creating users..."
 
 User.create(email: "admin@mail.com", password: "test123", is_admin: true)
