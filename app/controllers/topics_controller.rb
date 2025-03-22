@@ -1,4 +1,6 @@
 class TopicsController < ApplicationController
+  include Taggable
+
   before_action :set_topic, only: [ :show, :edit, :update, :destroy, :archive ]
 
   def index
@@ -14,7 +16,7 @@ class TopicsController < ApplicationController
   def create
     @topic = scope.new(topic_params)
 
-    if @topic.save
+    if save_with_tags(@topic, topic_params)
       redirect_to topics_path
     else
       render :new
@@ -28,8 +30,11 @@ class TopicsController < ApplicationController
   end
 
   def update
-    @topic.update(topic_params)
-    redirect_to topics_path
+    if save_with_tags(@topic, topic_params)
+      redirect_to topics_path
+    else
+      render :edit, status: :unprocessable_entity
+    end
   end
 
   def destroy
@@ -43,6 +48,14 @@ class TopicsController < ApplicationController
     redirect_to topics_path
   end
 
+  def tags
+    return [] unless params[:id].present? && topic_tags_params[:language_id].present?
+
+    set_topic
+    @tags = @topic.current_tags_for_language(topic_tags_params[:language_id])
+    render json: @tags
+  end
+
   private
 
   def other_available_providers
@@ -54,12 +67,16 @@ class TopicsController < ApplicationController
   def topic_params
     params
       .require(:topic)
-      .permit(:title, :description, :uid, :language_id, :provider_id, documents: []).tap do |perm_params|
+      .permit(:title, :description, :uid, :language_id, :provider_id, tag_list: [], documents: []).tap do |perm_params|
         if perm_params["provider_id"].present?
           perm_params["provider_id"] = provider_scope.find(perm_params["provider_id"]).id
           perm_params["provider_id"] = current_provider.id if current_provider && !Current.user.is_admin?
         end
       end
+  end
+
+  def topic_tags_params
+    params.permit(:language_id)
   end
 
   def search_params

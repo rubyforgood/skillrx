@@ -7,7 +7,10 @@ Rails.application.routes.draw do
   resource :session
   resources :users
   resources :topics do
-    put :archive, on: :member
+    member do
+      put :archive
+      get :tags
+    end
   end
   resource :settings, only: [] do
     put :provider, on: :collection
@@ -28,6 +31,9 @@ Rails.application.routes.draw do
   # get "manifest" => "rails/pwa#manifest", as: :pwa_manifest
   # get "service-worker" => "rails/pwa#service_worker", as: :pwa_service_worker
   # Defines the root path route ("/")
+
+
+  resources :tags, only: %i[index]
 
   root "home#index"
 end

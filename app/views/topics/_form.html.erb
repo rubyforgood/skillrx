@@ -1,4 +1,3 @@
-
 <%= form_for topic do |f| %>
   <div class="form-body">
     <div class="row">
@@ -10,11 +9,7 @@
         </div>
         <div class="form-group">
           <%= f.label :description %>
-          <%= f.text_area :description, class: "form-control", placeholder: "Descripion" %>
-        </div>
-        <div class="form-group">
-          <%= f.label :language %>
-          <%= f.collection_select :language_id, Language.all, :id, :name, { prompt: "Select Language" }, class: "form-select" %>
+          <%= f.text_area :description, class: "form-control", placeholder: "Description" %>
         </div>
         <% if Current.user.is_admin? %>
           <div class="form-group">
@@ -22,9 +17,36 @@
             <%= f.collection_select :provider_id, Provider.all, :id, :name, { prompt: "Select Provider" }, class: "form-select" %>
           </div>
         <% end %>
-        <div class="form-group">
-          <%= f.label :description %>
-          <%= f.text_area :description, class: "form-control", placeholder: "Descripion" %>
+        <div data-controller="select-tags">
+          <div class="form-group">
+            <%= f.label :language %>
+            <%= f.collection_select :language_id,
+                                    Language.all,
+                                    :id,
+                                    :name,
+                                    { prompt: "Select Language" },
+                                    class: "form-select",
+                                    data: { "resource-type": "topics", "resource-id": f.object.id, "select-tags-target": "language", "action": "change->tags#changeLanguage" }
+            %>
+          </div>
+          <div class="form-group">
+            <div class="d-flex">
+              <%= f.label :tag_list, class: "flex-fill" %>
+              <small class="flex-fill text-end fw-light text-muted text-uppercase">Press enter to add a new tag</small>
+            </div>
+            <%= f.select :tag_list,
+                         options_from_collection_for_select(
+                           topic.available_tags,
+                           :name,
+                           :name,
+                           topic.current_tags_list
+                         ),
+                         { prompt: "Select tags", include_blank: true },
+                         multiple: true,
+                         class: "form-select",
+                         data: { "allow-new": "true", "allow-clear": "true", "select-tags-target": "tagList" }
+            %>
+          </div>
         </div>
         <div class="form-group">
           <%= f.label :documents, style: "display: block" %>
