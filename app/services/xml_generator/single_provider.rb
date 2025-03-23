@@ -26,7 +26,7 @@ class XmlGenerator::SingleProvider < XmlGenerator::Base
                     }
                   end
                 }
-                xml.topic_tags
+                xml.topic_tags topic.current_tags_list.join(", ")
               }
             end
           }

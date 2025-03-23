@@ -17,7 +17,7 @@ RSpec.describe XmlGenerator::SingleProvider do
   end
 
   context "with topics" do
-    let!(:topic) { create(:topic, provider: provider) }
+    let!(:topic) { create(:topic, :tagged, provider: provider) }
 
     it "generates the xml" do
       expect(subject.perform).to eq(
@@ -30,7 +30,7 @@ RSpec.describe XmlGenerator::SingleProvider do
                   <title name="#{topic.title}">
                     <topic_id>#{topic.id}</topic_id>
                     <topic_files files="Files"/>
-                    <topic_tags/>
+                    <topic_tags>#{topic.current_tags_list.join(", ")}</topic_tags>
                   </title>
                 </topic_month>
               </topic_year>

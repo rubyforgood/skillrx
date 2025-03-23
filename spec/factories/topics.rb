@@ -30,5 +30,13 @@ FactoryBot.define do
     trait :archived do
       state { 1 }
     end
+
+    trait :tagged do
+      after(:create) do |topic|
+        tag = build(:tag)
+        topic.set_tag_list_on(topic.language.code.to_sym, tag.name)
+        topic.save
+      end
+    end
   end
 end
