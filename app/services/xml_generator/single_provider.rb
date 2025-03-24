@@ -1,11 +1,12 @@
 class XmlGenerator::SingleProvider < XmlGenerator::Base
-  def initialize(provider)
+  def initialize(provider, **args)
     @provider = provider
+    @args = args
   end
 
   private
 
-  attr_reader :provider
+  attr_reader :provider, :args
 
   def xml_content(xml)
     provider_xml(xml, provider)
@@ -36,6 +37,12 @@ class XmlGenerator::SingleProvider < XmlGenerator::Base
   end
 
   def grouped_topics(prov)
-    prov.topics.group_by { |topic| [ topic.created_at.year, topic.created_at.strftime("%m_%B") ] }
+    topic_scope(prov).group_by { |topic| [ topic.created_at.year, topic.created_at.strftime("%m_%B") ] }
+  end
+
+  def topic_scope(prov)
+    return prov.topics.where("created_at > ?", 1.month.ago) if args[:recent]
+
+    prov.topics
   end
 end
