@@ -1,0 +1,19 @@
+<% blobs.each do |blob| %>
+  <%
+    signed_id = blob.signed_id
+    display_name = blob.filename.to_s
+    blob_path = rails_blob_path(blob, disposition: "attachment")
+  %>
+
+  <div class="my-2" data-signed-id="<%= signed_id %>" data-upload-target="fileItem">
+    <%= link_to display_name, blob_path, title: display_name, class: "no-underline hover:underline" %>
+
+    <% if hidden_input %>
+      <input type="hidden" name="topic[document_signed_ids][]" value="<%= signed_id %>">
+    <% end %>
+
+    <button id="remove-button" class="btn btn-primary py-1 px-2 ml-5" data-action="click->upload#removeFile" data-signed-id="<%= signed_id %>">
+      <span class="button-span w-5 h-5 flex items-center justify-center">X</span>
+    </button>
+  </div>
+<% end %>
