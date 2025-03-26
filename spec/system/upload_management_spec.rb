@@ -40,15 +40,30 @@ RSpec.describe "Upload Management", type: :system do
       )
     end
 
-    it "Doesn't replace documents" do
-      click_link("Topics")
-      click_link("Edit")
-      expect(page).to have_text("logo_ruby_for_good.png")
-      page.attach_file(Rails.root.join("spec/support/files/file_text_test.txt")) do
-        page.find("#documents").click
+    context "when adding a document" do
+      it "Doesn't replace pre-existing documents" do
+        click_link("Topics")
+        click_link("Edit")
+        expect(page).to have_text("logo_ruby_for_good.png")
+        page.attach_file(Rails.root.join("spec/support/files/file_text_test.txt")) do
+          page.find("#documents").click
+        end
+        expect(page).to have_text("logo_ruby_for_good.png")
+        expect(page).to have_text("file_text_test.txt")
       end
-      expect(page).to have_text("logo_ruby_for_good.png")
-      expect(page).to have_text("file_text_test.txt")
+    end
+
+    context "when removing a document" do
+      it "removes the document" do
+        click_link("Topics")
+        click_link("Edit")
+        expect(page).to have_text("logo_ruby_for_good.png")
+        click_button("remove-button-1")
+        expect(page).not_to have_text("logo_ruby_for_good.png")
+        click_button("Update Topic")
+        # This checks we are redirected to Topic#index instead of re-rendering the form
+        expect(page).to have_text("Search")
+      end
     end
   end
 end
