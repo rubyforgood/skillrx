@@ -1,0 +1,64 @@
+services:
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile.dev
+    ports:
+      - "127.0.0.1:3000:3000"
+    volumes:
+      - ./:/app
+      - ./config:/app/config
+    env_file:
+      - .env
+    environment:
+      AWS_ENDPOINT_URL: ${AWS_ENDPOINT_URL}
+      RAILS_ENV: ${RAILS_ENV}
+      DATABASE_USER: ${DATABASE_USER}
+      DATABASE_PASSWORD: ${DATABASE_PASSWORD}
+      DATABASE_NAME: ${DATABASE_NAME}
+      DATABASE_PORT: ${DATABASE_PORT}
+      DATABASE_HOST: ${DATABASE_HOST}
+      DOCKER_CONTAINER: true
+    depends_on:
+      - db
+
+  db:
+    image: postgres:17-alpine
+    ports:
+      - "127.0.0.1:5432:5432"
+    volumes:
+      - db_data:/var/lib/postgresql/data
+    env_file:
+      - .env
+    environment:
+      POSTGRES_USER: ${DATABASE_USER}
+      POSTGRES_PASSWORD: ${DATABASE_PASSWORD}
+      POSTGRES_DB: ${DATABASE_NAME}
+
+  localstack:
+      image: localstack/localstack
+      ports:
+        - "127.0.0.1:4566:4566"            # LocalStack Gateway
+        - "127.0.0.1:4510-4559:4510-4559"  # external services port range
+      env_file:
+        - .env
+      environment:
+        - SERVICES=s3
+        - DEBUG=${LOCALSTACK_DEBUG}
+        - DOCKER_HOST=unix:///var/run/docker.sock
+        - AWS_DEFAULT_REGION=${AWS_DEFAULT_REGION}
+        - AWS_BUCKET_NAME=${AWS_BUCKET_NAME}
+        - AWS_ACCESS_KEY_ID=${AWS_ACCESS_KEY_ID}
+        - AWS_SECRET_ACCESS_KEY=${AWS_SECRET_ACCESS_KEY}
+        - S3_SKIP_SIGNATURE_VALIDATION=1
+        - LOCALSTACK_HOME=/root/.localstack
+      volumes:
+        - "/var/run/docker.sock:/var/run/docker.sock"
+        - ./dev/.aws:/etc/localstack/init/ready.d
+
+volumes:
+  db_data:
+
+networks:
+  default:
+    name: skillrx_network
