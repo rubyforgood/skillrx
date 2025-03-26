@@ -3,7 +3,7 @@ import { Controller } from "@hotwired/stimulus";
 export default class extends Controller {
   static values = { documentId: Number };
 
-  static targets = ["filesInput", "fileItem", "filesContainer"];
+  static targets = ["filesInput", "fileItem", "filesContainer", "hiddenField"];
 
   uploadFile(event) {
     event.preventDefault();
@@ -64,6 +64,12 @@ export default class extends Controller {
           );
           if (targetToRemove) {
             targetToRemove.remove();
+          }
+          const hiddenFieldToRemove = this.hiddenFieldTargets.find(
+            (t) => t.defaultValue === signedId
+          );
+          if (hiddenFieldToRemove) {
+            hiddenFieldToRemove.remove();
           }
         }
       });
