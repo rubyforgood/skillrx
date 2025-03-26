@@ -44,7 +44,7 @@ module Searcheable
         .then { |scope| params[:year].present? ? scope.by_year(params[:year]) : scope }
         .then { |scope| params[:month].present? ? scope.by_month(params[:month]) : scope }
         .then { |scope| params[:query].present? ? scope.search(params[:query]) : scope }
-        .then { |scope| params[:order].present? ? scope.order(created_at: sort_order(params[:order].to_sym)) : scope }
+        .then { |scope| scope.order(created_at: sort_order(params[:order].present? ? params[:order].to_sym : :desc)) }
     end
   end
 end
