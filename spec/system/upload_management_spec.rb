@@ -43,7 +43,7 @@ RSpec.describe "Upload Management", type: :system do
         content_type: "image/png"
       )
     end
-    it "Doesn't replace documents", :debug do
+    it "Doesn't replace documents" do
       click_link("Edit")
       expect(page).to have_text("logo_ruby_for_good.png")
       page.attach_file(Rails.root.join("spec/support/files/file_text_test.txt")) do
