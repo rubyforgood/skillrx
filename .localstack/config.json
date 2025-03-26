@@ -1,0 +1,11 @@
+{
+  "services": {
+    "s3": {
+      "buckets": [
+        {
+          "name": "dev-bucket"
+        }
+      ]
+    }
+  }
+}
