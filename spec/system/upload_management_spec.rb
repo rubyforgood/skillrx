@@ -24,7 +24,7 @@ RSpec.describe "Upload Management", type: :system do
         page.find("#documents").click
       end
       expect(page).to have_text("logo_ruby_for_good.png")
-      click_button("remove-button")
+      click_button("remove-button-1")
       expect(page).not_to have_text("logo_ruby_for_good.png")
     end
   end
