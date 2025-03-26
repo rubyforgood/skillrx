@@ -30,6 +30,21 @@ services:
       POSTGRES_PASSWORD: password
       POSTGRES_DATABASE: skillrx_development
 
+  localstack:
+      image: localstack/localstack
+      ports:
+        - "127.0.0.1:4566:4566"            # LocalStack Gateway
+        - "127.0.0.1:4510-4559:4510-4559"  # external services port range
+      environment:
+        - SERVICES=s3
+        - DEBUG=1
+#        - DATA_DIR=/tmp/localstack/data
+        - LOCALSTACK_HOME=/root/.localstack  # Set LocalStack home directory
+      volumes:
+        - "${LOCALSTACK_VOLUME_DIR:-./volume}:/var/lib/localstack"
+        - "/var/run/docker.sock:/var/run/docker.sock"
+        - ./.localstack:/root/.localstack
+
 volumes:
   db_data:
 
