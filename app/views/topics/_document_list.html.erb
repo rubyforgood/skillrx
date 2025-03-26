@@ -1,4 +1,4 @@
-<% blobs.each do |blob| %>
+<% blobs.each_with_index do |blob, i| %>
   <%
     signed_id = blob.signed_id
     display_name = blob.filename.to_s
@@ -12,7 +12,7 @@
       <input type="hidden" name="topic[document_signed_ids][]" value="<%= signed_id %>">
     <% end %>
 
-    <button id="remove-button" class="btn btn-primary py-1 px-2 ml-5" data-action="click->upload#removeFile" data-signed-id="<%= signed_id %>">
+    <button id="remove-button-<%= i + 1 %>" class="btn btn-primary py-1 px-2 ml-5" data-action="click->upload#removeFile" data-signed-id="<%= signed_id %>">
       <span class="button-span w-5 h-5 flex items-center justify-center">X</span>
     </button>
   </div>
