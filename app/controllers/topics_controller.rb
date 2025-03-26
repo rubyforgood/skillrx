@@ -19,7 +19,7 @@ class TopicsController < ApplicationController
     if save_with_tags(@topic, topic_params)
       redirect_to topics_path
     else
-      render :new
+      render :new, status: :unprocessable_entity
     end
   end
 
