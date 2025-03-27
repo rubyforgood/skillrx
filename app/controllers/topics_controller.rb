@@ -14,7 +14,7 @@ class TopicsController < ApplicationController
   end
 
   def create
-    @topic = scope.new(topic_params)
+    @topic = scope.new
 
     if save_with_tags(@topic, topic_params)
       redirect_to topics_path
