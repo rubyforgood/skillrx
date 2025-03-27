@@ -44,7 +44,7 @@ export default class extends Controller {
    */
   async fetchTags(languageId) {
     try {
-      const response = await get(`/tags?language_id=${languageId}`, {
+      const response = await get(`/api/v1/tags?language_id=${languageId}`, {
         responseKind: "json"
       })
 
