@@ -99,6 +99,6 @@ export default class extends Controller {
    * @param {Object} options - Configuration options for bootstrap5-tags
    */
   initializeTags(options = {}, reset = false) {
-    Tags.init("select#topic_tag_list", options, reset)
+    Tags.init(`select#${this.tagListTarget.id}`, options, reset)
   }
 }
