@@ -1,13 +1,15 @@
 class XmlGenerator::AllProviders < XmlGenerator::SingleProvider
-  def initialize(providers)
-    @providers = providers
+  def initialize(language, **args)
+    @language = language
+    @args = args
   end
 
-  attr_reader :providers
+  attr_reader :language, :args
 
   def xml_content(xml)
-    providers.map do |provider|
-      provider_xml(xml, provider)
-    end
+    language.providers
+      .map do |provider|
+        provider_xml(xml, provider)
+      end
   end
 end

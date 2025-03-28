@@ -9,6 +9,7 @@
 #
 class Language < ApplicationRecord
   has_many :topics, dependent: :destroy
+  has_many :providers, through: :topics
 
   validates :name, presence: true, uniqueness: true, length: { minimum: 2 }
 

@@ -41,7 +41,7 @@ class XmlGenerator::SingleProvider < XmlGenerator::Base
   end
 
   def topic_scope(prov)
-    return prov.topics.where("created_at > ?", 1.month.ago) if args[:recent]
+    return prov.topics.where("created_at > ?", 1.month.ago) if args.fetch(:recent, false)
 
     prov.topics
   end
