@@ -6,10 +6,10 @@
       </td>
       <td class="text-bold-500">
         <% tag.cognates.each do |cognate| %>
-          <%= link_to cognate.name, tag_path(cognate), class: "badge bg-light-primary" %>
+          <%= link_to cognate.name, tag_path(cognate), class: "badge bg-success" %>
         <% end %>
         <% tag.reverse_cognates.each do |cognate| %>
-          <%= link_to cognate.name, tag_path(cognate), class: "badge bg-light-primary" %>
+          <%= link_to cognate.name, tag_path(cognate), class: "badge bg-light-success" %>
         <% end %>
       </td>
       <td class="text-end">
