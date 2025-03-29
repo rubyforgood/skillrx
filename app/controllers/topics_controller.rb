@@ -67,12 +67,27 @@ class TopicsController < ApplicationController
   def topic_params
     params
       .require(:topic)
-      .permit(:title, :description, :uid, :language_id, :provider_id, tag_list: [], documents: []).tap do |perm_params|
-        if perm_params["provider_id"].present?
-          perm_params["provider_id"] = provider_scope.find(perm_params["provider_id"]).id
-          perm_params["provider_id"] = current_provider.id if current_provider && !Current.user.is_admin?
-        end
+      .permit(:title, :description, :uid, :language_id, :provider_id, :published_at_year, :published_at_month, tag_list: [], documents: []).tap do |permitted_params|
+        permitted_params = validate_provider!(permitted_params)
+        permitted_params = validate_published_at!(permitted_params)
       end
+  end
+
+  def validate_provider!(attrs)
+    if attrs["provider_id"].present?
+      attrs["provider_id"] = provider_scope.find(attrs["provider_id"]).id
+      attrs["provider_id"] = current_provider.id if current_provider && !Current.user.is_admin?
+    end
+    attrs
+  end
+
+  def validate_published_at!(attrs)
+    if attrs["published_at_year"].present? && attrs["published_at_month"].present?
+      attrs["published_at"] = Date.new(attrs["published_at_year"].to_i, attrs["published_at_month"].to_i, 1)
+      attrs.delete("published_at_year")
+      attrs.delete("published_at_month")
+    end
+    attrs
   end
 
   def topic_tags_params
