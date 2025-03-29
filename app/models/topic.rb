@@ -38,4 +38,14 @@ class Topic < ApplicationRecord
   enum :state, STATES.map.with_index.to_h
 
   scope :active, -> { where(state: :active) }
+
+  class << self
+    def by_year(year)
+      where("extract(year from published_at) = ?", year)
+    end
+
+    def by_month(month)
+      where("extract(month from published_at) = ?", month)
+    end
+  end
 end
