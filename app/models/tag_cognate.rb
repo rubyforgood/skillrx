@@ -20,8 +20,15 @@
 #  fk_rails_...  (tag_id => tags.id)
 #
 class TagCognate < ApplicationRecord
-  belongs_to :tag, class_name: "ActsAsTaggableOn::Tag"
-  belongs_to :cognate, class_name: "ActsAsTaggableOn::Tag"
+  belongs_to :tag, class_name: "Tag"
+  belongs_to :cognate, class_name: "Tag"
 
   validates :tag_id, uniqueness: { scope: :cognate_id }
+  validate :no_self_reference
+
+  private
+
+  def no_self_reference
+    errors.add(:base, "Tag can't be its own cognate") if tag_id == cognate_id
+  end
 end
