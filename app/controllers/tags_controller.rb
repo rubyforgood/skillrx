@@ -1,28 +1,52 @@
 
 class TagsController < ApplicationController
-  before_action :validate_language
+  before_action :set_tag, only: [ :show, :edit, :update, :destroy ]
 
   def index
-    @tags = ActsAsTaggableOn::Tag.for_context(language_tag_context)
+    @tags = Tag.all
+  end
 
-    render json: @tags
+  def new
+    @tag = Tag.new
+  end
+
+  def create
+    @tag = Tag.new(tag_params)
+
+    if @tag.save
+      redirect_to tags_path
+    else
+      render :new, status: :unprocessable_entity
+    end
+  end
+
+  def show
+  end
+
+  def edit
+  end
+
+  def update
+    if @tag.update!(tag_params)
+      redirect_to tags_path, notice: "Tag was successfully updated."
+    else
+      render :edit, status: :unprocessable_entity
+    end
+  end
+
+  def destroy
+    redirect_to tags_path and return unless Current.user.is_admin?
+    @tag.destroy
+    redirect_to tags_path, notice: "Tag was successfully destroyed."
   end
 
   private
 
-  def language_tag_context
-    Language.find(params[:language_id]).code.to_sym
+  def tag_params
+    params.require(:tag).permit(:name, cognates_list: [])
   end
 
-  def validate_language
-    render_error unless language_id_param
-  end
-
-  def language_id_param
-    params.require(:language_id)
-  end
-
-  def render_error
-    render json: { error: "Language is required" }, status: :bad_request
+  def set_tag
+    @tag = Tag.find(params[:id])
   end
 end
