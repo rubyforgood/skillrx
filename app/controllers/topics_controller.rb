@@ -83,7 +83,7 @@ class TopicsController < ApplicationController
 
   def validate_published_at!(attrs)
     if attrs["published_at_year"].present? && attrs["published_at_month"].present?
-      attrs["published_at"] = Date.new(attrs["published_at_year"].to_i, attrs["published_at_month"].to_i, 1)
+      attrs["published_at"] = DateTime.new(attrs["published_at_year"].to_i, attrs["published_at_month"].to_i, 1)
       attrs.delete("published_at_year")
       attrs.delete("published_at_month")
     end
