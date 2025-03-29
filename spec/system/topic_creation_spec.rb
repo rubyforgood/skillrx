@@ -7,8 +7,7 @@ RSpec.describe "Creating a Topic", type: :system do
 
     before do
       login_as(user)
-      click_link("Topics")
-      click_link("Add New Topic")
+      visit_with_wait(new_topic_path)
     end
 
     context "as an Admin" do
