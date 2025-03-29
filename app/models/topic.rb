@@ -23,6 +23,7 @@
 #
 class Topic < ApplicationRecord
   include Searcheable
+  include Taggable
   include LocalizedTaggable
 
   STATES = %i[active archived].freeze

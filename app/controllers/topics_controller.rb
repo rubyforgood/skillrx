@@ -1,6 +1,4 @@
 class TopicsController < ApplicationController
-  include Taggable
-
   before_action :set_topic, only: [ :show, :edit, :update, :destroy, :archive ]
 
   def index
@@ -16,7 +14,7 @@ class TopicsController < ApplicationController
   def create
     @topic = scope.new
 
-    if save_with_tags(@topic, topic_params)
+    if @topic.save_with_tags(topic_params)
       redirect_to topics_path
     else
       render :new
@@ -30,7 +28,7 @@ class TopicsController < ApplicationController
   end
 
   def update
-    if save_with_tags(@topic, topic_params)
+    if @topic.save_with_tags(topic_params)
       redirect_to topics_path
     else
       render :edit, status: :unprocessable_entity
