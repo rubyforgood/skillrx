@@ -36,10 +36,10 @@ RSpec.describe "Creating a Topic", type: :system do
     context "as a contributor" do
       let(:user) { create(:user) }
 
+      before { provider.users << user }
+
       context "when successful" do
-        # TODO: Currently, contributors see "Provider can't be blank"
-        # even though the provider dropdown isn't displayed to them
-        xit "creates a Topic" do
+        it "creates a Topic" do
           fill_in "Title", with: "My Topic"
           select "English", from: "topic_language_id"
           click_button("Create Topic")
