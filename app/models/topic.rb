@@ -40,6 +40,14 @@ class Topic < ApplicationRecord
 
   scope :active, -> { where(state: :active) }
 
+  def published_at_year
+    published_at&.year
+  end
+
+  def published_at_month
+    published_at&.month
+  end
+
   class << self
     def by_year(year)
       where("extract(year from published_at) = ?", year)

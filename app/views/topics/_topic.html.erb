@@ -23,4 +23,9 @@
     <strong>Provider:</strong>
     <%= link_to topic.provider.name, topic.provider %>
   </p>
+
+  <p>
+    <strong>Publishing at:</strong>
+    <%= topic.published_at.strftime('%m/%d/%Y') %>
+  </p>
 </div>

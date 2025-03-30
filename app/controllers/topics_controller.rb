@@ -1,5 +1,5 @@
 class TopicsController < ApplicationController
-  before_action :set_topic, only: [ :show, :edit, :update, :destroy, :archive ]
+  before_action :set_topic, only: [ :show, :edit, :tags, :update, :destroy, :archive ]
 
   def index
     @topics = scope.search_with_params(search_params)
@@ -37,6 +37,7 @@ class TopicsController < ApplicationController
 
   def destroy
     redirect_to topics_path and return unless Current.user.is_admin?
+
     @topic.destroy
     redirect_to topics_path
   end
@@ -49,7 +50,6 @@ class TopicsController < ApplicationController
   def tags
     return [] unless params[:id].present? && topic_tags_params[:language_id].present?
 
-    set_topic
     @tags = @topic.current_tags_for_language(topic_tags_params[:language_id])
     render json: @tags
   end
@@ -88,17 +88,6 @@ class TopicsController < ApplicationController
     attrs
   end
 
-  def topic_tags_params
-    params.permit(:language_id)
-  end
-
-  def search_params
-    return {} unless params[:search].present?
-
-    params.require(:search).permit(:query, :state, :provider_id, :language_id, :year, :month, :order)
-  end
-  helper_method :search_params
-
   def set_topic
     @topic = Topic.find(params[:id])
   end
@@ -110,8 +99,19 @@ class TopicsController < ApplicationController
       current_provider.topics
     else
       Current.user.topics
-    end.includes(:language, :provider)
+    end.includes(:language)
   end
+
+  def topic_tags_params
+    params.permit(:language_id)
+  end
+
+  def search_params
+    return {} unless params[:search].present?
+
+    params.require(:search).permit(:query, :state, :provider_id, :language_id, :year, :month, :order)
+  end
+  helper_method :search_params
 
   def topics_title
     current_provider.present? ? "#{current_provider.name}/topics" : "Topics"
