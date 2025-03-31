@@ -6,15 +6,24 @@ RSpec.describe TextGenerator::TitleAndTags do
   let(:language) { create(:language) }
   let!(:topic) { create(:topic, language:) }
 
-  it "generates the text" do
+  it "generates text with title only" do
     expect(subject.perform).to eq(topic.title)
   end
 
-  context "with tagged topics" do
+  context "when tagged topics exist" do
     let!(:topic) { create(:topic, :tagged, language:) }
 
-    it "generates the text with title and tags for topics" do
+    it "generates text with title and tags for topics" do
       expect(subject.perform).to eq("#{topic.title},#{topic.current_tags_list.join(",")}")
+    end
+  end
+
+  context "when topic does not belong to language" do
+    let(:other_language) { create(:language) }
+    let!(:topic) { create(:topic, :tagged, language: other_language) }
+
+    it "generates empty text" do
+      expect(subject.perform).to be_empty
     end
   end
 end

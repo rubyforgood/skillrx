@@ -1,6 +1,6 @@
 require "rails_helper"
 
-RSpec.describe LanguageContentGenerator do
+RSpec.describe LanguageContentProcessor do
   subject { described_class.new }
 
   let(:language) { create(:language) }

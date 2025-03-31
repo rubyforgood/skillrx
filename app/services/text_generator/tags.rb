@@ -9,6 +9,14 @@ class TextGenerator::Tags < TextGenerator::Base
   attr_reader :language, :args
 
   def text_content
-    language.tags.join("\n")
+    scope
+      .flat_map do |topic|
+        topic.current_tags_for_language(language.id).map { |tag| tag.name }
+      end
+      .uniq
+  end
+
+  def scope
+    language.topics.active
   end
 end

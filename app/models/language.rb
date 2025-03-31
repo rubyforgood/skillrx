@@ -22,12 +22,4 @@ class Language < ApplicationRecord
   def code
     name.first(2).downcase
   end
-
-  def tags
-    topics
-      .flat_map do |topic|
-        topic.current_tags_for_language(id).map { |tag| tag.name }
-      end
-      .uniq
-  end
 end

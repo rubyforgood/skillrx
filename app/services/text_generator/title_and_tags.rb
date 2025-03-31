@@ -9,10 +9,14 @@ class TextGenerator::TitleAndTags < TextGenerator::Base
   attr_reader :language, :args
 
   def text_content
-    language.topics
+    scope
       .map do |topic|
         ([ topic.title ] + topic.current_tags_list).join(",")
       end
       .join("\n")
+  end
+
+  def scope
+    language.topics
   end
 end
