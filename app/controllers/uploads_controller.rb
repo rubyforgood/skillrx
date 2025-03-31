@@ -17,21 +17,12 @@ class UploadsController < ApplicationController
   end
 
   def destroy
-    # Fetch the blob using the signed id
     blob = ActiveStorage::Blob.find_signed(params[:id])
-    if blob
-      if blob.attachments.any?
-        # the blob is attached to topic record
-        blob.attachments.each { |attachment| attachment.purge }
-      else
-        blob.purge
-      end
+    return head :unprocessable_entity unless blob
 
-      render json: { result: "success" }
-    else
-      # blob not found
-      head :unprocessable_entity
-    end
+    blob.purge if blob.attachments.empty?
+
+    render json: { result: "success" }
   end
 
   private
