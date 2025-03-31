@@ -15,10 +15,9 @@ class TopicsController < ApplicationController
 
   def create
     @topic = scope.new
-    file_signed_ids = params[:topic].delete(:document_signed_ids)
 
     if save_with_tags(@topic, topic_params)
-      attach_files(file_signed_ids)
+      attach_files(document_signed_ids)
       redirect_to topics_path
     else
       render :new, status: :unprocessable_entity
@@ -32,9 +31,8 @@ class TopicsController < ApplicationController
   end
 
   def update
-    file_signed_ids = params[:topic].delete(:document_signed_ids)
     if save_with_tags(@topic, topic_params)
-      attach_files(file_signed_ids)
+      attach_files(document_signed_ids)
       redirect_to topics_path
     else
       render :edit, status: :unprocessable_entity
@@ -62,12 +60,16 @@ class TopicsController < ApplicationController
 
   private
 
-  def attach_files(file_signed_ids)
-    if file_signed_ids.present?
-      file_signed_ids.each do |signed_id|
-        @topic.documents.attach(signed_id)
-      end
+  def attach_files(signed_ids)
+    return if signed_ids.blank?
+
+    signed_ids.each do |signed_id|
+      @topic.documents.attach(signed_id)
     end
+  end
+
+  def document_signed_ids
+    params.dig(:topic, :document_signed_ids)
   end
 
   def other_available_providers
