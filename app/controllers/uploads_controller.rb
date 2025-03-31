@@ -1,12 +1,7 @@
 class UploadsController < ApplicationController
   def create
-    documents = params.require(:documents)
-    blobs = documents.map do |document|
-        ActiveStorage::Blob.create_and_upload!(
-          io: document,
-          filename: document.original_filename,
-          content_type: document.content_type,
-        )
+    blobs = document_params.map do |document|
+        ActiveStorage::Blob.create_and_upload!(**document)
     end
 
     html_content =
@@ -36,6 +31,18 @@ class UploadsController < ApplicationController
     else
       # blob not found
       head :unprocessable_entity
+    end
+  end
+
+  private
+
+  def document_params
+    params.require(:documents).map do |document|
+      {
+        io: document,
+        filename: document.original_filename,
+        content_type: document.content_type,
+      }
     end
   end
 end
