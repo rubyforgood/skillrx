@@ -1,23 +1,12 @@
 class UploadsController < ApplicationController
   def create
     documents = params.require(:documents)
-    topic_id = params[:topic_id]
-    blobs = []
-
-    documents.each do |document|
-      blob =
+    blobs = documents.map do |document|
         ActiveStorage::Blob.create_and_upload!(
           io: document,
           filename: document.original_filename,
           content_type: document.content_type,
         )
-
-      if topic_id.present?
-        topic = Topic.find(topic_id)
-        topic.documents.attach(blob.signed_id)
-      end
-
-      blobs.push(blob)
     end
 
     html_content =

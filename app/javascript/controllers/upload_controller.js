@@ -1,8 +1,6 @@
 import { Controller } from "@hotwired/stimulus";
 
 export default class extends Controller {
-  static values = { documentId: Number };
-
   static targets = ["filesInput", "fileItem", "filesContainer", "hiddenField"];
 
   uploadFile(event) {
@@ -12,10 +10,6 @@ export default class extends Controller {
     let files = Array.from(filesInput.files);
 
     let formData = new FormData();
-
-    if (this.hasTopicIdValue) {
-      formData.set("topic_id", this.topicIdValue);
-    }
 
     files.forEach((file) => {
       formData.append("documents[]", file);
