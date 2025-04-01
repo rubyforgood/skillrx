@@ -15,7 +15,7 @@ describe "Topics", type: :request do
 
     context "with a document attached" do
       before do
-        topic.documents.attach(Rails.root.join("spec/support/images/logo_ruby_for_good.png"))
+        topic.documents.attach(Rails.root.join("test/fixtures/images/logo_ruby_for_good.png"))
       end
 
       it "displays a link to the document" do

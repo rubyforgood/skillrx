@@ -52,12 +52,12 @@
           <%= f.label :documents, style: "display: block" %>
 
           <div data-upload-target="filesContainer">
-            <% if @topic.documents_blobs.present? %>
-              <%= render partial: "topics/document_list", locals: { blobs: @topic.documents_blobs, hidden_input: false } %>
+            <% if topic.documents_blobs.present? %>
+              <%= render partial: "topics/document_list", locals: { blobs: topic.documents_blobs, hidden_input: false } %>
             <% end %>
           </div>
 
-          <% @topic.documents.each do |document| %>
+          <% topic.documents.each do |document| %>
             <%= f.hidden_field :documents, multiple: true, value: document.signed_id, data: { upload_target: "hiddenField" } %>
           <% end %>
 

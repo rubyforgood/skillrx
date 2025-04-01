@@ -11,14 +11,14 @@ RSpec.describe "Upload Management", type: :system do
     before { visit_with_wait(new_topic_path) }
 
     it "shows added documents" do
-      page.attach_file(Rails.root.join("spec/support/images/logo_ruby_for_good.png")) do
+      page.attach_file(Rails.root.join("test/fixtures/images/logo_ruby_for_good.png")) do
         page.find("#documents").click
       end
       expect(page).to have_text("logo_ruby_for_good.png")
     end
 
     it "deletes added documents" do
-      page.attach_file(Rails.root.join("spec/support/images/logo_ruby_for_good.png")) do
+      page.attach_file(Rails.root.join("test/fixtures/images/logo_ruby_for_good.png")) do
         page.find("#documents").click
       end
       expect(page).to have_text("logo_ruby_for_good.png")
@@ -32,7 +32,7 @@ RSpec.describe "Upload Management", type: :system do
 
     before do
       topic.documents.attach(
-        io: File.open(Rails.root.join("spec/support/images/logo_ruby_for_good.png")),
+        io: File.open(Rails.root.join("test/fixtures/images/logo_ruby_for_good.png")),
         filename: "logo_ruby_for_good.png",
         content_type: "image/png"
       )
@@ -40,13 +40,44 @@ RSpec.describe "Upload Management", type: :system do
     end
 
     context "when adding a document" do
-      it "doesn't replace pre-existing documents" do
+      it "does not replace pre-existing documents" do
         expect(page).to have_text("logo_ruby_for_good.png")
-        page.attach_file(Rails.root.join("test/fixtures/files/file_text_test.txt")) do
+        page.attach_file(Rails.root.join("test/fixtures/images/skillrx_sidebar.png")) do
           page.find("#documents").click
         end
         expect(page).to have_text("logo_ruby_for_good.png")
-        expect(page).to have_text("file_text_test.txt")
+        expect(page).to have_text("skillrx_sidebar.png")
+        click_button("Update Topic")
+        click_link("View", href: topic_path(topic))
+        expect(page).to have_text("skillrx_sidebar.png")
+      end
+
+      context "when the user does not confirm the addition of files" do
+        it "does not add the document" do
+          expect(page).to have_text("logo_ruby_for_good.png")
+          page.attach_file(Rails.root.join("test/fixtures/images/skillrx_sidebar.png")) do
+            page.find("#documents").click
+          end
+          expect(page).to have_text("logo_ruby_for_good.png")
+          expect(page).to have_text("skillrx_sidebar.png")
+          click_link("Cancel")
+          click_link("View", href: topic_path(topic))
+          expect(page).to have_text("logo_ruby_for_good.png")
+          expect(page).not_to have_text("skillrx_sidebar.png")
+        end
+      end
+
+      context "with an unsupported file type" do
+        it "does not add the document" do
+          expect(page).to have_text("logo_ruby_for_good.png")
+          page.attach_file(Rails.root.join("test/fixtures/files/file_text_test.txt")) do
+            page.find("#documents").click
+          end
+          expect(page).to have_text("logo_ruby_for_good.png")
+          expect(page).to have_text("file_text_test.txt")
+          click_button("Update Topic")
+          expect(page).to have_text("Documents must be images, videos or PDFs")
+        end
       end
     end
 

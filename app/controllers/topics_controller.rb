@@ -14,9 +14,10 @@ class TopicsController < ApplicationController
   end
 
   def create
-    @topic = scope.new
+    @topic = scope.new(topic_params)
+    validate_blobs
 
-    if save_with_tags(@topic, topic_params)
+    if @topic.errors.none? && save_with_tags(@topic, topic_params)
       attach_files(document_signed_ids)
       redirect_to topics_path
     else
@@ -28,10 +29,13 @@ class TopicsController < ApplicationController
   end
 
   def edit
+    @documents = @topic.documents
   end
 
   def update
-    if save_with_tags(@topic, topic_params)
+    validate_blobs
+
+    if @topic.errors.none? && save_with_tags(@topic, topic_params)
       attach_files(document_signed_ids)
       redirect_to topics_path
     else
@@ -64,6 +68,7 @@ class TopicsController < ApplicationController
     return if signed_ids.blank?
 
     signed_ids.each do |signed_id|
+      blob = ActiveStorage::Blob.find_signed(signed_id)
       @topic.documents.attach(signed_id)
     end
   end
@@ -118,4 +123,15 @@ class TopicsController < ApplicationController
     current_provider.present? ? "#{current_provider.name}/topics" : "Topics"
   end
   helper_method :topics_title
+
+  def validate_blobs
+    blobs = document_signed_ids&.filter_map { |signed_id| ActiveStorage::Blob.find_signed(signed_id) }
+
+    blobs&.each do |blob|
+      unless blob.content_type.in?(Topic::CONTENT_TYPES) && blob.byte_size < 10.megabytes
+        @topic.errors.add(:documents, "must be images, videos or PDFs of less than 10MB")
+        blob.purge
+      end
+    end
+  end
 end
