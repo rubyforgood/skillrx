@@ -1,0 +1,11 @@
+<% blobs.each_with_index do |blob, i| %>
+  <%= render partial: "topics/document", locals:
+    {
+      signed_id: blob.signed_id,
+      display_name: blob.filename.to_s,
+      blob_path: rails_blob_path(blob, disposition: "attachment"),
+      hidden_input: hidden_input,
+      blob_counter: i + 1
+    }
+  %>
+<% end %>

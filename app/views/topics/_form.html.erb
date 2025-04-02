@@ -48,9 +48,20 @@
             %>
           </div>
         </div>
-        <div class="form-group">
+        <div class="form-group" data-controller="upload" <% if topic.persisted? %> data-upload-topic-id-value="<%= topic.id %>" <% end %>>
           <%= f.label :documents, style: "display: block" %>
-          <%= f.file_field :documents, multiple: true, class: "form-control" %>
+
+          <div data-upload-target="filesContainer">
+            <% if topic.documents_blobs.present? %>
+              <%= render partial: "topics/document_list", locals: { blobs: topic.documents_blobs, hidden_input: false } %>
+            <% end %>
+          </div>
+
+          <% topic.documents.each do |document| %>
+            <%= f.hidden_field :documents, multiple: true, value: document.signed_id, data: { upload_target: "hiddenField" } %>
+          <% end %>
+
+          <%= f.file_field :documents, multiple: true, class: "form-control mt-4", id: "documents", data: { upload_target: "filesInput", action: "change->upload#uploadFile" } %>
         </div>
         <div class="col-12 d-flex justify-content-end">
           <%= f.submit class: "btn btn-primary me-1 mb-1" %>

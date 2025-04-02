@@ -23,4 +23,10 @@
     <strong>Provider:</strong>
     <%= link_to topic.provider.name, topic.provider %>
   </p>
+
+  <ul>
+    <% topic.documents.each do |document| %>
+      <li><%= link_to document.filename, rails_blob_path(document), target: "_blank"%></li>
+    <% end %>
+  </ul>
 </div>
