@@ -88,8 +88,8 @@ class DataImport
       language = Language.where("name like ?", "#{row["Topic_Language"]}%").first
       puts "Language #{row["Topic_Language"]} not found" unless language
       provider = Provider.find_by(id: row["Provider_ID"])
-      created_year = max(row["Created_Year"].to_i, 2016)
-      created_month = max(row["Created_Month"].split("_").first.to_i, 1)
+      created_year = [ row["Created_Year"].to_i, 2016 ].max
+      created_month = [ row["Created_Month"].split("_").first.to_i, 1 ].max
 
       topic = Topic.find_or_initialize_by(id: row["Topic_ID"])
       # debugger if row["Topic_UID"].empty?

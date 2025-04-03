@@ -14,13 +14,10 @@ class TopicsController < ApplicationController
   def create
     @topic = scope.new(topic_params)
     validate_blobs
+    return render :new, status: :unprocessable_entity if @topic.errors.any? || !@topic.save_with_tags(topic_params)
 
-    if @topic.errors.none? && @topic.save_with_tags(topic_params)
-      attach_files(document_signed_ids)
-      redirect_to topics_path
-    else
-      render :new, status: :unprocessable_entity
-    end
+    attach_files(document_signed_ids)
+    redirect_to topics_path
   end
 
   def show
@@ -32,13 +29,10 @@ class TopicsController < ApplicationController
 
   def update
     validate_blobs
+    return render :edit, status: :unprocessable_entity if @topic.errors.any? || !@topic.save_with_tags(topic_params)
 
-    if @topic.errors.none? && @topic.save_with_tags(topic_params)
-      attach_files(document_signed_ids)
-      redirect_to topics_path
-    else
-      render :edit, status: :unprocessable_entity
-    end
+    attach_files(document_signed_ids)
+    redirect_to topics_path
   end
 
   def destroy
@@ -66,7 +60,7 @@ class TopicsController < ApplicationController
     return if signed_ids.blank?
 
     signed_ids.each do |signed_id|
-      blob = ActiveStorage::Blob.find_signed(signed_id)
+      ActiveStorage::Blob.find_signed(signed_id)
       @topic.documents.attach(signed_id)
     end
   end
@@ -88,23 +82,6 @@ class TopicsController < ApplicationController
         permitted_params = validate_provider!(permitted_params)
         permitted_params = validate_published_at!(permitted_params)
       end
-  end
-
-  def validate_provider!(attrs)
-    if attrs["provider_id"].present?
-      attrs["provider_id"] = provider_scope.find(attrs["provider_id"]).id
-      attrs["provider_id"] = current_provider.id if current_provider && !Current.user.is_admin?
-    end
-    attrs
-  end
-
-  def validate_published_at!(attrs)
-    year = attrs["published_at_year"].present? ? attrs["published_at_year"] : Time.current.year
-    month = attrs["published_at_month"].present? ? attrs["published_at_month"] : Time.current.month
-    attrs["published_at"] = DateTime.new(year, month, 1)
-    attrs.delete("published_at_year")
-    attrs.delete("published_at_month")
-    attrs
   end
 
   def set_topic
@@ -137,14 +114,35 @@ class TopicsController < ApplicationController
   end
   helper_method :topics_title
 
-  def validate_blobs
-    blobs = document_signed_ids&.filter_map { |signed_id| ActiveStorage::Blob.find_signed(signed_id) }
+  def validate_provider!(attrs)
+    if attrs["provider_id"].present?
+      attrs["provider_id"] = provider_scope.find(attrs["provider_id"]).id
+      attrs["provider_id"] = current_provider.id if current_provider && !Current.user.is_admin?
+    end
+    attrs
+  end
 
-    blobs&.each do |blob|
-      unless blob.content_type.in?(Topic::CONTENT_TYPES) && blob.byte_size < 10.megabytes
-        @topic.errors.add(:documents, "must be images, videos or PDFs of less than 10MB")
-        blob.purge
-      end
+  def validate_published_at!(attrs)
+    year = attrs["published_at_year"].present? ? attrs["published_at_year"].to_i : Time.current.year
+    month = attrs["published_at_month"].present? ? attrs["published_at_month"].to_i : Time.current.month
+    attrs["published_at"] = DateTime.new(year, month, 1)
+    attrs.delete("published_at_year")
+    attrs.delete("published_at_month")
+    attrs
+  end
+
+
+  def validate_blobs
+    return if document_signed_ids.blank?
+
+    blobs = document_signed_ids.filter_map { |signed_id| ActiveStorage::Blob.find_signed(signed_id) }
+    return if blobs.blank?
+
+    blobs.each do |blob|
+      next if blob.content_type.in?(Topic::CONTENT_TYPES) && blob.byte_size < 10.megabytes
+
+      @topic.errors.add(:documents, "must be images, videos or PDFs of less than 10MB")
+      blob.purge
     end
   end
 end
