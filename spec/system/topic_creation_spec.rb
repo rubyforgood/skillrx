@@ -7,7 +7,7 @@ RSpec.describe "Creating a Topic", type: :system do
 
     before do
       login_as(user)
-      visit_with_wait(new_topic_path)
+      wait_and_visit(new_topic_path)
     end
 
     context "as an Admin" do

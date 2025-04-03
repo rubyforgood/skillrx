@@ -8,7 +8,7 @@ RSpec.describe "Upload Management", type: :system do
   end
 
   context "when creating a new topic" do
-    before { visit_with_wait(new_topic_path) }
+    before { wait_and_visit(new_topic_path) }
 
     it "shows added documents" do
       page.attach_file(Rails.root.join("test/fixtures/images/logo_ruby_for_good.png")) do
@@ -36,7 +36,7 @@ RSpec.describe "Upload Management", type: :system do
         filename: "logo_ruby_for_good.png",
         content_type: "image/png"
       )
-      visit_with_wait edit_topic_path(topic)
+      wait_and_visit edit_topic_path(topic)
     end
 
     context "when adding a document" do

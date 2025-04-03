@@ -30,6 +30,14 @@
             %>
           </div>
           <div class="form-group">
+            <%= f.label :publishing_year %>
+            <%= f.select :published_at_year, options_for_select((2016..Date.today.year).to_a, topic.published_at_year), { prompt: "Select year of publishing" }, class: "form-select" %>
+          </div>
+          <div class="form-group">
+            <%= f.label :publishing_month %>
+            <%= f.select :published_at_month, options_for_select((1..12).to_a, topic.published_at_month), { prompt: "Select month of publishing" }, class: "form-select" %>
+          </div>
+          <div class="form-group">
             <div class="d-flex">
               <%= f.label :tag_list, class: "flex-fill" %>
               <small class="flex-fill text-end fw-light text-muted text-uppercase">Press enter to add a new tag</small>
