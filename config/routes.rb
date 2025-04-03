@@ -5,6 +5,7 @@ Rails.application.routes.draw do
   resources :regions
   resource :registration, only: %i[new create]
   resource :session
+  resources :uploads, only: %i[create destroy]
   resources :users
   resources :topics do
     member do

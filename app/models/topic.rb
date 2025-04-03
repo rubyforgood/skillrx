@@ -27,7 +27,7 @@ class Topic < ApplicationRecord
   include LocalizedTaggable
 
   STATES = %i[active archived].freeze
-  CONTENT_TYPES = %w[image/jpeg image/png image/svg+xml image/webp image/avif image/gif video/mp4].freeze
+  CONTENT_TYPES = %w[image/jpeg image/png image/svg+xml image/webp image/avif image/gif video/mp4 application/pdf].freeze
 
   belongs_to :language
   belongs_to :provider
