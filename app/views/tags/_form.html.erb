@@ -1,0 +1,38 @@
+<%= form_for tag do |f| %>
+  <div class="form-body">
+    <div class="row">
+      <%= render "shared/errors", resource: tag %>
+      <div class="col-12">
+        <div class="form-group">
+          <%= f.label :name %>
+          <%= f.text_field :name, class: "form-control", placeholder: "Name" %>
+        </div>
+        <div data-controller="select-tags">
+          <div class="form-group">
+            <div class="d-flex">
+              <%= f.label :tag_list, class: "flex-fill" %>
+              <small class="flex-fill text-end fw-light text-muted text-uppercase">Press enter to add a new tag</small>
+            </div>
+            <%= f.select :cognates_list,
+                         options_from_collection_for_select(
+                           tag.available_cognates,
+                           :name,
+                           :name,
+                           tag.cognates_list
+                         ),
+                         { prompt: "Select tags", include_blank: true },
+                         multiple: true,
+                         class: "form-select",
+                         data: { "allow-new": "true", "allow-clear": "true", "select-tags-target": "tagList" }
+            %>
+          </div>
+        </div>
+
+        <div class="col-12 d-flex justify-content-end">
+          <%= f.submit class: "btn btn-primary me-1 mb-1" %>
+          <%= link_to "Cancel", tags_path, class: "btn btn-light-secondary me-1 mb-1" %>
+        </div>
+      </div>
+    </div>
+  </div>
+<% end %>
