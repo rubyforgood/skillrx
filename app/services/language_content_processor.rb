@@ -1,11 +1,4 @@
 class LanguageContentProcessor
-  # def perform
-  #   Language.all.reduce({}) do |hash, language|
-  #     hash[language.id] = generate_content(language)
-  #     hash
-  #   end
-  # end
-
   def initialize(language)
     @language = language
   end
@@ -29,28 +22,47 @@ class LanguageContentProcessor
     end
   end
 
-  # def generate_content(language)
-  #   {
-  #     title_and_tags: TextGenerator::TitleAndTags.new(language).perform,
-  #     tags: TextGenerator::Tags.new(language).perform,
-  #     all_providers: XmlGenerator::AllProviders.new(language).perform,
-  #   }.tap do |content|
-  #     language.providers.find_each do |provider|
-  #       content[provider.name] = XmlGenerator::SingleProvider.new(provider).perform
-  #     end
-  #   end
-
-  #   # Save or process the generated content as needed
-  #   # save_language_content(language, language_content)
-  # end
-
   def files_to_upload
     [
       FileToUpload.new(
         id: :all_providers,
         content: XmlGenerator::AllProviders.new(language).perform,
         name: "#{language.file_storage_prefix}_all_providers.xml",
+        path: "#{language.file_storage_prefix}_all_providers.xml",
       ),
-    ]
+      FileToUpload.new(
+        id: :all_providers_recent,
+        content: XmlGenerator::AllProviders.new(language, recent: true).perform,
+        name: "#{language.file_storage_prefix}_all_providers_recent.xml",
+        path: "#{language.file_storage_prefix}_all_providers_recent.xml",
+      ),
+      FileToUpload.new(
+        id: :tags,
+        content: TextGenerator::Tags.new(language).perform,
+        name: "#{language.file_storage_prefix}_tags.txt",
+        path: "#{language.file_storage_prefix}_tags.txt",
+      ),
+      FileToUpload.new(
+        id: :tags,
+        content: TextGenerator::TitleAndTags.new(language).perform,
+        name: "#{language.file_storage_prefix}_title_and_tags.txt",
+        path: "#{language.file_storage_prefix}_title_and_tags.txt",
+      ),
+    ].tap do |files|
+      language.providers.find_each do |provider|
+        files << FileToUpload.new(
+          id: provider.id,
+          content: XmlGenerator::SingleProvider.new(provider).perform,
+          name: "#{language.file_storage_prefix}_#{provider.name}.xml",
+          path: "#{language.file_storage_prefix}_#{provider.name}.xml",
+        )
+        files << FileToUpload.new(
+          id: "#{provider.id}_recent",
+          content: XmlGenerator::SingleProvider.new(provider, recent: true).perform,
+          name: "#{language.file_storage_prefix}_#{provider.name}_recent.xml",
+          path: "#{language.file_storage_prefix}_#{provider.name}_recent.xml",
+        )
+      end
+    end
   end
 end

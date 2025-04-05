@@ -6,8 +6,8 @@ RSpec.describe XmlGenerator::AllProviders do
   let(:language) { create(:language) }
   let(:provider1) { create(:provider) }
   let(:provider2) { create(:provider) }
-  let(:topic1) { create(:topic, language:, provider: provider1) }
-  let(:topic2) { create(:topic, language:, provider: provider2) }
+  let!(:topic1) { create(:topic, :tagged, language:, provider: provider1) }
+  let!(:topic2) { create(:topic, :tagged, language:, provider: provider2) }
 
   it "generates the xml" do
     expect(subject.perform).to eq(
@@ -25,7 +25,6 @@ RSpec.describe XmlGenerator::AllProviders do
               </topic_month>
             </topic_year>
           </content_provider>
-          <content_provider name="#{provider2.name}"/>
           <content_provider name="#{provider2.name}">
             <topic_year year="#{topic2.created_at.year}">
               <topic_month month="#{topic2.created_at.strftime("%m_%B")}">
