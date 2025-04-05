@@ -14,7 +14,7 @@ RSpec.describe TextGenerator::TitleAndTags do
     let!(:topic) { create(:topic, :tagged, language:) }
 
     it "generates text with title and tags for topics" do
-      expect(subject.perform).to eq("#{topic.title},#{topic.current_tags_list.join(",")}")
+      expect(subject.perform).to eq(([ topic.title ] + topic.current_tags_list).join("\n"))
     end
   end
 

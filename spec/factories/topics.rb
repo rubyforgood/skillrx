@@ -38,5 +38,16 @@ FactoryBot.define do
         topic.save
       end
     end
+
+    trait :with_documents do
+      after(:create) do |topic|
+        blob = ActiveStorage::Blob.create_and_upload!(
+          io: File.open(Rails.root.join("spec", "fixtures", "files", "test_image.png")),
+          filename: "test_image.png",
+          content_type: "image/png",
+        )
+        topic.documents.attach(blob)
+      end
+    end
   end
 end

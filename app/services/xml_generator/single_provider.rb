@@ -22,9 +22,7 @@ class XmlGenerator::SingleProvider < XmlGenerator::Base
                 xml.topic_id topic.id
                 xml.topic_files(files: "Files") {
                   topic.documents.each_with_index do |document, index|
-                    xml.send("file_name_#{index + 1}", file_size: document.byte_size) {
-                      xml.text! document.filename
-                    }
+                    xml.send("file_name_#{index + 1}", document.filename, file_size: document.byte_size)
                   end
                 }
                 xml.topic_tags topic.current_tags_list.join(", ")

@@ -10,8 +10,8 @@ class TextGenerator::TitleAndTags < TextGenerator::Base
 
   def text_content
     scope
-      .map do |topic|
-        ([ topic.title ] + topic.current_tags_list).join(",")
+      .flat_map do |topic|
+        [ topic.title ] + topic.current_tags_list
       end
       .join("\n")
   end
