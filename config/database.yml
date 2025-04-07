@@ -102,3 +102,19 @@ production:
     <<: *default
     url: <%= ENV['HEROKU_POSTGRESQL_CABLE_URL'] || ENV['DATABASE_URL'] %>
     migrations_paths: db/cable_migrate
+
+staging:
+  primary:
+    <<: *default
+    url: <%= ENV['DATABASE_URL'] %>
+  cache:
+    <<: *default
+    migrations_paths: db/cache_migrate
+  queue:
+    <<: *default
+    url: <%= ENV['HEROKU_POSTGRESQL_QUEUE_URL'] || ENV['DATABASE_URL'] %>
+    migrations_paths: db/queue_migrate
+  cable:
+    <<: *default
+    url: <%= ENV['HEROKU_POSTGRESQL_CABLE_URL'] || ENV['DATABASE_URL'] %>
+    migrations_paths: db/cable_migrate

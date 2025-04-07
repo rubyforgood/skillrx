@@ -10,6 +10,9 @@ development:
 production:
   <<: *default
 
+staging:
+  <<: *default
+
 # production:
 #   periodic_cleanup:
 #     class: CleanSoftDeletedRecordsJob
