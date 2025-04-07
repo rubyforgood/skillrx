@@ -1,3 +1,15 @@
+default: &default
+  language_files:
+    command: LanguageFilesScheduler.new.perform
+    queue: default
+    schedule: "@daily"
+
+development:
+  <<: *default
+
+production:
+  <<: *default
+
 # production:
 #   periodic_cleanup:
 #     class: CleanSoftDeletedRecordsJob

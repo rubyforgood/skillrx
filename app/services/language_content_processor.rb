@@ -4,14 +4,14 @@ class LanguageContentProcessor
   end
 
   def perform
-    process_language_content
+    process_language_content!
   end
 
   private
 
   attr_reader :language
 
-  def process_language_content
+  def process_language_content!
     files_to_upload.each do |file|
       FileWriter.new(file).temporary_file do |temp_file|
         FileSender.new(
