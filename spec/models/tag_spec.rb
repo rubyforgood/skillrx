@@ -10,6 +10,26 @@ RSpec.describe Tag, type: :model do
     it { should have_many(:reverse_cognates).through(:reverse_tag_cognates) }
   end
 
+  describe "validations" do
+    it { should validate_presence_of(:name) }
+    it { should validate_uniqueness_of(:name) }
+  end
+
+  describe ".destroy" do
+    context "when a tag has cognates" do
+      let(:tag) { create(:tag) }
+      let(:cognate_tag) { create(:tag) }
+      let!(:tag_cognate) { create(:tag_cognate, tag: tag, cognate: cognate_tag) }
+
+      it "destroys all associated tag cognates" do
+        expect { tag.destroy }
+          .to change { TagCognate.exists?(tag_id: tag.id, cognate_id: cognate_tag.id) }
+          .from(true)
+          .to(false)
+      end
+    end
+  end
+
   describe ".cognates_tags" do
     it "returns all tags that are cognates of the given tag" do
       cognate_tag = create(:tag)
@@ -46,14 +66,53 @@ RSpec.describe Tag, type: :model do
     end
   end
 
-  describe ".available_cognates" do
+  describe ".cognates_list=" do
+    context "when setting cognates" do
+      let(:cognate_tag) { create(:tag) }
+      let!(:existing_cognate) { create(:tag) }
+
+      it "adds new cognates to the tag" do
+        subject.cognates_list = [ cognate_tag.name ]
+        expect(subject.cognates_tags).to include(cognate_tag)
+      end
+
+      context "when existing cognates are present" do
+        let(:new_cognate_tag) { create(:tag) }
+
+        before do
+          create(:tag_cognate, tag: subject, cognate: existing_cognate)
+        end
+
+        it "replaces old cognates with new ones" do
+          subject.cognates_list = [ new_cognate_tag.name ]
+
+          aggregate_failures do
+            expect(subject.cognates_tags).to include(new_cognate_tag)
+            expect(subject.cognates_tags).not_to include(existing_cognate)
+          end
+        end
+      end
+    end
+
+    context "when setting an empty cognates list" do
+      before do
+        create(:tag_cognate, tag: subject, cognate: create(:tag))
+      end
+
+      it "removes all cognates" do
+        subject.cognates_list = []
+        expect(subject.cognates_tags).to be_empty
+      end
+    end
+  end
+
+  describe ".all_available_tags" do
     it "returns all tags that are not cognates of the given tag" do
-      non_cognate_tags = create_list(:tag, 2)
       cognate_tag = create(:tag)
       create(:tag_cognate, tag: subject, cognate: cognate_tag)
 
-      expect(subject.available_cognates).not_to include(cognate_tag)
-      expect(subject.available_cognates).to be_all { |tag| non_cognate_tags.include?(tag) }
+      expect(subject.all_available_tags).to include(cognate_tag)
+      expect(subject.all_available_tags).not_to include(subject)
     end
   end
 end

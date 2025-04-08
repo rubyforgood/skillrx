@@ -15,7 +15,7 @@
             </div>
             <%= f.select :cognates_list,
                          options_from_collection_for_select(
-                           tag.available_cognates,
+                           tag.all_available_tags,
                            :name,
                            :name,
                            tag.cognates_list
