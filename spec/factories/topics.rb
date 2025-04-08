@@ -27,6 +27,7 @@ FactoryBot.define do
     association :language
     title { "topic title" }
     description { "many topic details" }
+    published_at { DateTime.new(2023, 1, 1) }
     state { 0 }
 
     trait :archived do

@@ -23,6 +23,7 @@
 #
 class Topic < ApplicationRecord
   include Searcheable
+  include Taggable
   include LocalizedTaggable
 
   STATES = %i[active archived].freeze
@@ -32,10 +33,28 @@ class Topic < ApplicationRecord
   belongs_to :provider
   has_many_attached :documents
 
-  validates :title, :language_id, :provider_id, presence: true
+  validates :title, :language_id, :provider_id, :published_at, presence: true
   validates :documents, content_type: CONTENT_TYPES, size: { less_than: 10.megabytes }
 
   enum :state, STATES.map.with_index.to_h
 
   scope :active, -> { where(state: :active) }
+
+  def published_at_year
+    published_at&.year
+  end
+
+  def published_at_month
+    published_at&.month
+  end
+
+  class << self
+    def by_year(year)
+      where("extract(year from published_at) = ?", year)
+    end
+
+    def by_month(month)
+      where("extract(month from published_at) = ?", month)
+    end
+  end
 end

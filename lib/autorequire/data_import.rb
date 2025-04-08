@@ -88,9 +88,11 @@ class DataImport
       language = Language.where("name like ?", "#{row["Topic_Language"]}%").first
       puts "Language #{row["Topic_Language"]} not found" unless language
       provider = Provider.find_by(id: row["Provider_ID"])
+      created_year = [ row["Created_Year"].to_i, 2016 ].max
+      created_month = [ row["Created_Month"].split("_").first.to_i, 1 ].max
 
       topic = Topic.find_or_initialize_by(id: row["Topic_ID"])
-      debugger if row["Topic_UID"].empty?
+      # debugger if row["Topic_UID"].empty?
       # uid = row["Topic_UID"].nil? ? SecureRandom.uuid : row["Topic_UID"]
       topic.assign_attributes(
         id: row["Topic_ID"],
@@ -98,6 +100,7 @@ class DataImport
         language: language,
         provider: provider,
         description: row["Topic_Desc"],
+        published_at: DateTime.new(created_year, created_month, 1),
         # uid: uid,
         state: row["Topic_Archived"].to_i,
       )

@@ -5,7 +5,13 @@ describe "Topics", type: :request do
     let(:user) { create(:user) }
     let(:provider) { create(:provider) }
     let(:language) { create(:language) }
-    let(:topic_params) { attributes_for(:topic, provider_id: provider.id, language_id: language.id) }
+    let(:topic_params) do
+      attributes_for(:topic, provider_id: provider.id, language_id: language.id).tap do |params|
+        params[:published_at_year] = params[:published_at].year
+        params[:published_at_month] = params[:published_at].month
+        params[:published_at] = nil
+      end
+    end
 
     before do
       provider.users << user

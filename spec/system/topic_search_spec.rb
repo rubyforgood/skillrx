@@ -4,9 +4,34 @@ RSpec.describe "Topics search", type: :system do
   let(:admin) { create(:user, :admin, email: "admin@mail.com") }
   let(:english) { create(:language, name: "English") }
   let(:spanish) { create(:language, name: "Spanish") }
-  let!(:spanish_active_topic) { create(:topic, language: spanish, title: "Tratamiento del resfriado", created_at: Date.new(2025, 02, 03)) }
-  let!(:english_active_topic) { create(:topic, language: english, title: "How to treat colds", description: "All the latest information about nasopharyngitis", created_at: Date.new(2025, 03, 04)) }
-  let!(:english_archived_topic) { create(:topic, :archived, language: english, title: "Obsolete", created_at: Date.new(2023, 02, 01)) }
+  let!(:spanish_active_topic) do
+    create(
+      :topic,
+      language: spanish,
+      title: "Tratamiento del resfriado",
+      created_at: Date.new(2025, 02, 03),
+      published_at: Date.new(2025, 02, 03),
+    )
+  end
+  let!(:english_active_topic) do
+    create(
+      :topic,
+      language: english,
+      title: "How to treat colds",
+      description: "All the latest information about nasopharyngitis",
+      created_at: Date.new(2025, 03, 04),
+      published_at: Date.new(2025, 03, 04),
+    )
+  end
+  let!(:english_archived_topic) do
+    create(
+      :topic, :archived,
+      language: english,
+      title: "Obsolete",
+      created_at: Date.new(2023, 02, 01),
+      published_at: Date.new(2023, 02, 01),
+    )
+  end
 
   before do
     login_as(admin)
