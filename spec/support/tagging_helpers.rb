@@ -8,7 +8,7 @@ module TaggingHelpers
   #
   # @note This helper assumes the presence of a Stimulus controller 'select-tags'
   #       which renders a specific DOM structure
-  def select_tag(tag_name)
+  def enter_and_select_tag(tag_name)
     within "div[data-controller='select-tags']" do
       tag_input = find("div.form-control.dropdown.form-select>div>input")
       tag_input.fill_in(with: tag_name)
@@ -27,7 +27,7 @@ module TaggingHelpers
   # @note This helper navigates to the topic's show page for verification
   #       as tags are only visible in the detail view
   def verify_tags_in_topic_page(title, expected_tags)
-    visit_with_wait(topic_path(Topic.find_by(title: title)))
+    wait_and_visit(topic_path(Topic.find_by(title: title)))
     expected_tags.each do |tag|
       expect(page).to have_text(tag)
     end

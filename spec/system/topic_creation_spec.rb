@@ -19,7 +19,7 @@ RSpec.describe "Creating a Topic", type: :system do
           fill_in "Title", with: "My Topic"
           select "English", from: "topic_language_id"
           select provider.name, from: "topic_provider_id"
-          select_tag(tag_name)
+          enter_and_select_tag(tag_name)
           click_button("Create Topic")
           expect(page).to have_text("Search")
           expect(page).to have_text("My Topic")
@@ -45,9 +45,12 @@ RSpec.describe "Creating a Topic", type: :system do
         it "creates a Topic" do
           fill_in "Title", with: "My Topic"
           select "English", from: "topic_language_id"
+          enter_and_select_tag(tag_name)
           click_button("Create Topic")
           expect(page).to have_text("Search")
           expect(page).to have_text("My Topic")
+
+          verify_tags_in_topic_page("My Topic", [ tag_name ])
         end
       end
 
