@@ -9,6 +9,10 @@ export default class extends Controller {
     this.initializeTags()
   }
 
+  notify() {
+    this.dispatch("notify", { detail: { content: Array.from(this.tagListTarget.selectedOptions).map(option => option.value) } })
+  }
+
   /**
    * Handle language change event and update tags accordingly
    * @param {Event} event - Change event

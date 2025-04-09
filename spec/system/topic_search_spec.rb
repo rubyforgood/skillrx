@@ -128,6 +128,19 @@ RSpec.describe "Topics search", type: :system do
     end
   end
 
+  context "when searching by tags" do
+    it "only displays topics matching the search" do
+      english_active_topic.set_tag_list_on(english_active_topic.language.code.to_sym, "Basic")
+      english_active_topic.save
+
+      select_tag("Basic")
+
+      expect(page).to have_text(english_active_topic.title)
+      expect(page).not_to have_text(spanish_active_topic.title)
+      expect(page).not_to have_text(english_archived_topic.title)
+    end
+  end
+
   context "when sorting" do
     it "displays users in the selected order" do
       select "asc", from: "search_order"
