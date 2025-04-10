@@ -11,7 +11,7 @@ RSpec.describe "Creating a Tag", type: :system do
   context "as an Admin" do
     it "creates a tag" do
       fill_in "Name", with: "Erlang"
-      enter_and_select_tag("OTP")
+      enter_and_choose_tag("OTP")
 
       click_button "Create Tag"
       expect(page).to have_content("Erlang")

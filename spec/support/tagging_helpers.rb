@@ -4,13 +4,13 @@ module TaggingHelpers
   # @param tag_name [String] the name of the tag to be selected
   #
   # @example
-  #   select_tag("ruby") # Enters the tag "ruby" in the form
+  #   choose_tag("ruby") # Enters the tag "ruby" in the form
   #
   # @note This helper assumes the presence of a Stimulus controller 'select-tags'
   #       which renders a specific DOM structure
-  def select_tag(tag_name)
+  def choose_tag(tag_name)
     within "div[data-controller='select-tags']" do
-      select_input = find("select#search_tag_list", visible: false)
+      select_input = find("select#search_tag_list", visible: :all)
       select_input.select(tag_name)
     end
   end
@@ -20,11 +20,11 @@ module TaggingHelpers
   # @param tag_name [String] the name of the tag to be selected
   #
   # @example
-  #   select_tag("ruby") # Enters the tag "ruby" in the form
+  #   enter_and_choose_tag("ruby") # Enters the tag "ruby" in the form
   #
   # @note This helper assumes the presence of a Stimulus controller 'select-tags'
   #       which renders a specific DOM structure
-  def enter_and_select_tag(tag_name)
+  def enter_and_choose_tag(tag_name)
     within "div[data-controller='select-tags']" do
       tag_input = find("div.form-control.dropdown.form-select>div>input")
       tag_input.fill_in(with: tag_name)

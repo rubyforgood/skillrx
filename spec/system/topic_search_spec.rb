@@ -4,6 +4,7 @@ RSpec.describe "Topics search", type: :system do
   let(:admin) { create(:user, :admin, email: "admin@mail.com") }
   let(:english) { create(:language, name: "English") }
   let(:spanish) { create(:language, name: "Spanish") }
+  let(:tag_name) { create(:language, name: "Basic") }
   let!(:spanish_active_topic) do
     create(
       :topic,
@@ -31,6 +32,12 @@ RSpec.describe "Topics search", type: :system do
       created_at: Date.new(2023, 02, 01),
       published_at: Date.new(2023, 02, 01),
     )
+  end
+
+  let!(:english_topic_tagged) do
+    english_active_topic.set_tag_list_on(english.code.to_sym, tag_name)
+    english_active_topic.save
+    english_active_topic.reload
   end
 
   before do
@@ -130,12 +137,9 @@ RSpec.describe "Topics search", type: :system do
 
   context "when searching by tags" do
     it "only displays topics matching the search" do
-      english_active_topic.set_tag_list_on(english_active_topic.language.code.to_sym, "Basic")
-      english_active_topic.save
+      choose_tag(tag_name)
 
-      select_tag("Basic")
-
-      expect(page).to have_text(english_active_topic.title)
+      expect(page).to have_text(english_topic_tagged.title)
       expect(page).not_to have_text(spanish_active_topic.title)
       expect(page).not_to have_text(english_archived_topic.title)
     end

@@ -12,7 +12,7 @@ RSpec.describe "Updating a Tag", type: :system do
   context "as an Admin" do
     it "updates a tag" do
       fill_in "Name", with: "JavaScript"
-      enter_and_select_tag("TypeScript")
+      enter_and_choose_tag("TypeScript")
 
       click_button "Update Tag"
       expect(page).to have_content("JavaScript")
