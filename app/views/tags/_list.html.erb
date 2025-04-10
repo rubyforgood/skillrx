@@ -9,6 +9,9 @@
           <%= link_to cognate.name, tag_path(cognate), class: "badge bg-success" %>
         <% end %>
       </td>
+      <td class="text-bold-500">
+        <%= tag.taggings_count %>
+      </td>
       <td class="text-end">
         <%= link_to tag, class: "btn btn-primary btn-sm", data: {turbo: false } do %>
           <i class="bi bi-search"></i> View

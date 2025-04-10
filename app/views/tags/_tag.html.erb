@@ -17,4 +17,6 @@
       <%= link_to cognate.name, tag_path(cognate), class: "badge bg-light-success" %>
     <% end %>
   </p>
+
+  <%= render("tags/taggings", tag: tag) if tag.taggings_count.positive? %>
 </div>
