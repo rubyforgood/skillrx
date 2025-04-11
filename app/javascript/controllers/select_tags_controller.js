@@ -9,6 +9,10 @@ export default class extends Controller {
     this.initializeTags()
   }
 
+  notify() {
+    this.dispatch("notify", { detail: { content: Array.from(this.tagListTarget.selectedOptions).map(option => option.value) } })
+  }
+
   /**
    * Handle language change event and update tags accordingly
    * @param {Event} event - Change event
@@ -44,7 +48,7 @@ export default class extends Controller {
    */
   async fetchTags(languageId) {
     try {
-      const response = await get(`/tags?language_id=${languageId}`, {
+      const response = await get(`/api/v1/tags?language_id=${languageId}`, {
         responseKind: "json"
       })
 
@@ -99,6 +103,6 @@ export default class extends Controller {
    * @param {Object} options - Configuration options for bootstrap5-tags
    */
   initializeTags(options = {}, reset = false) {
-    Tags.init("select#topic_tag_list", options, reset)
+    Tags.init(`select#${this.tagListTarget.id}`, options, reset)
   }
 }

@@ -1,0 +1,22 @@
+<div id="<%= dom_id tag %>">
+  <p>
+    <strong>Name:</strong>
+    <%= tag.name %>
+  </p>
+
+  <p>
+    <strong>Cognates:</strong>
+    <% tag.cognates.each do |cognate| %>
+      <%= link_to cognate.name, tag_path(cognate), class: "badge bg-success" %>
+    <% end %>
+  </p>
+
+  <p>
+    <strong>Reverse cognates:</strong>
+    <% tag.reverse_cognates.each do |cognate| %>
+      <%= link_to cognate.name, tag_path(cognate), class: "badge bg-light-success" %>
+    <% end %>
+  </p>
+
+  <%= render("tags/taggings", tag: tag) if tag.taggings_count.positive? %>
+</div>

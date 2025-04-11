@@ -90,6 +90,16 @@ ActiveRecord::Schema[8.0].define(version: 2025_03_29_174617) do
     t.index ["user_id"], name: "index_sessions_on_user_id"
   end
 
+  create_table "tag_cognates", force: :cascade do |t|
+    t.bigint "tag_id"
+    t.bigint "cognate_id"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["cognate_id"], name: "index_tag_cognates_on_cognate_id"
+    t.index ["tag_id", "cognate_id"], name: "index_tag_cognates_on_tag_id_and_cognate_id", unique: true
+    t.index ["tag_id"], name: "index_tag_cognates_on_tag_id"
+  end
+
   create_table "taggings", force: :cascade do |t|
     t.bigint "tag_id"
     t.string "taggable_type"
@@ -148,5 +158,7 @@ ActiveRecord::Schema[8.0].define(version: 2025_03_29_174617) do
   add_foreign_key "active_storage_attachments", "active_storage_blobs", column: "blob_id"
   add_foreign_key "active_storage_variant_records", "active_storage_blobs", column: "blob_id"
   add_foreign_key "sessions", "users"
+  add_foreign_key "tag_cognates", "tags"
+  add_foreign_key "tag_cognates", "tags", column: "cognate_id"
   add_foreign_key "taggings", "tags"
 end

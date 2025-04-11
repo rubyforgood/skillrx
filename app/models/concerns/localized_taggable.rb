@@ -37,6 +37,15 @@ module LocalizedTaggable
 
   # Retrieves associated tags for the current language context
   #
+  # @return [Array<Tag>] list of tags
+  def current_tags
+    return [] if language_tag_context.nil?
+
+    tags_on(language_tag_context)
+  end
+
+  # Retrieves associated tags for the current language context
+  #
   # @return [Array<String>] list of tag names
   def current_tags_list
     return [] if language_tag_context.nil?

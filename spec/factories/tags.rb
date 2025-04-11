@@ -1,5 +1,5 @@
 FactoryBot.define do
-  factory :tag, class: ActsAsTaggableOn::Tag do
+  factory :tag do
     name { Faker::ProgrammingLanguage.name }
 
     trait :english do

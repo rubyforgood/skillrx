@@ -7,6 +7,7 @@ Rails.application.routes.draw do
   resource :session
   resources :uploads, only: %i[create destroy]
   resources :users
+  resources :tags
   resources :topics do
     member do
       put :archive
@@ -33,8 +34,11 @@ Rails.application.routes.draw do
   # get "service-worker" => "rails/pwa#service_worker", as: :pwa_service_worker
   # Defines the root path route ("/")
 
-
-  resources :tags, only: %i[index]
+  namespace :api do
+    namespace :v1 do
+      resources :tags, only: %i[index show]
+    end
+  end
 
   root "home#index"
 end
