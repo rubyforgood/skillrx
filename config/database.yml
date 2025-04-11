@@ -60,11 +60,9 @@ development:
 # Do not set this db to the same as development or production.
 test:
   primary:
-    <<: *default
-    database: skillrx_test
+    url : <%= ENV["DATABASE_URL"] %>
   queue:
-    <<: *default
-    database: skillrx_test_queue
+    url : <%= ENV["QUEUE_DATABASE_URL"] %>
     migrations_paths: db/queue_migrate
 
 # As with config/credentials.yml, you never want to store sensitive information,
