@@ -36,8 +36,16 @@ class TagsController < ApplicationController
 
   def destroy
     redirect_to tags_path and return unless Current.user.is_admin?
-    @tag.destroy
-    redirect_to tags_path, notice: "Tag was successfully destroyed."
+
+    if params[:confirmed]
+      @tag.destroy
+      redirect_to tags_path, notice: "Tag was successfully destroyed."
+    else
+      @confirmation_required = @tag.taggings_count.positive?
+      respond_to do |format|
+        format.turbo_stream
+      end
+    end
   end
 
   private

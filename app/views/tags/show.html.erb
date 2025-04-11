@@ -2,13 +2,15 @@
 
 <%= render @tag %>
 
-<div class="mt-4">
-  <%= link_to "Edit this tag", edit_tag_path(@tag) %> |
-  <%= link_to "Back to tags", tags_path %>
-</div>
-
-<% if Current.user.is_admin? %>
-  <div>
-    <%= button_to "Delete this tag", @tag, method: :delete, class: "btn btn-danger mt-4" %>
+<div id="<%= "delete_tag_#{@tag.id}" %>">
+  <div class="mt-4">
+    <%= link_to "Edit this tag", edit_tag_path(@tag) %> |
+    <%= link_to "Back to tags", tags_path %>
   </div>
-<% end %>
+
+  <% if Current.user.is_admin? %>
+    <div>
+      <%= button_to "Delete this tag", @tag, method: :delete, class: "btn btn-danger mt-4" %>
+    </div>
+  <% end %>
+</div>
