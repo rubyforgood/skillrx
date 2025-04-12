@@ -90,7 +90,7 @@ class TopicsController < ApplicationController
 
   def scope
     @scope ||= if Current.user.is_admin?
-      Topic.all
+      Topic.includes(:provider).all
     elsif current_provider.present?
       current_provider.topics
     else
