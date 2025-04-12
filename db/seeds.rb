@@ -42,6 +42,7 @@ puts "Creating topics..."
     language_id: Language.find_by(name: "english").id,
     provider_id: Provider.find_by(name: "Provided by the government").id,
     uid: "d290f1ee-6c54-4b01-90e6-d701748f0851",
+    published_at: Time.now - 1.day,
     state: :active,
   },
   {
@@ -50,6 +51,7 @@ puts "Creating topics..."
     language_id: Language.find_by(name: "spanish").id,
     provider_id: Provider.find_by(name: "Provided by the government").id,
     uid: "d290f1ee-6c54-4b01-90e6-d701748f0852",
+    published_at: Time.now - 1.day,
     state: :archived,
   },
 ].each do |topic|
