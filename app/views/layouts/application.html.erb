@@ -77,6 +77,8 @@
       <%= render "layouts/sidebar" %>
       <div id="main" class='layout-navbar navbar-fixed'>
         <div id="main-content">
+          <%= render "shared/flash" %>
+
           <%= yield %>
         </div>
         <footer>
