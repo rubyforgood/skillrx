@@ -1,0 +1,11 @@
+<p>
+  <strong>This tag is associated with <%= @tag.taggings_count %> resource(s).</strong>
+</p>
+
+<ul>
+  <% tag.taggings.each do |tagging| %>
+    <li>
+      <%= link_to tagging.taggable.title, url_for(tagging.taggable), target: "_blank" %>
+    </li>
+  <% end %>
+</ul>

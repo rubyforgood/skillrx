@@ -34,7 +34,7 @@ describe "Topics", type: :request do
       context "with a state" do
         it "filters topics by state" do
           active_topic = create(:topic, provider:, state: :active)
-          archived_topic = create(:topic, provider:, state: :archived)
+          create(:topic, provider:, state: :archived)
 
           get topics_url, params: { search: { state: "active" } }
 
@@ -68,7 +68,7 @@ describe "Topics", type: :request do
 
       context "by year and month" do
         it "filters topics by date" do
-          topic = create(:topic, provider:, created_at: Time.zone.local(2021, 1, 1))
+          topic = create(:topic, provider:, published_at: Time.zone.local(2021, 1, 1))
 
           get topics_url, params: { search: { year: 2021, month: 1 } }
 
