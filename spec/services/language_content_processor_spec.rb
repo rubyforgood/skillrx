@@ -31,27 +31,27 @@ RSpec.describe LanguageContentProcessor do
 
     expect(FileSender).to have_received(:new).with(
       file: "temp_file_path",
-      dest: "#{language.file_storage_prefix}_all_providers.xml"
+      dest: "#{language.file_storage_prefix}Server_XML.xml"
     )
     expect(FileSender).to have_received(:new).with(
       file: "temp_file_path",
-      dest: "#{language.file_storage_prefix}_all_providers_recent.xml"
+      dest: "#{language.file_storage_prefix}New_Uploads.xml"
     )
     expect(FileSender).to have_received(:new).with(
       file: "temp_file_path",
-      dest: "#{language.file_storage_prefix}_tags.txt"
+      dest: "#{language.file_storage_prefix}tags.txt"
     )
     expect(FileSender).to have_received(:new).with(
       file: "temp_file_path",
-      dest: "#{language.file_storage_prefix}_title_and_tags.txt"
+      dest: "#{language.file_storage_prefix}tagsAndTitle.txt"
     )
     expect(FileSender).to have_received(:new).with(
       file: "temp_file_path",
-      dest: "#{language.file_storage_prefix}_#{provider.name}.xml"
+      dest: "#{language.file_storage_prefix}#{provider.name}.xml"
     )
     expect(FileSender).to have_received(:new).with(
       file: "temp_file_path",
-      dest: "#{language.file_storage_prefix}_#{provider.name}_recent.xml"
+      dest: "#{language.file_storage_prefix}New_#{provider.name}.xml"
     )
     expect(file_sender).to have_received(:perform).exactly(files_number).times
   end
