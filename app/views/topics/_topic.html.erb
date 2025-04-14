@@ -1,5 +1,10 @@
 <div id="<%= dom_id topic %>">
   <p>
+    <strong>UID:</strong>
+    <%= topic.uid %>
+  </p>
+
+  <p>
     <strong>Title:</strong>
     <%= topic.title %>
   </p>
@@ -10,8 +15,8 @@
   </p>
 
   <p>
-    <strong>UID:</strong>
-    <%= topic.uid %>
+    <strong>Provider:</strong>
+    <%= link_to topic.provider.name, topic.provider %>
   </p>
 
   <p>
@@ -20,13 +25,25 @@
   </p>
 
   <p>
-    <strong>Provider:</strong>
-    <%= link_to topic.provider.name, topic.provider %>
+    <strong>Publishing at:</strong>
+    <%= topic.published_at.strftime('%m/%d/%Y') %>
   </p>
 
-  <ul>
-    <% topic.documents.each do |document| %>
-      <li><%= link_to document.filename, rails_blob_path(document), target: "_blank"%></li>
-    <% end %>
-  </ul>
+  <div>
+    <p>
+      <strong>Tags:</strong>
+      <% topic.current_tags.each do |tag| %>
+        <%= link_to tag.name, tag_path(tag), class: "badge bg-success", target: "_blank" %>
+      <% end %>
+    </p>
+  </div>
+
+  <div>
+    <strong>Documents:</strong>
+    <ul>
+      <% topic.documents.each do |document| %>
+        <li><%= link_to document.filename, rails_blob_path(document), target: "_blank"%></li>
+      <% end %>
+    </ul>
+  </div>
 </div>

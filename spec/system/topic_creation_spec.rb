@@ -4,10 +4,11 @@ RSpec.describe "Creating a Topic", type: :system do
   describe "there is a create topic button" do
     let!(:english) { create(:language, name: "English") }
     let!(:provider) { create(:provider) }
+    let!(:tag_name) { "tag1" }
 
     before do
       login_as(user)
-      visit_with_wait(new_topic_path)
+      wait_and_visit(new_topic_path)
     end
 
     context "as an Admin" do
@@ -18,9 +19,12 @@ RSpec.describe "Creating a Topic", type: :system do
           fill_in "Title", with: "My Topic"
           select "English", from: "topic_language_id"
           select provider.name, from: "topic_provider_id"
+          enter_and_choose_tag(tag_name)
           click_button("Create Topic")
           expect(page).to have_text("Search")
           expect(page).to have_text("My Topic")
+
+          verify_tags_in_topic_page("My Topic", [ tag_name ])
         end
       end
 
@@ -41,9 +45,12 @@ RSpec.describe "Creating a Topic", type: :system do
         it "creates a Topic" do
           fill_in "Title", with: "My Topic"
           select "English", from: "topic_language_id"
+          enter_and_choose_tag(tag_name)
           click_button("Create Topic")
           expect(page).to have_text("Search")
           expect(page).to have_text("My Topic")
+
+          verify_tags_in_topic_page("My Topic", [ tag_name ])
         end
       end
 

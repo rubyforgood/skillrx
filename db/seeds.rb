@@ -57,6 +57,7 @@ puts "Creating topics..."
 end
 
 puts "Topics created!"
+puts "Tagging topics.."
 Topic.all.each do |topic|
   language_code = topic.language.code
   3.times do
@@ -65,7 +66,11 @@ Topic.all.each do |topic|
   end
 end
 
-puts "Tags created!"
+puts "Topics tagged!"
+puts "Creating tags cognates..."
+Tag.first.tag_cognates.create(cognate_id:  Tag.second.id)
+
+puts "Topics tagged!"
 puts "Creating users..."
 
 User.create(email: "admin@mail.com", password: "test123", is_admin: true)
