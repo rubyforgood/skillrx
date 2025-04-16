@@ -3,7 +3,7 @@ require "rails_helper"
 RSpec.describe "Topics search", type: :system do
   let(:english) { create(:language, name: "English") }
   let(:spanish) { create(:language, name: "Spanish") }
-  let(:tag_name) { create(:language, name: "Basic") }
+  let(:tag_name) { create(:language, name: "Basic").name }
   let(:provider_1) { create(:provider) }
   let(:provider_2) { create(:provider) }
   let!(:spanish_active_topic) do
