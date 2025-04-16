@@ -2,10 +2,12 @@
 module Api
   module V1
     class TagsController < ApplicationController
-      before_action :validate_language
-
       def index
-        @tags = ActsAsTaggableOn::Tag.for_context(language_tag_context)
+        if tag_params[:language_id].present?
+          @tags = ActsAsTaggableOn::Tag.for_context(language_tag_context)
+        else
+          @tags = ActsAsTaggableOn::Tag.all
+        end
 
         render json: @tags
       end
@@ -16,16 +18,8 @@ module Api
         Language.find(params[:language_id]).code.to_sym
       end
 
-      def validate_language
-        render_error unless language_id_param
-      end
-
-      def language_id_param
-        params.require(:language_id)
-      end
-
-      def render_error
-        render json: { error: "Language is required" }, status: :bad_request
+      def tag_params
+        params.permit(:language_id)
       end
     end
   end
