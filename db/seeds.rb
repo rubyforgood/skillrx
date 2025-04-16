@@ -42,6 +42,7 @@ puts "Creating topics..."
     language_id: Language.find_by(name: "english").id,
     provider_id: Provider.find_by(name: "Provided by the government").id,
     uid: "d290f1ee-6c54-4b01-90e6-d701748f0851",
+    published_at: Time.now,
     state: :active,
   },
   {
@@ -49,9 +50,19 @@ puts "Creating topics..."
     description: "Learn the basics of Spanish",
     language_id: Language.find_by(name: "spanish").id,
     provider_id: Provider.find_by(name: "Provided by the government").id,
+    published_at: Time.now,
     uid: "d290f1ee-6c54-4b01-90e6-d701748f0852",
     state: :archived,
   },
+  {
+    title: "Introduction to French",
+    description: "Learn the basics of French",
+    language_id: Language.find_by(name: "english").id,
+    provider_id: Provider.find_by(name: "Provided by the government").id,
+    published_at: Time.now,
+    uid: "d290f1ee-6c54-4b01-90e6-d701748f0963",
+    state: :active,
+  }
 ].each do |topic|
   Topic.find_or_create_by!(topic)
 end
@@ -60,7 +71,7 @@ puts "Topics created!"
 puts "Tagging topics.."
 Topic.all.each do |topic|
   language_code = topic.language.code
-  3.times do
+  10.times do
     topic.tag_list_on(language_code.to_sym).add(Faker::ProgrammingLanguage.name)
     topic.save
   end
