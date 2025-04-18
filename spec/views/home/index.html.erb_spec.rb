@@ -13,6 +13,11 @@ RSpec.describe "home/index", type: :view do
   context "when authenticated" do
     before { def view.authenticated? = true }
 
+    it "displays link to the dashboard" do
+      render
+      expect(rendered).to have_link("Dashboard", href: dashboard_path)
+    end
+
     it "has button to sign out" do
       render
       expect(rendered).to have_button("Sign Out")
