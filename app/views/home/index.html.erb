@@ -12,7 +12,7 @@
         <!-- New Sign In link using Rails 8 authentication -->
         <% if authenticated? %>
           <li class="nav-item">
-            <%= link_to "Sign Out", session_path, method: :delete, class: "nav-link" %>
+            <%= button_to "Sign Out", session_path, method: :delete, class: "nav-link" %>
           </li>
         <% else %>
           <li class="nav-item">
