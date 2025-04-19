@@ -30,8 +30,4 @@ class User < ApplicationRecord
       .then { |scope| params[:is_admin].present? ? scope.where(is_admin: params[:is_admin]) : scope }
       .then { |scope| scope.order(created_at: params[:order]&.to_sym || :desc) }
   end
-
-  def topics
-    Topic.where(provider_id: providers.pluck(:id))
-  end
 end

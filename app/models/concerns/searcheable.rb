@@ -16,10 +16,6 @@ module Searcheable
       where("extract(month from created_at) = ?", month)
     end
 
-    def by_provider(provider_id)
-      where(provider_id: provider_id)
-    end
-
     def by_language(language_id)
       where(language_id: language_id)
     end
@@ -43,7 +39,6 @@ module Searcheable
     scope :search_with_params, ->(params) do
       self
         .then { |scope| params[:state].present? ? scope.by_state(params[:state]) : scope }
-        .then { |scope| params[:provider_id].present? ? scope.by_provider(params[:provider_id]) : scope }
         .then { |scope| params[:language_id].present? ? scope.by_language(params[:language_id]): scope }
         .then { |scope| params[:year].present? ? scope.by_year(params[:year]) : scope }
         .then { |scope| params[:month].present? ? scope.by_month(params[:month]) : scope }
