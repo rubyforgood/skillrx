@@ -89,7 +89,7 @@ class TopicsController < ApplicationController
   end
 
   def scope
-    @scope ||= current_provider&.topics&.includes(:language) ||  Topic.none
+    @scope ||= current_provider.topics.includes(:language)
   end
 
   def topic_tags_params
