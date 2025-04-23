@@ -39,6 +39,6 @@ RSpec.describe Topic, type: :model do
   end
 
   context "tagging" do
-    it_behaves_like "localized taggable"
+    it_behaves_like "taggable"
   end
 end

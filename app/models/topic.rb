@@ -24,7 +24,6 @@
 class Topic < ApplicationRecord
   include Searcheable
   include Taggable
-  include LocalizedTaggable
 
   STATES = %i[active archived].freeze
   CONTENT_TYPES = %w[image/jpeg image/png image/svg+xml image/webp image/avif image/gif video/mp4 application/pdf].freeze
