@@ -66,7 +66,7 @@ format:
 	$(EXEC_CMD) bundle exec rubocop --autocorrect-all
 
 test:
-	$(DOCKER_TEST_CMD)
+	export RAILS_ENV=test $(DOCKER_TEST_CMD)
 
 test_fast:
 	$(DOCKER_TEST_CMD) --fail-fast
