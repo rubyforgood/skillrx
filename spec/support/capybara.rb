@@ -7,8 +7,13 @@ Capybara.register_driver :selenium do |app|
 end
 
 Capybara.register_driver :selenium_chrome_headless do |app|
-  options = Selenium::WebDriver::Chrome::Options.new(args: %w[headless disable-gpu window-size=1400,1400])
+  chrome_flags =  %w[headless disable-gpu window-size=1400,1400]
 
+  if ENV["DOCKER_CONTAINER"]
+    chrome_flags.concat(%w[no-sandbox disable-dev-shm-usage])
+  end
+
+  options = Selenium::WebDriver::Chrome::Options.new(args: chrome_flags)
   Capybara::Selenium::Driver.new(app, browser: :chrome, options: options)
 end
 
