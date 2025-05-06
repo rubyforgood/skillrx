@@ -10,6 +10,7 @@ class DataImport
     Language.destroy_all
     Region.destroy_all
     User.destroy_all
+    Tag.destroy_all
   end
 
   def self.import_all
@@ -19,6 +20,7 @@ class DataImport
     # import_branches
     # import_contributors
     import_topics
+    import_tags
     restore_default_users
   end
 
@@ -106,6 +108,28 @@ class DataImport
       )
       puts "#{topic.title} #{topic.new_record? ? "created" : "already exists"}"
       topic.save!
+    end
+  end
+
+  def self.import_tags
+    tag_data = CSV.read(file_path("tags.csv"), headers: true)
+    tag_data.each do |row|
+      tag = Tag.find_or_initialize_by(id: row["Tag_ID"])
+      tag.assign_attributes(
+        name: row["Tag_Name"],
+        )
+
+          puts "#{tag.name} #{tag.new_record? ? "created" : "already exists"}"
+        tag.save!
+        # if tag.save
+        #   puts "#{tag.name} #{tag.new_record? ? "created" : "already exists"}"
+        # else
+        #   dup_tag = Tag.find_by(name: row["Tag_Name"])
+        #   if dup_tag
+        #     puts "Using existing tag #{dup_tag.name} (ID: #{dup_tag.id})"
+        #     tag.id = dup_tag.id if tag.new_record?
+        #   end
+        # end
     end
   end
 
