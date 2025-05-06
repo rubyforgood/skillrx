@@ -14,13 +14,13 @@
   <div class="col-md-4">
     <div class="form-group">
       <%= form.label :email, style: "display: block" %>
-      <%= form.text_field :email, id: "basicInput", class: "form-control", autofocus: true %>
+      <%= form.text_field :email, class: "form-control", autofocus: true %>
     </div>
   </div>
   <div class="col-md-4">
     <div class="form-group">
       <%= form.label :password, style: "display: block" %>
-      <%= form.text_field :password, id: "basicInput", class: "form-control", autofocus: true %>
+      <%= form.text_field :password, class: "form-control", autofocus: true %>
     </div>
   </div>
     <div class="col-md-4">
@@ -29,6 +29,23 @@
       <%= form.check_box :is_admin, autofocus: true %>
     </div>
   </div>
+
+  <div class="col-md-4" data-controller="selectable">
+    <div class="form-group">
+      <%= form.label :contributors, style: "display: block" %>
+      <%=
+        form.collection_select :provider_ids,
+        Provider.order(:name),
+        :id,
+        :name,
+        { prompt: "Select provider", include_blank: true },
+        class: "form-select",
+        multiple: true,
+        data: { "allow-new": "true", "allow-clear": "true", "selectable-target": "selectableList" }
+      %>
+    </div>
+  </div>
+
   <div class="mt-4">
     <div class="col-12 d-flex justify-content-end">
       <%= form.submit class: "btn btn-primary me-1 mb-1" %>
