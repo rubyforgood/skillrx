@@ -50,7 +50,7 @@ class UsersController < ApplicationController
   end
 
   def user_params
-    params.require(:user).permit(:email, :password, :is_admin, provider_ids: [])
+    params.expect(user: [ :email, :password, :is_admin,  provider_ids: [] ])
   end
 
   def user_search_params
