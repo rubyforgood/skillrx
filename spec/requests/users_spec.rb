@@ -2,8 +2,8 @@ require "rails_helper"
 
 RSpec.describe "/users", type: :request do
   let(:admin) { create(:user, :admin) }
-  let(:provider_1) { FactoryBot.create(:provider) }
-  let(:provider_2) { FactoryBot.create(:provider) }
+  let(:provider_1) { create(:provider) }
+  let(:provider_2) { create(:provider) }
   let(:valid_attributes) do
       { email: "new_name@example.com",
         password: "new_password",
@@ -18,7 +18,6 @@ RSpec.describe "/users", type: :request do
 
   describe "GET /index" do
     it "renders a successful response" do
-      user = FactoryBot.create(:user)
       get users_url
       expect(response).to be_successful
     end
@@ -38,14 +37,16 @@ RSpec.describe "/users", type: :request do
 
   describe "POST /create" do
     context "with valid parameters" do
+      let(:user) { User.last }
+
       it "creates a new user with correct attributes and associations" do
         expect {
           post users_url, params: { user: valid_attributes }
         }.to change(User, :count).by(1)
-        expect(User.last.email).to eq("new_name@example.com")
-        expect(User.last.password_digest).not_to be_nil
-        expect(User.last.provider_ids).to match_array([ provider_1.id, provider_2.id ])
-        expect(User.last.is_admin).to be_falsey
+        expect(user.email).to eq("new_name@example.com")
+        expect(user.password_digest).not_to be_nil
+        expect(user.provider_ids).to match_array([ provider_1.id, provider_2.id ])
+        expect(user.is_admin).to be_falsey
       end
 
       it "redirects to the user index" do
@@ -69,16 +70,17 @@ RSpec.describe "/users", type: :request do
   end
 
   describe "GET /edit" do
+    let(:user) { create(:user) }
+
     it "renders a successful response" do
-      user = FactoryBot.create(:user)
       get edit_user_url(user)
       expect(response).to be_successful
     end
   end
 
   describe "PATCH /update" do
-    let(:user) { FactoryBot.create(:user, email: "old_name@example.com", password: "old_password") }
-    let(:previous_provider) { FactoryBot.create(:provider) }
+    let(:user) { create(:user, email: "old_name@example.com", password: "old_password") }
+    let(:previous_provider) { create(:provider) }
 
     before do
       user.contributors.create(provider_id: previous_provider.id)
@@ -108,15 +110,15 @@ RSpec.describe "/users", type: :request do
   end
 
   describe "DELETE /destroy" do
+    let!(:user) { create(:user, valid_attributes) }
+
     it "destroys the requested user" do
-      user = User.create! valid_attributes
       expect {
         delete user_url(user)
       }.to change(User, :count).by(-1)
     end
 
     it "redirects to the users list" do
-      user = User.create! valid_attributes
       delete user_url(user)
       expect(response).to redirect_to(users_url)
     end
