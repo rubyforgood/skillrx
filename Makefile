@@ -1,4 +1,7 @@
 # Project configuration
+
+# Docker uses the directory environment variable to set a prefix for the service's container names.
+# Doc: https://docs.docker.com/compose/how-tos/environment-variables/envvars/#compose_project_name
 PROJECT_NAME := sk
 
 # Colors for terminal output (optional)
