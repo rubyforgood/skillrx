@@ -5,6 +5,8 @@ class DataImport
   # Regions must be imported before providers
 
   def self.destroy_all_data
+    ActsAsTaggableOn::Tagging.destroy_all
+    ActsAsTaggableOn::Tag.destroy_all
     Topic.destroy_all
     Provider.destroy_all
     Language.destroy_all
@@ -19,6 +21,8 @@ class DataImport
     # import_branches
     # import_contributors
     import_topics
+    import_tags
+    import_topic_tags
     restore_default_users
   end
 
@@ -107,6 +111,47 @@ class DataImport
       puts "#{topic.title} #{topic.new_record? ? "created" : "already exists"}"
       topic.save!
     end
+  end
+
+  def self.import_tags
+    data = CSV.read(file_path("tags.csv"), headers: true)
+
+    data.each do |row|
+      tag_id = row["Tag_ID"].to_i
+      tag_name = row["Tag_Name"]
+      language = row["tag_language"]
+
+      tag = ActsAsTaggableOn::Tag.find_or_initialize_by(id: tag_id)
+
+      begin
+        tag.name = tag_name
+        tag.save!
+      rescue ActiveRecord::RecordInvalid
+        tag.name = "#{tag_name}_#{language}"
+        tag.save!
+      end
+    end
+    puts "Tags import completed"
+  end
+
+  def self.import_topic_tags
+    data = CSV.read(file_path("topic_tags.csv"), headers: true)
+
+    data.each do |row|
+      topic_id = row["Topic_ID"].to_i
+      tag_id = row["Tag_ID"].to_i
+      next if topic_id.blank? || tag_id.blank?
+
+      topic = Topic.find_by(id: topic_id)
+      tag = ActsAsTaggableOn::Tag.find_by(id: tag_id)
+      next unless topic && tag
+
+      unless topic.tag_list.include?(tag.name)
+        topic.tag_list.add(tag.name)
+        topic.save!
+      end
+    end
+    puts "Topic tags import completed"
   end
 
   def self.restore_default_users
