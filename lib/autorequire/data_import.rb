@@ -5,12 +5,13 @@ class DataImport
   # Regions must be imported before providers
 
   def self.destroy_all_data
+    ActsAsTaggableOn::Tagging.destroy_all
+    ActsAsTaggableOn::Tag.destroy_all
     Topic.destroy_all
     Provider.destroy_all
     Language.destroy_all
     Region.destroy_all
     User.destroy_all
-    Tag.destroy_all
   end
 
   def self.import_all
@@ -21,6 +22,7 @@ class DataImport
     # import_contributors
     import_topics
     import_tags
+    import_topic_tags
     restore_default_users
   end
 
@@ -112,25 +114,44 @@ class DataImport
   end
 
   def self.import_tags
-    tag_data = CSV.read(file_path("tags.csv"), headers: true)
-    tag_data.each do |row|
-      tag = Tag.find_or_initialize_by(id: row["Tag_ID"])
-      tag.assign_attributes(
-        name: row["Tag_Name"],
-        )
+    data = CSV.read(file_path("tags.csv"), headers: true)
 
-          puts "#{tag.name} #{tag.new_record? ? "created" : "already exists"}"
+    data.each do |row|
+      tag_id = row["Tag_ID"].to_i
+      tag_name = row["Tag_Name"]
+      language = row["tag_language"]
+
+      tag = ActsAsTaggableOn::Tag.find_or_initialize_by(id: tag_id)
+
+      begin
+        tag.name = tag_name
         tag.save!
-        # if tag.save
-        #   puts "#{tag.name} #{tag.new_record? ? "created" : "already exists"}"
-        # else
-        #   dup_tag = Tag.find_by(name: row["Tag_Name"])
-        #   if dup_tag
-        #     puts "Using existing tag #{dup_tag.name} (ID: #{dup_tag.id})"
-        #     tag.id = dup_tag.id if tag.new_record?
-        #   end
-        # end
+      rescue ActiveRecord::RecordInvalid
+        tag.name = "#{tag_name}_#{language}"
+        tag.save!
+      end
     end
+    puts "Tags import completed"
+  end
+
+  def self.import_topic_tags
+    data = CSV.read(file_path("topic_tags.csv"), headers: true)
+
+    data.each do |row|
+      topic_id = row["Topic_ID"].to_i
+      tag_id = row["Tag_ID"].to_i
+      next if topic_id.blank? || tag_id.blank?
+
+      topic = Topic.find_by(id: topic_id)
+      tag = ActsAsTaggableOn::Tag.find_by(id: tag_id)
+      next unless topic && tag
+
+      unless topic.tag_list.include?(tag.name)
+        topic.tag_list.add(tag.name)
+        topic.save!
+      end
+    end
+    puts "Topic tags import completed"
   end
 
   def self.restore_default_users
