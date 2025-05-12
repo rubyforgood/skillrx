@@ -19,6 +19,7 @@ gem "stimulus-rails"
 # Build JSON APIs with ease [https://github.com/rails/jbuilder]
 gem "jbuilder"
 
+gem "azure_file_shares", github: "dmitrytrager/azure_file_shares"
 # temporarily in production since it's being used in the seeds file
 gem "faker"
 
