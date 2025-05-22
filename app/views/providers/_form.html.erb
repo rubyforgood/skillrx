@@ -32,13 +32,6 @@
     </div>
   </div>
 
-  <div class="col-md-4">
-    <div class="form-group">
-      <%= form.label :contributors, style: "display: block" %>
-      <%= form.collection_select :user_ids, User.order(:email), :id, :email, { include_hidden: false }, class: "form-select", multiple: true %>
-    </div>
-  </div>
-
   <div class="mt-4">
     <div class="col-12 d-flex justify-content-end">
       <%= form.submit class: "btn btn-primary me-1 mb-1" %>
