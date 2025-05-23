@@ -7,10 +7,32 @@
       <%= form_for :search, url: topics_path, method: :get, data: { controller: "topics", topics_target: "searchForm", turbo_frame: "topic-list", turbo_action: "advance" } do |f| %>
         <div class="form-body">
           <div class="row">
-            <div class="col-12">
+            <div class="col-md-6 col-12">
               <div class="form-group">
                 <%= f.label :query %>
                 <%= f.text_field :query, value: params[:query], class: "form-control", data: { action: "input->topics#searchTopics" } %>
+              </div>
+            </div>
+            <div class="col-md-6 col-12"
+                 data-controller="select-tags"
+                 data-action="select-tags:notify->topics#searchTopics:captures">
+              <div class="form-group">
+                <div class="d-flex">
+                  <%= f.label :tag_list, class: "flex-fill" %>
+                  <small class="flex-fill text-end fw-light text-muted text-uppercase">Press enter to add a new tag</small>
+                </div>
+                <%= f.select :tag_list,
+                             options_from_collection_for_select(
+                               Tag.all,
+                               :name,
+                               :name,
+                               []
+                             ),
+                             { prompt: "Select tags", include_hidden: false },
+                             multiple: true,
+                             class: "form-select",
+                             data: { "allow-clear": "true", "select-tags-target": "tagList", "action": "change->select-tags#notify" }
+                %>
               </div>
             </div>
             <div class="col-md-6 col-12">

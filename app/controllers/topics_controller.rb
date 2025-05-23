@@ -89,13 +89,7 @@ class TopicsController < ApplicationController
   end
 
   def scope
-    @scope ||= if Current.user.is_admin?
-      Topic.all
-    elsif current_provider.present?
-      current_provider.topics
-    else
-      Current.user.topics
-    end.includes(:language)
+    @scope ||= current_provider.topics.includes(:language)
   end
 
   def topic_tags_params
@@ -105,7 +99,7 @@ class TopicsController < ApplicationController
   def search_params
     return {} unless params[:search].present?
 
-    params.require(:search).permit(:query, :state, :provider_id, :language_id, :year, :month, :order)
+    params.require(:search).permit(:query, :state, :language_id, :year, :month, :order, tag_list: [])
   end
   helper_method :search_params
 

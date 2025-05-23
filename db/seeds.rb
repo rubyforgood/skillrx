@@ -42,6 +42,7 @@ puts "Creating topics..."
     language_id: Language.find_by(name: "english").id,
     provider_id: Provider.find_by(name: "Provided by the government").id,
     uid: "d290f1ee-6c54-4b01-90e6-d701748f0851",
+    published_at: Time.now - 1.day,
     state: :active,
   },
   {
@@ -50,6 +51,7 @@ puts "Creating topics..."
     language_id: Language.find_by(name: "spanish").id,
     provider_id: Provider.find_by(name: "Provided by the government").id,
     uid: "d290f1ee-6c54-4b01-90e6-d701748f0852",
+    published_at: Time.now - 1.day,
     state: :archived,
   },
 ].each do |topic|
@@ -57,6 +59,7 @@ puts "Creating topics..."
 end
 
 puts "Topics created!"
+puts "Tagging topics.."
 Topic.all.each do |topic|
   language_code = topic.language.code
   3.times do
@@ -65,7 +68,11 @@ Topic.all.each do |topic|
   end
 end
 
-puts "Tags created!"
+puts "Topics tagged!"
+puts "Creating tags cognates..."
+Tag.first.tag_cognates.create(cognate_id:  Tag.second.id)
+
+puts "Topics tagged!"
 puts "Creating users..."
 
 User.create(email: "admin@mail.com", password: "test123", is_admin: true)

@@ -15,7 +15,7 @@ class ApplicationController < ActionController::Base
     @current_provider ||= begin
       provider_scope.find(cookies.signed[:current_provider_id])
     rescue ActiveRecord::RecordNotFound
-      provider_scope.first
+      provider_scope.first || NullProvider.new
     end
   end
   helper_method :current_provider
