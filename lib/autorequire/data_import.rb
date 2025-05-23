@@ -5,6 +5,8 @@ class DataImport
   # Regions must be imported before providers
 
   def self.destroy_all_data
+    ActsAsTaggableOn::Tagging.destroy_all
+    ActsAsTaggableOn::Tag.destroy_all
     Topic.destroy_all
     Provider.destroy_all
     Language.destroy_all
@@ -16,9 +18,9 @@ class DataImport
     import_regions
     import_providers
     import_languages
-    # import_branches
-    # import_contributors
     import_topics
+    import_tags
+    import_topic_tags
     restore_default_users
   end
 
@@ -48,7 +50,7 @@ class DataImport
         provider.assign_attributes(
           name: row["Provider_Name"],
           provider_type: row["Provider_Type"],
-        )
+          )
         provider.save!
       end
       puts "#{provider.name} #{new_record ? "created" : "already exists"}"
@@ -103,10 +105,60 @@ class DataImport
         published_at: DateTime.new(created_year, created_month, 1),
         # uid: uid,
         state: row["Topic_Archived"].to_i,
-      )
+        )
       puts "#{topic.title} #{topic.new_record? ? "created" : "already exists"}"
       topic.save!
     end
+  end
+
+  def self.import_tags
+    data = CSV.read(file_path("tags.csv"), headers: true)
+    data.each do |row|
+      tag_id = row["Tag_ID"].to_i
+      tag_name = row["Tag_Name"]&.strip
+
+      begin
+        Tag.find_or_create_by!(id: tag_id, name: tag_name)
+      rescue ActiveRecord::RecordInvalid
+        puts "Tag #{tag_name} is invalid"
+      end
+    end
+    puts "Tags import completed"
+  end
+
+  def self.import_topic_tags
+    tags_data = CSV.read(file_path("tags.csv"))
+    join_data = CSV.read(file_path("topic_tags.csv"))
+
+    # It returns a hash where the key is the Topic_ID and the value is an array of Tag_ID
+    grouped_data = join_data
+                     .drop(1)
+                     .group_by { |row| row.first.to_i }
+                     .transform_values { |values| values.map(&:last).map(&:to_i) }
+
+    # It returns the corresponding Tag record from the database based on the name
+    find_by_name = ->(tags_data, tag_id) do
+      _id, name, _language = tags_data.find { |row| row.first.to_i == tag_id }
+      Tag.find_by(name: name)
+    end
+
+    # Iterate over the dictionary of lists
+    grouped_data.each do |topic_id, tag_ids|
+      topic = Topic.find_by(id: topic_id)
+      next if topic.nil?
+
+      # Build a string with the tag names
+      tag_names_str = tag_ids.filter_map do |tag_id|
+        Tag.find_by(id: tag_id)&.name&.strip || find_by_name.(tags_data, tag_id)&.name&.strip
+      end.join(",")
+
+      # Set the topic tags in the pertinent context (language comes from the topic's language)
+      topic.set_tag_list_on(topic.language.code.to_sym, tag_names_str)
+      topic.save!
+
+      puts "#{topic.title} - #{topic.id} / Tags: #{topic.current_tags_list}"
+    end
+    puts "Topic tags import completed"
   end
 
   def self.restore_default_users
@@ -114,7 +166,7 @@ class DataImport
 
     admin = User.find_by(email: "admin@mail.com")
     if admin.nil?
-      User.create!(email: "admin@mail.com", password: "test123", is_admin: true)
+      admin = User.create!(email: "admin@mail.com", password: "test123", is_admin: true)
     end
     Provider.all.each do |provider|
       provider.users << admin unless provider.users.include?(admin)
@@ -122,7 +174,7 @@ class DataImport
 
     me = User.find_by(email: "me@mail.com")
     if me.nil?
-     me = User.create!(email: "me@mail.com", password: "test123")
+      me = User.create!(email: "me@mail.com", password: "test123")
     end
 
     Provider.first.users << me unless Provider.first.users.include?(me)
