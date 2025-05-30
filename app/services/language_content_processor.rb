@@ -16,7 +16,8 @@ class LanguageContentProcessor
       FileWriter.new(file).temporary_file do |temp_file|
         FileSender.new(
           file: temp_file,
-          dest: file.path,
+          name: file.name,
+          path: file.path,
         ).perform
       end
     end
