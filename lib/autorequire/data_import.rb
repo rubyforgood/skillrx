@@ -5,6 +5,7 @@ class DataImport
   # Regions must be imported before providers
 
   def self.destroy_all_data
+    TagCognate.destroy_all
     ActsAsTaggableOn::Tagging.destroy_all
     ActsAsTaggableOn::Tag.destroy_all
     Topic.destroy_all
