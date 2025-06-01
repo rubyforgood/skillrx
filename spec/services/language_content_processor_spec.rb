@@ -1,10 +1,11 @@
 require "rails_helper"
 
 RSpec.describe LanguageContentProcessor do
-  subject { described_class.new(language) }
+  subject { described_class.new(language, share) }
 
   let(:language) { create(:language) }
   let(:provider) { create(:provider) }
+  let(:share) { "skillrx-test" }
 
   let(:file_writer) { instance_double(FileWriter) }
   let(:file_sender) { instance_double(FileSender) }
@@ -25,33 +26,47 @@ RSpec.describe LanguageContentProcessor do
     expect(FileWriter).to have_received(:new).with(instance_of(FileToUpload)).exactly(files_number).times
     expect(file_writer).to have_received(:temporary_file).exactly(files_number).times
     expect(FileSender).to have_received(:new).with(
+      share:,
+      name: instance_of(String),
+      path: instance_of(String),
       file: "temp_file_path",
-      dest: instance_of(String)
     ).exactly(files_number).times
 
     expect(FileSender).to have_received(:new).with(
+      share:,
+      path: "#{language.file_storage_prefix}CMES-Pi/assets/XML",
+      name: "#{language.file_storage_prefix}Server_XML.xml",
       file: "temp_file_path",
-      dest: "#{language.file_storage_prefix}Server_XML.xml"
     )
     expect(FileSender).to have_received(:new).with(
+      share:,
+      path: "#{language.file_storage_prefix}CMES-Pi/assets/XML",
+      name: "#{language.file_storage_prefix}New_Uploads_Server_XML.xml",
       file: "temp_file_path",
-      dest: "#{language.file_storage_prefix}New_Uploads.xml"
     )
     expect(FileSender).to have_received(:new).with(
+      share:,
+      path: "#{language.file_storage_prefix}CMES-Pi/assets/Tags",
+      name: "#{language.file_storage_prefix}tags.txt",
       file: "temp_file_path",
-      dest: "#{language.file_storage_prefix}tags.txt"
     )
     expect(FileSender).to have_received(:new).with(
+      share:,
+      path: "#{language.file_storage_prefix}CMES-Pi/assets/Tags",
+      name: "#{language.file_storage_prefix}tagsAndTitle.txt",
       file: "temp_file_path",
-      dest: "#{language.file_storage_prefix}tagsAndTitle.txt"
     )
     expect(FileSender).to have_received(:new).with(
+      share:,
+      path: "#{language.file_storage_prefix}CMES-Pi/assets/XML",
+      name: "#{language.file_storage_prefix}#{provider.name}.xml",
       file: "temp_file_path",
-      dest: "#{language.file_storage_prefix}#{provider.name}.xml"
     )
     expect(FileSender).to have_received(:new).with(
+      share:,
+      path: "#{language.file_storage_prefix}CMES-Pi/assets/XML",
+      name: "#{language.file_storage_prefix}New_Uploads_#{provider.name}.xml",
       file: "temp_file_path",
-      dest: "#{language.file_storage_prefix}New_#{provider.name}.xml"
     )
     expect(file_sender).to have_received(:perform).exactly(files_number).times
   end

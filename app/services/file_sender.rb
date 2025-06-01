@@ -1,8 +1,9 @@
 class FileSender
-  def initialize(file:, name:, path:)
-    @file = file
+  def initialize(share:, name:, path:, file:)
+    @share = share
     @name = name
     @path = path
+    @file = file
   end
 
   def perform
@@ -12,12 +13,12 @@ class FileSender
   private
 
   def send_file
-    client.files.upload_file("skillrx-staging-env", path, name, file)
+    client.files.upload_file(share, path, name, file)
   end
 
   def client
     @client ||= AzureFileShares.client
   end
 
-  attr_reader :file, :path, :name
+  attr_reader :share, :path, :name, :file
 end
