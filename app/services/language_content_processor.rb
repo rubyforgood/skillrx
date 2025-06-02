@@ -58,13 +58,6 @@ class LanguageContentProcessor
           content: XmlGenerator::SingleProvider.new(provider).perform,
           name: "#{language.file_storage_prefix}#{provider.name}.xml",
           path: "#{language.file_storage_prefix}CMES-Pi/assets/XML",
-
-        )
-        files << FileToUpload.new(
-          id: "#{provider.id}_recent",
-          content: XmlGenerator::SingleProvider.new(provider, recent: true).perform,
-          name: "#{language.file_storage_prefix}New_Uploads_#{provider.name}.xml",
-          path: "#{language.file_storage_prefix}CMES-Pi/assets/XML",
         )
       end
     end

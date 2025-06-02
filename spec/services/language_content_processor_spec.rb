@@ -20,7 +20,7 @@ RSpec.describe LanguageContentProcessor do
   end
 
   it "content for every language" do
-    files_number = (language.providers.size + 1) * 2 + 2
+    files_number = language.providers.size + 2 + 2 # 2 files for all provides and 2 files for tags
     subject.perform
 
     expect(FileWriter).to have_received(:new).with(instance_of(FileToUpload)).exactly(files_number).times
@@ -60,12 +60,6 @@ RSpec.describe LanguageContentProcessor do
       share:,
       path: "#{language.file_storage_prefix}CMES-Pi/assets/XML",
       name: "#{language.file_storage_prefix}#{provider.name}.xml",
-      file: "temp_file_path",
-    )
-    expect(FileSender).to have_received(:new).with(
-      share:,
-      path: "#{language.file_storage_prefix}CMES-Pi/assets/XML",
-      name: "#{language.file_storage_prefix}New_Uploads_#{provider.name}.xml",
       file: "temp_file_path",
     )
     expect(file_sender).to have_received(:perform).exactly(files_number).times
