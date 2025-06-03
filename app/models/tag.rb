@@ -66,7 +66,7 @@ class Tag < ActsAsTaggableOn::Tag
       next if name.blank?
 
       Tag.find_or_create_with_like_by_name(name).then do |tag|
-        tag_cognates.create(cognate: tag)
+        tag_cognates.find_or_create_by(cognate: tag)
       end
     end
   end
