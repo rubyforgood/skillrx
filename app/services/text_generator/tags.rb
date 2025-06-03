@@ -11,9 +11,11 @@ class TextGenerator::Tags < TextGenerator::Base
   def text_content
     scope
       .flat_map do |topic|
-        topic.current_tags_for_language(language.id).map { |tag| tag.name }
+        topic.current_tags_for_language(language.id).map(&:name)
       end
       .uniq
+      .sort
+      .join("\n")
   end
 
   def scope

@@ -13,7 +13,7 @@ RSpec.describe TextGenerator::Tags do
     let!(:topic) { create(:topic, :tagged, language:) }
 
     it "generates text with tags for topics" do
-      expect(subject.perform).not_to be_empty
+      expect(subject.perform).to eq(topic.current_tags_for_language(language.id).map(&:name).uniq.sort.join("\n"))
     end
   end
 

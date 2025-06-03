@@ -14,14 +14,12 @@ class LanguageContentProcessor
 
   def process_language_content!
     files_to_upload.each do |file|
-      FileWriter.new(file).temporary_file do |temp_file|
-        FileSender.new(
-          share:,
-          name: file.name,
-          path: file.path,
-          file: temp_file,
-        ).perform
-      end
+      FileSender.new(
+        share:,
+        name: file.name,
+        path: file.path,
+        file: file.content,
+      ).perform
     end
   end
 

@@ -3,7 +3,7 @@ require "rails_helper"
 RSpec.describe FileSender do
   subject(:sender) { described_class.new(share: "skillrx-test", file:, path:, name:) }
 
-  let(:file) { Tempfile.new("file_name") }
+  let(:file) { "some_content" }
   let(:path) { "destination_path" }
   let(:name) { "destination_name" }
 
@@ -11,6 +11,7 @@ RSpec.describe FileSender do
 
   before do
     allow(AzureFileShares).to receive_message_chain(:client, :files).and_return(files)
+    allow(files).to receive(:directory_exists?).and_return(true)
     allow(files).to receive(:upload_file).with("skillrx-test", path, name, file)
   end
 
