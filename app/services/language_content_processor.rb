@@ -44,10 +44,34 @@ class LanguageContentProcessor
         path: "#{language.file_storage_prefix}CMES-Pi/assets/Tags",
       ),
       FileToUpload.new(
-        id: :tags,
+        id: :tags_and_title,
         content: TextGenerator::TitleAndTags.new(language).perform,
         name: "#{language.file_storage_prefix}tagsAndTitle.txt",
         path: "#{language.file_storage_prefix}CMES-Pi/assets/Tags",
+      ),
+      FileToUpload.new(
+        id: :files,
+        content: CsvGenerator::Files.new(language).perform,
+        name: "#{language.file_storage_prefix}File.csv",
+        path: "#{language.file_storage_prefix}CMES-mini/assets/csv",
+      ),
+      FileToUpload.new(
+        id: :topics,
+        content: CsvGenerator::Topics.new(language).perform,
+        name: "#{language.file_storage_prefix}Topic.csv",
+        path: "#{language.file_storage_prefix}CMES-mini/assets/csv",
+      ),
+      FileToUpload.new(
+        id: :tag_details,
+        content: CsvGenerator::TagDetails.new(language).perform,
+        name: "#{language.file_storage_prefix}Tag.csv",
+        path: "#{language.file_storage_prefix}CMES-mini/assets/csv",
+      ),
+      FileToUpload.new(
+        id: :topic_tags,
+        content: CsvGenerator::TopicTags.new(language).perform,
+        name: "#{language.file_storage_prefix}TopicTag.csv",
+        path: "#{language.file_storage_prefix}CMES-mini/assets/csv",
       ),
     ].tap do |files|
       language.providers.find_each do |provider|
