@@ -33,5 +33,24 @@ FactoryBot.define do
     trait :archived do
       state { 1 }
     end
+
+    trait :tagged do
+      after(:create) do |topic|
+        tag = build(:tag)
+        topic.set_tag_list_on(topic.language.code.to_sym, tag.name)
+        topic.save
+      end
+    end
+
+    trait :with_documents do
+      after(:create) do |topic|
+        blob = ActiveStorage::Blob.create_and_upload!(
+          io: File.open(Rails.root.join("spec", "fixtures", "files", "test_image.png")),
+          filename: "test_image.png",
+          content_type: "image/png",
+        )
+        topic.documents.attach(blob)
+      end
+    end
   end
 end

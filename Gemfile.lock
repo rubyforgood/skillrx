@@ -130,7 +130,10 @@ GEM
       reline (>= 0.3.8)
     diff-lcs (1.6.1)
     dotenv (3.1.8)
-    drb (2.2.3)
+    dotenv-rails (3.1.7)
+      dotenv (= 3.1.8)
+      railties (>= 6.1)
+    drb (2.2.1)
     ed25519 (1.4.0)
     erubi (1.13.1)
     et-orbi (1.2.11)
@@ -476,6 +479,7 @@ DEPENDENCIES
   capybara
   csv
   debug
+  dotenv-rails
   factory_bot_rails
   faker
   hotwire-spark

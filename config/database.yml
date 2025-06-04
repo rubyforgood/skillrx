@@ -20,8 +20,13 @@ default: &default
   pool: <%= ENV.fetch("RAILS_MAX_THREADS") { 5 } %>
 
 development:
-  <<: *default
-  database: skillrx_development
+  primary:
+    <<: *default
+    database: skillrx_development
+  queue:
+    <<: *default
+    database: skillrx_development_queue
+    migrations_paths: db/queue_migrate
 
   # The specified database role being used to connect to PostgreSQL.
   # To create additional roles in PostgreSQL see `$ createuser --help`.
@@ -54,8 +59,11 @@ development:
 # re-generated from your development database when you run "rake".
 # Do not set this db to the same as development or production.
 test:
-  <<: *default
-  database: skillrx_test
+  primary:
+    url : <%= ENV["DATABASE_URL"] %>
+  queue:
+    url : <%= ENV["QUEUE_DATABASE_URL"] %>
+    migrations_paths: db/queue_migrate
 
 # As with config/credentials.yml, you never want to store sensitive information,
 # like your database password, in your source code. If your source code is
@@ -92,4 +100,20 @@ production:
   cable:
     <<: *default
     database: skillrx_production_cable
+    migrations_paths: db/cable_migrate
+
+staging:
+  primary:
+    <<: *default
+    url: <%= ENV['DATABASE_URL'] %>
+  cache:
+    <<: *default
+    migrations_paths: db/cache_migrate
+  queue:
+    <<: *default
+    url: <%= ENV['HEROKU_POSTGRESQL_QUEUE_URL'] || ENV['DATABASE_URL'] %>
+    migrations_paths: db/queue_migrate
+  cable:
+    <<: *default
+    url: <%= ENV['HEROKU_POSTGRESQL_CABLE_URL'] || ENV['DATABASE_URL'] %>
     migrations_paths: db/cable_migrate

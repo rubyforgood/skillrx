@@ -16,6 +16,14 @@ Style/StringLiterals:
     - "lib/**/*"
     - "spec/**/*"
     - "Gemfile"
+Style/StringLiteralsInInterpolation:
+  EnforcedStyle: double_quotes
+  Include:
+    - "app/**/*"
+    - "config/**/*"
+    - "lib/**/*"
+    - "spec/**/*"
+    - "Gemfile"
 Bundler/OrderedGems:
   Enabled: true
 
