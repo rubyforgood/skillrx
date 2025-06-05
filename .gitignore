@@ -8,8 +8,7 @@
 /.bundle
 
 # Ignore all environment files.
-/.env*
-!/.env.example
+/.env
 
 db/structure.sql
 
