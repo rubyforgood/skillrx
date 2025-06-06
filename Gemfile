@@ -49,9 +49,8 @@ gem "thruster", require: false
 # Use Active Storage variants [https://guides.rubyonrails.org/active_storage_overview.html#transforming-images]
 gem "image_processing", "~> 1.14"
 
-# Add tagging functionality
 gem "acts-as-taggable-on"
-
+gem "aws-sdk-s3", require: false
 gem "requestjs-rails"
 
 group :development, :test do
