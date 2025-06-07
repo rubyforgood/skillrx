@@ -1,9 +1,11 @@
 
 class TagsController < ApplicationController
+  include Pagy::Backend
+
   before_action :set_tag, only: [ :show, :edit, :update, :destroy ]
 
   def index
-    @tags = Tag.includes(:cognates, :reverse_cognates).references(:tag)
+    @pagy, @tags = pagy(Tag.includes(:cognates, :reverse_cognates).references(:tag))
   end
 
   def new
