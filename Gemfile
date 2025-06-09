@@ -51,6 +51,7 @@ gem "image_processing", "~> 1.14"
 
 gem "acts-as-taggable-on"
 gem "aws-sdk-s3", require: false
+gem "pagy"
 gem "requestjs-rails"
 
 group :development, :test do

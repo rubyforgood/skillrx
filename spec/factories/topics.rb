@@ -25,7 +25,7 @@ FactoryBot.define do
   factory :topic do
     association :provider
     association :language
-    title { "topic title" }
+    sequence(:title) { |n| "topic title #{10}" }
     description { "many topic details" }
     published_at { DateTime.new(2023, 1, 1) }
     state { 0 }

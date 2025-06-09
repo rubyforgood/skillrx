@@ -1,9 +1,11 @@
 class UsersController < ApplicationController
+  include Pagy::Backend
+
   before_action :redirect_contributors
   before_action :set_user, only: %i[ edit update destroy ]
 
   def index
-    @users = User.all.search_with_params(user_search_params)
+    @pagy, @users = pagy(User.all.search_with_params(user_search_params))
   end
 
   def new

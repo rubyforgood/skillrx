@@ -1,8 +1,10 @@
 class TopicsController < ApplicationController
+  include Pagy::Backend
+
   before_action :set_topic, only: [ :show, :edit, :tags, :update, :destroy, :archive ]
 
   def index
-    @topics = scope.search_with_params(search_params)
+    @pagy, @topics = pagy(scope.search_with_params(search_params))
     @available_providers = other_available_providers
     @languages = scope.map(&:language).uniq.sort_by(&:name)
   end

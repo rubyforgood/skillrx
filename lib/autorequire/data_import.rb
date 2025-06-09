@@ -3,6 +3,10 @@ class DataImport
 
   # There are dependencies here.
   # Regions must be imported before providers
+  def self.reset
+    self.destroy_all_data
+    self.import_all
+  end
 
   def self.destroy_all_data
     TagCognate.destroy_all

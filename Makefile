@@ -10,7 +10,7 @@ RESET := \033[0m
 
 # Commands configuration
 COMPOSE_CMD = COMPOSE_PROJECT_NAME=$(PROJECT_NAME) docker compose -f docker-compose.dev.yml
-DOCKER_TEST_CMD = $(COMPOSE_CMD) exec app bundle exec rspec --format documentation
+DOCKER_TEST_CMD = $(COMPOSE_CMD) exec app bundle exec bash -c "export RAILS_ENV=test && rspec --format documentation"
 EXEC_CMD = $(COMPOSE_CMD) exec app
 
 .PHONY: help build rebuild stop start restart logs shell console format test test_fast db_reset migrate clean clean_volumes
@@ -69,7 +69,7 @@ format:
 	$(EXEC_CMD) bundle exec rubocop --autocorrect-all
 
 test:
-	export RAILS_ENV=test $(DOCKER_TEST_CMD)
+	$(DOCKER_TEST_CMD)
 
 test_fast:
 	$(DOCKER_TEST_CMD) --fail-fast
