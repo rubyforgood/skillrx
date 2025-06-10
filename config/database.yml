@@ -16,8 +16,8 @@ default: &default
   adapter: postgresql
   encoding: unicode
   host: <%= ENV.fetch('DATABASE_HOST') { 'localhost' } %>
-  user: <%= ENV.fetch('DATABASE_USERNAME') { 'postgres' } %>
-  password: <%= ENV.fetch('DATABASE_PASSWORD') { 'postgres' } %>
+  user: <%= ENV.fetch('DATABASE_USERNAME') { '' } %>
+  password: <%= ENV.fetch('DATABASE_PASSWORD') { '' } %>
   port: <%= ENV.fetch('DATABASE_PORT') { 5432 }  %>
   # For details on connection pooling, see Rails configuration guide
   # https://guides.rubyonrails.org/configuring.html#database-pooling
@@ -64,9 +64,11 @@ development:
 # Do not set this db to the same as development or production.
 test:
   primary:
-    url : <%= ENV["DATABASE_URL"] %>
+    <<: *default
+    database: skillrx_test
   queue:
-    url : <%= ENV["QUEUE_DATABASE_URL"] %>
+    <<: *default
+    database: skillrx_test_queue
     migrations_paths: db/queue_migrate
 
 # As with config/credentials.yml, you never want to store sensitive information,
