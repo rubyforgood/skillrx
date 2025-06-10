@@ -117,9 +117,9 @@ staging:
     migrations_paths: db/cache_migrate
   queue:
     <<: *default
-    url: <%= ENV['HEROKU_POSTGRESQL_QUEUE_URL'] || ENV['DATABASE_URL'] %>
+    url: <%= ENV['HEROKU_POSTGRESQL_QUEUE_URL'] || ENV['QUEUE_DATABASE_URL'] %>
     migrations_paths: db/queue_migrate
   cable:
     <<: *default
-    url: <%= ENV['HEROKU_POSTGRESQL_CABLE_URL'] || ENV['DATABASE_URL'] %>
+    url: <%= ENV['HEROKU_POSTGRESQL_CABLE_URL'] || ENV['CABLE_DATABASE_URL'] %>
     migrations_paths: db/cable_migrate
