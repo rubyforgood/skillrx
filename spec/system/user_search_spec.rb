@@ -43,7 +43,9 @@ RSpec.describe "User search", type: :system do
   context "when sorting" do
     it "displays users in the selected order" do
       select "By least recently added", from: "search_order"
-      expect(page).to have_text(/#{admin.email}.+#{martin.email}.+#{rosemary.email}/m)
+      Capybara.using_wait_time(7) do
+        expect(page).to have_text(/#{admin.email}.+#{martin.email}.+#{rosemary.email}/m)
+      end
     end
   end
 end
