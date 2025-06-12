@@ -21,6 +21,11 @@ Clone the codebase
 git clone git@github.com:rubyforgood/skillrx.git
 ``` 
 
+Create new DB role:
+```
+psql -d postgres -c 'CREATE ROLE skillrx LOGIN CREATEDB SUPERUSER;'
+```
+
 Run the setup script to prepare the DB and assets
 ```sh
 bin/setup

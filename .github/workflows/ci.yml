@@ -59,14 +59,12 @@ jobs:
   test:
     runs-on: ubuntu-latest
     env:
-      DATABASE_URL: postgres://postgres:postgres@localhost:5432/skillrx_test
-      QUEUE_DATABASE_URL: postgres://postgres:postgres@localhost:5432/skillrx_test_queue
+      DATABASE_USERNAME: 'postgres'
     services:
       postgres:
         image: postgres
         env:
-          POSTGRES_USER: postgres
-          POSTGRES_PASSWORD: postgres
+          POSTGRES_HOST_AUTH_METHOD: trust
         ports:
           - 5432:5432
         options: --health-cmd="pg_isready" --health-interval=10s --health-timeout=5s --health-retries=3
