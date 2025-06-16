@@ -39,16 +39,13 @@ class Tag < ActsAsTaggableOn::Tag
   #
   # @param str_list [Array<String>] list of tag names to set as cognates
   def cognates_list=(str_list)
-    if persisted?
-      remove_cognates(str_list)
-      create_cognates(str_list)
-    else
-      self.tag_cognates_attributes = str_list.filter_map do |name|
-        next if name.blank?
-
-        cognate = Tag.find_or_create_with_like_by_name(name)
-        { cognate_id: cognate.id } if cognate.id != id
-      end
+    names = str_list.compact_blank.uniq.reject { |name| name == self.name }
+    return if names.empty?
+    remove_cognates(names) if persisted?
+    create_cognates(names)
+    self.tag_cognates_attributes = names.filter_map do |name|
+      cognate = Tag.find_by(name: name)
+      { cognate_id: cognate.id }
     end
   end
 
@@ -61,17 +58,17 @@ class Tag < ActsAsTaggableOn::Tag
 
   private
 
-  def create_cognates(str_list)
-    str_list.filter_map do |name|
-      next if name.blank?
-
-      Tag.find_or_create_with_like_by_name(name).then do |tag|
-        tag_cognates.find_or_create_by(cognate: tag)
+  def create_cognates(names)
+    names.each { |name| Tag.find_or_create_by(name: name) }
+    related_tags = Tag.where(name: names)
+    related_tags.each_with_index do |tag, index|
+      related_tags[index + 1..].each do |cognate|
+        tag.tag_cognates.find_or_create_by(cognate: cognate)
       end
     end
   end
 
-  def remove_cognates(str_list)
-    tag_cognates.where.not(cognate_id: Tag.where(name: str_list).pluck(:id)).destroy_all
+  def remove_cognates(names)
+    tag_cognates.where.not(cognate_id: Tag.where(name: names).pluck(:id)).destroy_all
   end
 end
