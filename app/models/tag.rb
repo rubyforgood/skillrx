@@ -18,7 +18,7 @@ class Tag < ActsAsTaggableOn::Tag
   accepts_nested_attributes_for :tag_cognates, allow_destroy: true
 
   # Reverse relationship for cognates referencing this tag
-  has_many :reverse_tag_cognates, class_name: "TagCognate", foreign_key: :cognate_id
+  has_many :reverse_tag_cognates, class_name: "TagCognate", foreign_key: :cognate_id, dependent: :destroy
   has_many :reverse_cognates, through: :reverse_tag_cognates, source: :tag
 
   # Returns a unique list of all cognate tags, including both direct and reverse relationships
