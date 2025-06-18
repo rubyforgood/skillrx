@@ -26,6 +26,7 @@ class DataImport
     import_topics
     import_tags
     import_topic_tags
+    import_training_documents
     restore_default_users
   end
 
@@ -183,5 +184,118 @@ class DataImport
     end
 
     Provider.first.users << me unless Provider.first.users.include?(me)
+  end
+
+  def self.import_training_documents
+    csv_data = CSV.read(file_path("CMEFiles.csv"), headers: true)
+
+    csv_files_without_topics = []
+    files_with_topics = []
+    attached_files = []
+    non_attached_files = []
+    files_with_problems = []
+
+    # Filter training documents if there is a matching topic in the DB
+    csv_training_index = csv_data.filter_map do |row|
+      if Topic.find_by(id: row["Topic_ID"].to_i)
+        row
+      else
+        csv_files_without_topics << row["Topic_ID"]
+        nil
+      end
+    end
+
+    # Pre-fetch all the training files from Azure for each language and state
+    all_azure_files = self.fetch_azure_files
+
+    # Filter all fetched azure files against the csv_training_index by name
+    csv_with_azure_files = all_azure_files.filter_map do |file|
+      csv_training_index.find { |row| row["File_Name"] == file[:name] }
+    end
+
+    puts "csv_training_index: #{csv_training_index.size}"
+    puts "all_azure_files: #{all_azure_files.size}"
+    puts "csv_with_azure_files: #{csv_with_azure_files.size}"
+
+    # Since we import only existing files in Azure, we rely on our filtered list
+    csv_with_azure_files.each do |row|
+      topic = Topic.find_by(id: row["Topic_ID"])
+
+      files_with_topics << topic
+      file_path = self.get_file_path(topic.state, topic.language.name)
+
+      puts "Requesting: #{file_path}/#{row["File_Name"]}"
+
+      begin
+        encoded_filename = URI.encode_www_form_component(row["File_Name"])
+        file_content = AzureFileShares.client.files.download_file(ENV["AZURE_STORAGE_SHARE_NAME"], file_path, encoded_filename)
+
+        topic.documents.attach(
+          io: StringIO.new(file_content),
+          filename: row["File_Name"],
+          content_type: self.detect_content_type(row["File_Type"])
+        )
+
+        if topic.save!
+          attached_files << [ row, topic ]
+        else
+          non_attached_files << [ row, topic ]
+        end
+      rescue AzureFileShares::Errors::ApiError, URI::InvalidURIError => e
+        files_with_problems << { topic: topic, file: row["File_Name"], error: e.message }
+        puts "Error with file: #{row["File_Name"]} for topic #{topic.title} - #{e.message}"
+      end
+    end
+
+    puts "topics not found: #{csv_files_without_topics.size}"
+    puts "topics found: #{files_with_topics.size}"
+    puts "attached files: #{attached_files.size}"
+    puts "non_attached_files: #{non_attached_files.size}"
+    puts "files with problems: #{files_with_problems.size}"
+  end
+
+  private
+
+  def self.get_file_path(state, language)
+    case [ state, language ]
+    in [ "active", "english" ]
+      "CMES-Pi/assets/Content"
+    in [ "archived", "english" ]
+      "CMES-Pi_Archive"
+    in [ "active", "spanish" ]
+      "SP_CMES-Pi/assets/Content"
+    in [ "archived", "spanish" ]
+      "SP_CMES-Pi_Archive"
+    end
+  end
+
+  def self.fetch_azure_files
+    client = AzureFileShares.client
+    azure_active_en = client.files.list(ENV["AZURE_STORAGE_SHARE_NAME"], self.get_file_path("active", "english"))
+    azure_active_es = client.files.list(ENV["AZURE_STORAGE_SHARE_NAME"], self.get_file_path("active", "spanish"))
+    azure_archived_en = client.files.list(ENV["AZURE_STORAGE_SHARE_NAME"], self.get_file_path("archived", "english"))
+    azure_archived_es = client.files.list(ENV["AZURE_STORAGE_SHARE_NAME"], self.get_file_path("archived", "spanish"))
+
+    [
+      azure_active_en[:files],
+      azure_active_es[:files],
+      azure_archived_en[:files],
+      azure_archived_es[:files],
+    ].flatten
+  end
+
+  def self.detect_content_type(filename)
+    case File.extname(filename).downcase
+    when ".mp3"
+      "audio/mpeg"
+    when ".pdf"
+      "application/pdf"
+    when ".jpg", ".jpeg"
+      "image/jpeg"
+    when ".png"
+      "image/png"
+    else
+      "application/octet-stream"
+    end
   end
 end
