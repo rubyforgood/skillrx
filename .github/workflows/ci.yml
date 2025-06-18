@@ -3,7 +3,7 @@ name: CI
 on:
   pull_request:
   push:
-    branches: [ main ]
+    branches: [main]
 
 env:
   RAILS_ENV: "test"
@@ -59,7 +59,7 @@ jobs:
   test:
     runs-on: ubuntu-latest
     env:
-      DATABASE_USERNAME: 'postgres'
+      DATABASE_USER: "postgres"
     services:
       postgres:
         image: postgres
