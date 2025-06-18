@@ -26,6 +26,7 @@ class DataImport
     import_topics
     import_tags
     import_topic_tags
+    import_training_documents
     restore_default_users
   end
 
@@ -183,5 +184,164 @@ class DataImport
     end
 
     Provider.first.users << me unless Provider.first.users.include?(me)
+  end
+
+  def self.import_training_documents
+    csv_data = load_training_documents_csv
+    import_stats = initialize_import_stats
+
+    valid_csv_rows = filter_rows_with_existing_topics(csv_data, import_stats)
+    azure_files = fetch_azure_files
+    importable_rows = match_csv_with_azure_files(valid_csv_rows, azure_files)
+
+    log_import_summary(valid_csv_rows, azure_files, importable_rows)
+
+    process_document_attachments(importable_rows, import_stats)
+    log_final_results(import_stats)
+  end
+
+  private
+
+  def self.load_training_documents_csv
+    CSV.read(file_path("CMEFiles.csv"), headers: true)
+  end
+
+  def self.initialize_import_stats
+    {
+      topics_without_csv: [],
+      successful_attachments: [],
+      failed_attachments: [],
+      error_files: [],
+    }
+  end
+
+  def self.filter_rows_with_existing_topics(csv_data, stats)
+    csv_data.filter_map do |row|
+      topic_id = row["Topic_ID"].to_i
+      if Topic.find_by(id: topic_id)
+        row
+      else
+        stats[:topics_without_csv] << topic_id
+        nil
+      end
+    end
+  end
+
+  def self.match_csv_with_azure_files(csv_rows, azure_files)
+    azure_files.filter_map do |file|
+      csv_rows.find { |row| row["File_Name"] == file[:name] }
+    end
+  end
+
+  def self.process_document_attachments(rows, stats)
+    rows.each do |row|
+      topic = Topic.find_by(id: row["Topic_ID"])
+      next unless topic
+
+      attach_document_to_topic(topic, row, stats)
+    end
+  end
+
+  def self.attach_document_to_topic(topic, row, stats)
+    file_path = get_file_path(topic.state, topic.language.name)
+    filename = row["File_Name"]
+
+    puts "Requesting: #{file_path}/#{filename}"
+
+    begin
+      file_content = download_azure_file(file_path, filename)
+
+      topic.documents.attach(
+        io: StringIO.new(file_content),
+        filename: filename,
+        content_type: detect_content_type(row["File_Type"])
+      )
+
+      if topic.save!
+        stats[:successful_attachments] << [ row, topic ]
+      else
+        stats[:failed_attachments] << [ row, topic ]
+      end
+
+    rescue AzureFileShares::Errors::ApiError, URI::InvalidURIError => e
+      handle_attachment_error(topic, filename, e, stats)
+    end
+  end
+
+  def self.download_azure_file(file_path, filename)
+    encoded_filename = URI.encode_www_form_component(filename)
+    AzureFileShares.client.files.download_file(
+      ENV["AZURE_STORAGE_SHARE_NAME"],
+      file_path,
+      encoded_filename
+    )
+  end
+
+  def self.handle_attachment_error(topic, filename, error, stats)
+    error_info = {
+      topic: topic,
+      file: filename,
+      error: error.message,
+    }
+    stats[:error_files] << error_info
+    puts "Error with file: #{filename} for topic #{topic.title} - #{error.message}"
+  end
+
+  def self.log_import_summary(csv_rows, azure_files, importable_rows)
+    puts "CSV rows with topics: #{csv_rows.size}"
+    puts "Azure files found: #{azure_files.size}"
+    puts "Importable files: #{importable_rows.size}"
+  end
+
+  def self.log_final_results(stats)
+    puts "Topics not found: #{stats[:topics_without_csv].size}"
+    puts "Successful attachments: #{stats[:successful_attachments].size}"
+    puts "Failed attachments: #{stats[:failed_attachments].size}"
+    puts "Files with errors: #{stats[:error_files].size}"
+  end
+
+  private
+
+  def self.get_file_path(state, language)
+    case [ state, language ]
+    in [ "active", "english" ]
+      "CMES-Pi/assets/Content"
+    in [ "archived", "english" ]
+      "CMES-Pi_Archive"
+    in [ "active", "spanish" ]
+      "SP_CMES-Pi/assets/Content"
+    in [ "archived", "spanish" ]
+      "SP_CMES-Pi_Archive"
+    end
+  end
+
+  def self.fetch_azure_files
+    client = AzureFileShares.client
+    azure_active_en = client.files.list(ENV["AZURE_STORAGE_SHARE_NAME"], self.get_file_path("active", "english"))
+    azure_active_es = client.files.list(ENV["AZURE_STORAGE_SHARE_NAME"], self.get_file_path("active", "spanish"))
+    azure_archived_en = client.files.list(ENV["AZURE_STORAGE_SHARE_NAME"], self.get_file_path("archived", "english"))
+    azure_archived_es = client.files.list(ENV["AZURE_STORAGE_SHARE_NAME"], self.get_file_path("archived", "spanish"))
+
+    [
+      azure_active_en[:files],
+      azure_active_es[:files],
+      azure_archived_en[:files],
+      azure_archived_es[:files],
+    ].flatten
+  end
+
+  def self.detect_content_type(filename)
+    case File.extname(filename).downcase
+    when ".mp3"
+      "audio/mpeg"
+    when ".pdf"
+      "application/pdf"
+    when ".jpg", ".jpeg"
+      "image/jpeg"
+    when ".png"
+      "image/png"
+    else
+      "application/octet-stream"
+    end
   end
 end
