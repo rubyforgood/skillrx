@@ -26,7 +26,7 @@ class Topic < ApplicationRecord
   include Taggable
 
   STATES = %i[active archived].freeze
-  CONTENT_TYPES = %w[image/jpeg image/png image/svg+xml image/webp image/avif image/gif video/mp4 application/pdf].freeze
+  CONTENT_TYPES = %w[image/jpeg image/png image/svg+xml image/webp image/avif image/gif video/mp4 application/pdf audio/mpeg].freeze
 
   belongs_to :language
   belongs_to :provider
