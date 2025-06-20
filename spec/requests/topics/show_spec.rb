@@ -21,7 +21,7 @@ describe "Topics", type: :request do
       it "displays a link to the document" do
         get topic_path(topic)
 
-        expect(page).to have_link("logo_ruby_for_good.png")
+        expect(response.body).to include("logo_ruby_for_good.png")
       end
     end
   end
