@@ -1,42 +1,47 @@
 <div id="<%= dom_id topic %>">
   <div class="section">
-    <p>
-      <strong>UID:</strong>
-      <%= topic.uid %>
-    </p>
-    <p>
-      <strong>Title:</strong>
-      <%= topic.title %>
-    </p>
-    <p>
-      <strong>Description:</strong>
-      <%= topic.description %>
-    </p>
-    <p>
-      <strong>Provider:</strong>
-      <%= link_to topic.provider.name, topic.provider %>
-    </p>
-    <p>
-      <strong>Language:</strong>
-      <%= link_to topic.language.name, topic.language %>
-    </p>
-    <p>
-      <strong>Publishing at:</strong>
-      <%= topic.published_at.strftime('%m/%d/%Y') %>
-    </p>
-    <div>
-      <p>
+    <h3 class="mb-4">Topic: <%= topic.id %></h3>
+    <div class="card mb-6">
+      <div class="card-header">
+        <div class="card-title">
+          <h3><%= topic.title %></h3>
+        </div>
+      </div>
+      <div class="card-body">
+        <div class="row mb-2">
+          <div class="col-md-3"><strong>UID:</strong></div>
+          <div class="col-md-9"><%= topic.uid %></div>
+        </div>
+        <div class="row mb-2">
+          <div class="col-md-3"><strong>Description:</strong></div>
+          <div class="col-md-9"><%= topic.description %></div>
+        </div>
+        <div class="row mb-2">
+          <div class="col-md-3"><strong>Provider:</strong></div>
+          <div class="col-md-9"><%= link_to topic.provider.name, topic.provider, class: "text-decoration-none" %></div>
+        </div>
+        <div class="row mb-2">
+          <div class="col-md-3"><strong>Language:</strong></div>
+          <div class="col-md-9"><%= link_to topic.language.name, topic.language, class: "text-decoration-none" %></div>
+        </div>
+        <div class="row mb-2">
+          <div class="col-md-3"><strong>Publishing at:</strong></div>
+          <div class="col-md-9"><%= topic.published_at.strftime('%m/%d/%Y') %></div>
+        </div>
+      </div>
+      <div class="card-footer">
         <strong>Tags:</strong>
         <% topic.current_tags.each do |tag| %>
-          <%= link_to tag.name, tag_path(tag), class: "badge bg-success", target: "_blank" %>
+          <%= link_to tag.name, tag_path(tag), class: "badge bg-success text-decoration-none me-1", target: "_blank" %>
         <% end %>
-      </p>
+      </div>
     </div>
   </div>
 
   <div class="section">
-    <h4>Documents</h4>
-    <hr>
+    <div class="col-12">
+      <h3 class="mb-4">Documents</h3>
+    </div>
     <div>
       <% topic.documents.each do |document| %>
         <div class="card">
