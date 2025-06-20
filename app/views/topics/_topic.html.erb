@@ -1,49 +1,74 @@
 <div id="<%= dom_id topic %>">
-  <p>
-    <strong>UID:</strong>
-    <%= topic.uid %>
-  </p>
-
-  <p>
-    <strong>Title:</strong>
-    <%= topic.title %>
-  </p>
-
-  <p>
-    <strong>Description:</strong>
-    <%= topic.description %>
-  </p>
-
-  <p>
-    <strong>Provider:</strong>
-    <%= link_to topic.provider.name, topic.provider %>
-  </p>
-
-  <p>
-    <strong>Language:</strong>
-    <%= link_to topic.language.name, topic.language %>
-  </p>
-
-  <p>
-    <strong>Publishing at:</strong>
-    <%= topic.published_at.strftime('%m/%d/%Y') %>
-  </p>
-
-  <div>
+  <div class="section">
     <p>
-      <strong>Tags:</strong>
-      <% topic.current_tags.each do |tag| %>
-        <%= link_to tag.name, tag_path(tag), class: "badge bg-success", target: "_blank" %>
-      <% end %>
+      <strong>UID:</strong>
+      <%= topic.uid %>
     </p>
+    <p>
+      <strong>Title:</strong>
+      <%= topic.title %>
+    </p>
+    <p>
+      <strong>Description:</strong>
+      <%= topic.description %>
+    </p>
+    <p>
+      <strong>Provider:</strong>
+      <%= link_to topic.provider.name, topic.provider %>
+    </p>
+    <p>
+      <strong>Language:</strong>
+      <%= link_to topic.language.name, topic.language %>
+    </p>
+    <p>
+      <strong>Publishing at:</strong>
+      <%= topic.published_at.strftime('%m/%d/%Y') %>
+    </p>
+    <div>
+      <p>
+        <strong>Tags:</strong>
+        <% topic.current_tags.each do |tag| %>
+          <%= link_to tag.name, tag_path(tag), class: "badge bg-success", target: "_blank" %>
+        <% end %>
+      </p>
+    </div>
   </div>
 
-  <div>
-    <strong>Documents:</strong>
-    <ul>
+  <div class="section">
+    <h4>Documents</h4>
+    <hr>
+    <div>
       <% topic.documents.each do |document| %>
-        <li><%= link_to document.filename, rails_blob_path(document), target: "_blank"%></li>
+        <div class="card">
+          <div class="card-content">
+            <div class="card-body">
+              <div class="card-title">
+                <h4><%= document.filename %></h4>
+              </div>
+            </div>
+
+            <%= card_preview_media(document) %>
+
+            <div class="card-body">
+              <div class="d-flex justify-content-between">
+                <div>
+                  <span class="btn btn-sm btn-outline-secondary">
+                    <i class="bi bi-calendar-date"></i>
+                    <%= document.created_at.strftime('%m/%d/%Y') %>
+                  </span>
+                  <span class="btn btn-sm btn-outline-secondary">
+                    <i class="bi bi-clipboard-data"></i>
+                    <%= number_to_human_size(document.byte_size) %>
+                  </span>
+                </div>
+                <%= link_to rails_blob_path(document), target: "_blank", class: "btn btn-primary" do %>
+                  <i class="bi bi-file-arrow-down"></i> Download
+                <% end %>
+              </div>
+            </div>
+          </div>
+        </div>
       <% end %>
-    </ul>
+    </div>
   </div>
 </div>
