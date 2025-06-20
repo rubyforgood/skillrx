@@ -187,71 +187,117 @@ class DataImport
   end
 
   def self.import_training_documents
-    csv_data = CSV.read(file_path("CMEFiles.csv"), headers: true)
+    csv_data = load_training_documents_csv
+    import_stats = initialize_import_stats
 
-    csv_files_without_topics = []
-    files_with_topics = []
-    attached_files = []
-    non_attached_files = []
-    files_with_problems = []
+    valid_csv_rows = filter_rows_with_existing_topics(csv_data, import_stats)
+    azure_files = fetch_azure_files
+    importable_rows = match_csv_with_azure_files(valid_csv_rows, azure_files)
 
-    # Filter training documents if there is a matching topic in the DB
-    csv_training_index = csv_data.filter_map do |row|
-      if Topic.find_by(id: row["Topic_ID"].to_i)
+    log_import_summary(valid_csv_rows, azure_files, importable_rows)
+
+    process_document_attachments(importable_rows, import_stats)
+    log_final_results(import_stats)
+  end
+
+  private
+
+  def self.load_training_documents_csv
+    CSV.read(file_path("CMEFiles.csv"), headers: true)
+  end
+
+  def self.initialize_import_stats
+    {
+      topics_without_csv: [],
+      successful_attachments: [],
+      failed_attachments: [],
+      error_files: [],
+    }
+  end
+
+  def self.filter_rows_with_existing_topics(csv_data, stats)
+    csv_data.filter_map do |row|
+      topic_id = row["Topic_ID"].to_i
+      if Topic.find_by(id: topic_id)
         row
       else
-        csv_files_without_topics << row["Topic_ID"]
+        stats[:topics_without_csv] << topic_id
         nil
       end
     end
+  end
 
-    # Pre-fetch all the training files from Azure for each language and state
-    all_azure_files = self.fetch_azure_files
-
-    # Filter all fetched azure files against the csv_training_index by name
-    csv_with_azure_files = all_azure_files.filter_map do |file|
-      csv_training_index.find { |row| row["File_Name"] == file[:name] }
+  def self.match_csv_with_azure_files(csv_rows, azure_files)
+    azure_files.filter_map do |file|
+      csv_rows.find { |row| row["File_Name"] == file[:name] }
     end
+  end
 
-    puts "csv_training_index: #{csv_training_index.size}"
-    puts "all_azure_files: #{all_azure_files.size}"
-    puts "csv_with_azure_files: #{csv_with_azure_files.size}"
-
-    # Since we import only existing files in Azure, we rely on our filtered list
-    csv_with_azure_files.each do |row|
+  def self.process_document_attachments(rows, stats)
+    rows.each do |row|
       topic = Topic.find_by(id: row["Topic_ID"])
+      next unless topic
 
-      files_with_topics << topic
-      file_path = self.get_file_path(topic.state, topic.language.name)
-
-      puts "Requesting: #{file_path}/#{row["File_Name"]}"
-
-      begin
-        encoded_filename = URI.encode_www_form_component(row["File_Name"])
-        file_content = AzureFileShares.client.files.download_file(ENV["AZURE_STORAGE_SHARE_NAME"], file_path, encoded_filename)
-
-        topic.documents.attach(
-          io: StringIO.new(file_content),
-          filename: row["File_Name"],
-          content_type: self.detect_content_type(row["File_Type"])
-        )
-
-        if topic.save!
-          attached_files << [ row, topic ]
-        else
-          non_attached_files << [ row, topic ]
-        end
-      rescue AzureFileShares::Errors::ApiError, URI::InvalidURIError => e
-        files_with_problems << { topic: topic, file: row["File_Name"], error: e.message }
-        puts "Error with file: #{row["File_Name"]} for topic #{topic.title} - #{e.message}"
-      end
+      attach_document_to_topic(topic, row, stats)
     end
+  end
 
-    puts "topics not found: #{csv_files_without_topics.size}"
-    puts "topics found: #{files_with_topics.size}"
-    puts "attached files: #{attached_files.size}"
-    puts "non_attached_files: #{non_attached_files.size}"
-    puts "files with problems: #{files_with_problems.size}"
+  def self.attach_document_to_topic(topic, row, stats)
+    file_path = get_file_path(topic.state, topic.language.name)
+    filename = row["File_Name"]
+
+    puts "Requesting: #{file_path}/#{filename}"
+
+    begin
+      file_content = download_azure_file(file_path, filename)
+
+      topic.documents.attach(
+        io: StringIO.new(file_content),
+        filename: filename,
+        content_type: detect_content_type(row["File_Type"])
+      )
+
+      if topic.save!
+        stats[:successful_attachments] << [ row, topic ]
+      else
+        stats[:failed_attachments] << [ row, topic ]
+      end
+
+    rescue AzureFileShares::Errors::ApiError, URI::InvalidURIError => e
+      handle_attachment_error(topic, filename, e, stats)
+    end
+  end
+
+  def self.download_azure_file(file_path, filename)
+    encoded_filename = URI.encode_www_form_component(filename)
+    AzureFileShares.client.files.download_file(
+      ENV["AZURE_STORAGE_SHARE_NAME"],
+      file_path,
+      encoded_filename
+    )
+  end
+
+  def self.handle_attachment_error(topic, filename, error, stats)
+    error_info = {
+      topic: topic,
+      file: filename,
+      error: error.message,
+    }
+    stats[:error_files] << error_info
+    puts "Error with file: #{filename} for topic #{topic.title} - #{error.message}"
+  end
+
+  def self.log_import_summary(csv_rows, azure_files, importable_rows)
+    puts "CSV rows with topics: #{csv_rows.size}"
+    puts "Azure files found: #{azure_files.size}"
+    puts "Importable files: #{importable_rows.size}"
+  end
+
+  def self.log_final_results(stats)
+    puts "Topics not found: #{stats[:topics_without_csv].size}"
+    puts "Successful attachments: #{stats[:successful_attachments].size}"
+    puts "Failed attachments: #{stats[:failed_attachments].size}"
+    puts "Files with errors: #{stats[:error_files].size}"
   end
 
   private
