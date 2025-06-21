@@ -43,10 +43,7 @@ class Tag < ActsAsTaggableOn::Tag
     remove_cognates(names) if persisted?
     return if names.empty?
     create_cognates(names)
-    self.tag_cognates_attributes = names.filter_map do |name|
-      cognate = Tag.find_by(name: name)
-      { cognate_id: cognate.id } if cognate.id != id && !tag_cognates.find_by(cognate_id: cognate.id)
-    end
+    associate_cognates(names)
   end
 
   # Returns tags that are available to be set as cognates
@@ -60,12 +57,6 @@ class Tag < ActsAsTaggableOn::Tag
 
   def create_cognates(names)
     names.each { |name| Tag.find_or_create_by(name: name) }
-    related_tags = Tag.where(name: names)
-    related_tags.each_with_index do |tag, index|
-      related_tags[index + 1..].each do |cognate|
-        tag.tag_cognates.find_or_create_by(cognate: cognate)
-      end
-    end
   end
 
   def remove_cognates(names)
@@ -73,6 +64,20 @@ class Tag < ActsAsTaggableOn::Tag
     cognates_to_remove.each do |cognate|
       cognate.tag_cognates.destroy_all
       cognate.reverse_tag_cognates.destroy_all
+    end
+  end
+
+  def associate_cognates(names)
+    tags_for_passed_names = Tag.where(name: names)
+    related_tags = tags_for_passed_names.or(Tag.where(id: tags_for_passed_names.flat_map(&:cognates_tags).pluck(:id))).uniq
+    related_tags.each_with_index do |tag, index|
+      related_tags[index + 1..].each do |cognate|
+        tag.tag_cognates.create(cognate: cognate)
+      end
+    end
+    self.tag_cognates_attributes = related_tags.filter_map do |tag|
+      cognate = Tag.find_by(name: tag.name)
+      { cognate_id: cognate.id } if cognate.id != id && !tag_cognates.find_by(cognate_id: cognate.id)
     end
   end
 end
