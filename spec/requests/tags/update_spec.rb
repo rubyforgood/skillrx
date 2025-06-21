@@ -37,6 +37,24 @@ describe "Tag", type: :request do
       end
     end
 
+    context "when adding as cognate a tag that already has a cognate" do
+      let(:cardiovascular_tag) { create(:tag, name: "Cardiovascular") }
+      let(:cardio_tag) { create(:tag, name: "Cardio") }
+      let(:tag_params) { attributes_for(:tag, name: "Heart", cognates_list: [ "", "Cardio" ]) }
+
+      before do
+        create(:tag_cognate, tag: cardiovascular_tag, cognate: cardio_tag)
+      end
+
+      it "associates the tag with the cognates of the cognate" do
+        expect { put tag_url(tag), params: { tag: tag_params } }
+          .to change { tag.reload.cognates_list }
+          .from([]).to(match_array([ "Cardio", "Cardiovascular" ]))
+          .and change { cardiovascular_tag.reload.cognates_list }
+          .from([ "Cardio" ]).to(match_array([ "Heart", "Cardio" ]))
+      end
+    end
+
     context "when part of the cognates are being removed" do
       let(:cardiovascular_tag) { create(:tag, name: "Cardiovascular") }
       let(:cardio_tag) { create(:tag, name: "Cardio") }
