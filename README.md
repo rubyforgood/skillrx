@@ -3,7 +3,9 @@ SkillRX is a Ruby on Rails content management application which will allow medic
 
 The project provides a ground-up rewrite of the [CMES Admin Panel](https://github.com/techieswithoutborders/cmes-admin-panel-next) for [Techies Without Borders](https://techieswithoutborders.us/).
 
-> [CMES](https://cmesworld.org/) is an initiative of Techies without Borders, a global nonprofit focused on harnessing technology for social development. CMES aims to address the difficulty in accessing CME content for medical practitioners in resource-constrained areas of the world, a critical problem in public health. Since its inception in January 2016, the CMES team has distributed over 200 CMES thumb drives to medical doctors and nurses working at remote locations in Nepal, Uganda, Ecuador, Nigeria, St. Lucia and the Oceania region (Fiji,Tonga, Solomon Islands, Tuvalu, Samoa and Cook Islands).
+[CMES](https://cmesworld.org/) is an initiative of Techies without Borders, a global nonprofit focused on harnessing technology for social development. CMES aims to address the difficulty in accessing CME content for medical practitioners in resource-constrained areas of the world, a critical problem in public health. Since its inception in January 2016, the CMES team has distributed over 200 CMES thumb drives to medical doctors and nurses working at remote locations in Nepal, Uganda, Ecuador, Nigeria, St. Lucia and the Oceania region (Fiji,Tonga, Solomon Islands, Tuvalu, Samoa and Cook Islands).
+
+As of June 2025, the project was serving over 13,000 medical practitioners across 19 countries, first with thumb drives, then with Raspberry Pis, and soon (August 2025) with minicomputers supported by SkillRX.
 
 # Ruby for Good
 SkillRX is one of many projects initiated and run by Ruby for Good. You can find out more about Ruby for Good at https://rubyforgood.org.
@@ -16,10 +18,10 @@ Thank you for checking out our work. We are in the process of setting up the rep
 
 # Install & Setup
 
-Clone the codebase 
+Clone the codebase
 ```
 git clone git@github.com:rubyforgood/skillrx.git
-``` 
+```
 
 Create new DB role:
 ```
@@ -116,7 +118,7 @@ The development environment consists of three containerised services:
     * Handles the main application logic
     * Runs on Ruby on Rails
 * db : PostgreSQL database service
-    * Persists application data 
+    * Persists application data
     * Runs independently from the application
 * localstack : AWS S3 emulator
      * Provides local S3-compatible storage
