@@ -36,5 +36,61 @@ describe "Tag", type: :request do
         expect(cardio_tag.cognates_list).to match_array([ "Heart", "Cardiovascular" ])
       end
     end
+
+    context "when part of the cognates are being removed" do
+      let(:cardiovascular_tag) { create(:tag, name: "Cardiovascular") }
+      let(:cardio_tag) { create(:tag, name: "Cardio") }
+      let(:circulatory_tag) { create(:tag, name: "Circulatory") }
+      let(:tag_params) { attributes_for(:tag, name: "Heart", cognates_list: [ "", "Cardio" ]) }
+
+      before do
+        create(:tag_cognate, tag: tag, cognate: cardiovascular_tag)
+        create(:tag_cognate, tag: tag, cognate: cardio_tag)
+        create(:tag_cognate, tag: circulatory_tag, cognate: tag)
+        create(:tag_cognate, tag: cardiovascular_tag, cognate: cardio_tag)
+        create(:tag_cognate, tag: cardiovascular_tag, cognate: circulatory_tag)
+        create(:tag_cognate, tag: circulatory_tag, cognate: cardio_tag)
+      end
+
+      it "removes the association to the removed cognates" do
+        expect { put tag_url(tag), params: { tag: tag_params } }
+          .to change { tag.reload.cognates_list }
+          .from([ "Cardiovascular", "Cardio", "Circulatory" ]).to([ "Cardio" ])
+
+        cardiovascular_tag = Tag.find_by(name: "Cardiovascular")
+        cardio_tag = Tag.find_by(name: "Cardio")
+        circulatory_tag = Tag.find_by(name: "Circulatory")
+        expect(cardiovascular_tag).not_to be_nil
+        expect(cardiovascular_tag.cognates_list).to be_empty
+        expect(cardio_tag.cognates_list).to match_array([ "Heart" ])
+        expect(circulatory_tag).not_to be_nil
+        expect(circulatory_tag.cognates_list).to be_empty
+      end
+    end
+
+    context "when all cognates are being removed" do
+      let(:cardiovascular_tag) { create(:tag, name: "Cardiovascular") }
+      let(:cardio_tag) { create(:tag, name: "Cardio") }
+      let(:tag_params) { attributes_for(:tag, name: "Heart", cognates_list: [ "" ]) }
+
+      before do
+        create(:tag_cognate, tag: tag, cognate: cardiovascular_tag)
+        create(:tag_cognate, tag: tag, cognate: cardio_tag)
+        create(:tag_cognate, tag: cardiovascular_tag, cognate: cardio_tag)
+      end
+
+      it "removes the associations with the removed cognates" do
+        expect { put tag_url(tag), params: { tag: tag_params } }
+          .to change { tag.reload.cognates_list }
+          .from([ "Cardiovascular", "Cardio" ]).to([])
+
+        cardiovascular_tag = Tag.find_by(name: "Cardiovascular")
+        cardio_tag = Tag.find_by(name: "Cardio")
+        expect(cardiovascular_tag).not_to be_nil
+        expect(cardiovascular_tag.cognates_list).to be_empty
+        expect(cardio_tag).not_to be_nil
+        expect(cardio_tag.cognates_list).to be_empty
+      end
+    end
   end
 end

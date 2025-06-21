@@ -40,12 +40,12 @@ class Tag < ActsAsTaggableOn::Tag
   # @param str_list [Array<String>] list of tag names to set as cognates
   def cognates_list=(str_list)
     names = str_list.compact_blank.uniq.reject { |name| name == self.name }
-    return if names.empty?
     remove_cognates(names) if persisted?
+    return if names.empty?
     create_cognates(names)
     self.tag_cognates_attributes = names.filter_map do |name|
       cognate = Tag.find_by(name: name)
-      { cognate_id: cognate.id }
+      { cognate_id: cognate.id } if cognate.id != id && !tag_cognates.find_by(cognate_id: cognate.id)
     end
   end
 
@@ -69,6 +69,10 @@ class Tag < ActsAsTaggableOn::Tag
   end
 
   def remove_cognates(names)
-    tag_cognates.where.not(cognate_id: Tag.where(name: names).pluck(:id)).destroy_all
+    cognates_to_remove = cognates_tags.excluding(Tag.where(name: names))
+    cognates_to_remove.each do |cognate|
+      cognate.tag_cognates.destroy_all
+      cognate.reverse_tag_cognates.destroy_all
+    end
   end
 end
