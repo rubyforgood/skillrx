@@ -26,14 +26,14 @@ class Topic < ApplicationRecord
   include Taggable
 
   STATES = %i[active archived].freeze
-  CONTENT_TYPES = %w[image/jpeg image/png image/svg+xml image/webp image/avif image/gif video/mp4 application/pdf].freeze
+  CONTENT_TYPES = %w[image/jpeg image/png image/svg+xml image/webp image/avif image/gif video/mp4 application/pdf audio/mpeg].freeze
 
   belongs_to :language
   belongs_to :provider
   has_many_attached :documents
 
   validates :title, :language_id, :provider_id, :published_at, presence: true
-  validates :documents, content_type: CONTENT_TYPES, size: { less_than: 10.megabytes }
+  validates :documents, content_type: CONTENT_TYPES, size: { less_than: 200.megabytes }
 
   enum :state, STATES.map.with_index.to_h
 

@@ -1,4 +1,5 @@
 class TopicsController < ApplicationController
+  include ActiveStorage::SetCurrent
   include Pagy::Backend
 
   before_action :set_topic, only: [ :show, :edit, :tags, :update, :destroy, :archive ]

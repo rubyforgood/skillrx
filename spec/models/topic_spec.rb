@@ -35,7 +35,7 @@ RSpec.describe Topic, type: :model do
   context "associations" do
     it { should have_many_attached(:documents) }
     it { is_expected.to validate_content_type_of(:documents).allowing("image/png", "image/jpeg", "image/svg+xml", "image/webp", "image/avif", "image/gif", "video/mp4") }
-    it { is_expected.to validate_size_of(:documents).less_than(10.megabytes) }
+    it { is_expected.to validate_size_of(:documents).less_than(200.megabytes) }
   end
 
   context "tagging" do
