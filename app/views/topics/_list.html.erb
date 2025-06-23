@@ -6,6 +6,7 @@
       <td class="text-bold-500"><%= topic.uid.truncate(10, omission: "...") if topic.uid %></td>
       <td class="text-bold-500"><%= topic.language.name %></td>
       <td class="text-bold-500"><%= topic.provider.name %></td>
+      <td class="text-bold-500"><%= topic.documents_count %></td>
       <td class="text-bold-500"><%= topic.state %></td>
       <td class="text-end">
         <%= link_to topic, class: "btn btn-primary btn-sm", data: {turbo: false } do %>

@@ -42,4 +42,35 @@ RSpec.describe Topic, type: :model do
   context "tagging" do
     it_behaves_like "taggable"
   end
+
+  context "documents_count" do
+    it "changes the documents_count counter when adding files" do
+      expect { subject.documents.attach(io: StringIO.new("test"), filename: "test.pdf", content_type: "application/pdf") }
+        .to change { subject.reload.documents_count }
+        .from(0)
+        .to(1)
+    end
+
+    context "Topic with existing documents" do
+      before do
+        subject.documents.attach(
+          io: File.open(Rails.root.join("test/fixtures/images/logo_ruby_for_good.png")),
+          filename: "logo_ruby_for_good.png",
+          content_type: "image/png"
+        )
+        subject.documents.attach(
+          io: File.open(Rails.root.join("test/fixtures/images/skillrx_sidebar.png")),
+          filename: "skillrx_sidebar.png",
+          content_type: "image/png"
+        )
+      end
+
+      it "changes the documents_count counter when removing files" do
+        expect { subject.documents.first.destroy }
+          .to change { subject.reload.documents_count }
+          .from(2)
+          .to(1)
+      end
+    end
+  end
 end
