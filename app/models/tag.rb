@@ -39,11 +39,11 @@ class Tag < ActsAsTaggableOn::Tag
   #
   # @param str_list [Array<String>] list of tag names to set as cognates
   def cognates_list=(str_list)
-    names = str_list.compact_blank.uniq.reject { |name| name == self.name }
+    names = str_list.compact_blank.uniq.reject { _1 == name }
     remove_cognates(names) if persisted?
     return if names.empty?
-    create_cognates(names)
-    associate_cognates(names)
+    new_names_to_associate = create_cognates(names)
+    associate_cognates(new_names_to_associate)
   end
 
   # Returns tags that are available to be set as cognates
@@ -56,7 +56,13 @@ class Tag < ActsAsTaggableOn::Tag
   private
 
   def create_cognates(names)
-    names.each { |name| Tag.find_or_create_by(name: name) }
+    names
+      .map { |name| [ name, Tag.find_or_initialize_by(name: name) ] }
+      .each_with_object([]) do |(name, tag), new_names|
+        new_names << name unless tag.in?(cognates_tags)
+        tag.save
+        new_names
+      end
   end
 
   def remove_cognates(names)
@@ -76,8 +82,7 @@ class Tag < ActsAsTaggableOn::Tag
       end
     end
     self.tag_cognates_attributes = related_tags.filter_map do |tag|
-      cognate = Tag.find_by(name: tag.name)
-      { cognate_id: cognate.id } if cognate.id != id && !tag_cognates.find_by(cognate_id: cognate.id)
+      { cognate_id: tag.id } if tag.id != id && !tag_cognates.find_by(cognate_id: tag.id)
     end
   end
 end
