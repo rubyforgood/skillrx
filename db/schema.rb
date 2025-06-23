@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.0].define(version: 2025_03_29_174617) do
+ActiveRecord::Schema[8.0].define(version: 2025_06_23_102502) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_catalog.plpgsql"
 
@@ -140,6 +140,7 @@ ActiveRecord::Schema[8.0].define(version: 2025_03_29_174617) do
     t.integer "old_id"
     t.string "uid"
     t.datetime "published_at", default: -> { "CURRENT_TIMESTAMP" }, null: false
+    t.integer "documents_count", default: 0, null: false
     t.index ["language_id"], name: "index_topics_on_language_id"
     t.index ["old_id"], name: "index_topics_on_old_id", unique: true
     t.index ["provider_id"], name: "index_topics_on_provider_id"
