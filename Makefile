@@ -17,21 +17,21 @@ EXEC_CMD = $(COMPOSE_CMD) exec app
 # Default target
 help:
 	@echo "$(BLUE)Available commands:$(RESET)"
-	@echo "  make build             - Build image containers"
-	@echo "  make rebuild           - Clean, build, start containers and prepare database"
-	@echo "  make stop [service]    - Stop all containers or a specific service"
-	@echo "  make start [service]   - Start all containers or a specific service"
-	@echo "  make restart [service] - Restart all containers or a specific service"
-	@echo "  make logs [service]    - View logs of all containers or a specific service"
-	@echo "  make shell				- Open a bash shell in the app container"
-	@echo "  make console           - Start Rails console"
-	@echo "  make format            - Auto-format code with Rubocop"
-	@echo "  make test              - Run all tests"
-	@echo "  make test_fast         - Run all tests and stop on first failure"
-	@echo "  make migrate           - Run database migrations"
-	@echo "  make db_reset          - Reset and rebuild database"
-	@echo "  make clean             - Remove all containers and volumes"
-	@echo "  make clean_volumes     - Remove all volumes"
+	@echo "  make build                      - Build image containers"
+	@echo "  make rebuild                    - Clean, build, start containers and prepare database"
+	@echo "  make stop [service]             - Stop all containers or a specific service"
+	@echo "  make start [service]            - Start all containers or a specific service"
+	@echo "  make restart [service]          - Restart all containers or a specific service"
+	@echo "  make logs [service]             - View logs of all containers or a specific service"
+	@echo "  make shell                      - Open a bash shell in the app container"
+	@echo "  make console                    - Start Rails console"
+	@echo "  make format                     - Auto-format code with Rubocop"
+	@echo "  make test [FILE=path]           - Run all tests or specific file"
+	@echo "  make test_fast [FILE=path]      - Run all tests or specific file and stop on first failure"
+	@echo "  make migrate                    - Run database migrations"
+	@echo "  make db_reset                   - Reset and rebuild database"
+	@echo "  make clean                      - Remove all containers and volumes"
+	@echo "  make clean_volumes              - Remove all volumes"
 
 build:
 	$(COMPOSE_CMD) build
@@ -68,10 +68,10 @@ format:
 	$(EXEC_CMD) bundle exec rubocop --autocorrect-all
 
 test:
-	$(COMPOSE_CMD) exec app bundle exec bash -c "export RAILS_ENV=test && rspec --format documentation"
+	$(COMPOSE_CMD) exec app bundle exec bash -c "export RAILS_ENV=test && rspec --format documentation $(FILE)"
 
 test_fast:
-	$(COMPOSE_CMD) exec app bundle exec bash -c "export RAILS_ENV=test && rspec --format documentation --fail-fast"
+	$(COMPOSE_CMD) exec app bundle exec bash -c "export RAILS_ENV=test && rspec --format documentation --fail-fast $(FILE)"
 
 migrate:
 	$(EXEC_CMD) bundle exec rails db:migrate
