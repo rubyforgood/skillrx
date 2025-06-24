@@ -75,14 +75,14 @@ class Tag < ActsAsTaggableOn::Tag
 
   def associate_cognates(names)
     tags_for_passed_names = Tag.where(name: names)
-    related_tags = tags_for_passed_names.or(Tag.where(id: tags_for_passed_names.flat_map(&:cognates_tags).pluck(:id))).uniq
+    related_tags = tags_for_passed_names.excluding(self).or(Tag.where(id: tags_for_passed_names.flat_map(&:cognates_tags).pluck(:id))).uniq
     related_tags.each_with_index do |tag, index|
       related_tags[index + 1..].each do |cognate|
         tag.tag_cognates.create(cognate: cognate)
       end
     end
     self.tag_cognates_attributes = related_tags.filter_map do |tag|
-      { cognate_id: tag.id } if tag.id != id && !tag_cognates.find_by(cognate_id: tag.id)
+      { cognate_id: tag.id } if !tag_cognates.find_by(cognate_id: tag.id)
     end
   end
 end
