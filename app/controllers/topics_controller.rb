@@ -2,7 +2,7 @@ class TopicsController < ApplicationController
   include ActiveStorage::SetCurrent
   include Pagy::Backend
 
-  before_action :set_topic, only: [ :show, :edit, :tags, :update, :destroy, :archive ]
+  before_action :set_topic, only: [ :show, :edit, :update, :destroy, :archive ]
 
   def index
     @pagy, @topics = pagy(scope.includes(:documents_attachments).search_with_params(search_params))
@@ -50,13 +50,6 @@ class TopicsController < ApplicationController
     redirect_to topics_path
   end
 
-  def tags
-    return [] unless params[:id].present? && topic_tags_params[:language_id].present?
-
-    @tags = @topic.current_tags_for_language(topic_tags_params[:language_id])
-    render json: @tags
-  end
-
   private
 
   def attach_files(signed_ids)
@@ -93,10 +86,6 @@ class TopicsController < ApplicationController
 
   def scope
     @scope ||= current_provider.topics.includes(:language)
-  end
-
-  def topic_tags_params
-    params.permit(:language_id)
   end
 
   def search_params
