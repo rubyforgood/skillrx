@@ -187,17 +187,41 @@ class DataImport
   end
 
   def self.import_training_documents
-    csv_data = load_training_documents_csv
-    import_stats = initialize_import_stats
+    report = ImportReport.create!(
+      import_type: "training_documents",
+      started_at: Time.current,
+      status: "pending"
+    )
 
-    valid_csv_rows = filter_rows_with_existing_topics(csv_data, import_stats)
-    azure_files = fetch_azure_files
-    importable_rows = match_csv_with_azure_files(valid_csv_rows, azure_files)
+    begin
+      csv_data = load_training_documents_csv
+      import_stats = initialize_import_stats
 
-    log_import_summary(valid_csv_rows, azure_files, importable_rows)
+      valid_csv_rows = filter_rows_with_existing_topics(csv_data, import_stats)
+      azure_files = fetch_azure_files
+      importable_rows = match_csv_with_azure_files(valid_csv_rows, azure_files)
+      unmatched_files = collect_unmatched_files(csv_data, azure_files, importable_rows)
 
-    process_document_attachments(importable_rows, import_stats)
-    log_final_results(import_stats)
+      report.update!(
+        summary_stats: build_summary_stats(import_stats, csv_data, azure_files),
+        unmatched_files: unmatched_files,
+        status: "planned"
+      )
+
+      process_document_attachments(importable_rows, import_stats, report)
+
+      report.update!(
+        completed_at: Time.current,
+        status: "completed",
+        summary_stats: build_summary_stats(import_stats, csv_data, azure_files),
+        unmatched_files: unmatched_files
+      )
+
+      log_final_results(import_stats)
+    rescue => e
+      report.update!(status: "failed", error_details: [ { error: e.message } ])
+      raise
+    end
   end
 
   private
@@ -233,16 +257,16 @@ class DataImport
     end
   end
 
-  def self.process_document_attachments(rows, stats)
+  def self.process_document_attachments(rows, stats, report)
     rows.each do |row|
       topic = Topic.find_by(id: row["Topic_ID"])
       next unless topic
 
-      attach_document_to_topic(topic, row, stats)
+      attach_document_to_topic(topic, row, stats, report)
     end
   end
 
-  def self.attach_document_to_topic(topic, row, stats)
+  def self.attach_document_to_topic(topic, row, stats, report)
     file_path = get_file_path(topic.state, topic.language.name)
     filename = row["File_Name"]
 
@@ -264,7 +288,7 @@ class DataImport
       end
 
     rescue AzureFileShares::Errors::ApiError, URI::InvalidURIError => e
-      handle_attachment_error(topic, filename, e, stats)
+      handle_attachment_error(topic, filename, e, stats, report)
     end
   end
 
@@ -277,20 +301,43 @@ class DataImport
     )
   end
 
-  def self.handle_attachment_error(topic, filename, error, stats)
-    error_info = {
+  def self.handle_attachment_error(topic, filename, error, stats, report)
+    ImportError.create!(
+      import_report_id: report.id,
+      topic_id: topic.id,
+      file_name: filename,
+      error_message: error.message
+    )
+
+    stats[:error_files] << {
       topic: topic,
       file: filename,
       error: error.message,
     }
-    stats[:error_files] << error_info
     puts "Error with file: #{filename} for topic #{topic.title} - #{error.message}"
   end
 
-  def self.log_import_summary(csv_rows, azure_files, importable_rows)
-    puts "CSV rows with topics: #{csv_rows.size}"
-    puts "Azure files found: #{azure_files.size}"
-    puts "Importable files: #{importable_rows.size}"
+  def self.collect_unmatched_files(csv_data, azure_files, importable_rows)
+    csv_file_names = csv_data.map { |row| row["File_Name"] }
+    azure_file_names = azure_files.map { |file| file[:name] }
+    matched_file_names = importable_rows.map { |row| row["File_Name"] }
+
+    {
+      csv_without_azure: csv_file_names - azure_file_names,
+      azure_without_csv: azure_file_names - csv_file_names,
+      total_unmatched: (csv_file_names + azure_file_names - matched_file_names).uniq,
+    }
+  end
+
+  def self.build_summary_stats(import_stats, csv_data, azure_files)
+    {
+      total_csv_files: csv_data.size,
+      total_azure_files: azure_files.size,
+      successful_attachments: import_stats[:successful_attachments].size,
+      failed_attachments: import_stats[:failed_attachments].size,
+      topics_without_csv: import_stats[:topics_without_csv].size,
+      error_files: import_stats[:error_files].size,
+    }
   end
 
   def self.log_final_results(stats)
