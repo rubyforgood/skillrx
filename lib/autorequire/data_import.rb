@@ -200,7 +200,7 @@ class DataImport
       valid_csv_rows = filter_rows_with_existing_topics(csv_data, import_stats)
       azure_files = fetch_azure_files
       importable_rows = match_csv_with_azure_files(valid_csv_rows, azure_files)
-      unmatched_files = collect_unmatched_files(csv_data, azure_files, importable_rows)
+      unmatched_files = collect_unmatched_files(csv_data, azure_files, importable_rows, report)
 
       report.update!(
         summary_stats: build_summary_stats(import_stats, csv_data, azure_files),
@@ -239,7 +239,7 @@ class DataImport
     }
   end
 
-  def self.filter_rows_with_existing_topics(csv_data, stats)
+  def self.filter_rows_with_existing_topics(csv_data, stats, report)
     csv_data.filter_map do |row|
       topic_id = row["Topic_ID"].to_i
       if Topic.find_by(id: topic_id)
@@ -306,6 +306,7 @@ class DataImport
       import_report_id: report.id,
       topic_id: topic.id,
       file_name: filename,
+      error_type: error.class.to_s,
       error_message: error.message
     )
 
@@ -317,16 +318,38 @@ class DataImport
     puts "Error with file: #{filename} for topic #{topic.title} - #{error.message}"
   end
 
-  def self.collect_unmatched_files(csv_data, azure_files, importable_rows)
+  def self.collect_unmatched_files(csv_data, azure_files, importable_rows, report)
     csv_file_names = csv_data.map { |row| row["File_Name"] }
     azure_file_names = azure_files.map { |file| file[:name] }
     matched_file_names = importable_rows.map { |row| row["File_Name"] }
 
-    {
-      csv_without_azure: csv_file_names - azure_file_names,
-      azure_without_csv: azure_file_names - csv_file_names,
+    r = {
+      csv_without_azure_files: csv_file_names - azure_file_names,
+      azure_files_without_csv: azure_file_names - csv_file_names,
       total_unmatched: (csv_file_names + azure_file_names - matched_file_names).uniq,
     }
+
+    r[:csv_without_azure_files].each do |csv_row_name|
+      ImportError.create!(
+        import_report_id: report.id,
+        file_name: csv_row_name,
+        error_type: "CSV::Row::File not found in Azure",
+        error_message: "CSV Row File not found in Azure",
+        topic_id: csv_row_name.split("_").first
+      )
+    end
+
+    r[:azure_files_without_csv].each do |azure_file_name|
+      ImportError.create!(
+        import_report_id: report.id,
+        file_name: azure_file_name,
+        error_type: "Azure::File not found in CSV",
+        error_message: "Azure::File not found in CSV",
+        topic_id: azure_file_name.split("_").first
+      )
+    end
+
+    r
   end
 
   def self.build_summary_stats(import_stats, csv_data, azure_files)
