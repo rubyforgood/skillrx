@@ -71,5 +71,27 @@ describe "Topics", type: :request do
         end
       end
     end
+
+    context "when topic has documents" do
+      let(:document) { fixture_file_upload("files/sample.pdf", "application/pdf") }
+
+      before do
+        allow(DocumentSyncJob).to receive(:perform_later)
+      end
+
+      it "attaches documents and runs sync job" do
+        post topics_url, params: { topic: topic_params.merge(document_signed_ids: [ document.signed_id ]) }
+
+        expect(response).to redirect_to(topics_url)
+        topic = Topic.last
+        expect(topic.documents.count).to eq(1)
+        expect(topic.documents.first.filename.to_s).to eq("sample.pdf")
+        expect(DocumentSyncJob).to have_received(:perform_later).with(
+          topic_id: topic.id,
+          document_id: topic.documents.first.id,
+          action: "create",
+        )
+      end
+    end
   end
 end
