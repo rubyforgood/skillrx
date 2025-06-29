@@ -1,0 +1,132 @@
+<% content_for :title, "Import Report ##{@import_report.id}" %>
+
+<div class="section">
+  <h3 class="mb-4">Import Report: #<%= @import_report.id %></h3>
+  <div class="card mb-6">
+    <div class="card-header">
+      <div class="card-title">
+        <h3><%= @import_report.import_type.humanize %> Import</h3>
+      </div>
+    </div>
+    <div class="card-body">
+      <div class="row mb-2">
+        <div class="col-md-3"><strong>Status:</strong></div>
+        <div class="col-md-9">
+          <span class="badge bg-alert %>">
+            <%= @import_report.status %>
+          </span>
+        </div>
+      </div>
+      <div class="row mb-2">
+        <div class="col-md-3"><strong>Import Type:</strong></div>
+        <div class="col-md-9"><%= @import_report.import_type.humanize %></div>
+      </div>
+      <div class="row mb-2">
+        <div class="col-md-3"><strong>Started At:</strong></div>
+        <div class="col-md-9">
+          <%= @import_report.started_at&.strftime('%m/%d/%Y %I:%M %p') || "Not started" %>
+        </div>
+      </div>
+      <div class="row mb-2">
+        <div class="col-md-3"><strong>Completed At:</strong></div>
+        <div class="col-md-9">
+          <%= @import_report.completed_at&.strftime('%m/%d/%Y %I:%M %p') || "Not completed" %>
+        </div>
+      </div>
+      <% if @import_report.summary_stats.present? %>
+        <div class="row mb-2">
+          <div class="col-md-3"><strong>Summary Stats:</strong></div>
+          <div class="col-md-9">
+            <pre class="bg-light p-2 rounded"><%= JSON.pretty_generate(@import_report.summary_stats) %></pre>
+          </div>
+        </div>
+      <% end %>
+    </div>
+    <div class="card-footer">
+      <div class="row">
+        <div class="col-md-3"><strong>Created:</strong></div>
+        <div class="col-md-9"><%= @import_report.created_at.strftime('%m/%d/%Y %I:%M %p') %></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="section">
+  <div class="col-12">
+    <h3 class="mb-4">
+      Import Errors 
+      <span class="badge bg-<%= @import_errors.any? ? 'danger' : 'success' %>">
+        <%= @import_errors.count %>
+      </span>
+    </h3>
+  </div>
+  
+  <% if @import_errors.any? %>
+    <div class="card">
+      <div class="card-content">
+        <div class="card-body">
+          <div class="table-responsive">
+            <table class="table table-lg table-striped mb-0">
+              <thead>
+                <tr>
+                  <th>Error Type</th>
+                  <th>File Name</th>
+                  <th>Error Message</th>
+                  <th>Topic ID</th>
+                </tr>
+              </thead>
+              <tbody>
+                <% @import_errors.each do |error| %>
+                  <tr>
+                    <td>
+                      <span class="badge bg-danger"><%= error.error_type %></span>
+                    </td>
+                    <td class="text-bold-500">
+                      <div class="text-truncate"title="<%= error.file_name %>">
+                        <%= error.file_name || "N/A" %>
+                      </div>
+                    </td>
+                    <td class="text-bold-500">
+                      <% if error.error_message.present? %>
+                        <div class="text-truncate" style="max-width: 300px;" title="<%= error.error_message %>">
+                          <%= error.error_message %>
+                        </div>
+                      <% else %>
+                        N/A
+                      <% end %>
+                    </td>
+                    <td class="text-bold-500">
+                      <%= error.topic_id || "N/A" %>
+                    </td>
+                  </tr>
+                  <% if error.metadata.present? %>
+                    <tr>
+                      <td colspan="5" class="bg-light">
+                        <small><strong>Metadata:</strong></small>
+                        <pre class="small mb-0"><%= JSON.pretty_generate(error.metadata) %></pre>
+                      </td>
+                    </tr>
+                  <% end %>
+                <% end %>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    </div>
+  <% else %>
+    <div class="card">
+      <div class="card-body text-center">
+        <div class="text-success">
+          <i class="bi bi-check-circle-fill" style="font-size: 3rem;"></i>
+        </div>
+        <h4 class="mt-3">No Errors Found</h4>
+        <p class="text-muted">This import completed successfully without any errors.</p>
+      </div>
+    </div>
+  <% end %>
+</div>
+
+<div class="mt-4">
+  <%= link_to "Back to Import Reports", import_reports_path, class: "btn btn-secondary" %>
+</div>

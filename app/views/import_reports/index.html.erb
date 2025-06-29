@@ -1,0 +1,79 @@
+<% content_for :title, "Import Reports" %>
+
+<section class="section">
+  <div class="row" id="table-striped">
+    <div class="col-12 cold-md-12">
+      <div class="card">
+        <div class="card-header d-flex justify-content-between align-items-center">
+          <h2 class="card-title">Import Reports</h2>
+        </div>
+        <div class="card-content">
+          <div class="card-body">
+            <p class="card-text">View and monitor import operations and their status.</p>
+            
+            <!-- Filters -->
+            <div class="row mb-3">
+              <div class="col-md-4">
+                <%= form_with url: import_reports_path, method: :get, local: true, class: "d-flex gap-2" do |form| %>
+                  <%= form.select :status, options_for_select([["All Statuses", ""]] + @available_statuses.map { |status| [status.humanize, status] }, params[:status]), {}, { class: "form-select", onchange: "this.form.submit();" } %>
+                <% end %>
+              </div>
+            </div>
+
+            <div class="table-responsive">
+              <table class="table table-lg table-striped mb-0">
+                <thead>
+                  <tr>
+                    <th>ID</th>
+                    <th>Import Type</th>
+                    <th>Status</th>
+                    <th>Started At</th>
+                    <th>Completed At</th>
+                    <th>Errors</th>
+                    <th class="text-end">Actions</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <% @import_reports.each do |import_report| %>
+                    <tr>
+                      <td class="text-bold-500"><%= import_report.id %></td>
+                      <td class="text-bold-500"><%= import_report.import_type.humanize %></td>
+                      <td>
+                        <span class="badge bg-<%= import_report.status == "completed" ? "success" : "info" %>">
+                          <%= import_report.status.humanize %>
+                        </span>
+                      </td>
+                      <td class="text-bold-500">
+                        <%= import_report.started_at&.strftime("%m/%d/%Y %I:%M %p") || "Not started" %>
+                      </td>
+                      <td class="text-bold-500">
+                        <%= import_report.completed_at&.strftime("%m/%d/%Y %I:%M %p") || "Not completed" %>
+                      </td>
+                      <td class="text-bold-500">
+                        <% if import_report.import_errors.any? %>
+                          <span class="badge bg-danger"><%= import_report.import_errors.count %></span>
+                        <% else %>
+                          <span class="badge bg-success">0</span>
+                        <% end %>
+                      </td>
+                      <td class="text-end">
+                        <%= link_to import_report_path(import_report), class: "btn btn-secondary btn-sm" do %>
+                          <i class="bi bi-eye"></i> View
+                        <% end %>
+                      </td>
+                    </tr>
+                  <% end %>
+                </tbody>
+              </table>
+            </div>
+
+            <!-- Pagination -->
+            <div class="d-flex justify-content-center mt-3">
+              <%== pagy_nav(@pagy) if @pagy.pages > 1 %>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
