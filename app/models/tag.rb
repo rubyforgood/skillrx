@@ -18,7 +18,7 @@ class Tag < ActsAsTaggableOn::Tag
   accepts_nested_attributes_for :tag_cognates, allow_destroy: true
 
   # Reverse relationship for cognates referencing this tag
-  has_many :reverse_tag_cognates, class_name: "TagCognate", foreign_key: :cognate_id
+  has_many :reverse_tag_cognates, class_name: "TagCognate", foreign_key: :cognate_id, dependent: :destroy
   has_many :reverse_cognates, through: :reverse_tag_cognates, source: :tag
 
   # Returns a unique list of all cognate tags, including both direct and reverse relationships
@@ -39,17 +39,11 @@ class Tag < ActsAsTaggableOn::Tag
   #
   # @param str_list [Array<String>] list of tag names to set as cognates
   def cognates_list=(str_list)
-    if persisted?
-      remove_cognates(str_list)
-      create_cognates(str_list)
-    else
-      self.tag_cognates_attributes = str_list.filter_map do |name|
-        next if name.blank?
-
-        cognate = Tag.find_or_create_with_like_by_name(name)
-        { cognate_id: cognate.id } if cognate.id != id
-      end
-    end
+    names = str_list.compact_blank.uniq.reject { _1 == name }
+    remove_cognates(names) if persisted?
+    return if names.empty?
+    new_names_to_associate = create_cognates(names)
+    associate_cognates(new_names_to_associate)
   end
 
   # Returns tags that are available to be set as cognates
@@ -61,17 +55,34 @@ class Tag < ActsAsTaggableOn::Tag
 
   private
 
-  def create_cognates(str_list)
-    str_list.filter_map do |name|
-      next if name.blank?
-
-      Tag.find_or_create_with_like_by_name(name).then do |tag|
-        tag_cognates.find_or_create_by(cognate: tag)
+  def create_cognates(names)
+    names
+      .map { |name| [ name, Tag.find_or_initialize_by(name: name) ] }
+      .each_with_object([]) do |(name, tag), new_names|
+        new_names << name unless tag.in?(cognates_tags)
+        tag.save
+        new_names
       end
+  end
+
+  def remove_cognates(names)
+    cognates_to_remove = cognates_tags.excluding(Tag.where(name: names))
+    cognates_to_remove.each do |cognate|
+      cognate.tag_cognates.destroy_all
+      cognate.reverse_tag_cognates.destroy_all
     end
   end
 
-  def remove_cognates(str_list)
-    tag_cognates.where.not(cognate_id: Tag.where(name: str_list).pluck(:id)).destroy_all
+  def associate_cognates(names)
+    tags_for_passed_names = Tag.where(name: names)
+    related_tags = tags_for_passed_names.excluding(self).or(Tag.where(id: tags_for_passed_names.flat_map(&:cognates_tags).pluck(:id))).uniq
+    related_tags.each_with_index do |tag, index|
+      related_tags[index + 1..].each do |cognate|
+        tag.tag_cognates.create(cognate: cognate)
+      end
+    end
+    self.tag_cognates_attributes = related_tags.filter_map do |tag|
+      { cognate_id: tag.id } if !tag_cognates.find_by(cognate_id: tag.id)
+    end
   end
 end

@@ -87,7 +87,8 @@ RSpec.describe Tag, type: :model do
 
       it "adds new cognates to the tag" do
         subject.cognates_list = [ cognate_tag.name ]
-        expect(subject.cognates_tags).to include(cognate_tag)
+        subject.save!
+        expect(subject.reload.cognates_tags).to include(cognate_tag)
       end
 
       context "when existing cognates are present" do
@@ -99,10 +100,10 @@ RSpec.describe Tag, type: :model do
 
         it "replaces old cognates with new ones" do
           subject.cognates_list = [ new_cognate_tag.name ]
+          subject.save!
 
           aggregate_failures do
-            expect(subject.cognates_tags).to include(new_cognate_tag)
-            expect(subject.cognates_tags).not_to include(existing_cognate)
+            expect(subject.reload.cognates_tags).to contain_exactly(new_cognate_tag)
           end
         end
       end
@@ -115,7 +116,8 @@ RSpec.describe Tag, type: :model do
 
       it "removes all cognates" do
         subject.cognates_list = []
-        expect(subject.cognates_tags).to be_empty
+        subject.save!
+        expect(subject.reload.cognates_tags).to be_empty
       end
     end
   end
