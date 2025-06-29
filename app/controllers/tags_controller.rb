@@ -5,7 +5,7 @@ class TagsController < ApplicationController
   before_action :set_tag, only: [ :show, :edit, :update, :destroy ]
 
   def index
-    @pagy, @tags = pagy(Tag.includes(:cognates, :reverse_cognates).references(:tag))
+    @pagy, @tags = pagy(Tag.includes(:cognates, :reverse_cognates).references(:tag).search_with_params(tag_search_params))
   end
 
   def new
@@ -54,6 +54,11 @@ class TagsController < ApplicationController
 
   def tag_params
     params.require(:tag).permit(:name, cognates_list: [])
+  end
+
+  def tag_search_params
+    return {} unless params[:search].present?
+    params.expect(search: [ :name, :order ])
   end
 
   def set_tag

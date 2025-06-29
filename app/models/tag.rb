@@ -21,6 +21,22 @@ class Tag < ActsAsTaggableOn::Tag
   has_many :reverse_tag_cognates, class_name: "TagCognate", foreign_key: :cognate_id
   has_many :reverse_cognates, through: :reverse_tag_cognates, source: :tag
 
+  scope :search_with_params, ->(params) do
+    self
+      .then { |scope| params[:name].present? ? scope.where("tags.name ILIKE ?", "%#{params[:name]}%") : scope }
+      .then do |scope|
+        if params[:order].in?([ "asc", "desc" ])
+          scope.order(created_at: params[:order]&.to_sym)
+        elsif params[:order] == "most_tagged"
+          scope.order(taggings_count: :desc)
+        elsif params[:order] == "least_tagged"
+          scope.order(taggings_count: :asc)
+        else
+          scope.order(name: :asc)
+        end
+      end
+  end
+
   # Returns a unique list of all cognate tags, including both direct and reverse relationships
   #
   # @return [Array<Tag>] unique array of associated cognate tags
