@@ -2,7 +2,7 @@ class TopicsController < ApplicationController
   include ActiveStorage::SetCurrent
   include Pagy::Backend
 
-  before_action :set_topic, only: [ :show, :edit, :tags, :update, :destroy, :archive ]
+  before_action :set_topic, only: [ :show, :edit, :update, :destroy, :archive ]
 
   def index
     @pagy, @topics = pagy(scope.includes(:documents_attachments).search_with_params(search_params))
@@ -50,13 +50,6 @@ class TopicsController < ApplicationController
     redirect_to topics_path
   end
 
-  def tags
-    return [] unless params[:id].present? && topic_tags_params[:language_id].present?
-
-    @tags = @topic.current_tags_for_language(topic_tags_params[:language_id])
-    render json: @tags
-  end
-
   private
 
   def attach_files(signed_ids)
@@ -79,12 +72,11 @@ class TopicsController < ApplicationController
   end
 
   def topic_params
-    params
+    permitted_params = params
       .require(:topic)
-      .permit(:title, :description, :uid, :language_id, :provider_id, :published_at_year, :published_at_month, tag_list: [], documents: []).tap do |permitted_params|
-        permitted_params = validate_provider!(permitted_params)
-        permitted_params = validate_published_at!(permitted_params)
-      end
+      .permit(:title, :description, :uid, :language_id, :provider_id, :published_at_year, :published_at_month, tag_list: [], documents: [])
+
+    TopicSanitizer.new(permitted_params, provider_scope, current_provider).sanitize
   end
 
   def set_topic
@@ -93,10 +85,6 @@ class TopicsController < ApplicationController
 
   def scope
     @scope ||= current_provider.topics.includes(:language)
-  end
-
-  def topic_tags_params
-    params.permit(:language_id)
   end
 
   def search_params
@@ -110,24 +98,6 @@ class TopicsController < ApplicationController
     current_provider.present? ? "#{current_provider.name}/topics" : "Topics"
   end
   helper_method :topics_title
-
-  def validate_provider!(attrs)
-    if attrs["provider_id"].present?
-      attrs["provider_id"] = provider_scope.find(attrs["provider_id"]).id
-      attrs["provider_id"] = current_provider.id if current_provider && !Current.user.is_admin?
-    end
-    attrs
-  end
-
-  def validate_published_at!(attrs)
-    year = attrs["published_at_year"].present? ? attrs["published_at_year"].to_i : Time.current.year
-    month = attrs["published_at_month"].present? ? attrs["published_at_month"].to_i : Time.current.month
-    attrs["published_at"] = DateTime.new(year, month, 1)
-    attrs.delete("published_at_year")
-    attrs.delete("published_at_month")
-    attrs
-  end
-
 
   def validate_blobs
     return if document_signed_ids.blank?
