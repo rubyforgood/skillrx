@@ -19,27 +19,31 @@ describe "Topics", type: :request do
     end
 
     context "when topic has documents" do
-      let(:document) { create(:document, topic: topic) }
+      let(:topic) { create(:topic, :with_documents) }
+      let(:document) { topic.documents.first }
 
       before do
-        topic.documents << document
-        allow(DocumentSyncJob).to receive(:perform_later)
+        allow(DocumentsSyncJob).to receive(:perform_later)
       end
 
-      context "when documents are changed" do
+      context "when new documents is added" do
         it "runs sync job for documents" do
-          new_document = fixture_file_upload("files/sample.pdf", "application/pdf")
-          topic_params = { title: "new topic with documents", document_signed_ids: [ new_document.signed_id ] }
+          blob = ActiveStorage::Blob.create_and_upload!(
+            io: File.open(Rails.root.join("spec", "fixtures", "files", "dummy.pdf")),
+            filename: "dummy.pdf",
+            content_type: "application/pdf",
+          )
+          topic_params = { title: "new topic with documents", document_signed_ids: [ blob.signed_id ] }
 
           put topic_url(topic), params: { topic: topic_params }
 
           topic.reload
           expect(response).to redirect_to(topics_url)
-          # expect(topic.documents.count).to eq(1)
-          # expect(topic.documents.first.filename.to_s).to eq("sample.pdf")
-          expect(DocumentSyncJob).to have_received(:perform_later).with(
+          expect(topic.documents.count).to eq(2)
+          expect(topic.documents.last.filename.to_s).to eq("dummy.pdf")
+          expect(DocumentsSyncJob).to have_received(:perform_later).with(
             topic_id: topic.id,
-            document_id: topic.documents.first.id,
+            document_id: topic.documents.last.id,
             action: "update",
           )
         end

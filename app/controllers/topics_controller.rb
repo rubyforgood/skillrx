@@ -15,11 +15,14 @@ class TopicsController < ApplicationController
 
   def create
     @topic = scope.new(topic_params)
-    validate_blobs
-    return render :new, status: :unprocessable_entity if @topic.errors.any? || !@topic.save_with_tags(topic_params)
+    validate_blobs(@topic)
 
-    attach_files(document_signed_ids)
-    redirect_to topics_path
+    case mutator.create
+    in [ :ok, _topic ]
+      redirect_to topics_path
+    in [ :error, _errors ]
+      render :new, status: :unprocessable_entity
+    end
   end
 
   def show
@@ -30,22 +33,25 @@ class TopicsController < ApplicationController
   end
 
   def update
-    validate_blobs
-    return render :edit, status: :unprocessable_entity if @topic.errors.any? || !@topic.save_with_tags(topic_params)
+    validate_blobs(@topic)
 
-    attach_files(document_signed_ids)
-    redirect_to topics_path
+    case mutator.update
+    in [ :ok, _topic ]
+      redirect_to topics_path
+    in [ :error, _errors ]
+      render :edit, status: :unprocessable_entity
+    end
   end
 
   def destroy
     redirect_to topics_path and return unless Current.user.is_admin?
 
-    @topic.destroy
+    Topics::Mutator.new(topic: @topic).destroy
     redirect_to topics_path
   end
 
   def archive
-    @topic.archived!
+    Topics::Mutator.new(topic: @topic).archive
     redirect_to topics_path
   end
 
@@ -57,15 +63,6 @@ class TopicsController < ApplicationController
   end
 
   private
-
-  def attach_files(signed_ids)
-    return if signed_ids.blank?
-
-    signed_ids.each do |signed_id|
-      ActiveStorage::Blob.find_signed(signed_id)
-      @topic.documents.attach(signed_id)
-    end
-  end
 
   def document_signed_ids
     params.dig(:topic, :document_signed_ids)
@@ -92,6 +89,14 @@ class TopicsController < ApplicationController
 
   def scope
     @scope ||= current_provider.topics.includes(:language)
+  end
+
+  def mutator
+    @mutator ||= Topics::Mutator.new(
+      topic: @topic,
+      params: topic_params,
+      document_signed_ids: document_signed_ids
+    )
   end
 
   def topic_tags_params
@@ -128,7 +133,7 @@ class TopicsController < ApplicationController
   end
 
 
-  def validate_blobs
+  def validate_blobs(topic)
     return if document_signed_ids.blank?
 
     blobs = document_signed_ids.filter_map { |signed_id| ActiveStorage::Blob.find_signed(signed_id) }
@@ -137,7 +142,7 @@ class TopicsController < ApplicationController
     blobs.each do |blob|
       next if blob.content_type.in?(Topic::CONTENT_TYPES) && blob.byte_size < 10.megabytes
 
-      @topic.errors.add(:documents, "must be images, videos or PDFs of less than 10MB")
+      topic.errors.add(:documents, "must be images, videos or PDFs of less than 10MB")
       blob.purge
     end
   end

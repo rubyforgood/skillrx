@@ -37,10 +37,6 @@ class Topic < ApplicationRecord
 
   enum :state, STATES.map.with_index.to_h
 
-  after_save :documents_changed_action
-  after_save :topic_changed_action
-  after_destroy :topic_destroyed_action
-
   scope :active, -> { where(state: :active) }
 
   def published_at_year
@@ -58,34 +54,6 @@ class Topic < ApplicationRecord
 
     def by_month(month)
       where("extract(month from published_at) = ?", month)
-    end
-  end
-
-  private
-
-  def documents_changed_action
-    documents_attachments.each do |doc|
-      next unless doc.previous_changes.present?
-
-      DocumentsSyncJob.perform_later(
-        topic_id: id,
-        document_id: doc.id,
-        action: doc.previous_changes.keys.include?("blob_id") ? "update" : "create"
-      )
-    end
-  end
-
-  def topic_changed_action
-    return unless saved_change_to_state? && state_previously_was == "active" && state == "archived"
-
-    documents_attachments.each do |doc|
-      DocumentsSyncJob.perform_later(topic_id: id, document_id: doc.id, action: "archive")
-    end
-  end
-
-  def topic_destroyed_action
-    documents_attachments.each do |doc|
-      DocumentsSyncJob.perform_later(topic_id: id, document_id: doc.id, action: "delete")
     end
   end
 end
