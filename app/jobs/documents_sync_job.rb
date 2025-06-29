@@ -1,13 +1,11 @@
 class DocumentsSyncJob < ApplicationJob
-  attr_reader :topic, :share, :document
-
   def perform(topic_id, document_id, action, share = ENV["AZURE_STORAGE_SHARE_NAME"])
     @share = share
     @topic = Topic.find(topic_id)
     @document = topic.documents.find(document_id)
 
     case action
-    when "create", "update"
+    when "update"
       file_worker.send
     when "archive"
       file_worker.copy(archive_path)
@@ -21,24 +19,17 @@ class DocumentsSyncJob < ApplicationJob
 
   private
 
-  def name
-    document.filename.to_s
-  end
-
-  def path
-    "#{language.file_storage_prefix}CMES-Pi/assets/content"
-  end
-
   def archive_path
     "#{language.file_storage_prefix}CMES-Pi_Archive"
   end
 
-  def file
-    document.download
-  end
-
   def file_worker
-    @file_worker ||= FileWorker.new(share: share, name: name, path: path, file: file)
+    @file_worker ||= FileWorker.new(
+      share:,
+      file: document.download,
+      name: document.filename.to_s,
+      path: "#{language.file_storage_prefix}CMES-Pi/assets/content",
+    )
   end
 
   def language
@@ -48,4 +39,6 @@ class DocumentsSyncJob < ApplicationJob
   def client
     @client ||= AzureFileShares.client
   end
+
+  attr_reader :topic, :share, :document
 end
