@@ -95,6 +95,8 @@ production:
   primary:
     <<: *default
     database: skillrx_production
+    username: skillrx
+    password: <%= ENV["SKILLRX_DATABASE_PASSWORD"] %>
   cache:
     <<: *default
     database: sklillrx_production_cache
