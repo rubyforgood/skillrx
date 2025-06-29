@@ -19,6 +19,14 @@ describe "Topics", type: :request do
       expect(assigns(:topics)).to eq([ topic ])
     end
 
+    it "displays the number of documents" do
+      topic = create(:topic, :with_documents, provider:)
+
+      get topics_url
+
+      expect(page).to have_css("td", text: "1")
+    end
+
     describe "searching" do
       context "with a query" do
         it "filters topics by query" do
