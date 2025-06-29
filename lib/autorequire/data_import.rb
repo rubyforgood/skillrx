@@ -8,6 +8,21 @@ class DataImport
     self.import_all
   end
 
+  # Imports all data except for training documents.
+  def self.quick_reset
+    self.destroy_all_data
+    self.import_regions
+    self.import_providers
+    self.import_languages
+    self.import_topics
+    self.import_tags
+    self.import_topic_tags
+    self.restore_default_users
+  end
+
+  # This method will destroy all data in the database.
+  # Use with caution!
+
   def self.destroy_all_data
     TagCognate.destroy_all
     ActsAsTaggableOn::Tagging.destroy_all
@@ -239,7 +254,7 @@ class DataImport
     }
   end
 
-  def self.filter_rows_with_existing_topics(csv_data, stats, report)
+  def self.filter_rows_with_existing_topics(csv_data, stats)
     csv_data.filter_map do |row|
       topic_id = row["Topic_ID"].to_i
       if Topic.find_by(id: topic_id)
