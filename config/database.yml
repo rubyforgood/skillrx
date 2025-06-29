@@ -93,16 +93,20 @@ test:
 #
 production:
   primary:
-    url: <%= ENV['DATABASE_URL'] %>
-  queue:
-    url: <%= ENV['SKILLRX_QUEUE_DATABASE_URL'] %>
-    migrations_paths: db/queue_migrate
+    <<: *default
+    database: skillrx_production
+    username: skillrx
+    urL: <%= ENV['DATABASE_URL'] %>
   cache:
-    url: <%= ENV['SKILLRX_CACHE_DATABASE_URL'] %>
+    <<: *default
+    database: sklillrx_production_cache
     migrations_paths: db/cache_migrate
-  cable:
-    url: <%= ENV['SKILLRX_CABLE_DATABASE_URL'] %>
-    migrations_paths: db/cable_migrate
+    url: <%= ENV['SKILLRX_QUEUE_DATABASE_URL'] %>
+  queue:
+    <<: *default
+    database: skillrx_production_queue
+    migrations_paths: db/queue_migrate
+    url: <%= ENV['SKILLRX_CACHE_DATABASE_URL'] %>
 
 staging:
   primary:
