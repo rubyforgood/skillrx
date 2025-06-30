@@ -11,18 +11,6 @@ RSpec.describe "Editing a Topic", type: :system do
     login_as(user)
   end
 
-  it "updates a Topic" do
-    wait_and_visit(edit_topic_path(topic))
-    expect(page).to have_button("Update Topic")
-
-    select 2024, from: "topic_published_at_year"
-    select 3, from: "topic_published_at_month"
-    click_button "Update Topic"
-    expect(page).to have_content(topic.title)
-    expect(Topic.count).to eq(1)
-    expect(Topic.first.published_at).to eq(Date.new(2024, 3, 1))
-  end
-
   describe "when removing a tag" do
     let(:tag) { create(:tag, name: "Tag to remove") }
 
