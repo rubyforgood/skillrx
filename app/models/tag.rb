@@ -13,13 +13,10 @@
 #  index_tags_on_name  (name) UNIQUE
 #
 class Tag < ActsAsTaggableOn::Tag
-  has_many :tag_cognates, dependent: :destroy
+  # Moved :tag_cognates and reverse_tag_cognates associations to acts_as_taggable initializer to ensure dependent: :destroy was run
   has_many :cognates, through: :tag_cognates
-  accepts_nested_attributes_for :tag_cognates, allow_destroy: true
-
-  # Reverse relationship for cognates referencing this tag
-  has_many :reverse_tag_cognates, class_name: "TagCognate", foreign_key: :cognate_id, dependent: :destroy
   has_many :reverse_cognates, through: :reverse_tag_cognates, source: :tag
+  accepts_nested_attributes_for :tag_cognates, allow_destroy: true
 
   scope :search_with_params, ->(params) do
     self
