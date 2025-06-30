@@ -62,4 +62,27 @@ RSpec.describe "Editing a Topic", type: :system do
       end
     end
   end
+
+  describe "when removing a tag whose cognate remains associated to the Topic" do
+    let(:tag) { create(:tag, name: "Tag to remove") }
+    let(:cognate) { create(:tag, name: "Cognate to keep") }
+
+    before do
+      tag.cognates << cognate
+      topic.set_tag_list_on(topic.language.code.to_sym, "#{tag.name},#{cognate.name}")
+      topic.save
+    end
+
+    it "removes the tag but keeps the cognate" do
+      wait_and_visit edit_topic_path(topic)
+
+      first('[aria-label="Clear"]').click
+      click_button "Update Topic"
+
+      wait_and_visit topic_path(topic)
+      expect(page).to have_text(cognate.name)
+      expect(page).not_to have_text(tag.name)
+      expect(Tag.find_by(name: tag.name)).to be_nil
+    end
+  end
 end
