@@ -21,7 +21,7 @@ RSpec.describe "Updating a Tag", type: :system do
       wait_and_visit(edit_tag_path(tag.id))
       fill_in "Name", with: "Common Cold"
       enter_and_choose_tag("Rhinopharyngitis")
-      find('body').click
+      find("body").click
 
       click_button "Update Tag"
       visit(tag_path(tag))
