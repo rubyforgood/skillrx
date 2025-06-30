@@ -15,11 +15,11 @@ class TopicsController < ApplicationController
   end
 
   def create
+    document_signed_ids = topic_params.extract!(:document_signed_ids)
     @topic = scope.new(topic_params)
-    validate_blobs
     return render :new, status: :unprocessable_entity if @topic.errors.any? || !@topic.save_with_tags(topic_params)
 
-    attach_files(document_signed_ids)
+    attach_files(document_signed_ids[:document_signed_ids])
     redirect_to topics_path
   end
 
@@ -31,10 +31,10 @@ class TopicsController < ApplicationController
   end
 
   def update
-    validate_blobs
+    document_signed_ids = topic_params.extract!(:document_signed_ids)
     return render :edit, status: :unprocessable_entity if @topic.errors.any? || !@topic.save_with_tags(topic_params)
 
-    attach_files(document_signed_ids)
+    attach_files(document_signed_ids[:document_signed_ids])
     redirect_to topics_path
   end
 
@@ -56,13 +56,8 @@ class TopicsController < ApplicationController
     return if signed_ids.blank?
 
     signed_ids.each do |signed_id|
-      ActiveStorage::Blob.find_signed(signed_id)
       @topic.documents.attach(signed_id)
     end
-  end
-
-  def document_signed_ids
-    params.dig(:topic, :document_signed_ids)
   end
 
   def other_available_providers
@@ -72,11 +67,16 @@ class TopicsController < ApplicationController
   end
 
   def topic_params
-    permitted_params = params
-      .require(:topic)
-      .permit(:title, :description, :uid, :language_id, :provider_id, :published_at_year, :published_at_month, tag_list: [], documents: [])
+    @topic_params ||= begin
+      permitted_params = params
+        .require(:topic)
+        .permit(
+          :title, :description, :uid, :language_id, :provider_id, :published_at_year, :published_at_month,
+          tag_list: [], documents: [], document_signed_ids: [],
+        )
 
-    TopicSanitizer.new(permitted_params, provider_scope, current_provider).sanitize
+      TopicSanitizer.new(params: permitted_params, provider: current_provider, provider_scope:).sanitize
+    end
   end
 
   def set_topic
@@ -98,18 +98,4 @@ class TopicsController < ApplicationController
     current_provider.present? ? "#{current_provider.name}/topics" : "Topics"
   end
   helper_method :topics_title
-
-  def validate_blobs
-    return if document_signed_ids.blank?
-
-    blobs = document_signed_ids.filter_map { |signed_id| ActiveStorage::Blob.find_signed(signed_id) }
-    return if blobs.blank?
-
-    blobs.each do |blob|
-      next if blob.content_type.in?(Topic::CONTENT_TYPES) && blob.byte_size < 10.megabytes
-
-      @topic.errors.add(:documents, "must be images, videos or PDFs of less than 10MB")
-      blob.purge
-    end
-  end
 end
