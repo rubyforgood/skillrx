@@ -50,7 +50,7 @@ class DataImport
   end
 
   def self.import_regions
-    data = CSV.read(file_path("regions.csv"), headers: true)
+    data = get_data_file("regions.csv", "local")
 
     data.each do |row|
       region = Region.find_or_initialize_by(name: row["Region"])
@@ -61,7 +61,7 @@ class DataImport
   end
 
   def self.import_providers
-    data = CSV.read(file_path("providers_obfuscated.csv"), headers: true)
+    data =  get_data_file("providers.csv", "local")
 
     data.each do |row|
       # First, create the new provider
@@ -104,7 +104,7 @@ class DataImport
   end
 
   def self.import_topics
-    data = CSV.read(file_path("topics_obfuscated.csv"), headers: true)
+    data = get_data_file("topics.csv", "local")
 
     data.each do |row|
       # FIXME we need to search for LIKE name since the Topic_Language is 2 letter abbreviated
@@ -133,7 +133,8 @@ class DataImport
   end
 
   def self.import_tags
-    data = CSV.read(file_path("tags.csv"), headers: true)
+    data = get_data_file("tags.csv", "local")
+
     data.each do |row|
       tag_id = row["Tag_ID"].to_i
       tag_name = row["Tag_Name"]&.strip
@@ -148,8 +149,8 @@ class DataImport
   end
 
   def self.import_topic_tags
-    tags_data = CSV.read(file_path("tags.csv"))
-    join_data = CSV.read(file_path("topic_tags.csv"))
+    tags_data = get_data_file("tags.csv", "local")
+    join_data = get_data_file("topic_tags.csv", "local")
 
     # It returns a hash where the key is the Topic_ID and the value is an array of Tag_ID
     grouped_data = join_data
@@ -209,7 +210,7 @@ class DataImport
     )
 
     begin
-      csv_data = load_training_documents_csv
+      csv_data = get_data_file("cme_files.csv", "local")
       import_stats = initialize_import_stats
 
       valid_csv_rows = filter_rows_with_existing_topics(csv_data, import_stats)
@@ -240,10 +241,6 @@ class DataImport
   end
 
   private
-
-  def self.load_training_documents_csv
-    CSV.read(file_path("CMEFiles.csv"), headers: true)
-  end
 
   def self.initialize_import_stats
     {
@@ -304,6 +301,27 @@ class DataImport
 
     rescue AzureFileShares::Errors::ApiError, URI::InvalidURIError => e
       handle_attachment_error(topic, filename, e, stats, report)
+    end
+  end
+
+  def self.get_data_file(file_name, source = "local")
+    if source == "local"
+      CSV.read(file_path(file_name), headers: true)
+    elsif source == "azure"
+      get_data_file_from_azure(file_name)
+    else
+      raise ArgumentError, "Invalid source: #{source}"
+    end
+  end
+
+  def self.get_data_file_from_azure(file_name)
+    file_path = "/import_files"
+    begin
+      file_content = download_azure_file(file_path, file_name)
+      CSV.parse(file_content, headers: true)
+    rescue AzureFileShares::Errors::ApiError => e
+      puts "Error downloading file from Azure: #{e.message}"
+      raise e
     end
   end
 
