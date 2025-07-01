@@ -17,6 +17,7 @@ Rails.application.routes.draw do
       get :tags
     end
   end
+  resources :import_reports, only: %i[index show]
   resource :settings, only: [] do
     put :provider, on: :collection
   end

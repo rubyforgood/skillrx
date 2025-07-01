@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.0].define(version: 2025_03_29_174617) do
+ActiveRecord::Schema[8.0].define(version: 2025_06_25_101109) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_catalog.plpgsql"
 
@@ -58,6 +58,33 @@ ActiveRecord::Schema[8.0].define(version: 2025_03_29_174617) do
     t.datetime "updated_at", null: false
     t.index ["provider_id"], name: "index_contributors_on_provider_id"
     t.index ["user_id"], name: "index_contributors_on_user_id"
+  end
+
+  create_table "import_errors", force: :cascade do |t|
+    t.bigint "import_report_id", null: false
+    t.string "error_type", null: false
+    t.string "file_name"
+    t.integer "topic_id"
+    t.text "error_message"
+    t.json "metadata"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["error_type"], name: "index_import_errors_on_error_type"
+    t.index ["file_name"], name: "index_import_errors_on_file_name"
+    t.index ["import_report_id"], name: "index_import_errors_on_import_report_id"
+  end
+
+  create_table "import_reports", force: :cascade do |t|
+    t.string "import_type", null: false
+    t.datetime "started_at"
+    t.datetime "completed_at"
+    t.json "summary_stats"
+    t.json "unmatched_files"
+    t.json "error_details"
+    t.string "status", default: "pending"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["import_type"], name: "index_import_reports_on_import_type"
   end
 
   create_table "languages", force: :cascade do |t|
@@ -157,6 +184,7 @@ ActiveRecord::Schema[8.0].define(version: 2025_03_29_174617) do
 
   add_foreign_key "active_storage_attachments", "active_storage_blobs", column: "blob_id"
   add_foreign_key "active_storage_variant_records", "active_storage_blobs", column: "blob_id"
+  add_foreign_key "import_errors", "import_reports"
   add_foreign_key "sessions", "users"
   add_foreign_key "tag_cognates", "tags"
   add_foreign_key "tag_cognates", "tags", column: "cognate_id"
