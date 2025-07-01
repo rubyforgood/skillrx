@@ -76,7 +76,9 @@ RSpec.describe "Upload Management", type: :system do
           expect(page).to have_text("logo_ruby_for_good.png")
           expect(page).to have_text("file_text_test.txt")
           click_button("Update Topic")
-          expect(page).to have_text("Documents must be images, videos or PDFs")
+          expect(page).to have_text("View")
+          click_link("View", href: topic_path(topic))
+          expect(page).not_to have_text("file_text_test.txt")
         end
       end
     end

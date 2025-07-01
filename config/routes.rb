@@ -14,8 +14,8 @@ Rails.application.routes.draw do
   resources :topics do
     member do
       put :archive
-      get :tags
     end
+    resources :tags, only: %i[index], controller: "topics/tags"
   end
   resources :import_reports, only: %i[index show]
   resource :settings, only: [] do

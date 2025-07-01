@@ -2,7 +2,7 @@ class TopicsController < ApplicationController
   include ActiveStorage::SetCurrent
   include Pagy::Backend
 
-  before_action :set_topic, only: [ :show, :edit, :tags, :update, :destroy, :archive ]
+  before_action :set_topic, only: [ :show, :edit, :update, :destroy, :archive ]
 
   def index
     @pagy, @topics = pagy(scope.includes(:documents_attachments).search_with_params(search_params))
@@ -15,11 +15,11 @@ class TopicsController < ApplicationController
   end
 
   def create
+    document_signed_ids = topic_params.extract!(:document_signed_ids)
     @topic = scope.new(topic_params)
-    validate_blobs
     return render :new, status: :unprocessable_entity if @topic.errors.any? || !@topic.save_with_tags(topic_params)
 
-    attach_files(document_signed_ids)
+    attach_files(document_signed_ids[:document_signed_ids])
     redirect_to topics_path
   end
 
@@ -31,10 +31,10 @@ class TopicsController < ApplicationController
   end
 
   def update
-    validate_blobs
+    document_signed_ids = topic_params.extract!(:document_signed_ids)
     return render :edit, status: :unprocessable_entity if @topic.errors.any? || !@topic.save_with_tags(topic_params)
 
-    attach_files(document_signed_ids)
+    attach_files(document_signed_ids[:document_signed_ids])
     redirect_to topics_path
   end
 
@@ -50,26 +50,14 @@ class TopicsController < ApplicationController
     redirect_to topics_path
   end
 
-  def tags
-    return [] unless params[:id].present? && topic_tags_params[:language_id].present?
-
-    @tags = @topic.current_tags_for_language(topic_tags_params[:language_id])
-    render json: @tags
-  end
-
   private
 
   def attach_files(signed_ids)
     return if signed_ids.blank?
 
     signed_ids.each do |signed_id|
-      ActiveStorage::Blob.find_signed(signed_id)
       @topic.documents.attach(signed_id)
     end
-  end
-
-  def document_signed_ids
-    params.dig(:topic, :document_signed_ids)
   end
 
   def other_available_providers
@@ -79,12 +67,16 @@ class TopicsController < ApplicationController
   end
 
   def topic_params
-    params
-      .require(:topic)
-      .permit(:title, :description, :uid, :language_id, :provider_id, :published_at_year, :published_at_month, tag_list: [], documents: []).tap do |permitted_params|
-        permitted_params = validate_provider!(permitted_params)
-        permitted_params = validate_published_at!(permitted_params)
-      end
+    @topic_params ||= begin
+      permitted_params = params
+        .require(:topic)
+        .permit(
+          :title, :description, :uid, :language_id, :provider_id, :published_at_year, :published_at_month,
+          tag_list: [], documents: [], document_signed_ids: [],
+        )
+
+      TopicSanitizer.new(params: permitted_params, provider: current_provider, provider_scope:).sanitize
+    end
   end
 
   def set_topic
@@ -93,10 +85,6 @@ class TopicsController < ApplicationController
 
   def scope
     @scope ||= current_provider.topics.includes(:language)
-  end
-
-  def topic_tags_params
-    params.permit(:language_id)
   end
 
   def search_params
@@ -110,36 +98,4 @@ class TopicsController < ApplicationController
     current_provider.present? ? "#{current_provider.name}/topics" : "Topics"
   end
   helper_method :topics_title
-
-  def validate_provider!(attrs)
-    if attrs["provider_id"].present?
-      attrs["provider_id"] = provider_scope.find(attrs["provider_id"]).id
-      attrs["provider_id"] = current_provider.id if current_provider && !Current.user.is_admin?
-    end
-    attrs
-  end
-
-  def validate_published_at!(attrs)
-    year = attrs["published_at_year"].present? ? attrs["published_at_year"].to_i : Time.current.year
-    month = attrs["published_at_month"].present? ? attrs["published_at_month"].to_i : Time.current.month
-    attrs["published_at"] = DateTime.new(year, month, 1)
-    attrs.delete("published_at_year")
-    attrs.delete("published_at_month")
-    attrs
-  end
-
-
-  def validate_blobs
-    return if document_signed_ids.blank?
-
-    blobs = document_signed_ids.filter_map { |signed_id| ActiveStorage::Blob.find_signed(signed_id) }
-    return if blobs.blank?
-
-    blobs.each do |blob|
-      next if blob.content_type.in?(Topic::CONTENT_TYPES) && blob.byte_size < 10.megabytes
-
-      @topic.errors.add(:documents, "must be images, videos or PDFs of less than 10MB")
-      blob.purge
-    end
-  end
 end

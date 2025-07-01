@@ -144,6 +144,12 @@ GEM
     connection_pool (2.5.3)
     crass (1.0.6)
     csv (3.3.5)
+    database_cleaner (2.1.0)
+      database_cleaner-active_record (>= 2, < 3)
+    database_cleaner-active_record (2.2.1)
+      activerecord (>= 5.a)
+      database_cleaner-core (~> 2.0.0)
+    database_cleaner-core (2.0.1)
     date (3.4.1)
     debug (1.11.0)
       irb (~> 1.10)
@@ -512,6 +518,7 @@ DEPENDENCIES
   bullet
   capybara
   csv
+  database_cleaner
   debug
   dotenv-rails
   factory_bot_rails
