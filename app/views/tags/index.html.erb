@@ -12,7 +12,27 @@
         </div>
         <div class="card-content">
           <div class="card-body">
-            <p class="card-text">Some important information or instruction can be placed here.</p>
+            <%= form_for :search, url: tags_path, method: :get, data: { controller: "search", search_target: "search", turbo_frame: "tag-list", turbo_action: "advance" } do |f| %>
+              <div class="form-body">
+                <div class="row">
+                  <div class="col-md-6 col-12">
+                    <div class="form-group">
+                      <%= f.label :name %>
+                      <%= f.text_field :name, value: params.dig(:search, :name), class: "form-control", data: { action: "input->search#submit" } %>
+                    </div>
+                  </div>
+                  <div class="col-md-6 col-12">
+                    <div class="form-group">
+                      <%= f.label :order, "Order by" %>
+                      <%= f.select :order, options_for_select([["Name", :name],["Most recently added", :desc], ["Least recently added", :asc], ["Highest number of taggings", :most_tagged], ["Lowest number of taggings", :least_tagged]], params.dig(:search, :order)), {}, class: "form-select", data: { action: "change->search#submit" } %>
+                    </div>
+                  </div>
+                  <div class="col-12 d-flex justify-content-end">
+                    <%= link_to "Clear", tags_path, class: "btn btn-light-secondary me-1 mb-1" %>
+                  </div>
+                </div>
+              </div>
+            <% end %>
             <div class="table-responsive">
               <table class="table table-lg table-striped mb-0">
                 <thead>

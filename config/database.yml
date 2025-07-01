@@ -27,9 +27,11 @@ development:
   primary:
     <<: *default
     database: skillrx_development
+    <% if RUBY_PLATFORM =~ /darwin/ %>gssencmode: disable<% end %>
   queue:
     <<: *default
     database: skillrx_development_queue
+    <% if RUBY_PLATFORM =~ /darwin/ %>gssencmode: disable<% end %>
     migrations_paths: db/queue_migrate
 
   # The specified database role being used to connect to PostgreSQL.
@@ -65,10 +67,12 @@ development:
 test:
   primary:
     <<: *default
+    <% if RUBY_PLATFORM =~ /darwin/ %>gssencmode: disable<% end %>
     database: skillrx_test
   queue:
     <<: *default
     database: skillrx_test_queue
+    <% if RUBY_PLATFORM =~ /darwin/ %>gssencmode: disable<% end %>
     migrations_paths: db/queue_migrate
 
 # As with config/credentials.yml, you never want to store sensitive information,
@@ -95,6 +99,7 @@ production:
   primary:
     <<: *default
     database: skillrx_production
+    urL: <%= ENV['DATABASE_URL'] %>
   cache:
     <<: *default
     database: sklillrx_production_cache

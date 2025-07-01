@@ -25,6 +25,22 @@ describe "Tags", type: :request do
         expect(response).to redirect_to(tags_url)
         expect(Tag.count).to be_zero
       end
+
+      context "when the tag has cognates and reverse_cognates" do
+        let(:cognates) { create_list(:tag, 2) }
+
+        before do
+          create(:tag_cognate, tag: tag, cognate: cognates.first)
+          create(:tag_cognate, tag: cognates.last, cognate: tag)
+        end
+
+        it "deletes the Tag and removes the associations with its cognates" do
+          expect { delete tag_url(tag, confirmed: true) }.to change(Tag, :count).from(3).to(2)
+          expect(Tag.pluck(:id)).to match_array(cognates.map(&:id))
+
+          expect(response).to redirect_to(tags_url)
+        end
+      end
     end
 
     context "when user is not an admin" do
