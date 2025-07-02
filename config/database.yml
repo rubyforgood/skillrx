@@ -1,35 +1,30 @@
 default: &default
   adapter: postgresql
   encoding: unicode
-  host: <%= ENV.fetch('DATABASE_HOST') { 'localhost' } %>
-  username: <%= ENV.fetch('DATABASE_USER') { 'skillrx' } %>
-  password: <%= ENV.fetch('DATABASE_PASSWORD') { '' } %>
-  port: <%= ENV.fetch('DATABASE_PORT') { 5432 }  %>
   # For details on connection pooling, see Rails configuration guide
   # https://guides.rubyonrails.org/configuring.html#database-pooling
   pool: <%= ENV.fetch("RAILS_MAX_THREADS") { 5 } %>
 
+development_and_test: &development_and_test
+  <<: *default
+  host: <%= ENV.fetch('DATABASE_HOST') { 'localhost' } %>
+  username: <%= ENV.fetch('DATABASE_USER') { 'skillrx' } %>
+  password: <%= ENV.fetch('DATABASE_PASSWORD') { '' } %>
+  port: <%= ENV.fetch('DATABASE_PORT') { 5432 }  %>
+
 development:
   primary:
-    <<: *default
+    <<: *development_and_test
     database: skillrx_development
     <% if RUBY_PLATFORM =~ /darwin/ %>gssencmode: disable<% end %>
   queue:
-    <<: *default
-    database: skillrx_development_queue
-    <% if RUBY_PLATFORM =~ /darwin/ %>gssencmode: disable<% end %>
-    migrations_paths: db/queue_migrate
+    <<: *development_and_test
 
 test:
   primary:
-    <<: *default
-    <% if RUBY_PLATFORM =~ /darwin/ %>gssencmode: disable<% end %>
-    database: skillrx_test
+    <<: *development_and_test
   queue:
-    <<: *default
-    database: skillrx_test_queue
-    <% if RUBY_PLATFORM =~ /darwin/ %>gssencmode: disable<% end %>
-    migrations_paths: db/queue_migrate
+    <<: *development_and_test
 
 production:
   primary: &primary_production
