@@ -23,8 +23,12 @@ development:
 test:
   primary:
     <<: *development_and_test
+    database: skillrx_test
+    <% if RUBY_PLATFORM =~ /darwin/ %>gssencmode: disable<% end %>
   queue:
     <<: *development_and_test
+    database: skillrx_test
+    <% if RUBY_PLATFORM =~ /darwin/ %>gssencmode: disable<% end %>
 
 production:
   primary: &primary_production
