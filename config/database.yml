@@ -10,6 +10,7 @@ development:
   username: <%= ENV.fetch('DATABASE_USER', 'skillrx') %>
   password: <%= ENV.fetch('DATABASE_PASSWORD', '') %>
   port: <%= ENV.fetch('DATABASE_PORT', 5432) %>
+  <% if RUBY_PLATFORM =~ /darwin/ %>gssencmode: disable<% end %>
 
 test:
   <<: *default
@@ -18,6 +19,7 @@ test:
   username: <%= ENV.fetch('DATABASE_USER', 'skillrx') %>
   password: <%= ENV.fetch('DATABASE_PASSWORD', '') %>
   port: <%= ENV.fetch('DATABASE_PORT', 5432) %>
+  <% if RUBY_PLATFORM =~ /darwin/ %>gssencmode: disable<% end %>
 
 production:
   <<: *default
