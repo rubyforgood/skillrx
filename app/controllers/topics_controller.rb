@@ -70,7 +70,7 @@ class TopicsController < ApplicationController
           tag_list: [], documents: [], document_signed_ids: [],
         )
 
-      TopicSanitizer.new(params: permitted_params, provider: current_provider, provider_scope:).sanitize
+      Topics::Sanitizer.new(params: permitted_params, provider: current_provider, provider_scope:).sanitize
     end
   end
 
