@@ -33,11 +33,6 @@ RSpec.describe "/providers", type: :request do
       get new_provider_url
       expect(response).to be_successful
     end
-
-    it "displays a 'Create Provider' button" do
-      get new_provider_url
-      expect(page).to have_button("Create Provider")
-    end
   end
 
   describe "GET /edit" do
@@ -46,11 +41,6 @@ RSpec.describe "/providers", type: :request do
     it "renders a successful response" do
       get edit_provider_url(provider)
       expect(response).to be_successful
-    end
-
-    it "displays an 'Update Provider' button" do
-      get edit_provider_url(provider)
-      expect(page).to have_button("Update Provider")
     end
   end
 

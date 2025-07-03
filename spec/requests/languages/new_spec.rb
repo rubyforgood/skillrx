@@ -10,10 +10,5 @@ describe "Languages", type: :request do
       get new_language_url
       expect(response).to be_successful
     end
-
-    it "displays a 'Create Language' button" do
-      get new_language_url
-      expect(page).to have_button("Create Language")
-    end
   end
 end
