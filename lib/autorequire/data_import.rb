@@ -1,6 +1,10 @@
 class DataImport
   require "csv"
 
+  def self.source
+    ENV.fetch("DATA_IMPORT_SOURCE", "local")
+  end
+
   # There are dependencies here.
   # Regions must be imported before providers
   def self.reset
@@ -50,7 +54,7 @@ class DataImport
   end
 
   def self.import_regions
-    data = get_data_file("regions.csv", "local")
+    data = get_data_file("regions.csv")
 
     data.each do |row|
       region = Region.find_or_initialize_by(name: row["Region"])
@@ -61,7 +65,7 @@ class DataImport
   end
 
   def self.import_providers
-    data =  get_data_file("providers.csv", "local")
+    data =  get_data_file("providers.csv")
 
     data.each do |row|
       # First, create the new provider
@@ -85,8 +89,9 @@ class DataImport
 
       # Then, create the user that will be associated with the provider
       puts "Creating user for #{provider.name}"
-      user = User.find_by(email: "#{row["Provider_Name"]}@test.test")
-      user = User.create(email: "#{row["Provider_Name"]}@test.test", password_digest: BCrypt::Password.create(row["Provider_Password"])) if user.blank?
+      email = "#{row['Provider_Name'].parameterize}@test.test"
+      user = User.find_by(email: email)
+      user = User.create(email: email, password_digest: BCrypt::Password.create(row["Provider_Password"])) if user.blank?
 
       # Then, associate the user with the provider
       provider.users << user unless provider.users.include?(user)
@@ -104,7 +109,7 @@ class DataImport
   end
 
   def self.import_topics
-    data = get_data_file("topics.csv", "local")
+    data = get_data_file("topics.csv")
 
     data.each do |row|
       # FIXME we need to search for LIKE name since the Topic_Language is 2 letter abbreviated
@@ -133,7 +138,7 @@ class DataImport
   end
 
   def self.import_tags
-    data = get_data_file("tags.csv", "local")
+    data = get_data_file("tags.csv")
 
     data.each do |row|
       tag_id = row["Tag_ID"].to_i
@@ -149,8 +154,8 @@ class DataImport
   end
 
   def self.import_topic_tags
-    tags_data = get_data_file("tags.csv", "local")
-    join_data = get_data_file("topic_tags.csv", "local")
+    tags_data = get_data_file("tags.csv")
+    join_data = get_data_file("topic_tags.csv")
 
     # It returns a hash where the key is the Topic_ID and the value is an array of Tag_ID
     grouped_data = join_data
@@ -210,7 +215,7 @@ class DataImport
     )
 
     begin
-      csv_data = get_data_file("cme_files.csv", "local")
+      csv_data = get_data_file("cme_files.csv")
       import_stats = initialize_import_stats
 
       valid_csv_rows = filter_rows_with_existing_topics(csv_data, import_stats)
@@ -304,7 +309,9 @@ class DataImport
     end
   end
 
-  def self.get_data_file(file_name, source = "local")
+  def self.get_data_file(file_name)
+    source = self.source
+
     if source == "local"
       CSV.read(file_path(file_name), headers: true)
     elsif source == "azure"
