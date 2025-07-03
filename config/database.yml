@@ -1,53 +1,24 @@
 default: &default
   adapter: postgresql
   encoding: unicode
-  # For details on connection pooling, see Rails configuration guide
-  # https://guides.rubyonrails.org/configuring.html#database-pooling
   pool: <%= ENV.fetch("RAILS_MAX_THREADS") { 5 } %>
 
-development_and_test: &development_and_test
-  <<: *default
-  host: <%= ENV.fetch('DATABASE_HOST') { 'localhost' } %>
-  username: <%= ENV.fetch('DATABASE_USER') { 'skillrx' } %>
-  password: <%= ENV.fetch('DATABASE_PASSWORD') { '' } %>
-  port: <%= ENV.fetch('DATABASE_PORT') { 5432 }  %>
-
 development:
-  primary:
-    <<: *development_and_test
-    database: skillrx_development
-    <% if RUBY_PLATFORM =~ /darwin/ %>gssencmode: disable<% end %>
-  queue:
-    <<: *development_and_test
+  <<: *default
+  database: skillrx_development
+  host: <%= ENV.fetch('DATABASE_HOST', 'localhost') %>
+  username: <%= ENV.fetch('DATABASE_USER', 'skillrx') %>
+  password: <%= ENV.fetch('DATABASE_PASSWORD', '') %>
+  port: <%= ENV.fetch('DATABASE_PORT', 5432) %>
 
 test:
-  primary:
-    <<: *development_and_test
-    database: skillrx_test
-    <% if RUBY_PLATFORM =~ /darwin/ %>gssencmode: disable<% end %>
-  queue:
-    <<: *development_and_test
-    database: skillrx_test
-    <% if RUBY_PLATFORM =~ /darwin/ %>gssencmode: disable<% end %>
+  <<: *default
+  database: skillrx_test
+  host: <%= ENV.fetch('DATABASE_HOST', 'localhost') %>
+  username: <%= ENV.fetch('DATABASE_USER', 'skillrx') %>
+  password: <%= ENV.fetch('DATABASE_PASSWORD', '') %>
+  port: <%= ENV.fetch('DATABASE_PORT', 5432) %>
 
 production:
-  primary: &primary_production
-    <<: *default
-    urL: <%= ENV['DATABASE_URL'] %>
-  cache:
-    <<: *primary_production
-  queue:
-    <<: *primary_production
-  cable:
-    <<: *primary_production
-
-staging:
-  primary: &primary_staging
-    <<: *default
-    url: <%= ENV['DATABASE_URL'] %>
-  cache:
-    <<: *primary_staging
-  queue:
-    <<: *primary_staging
-  cable:
-    <<: *primary_staging
+  <<: *default
+  url: <%= ENV['DATABASE_URL'] %>
