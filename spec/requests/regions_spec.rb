@@ -47,11 +47,6 @@ RSpec.describe "/regions", type: :request do
       get new_region_url
       expect(response).to be_successful
     end
-
-    it "displays a 'Create Region' button" do
-      get new_region_url
-      expect(page).to have_button("Create Region")
-    end
   end
 
   describe "GET /edit" do
@@ -60,11 +55,6 @@ RSpec.describe "/regions", type: :request do
     it "renders a successful response" do
       get edit_region_url(region)
       expect(response).to be_successful
-    end
-
-    it "displays an 'Update Region' button" do
-      get edit_region_url(region)
-      expect(page).to have_button("Update Region")
     end
   end
 

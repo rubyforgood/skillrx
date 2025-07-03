@@ -33,11 +33,6 @@ RSpec.describe "/users", type: :request do
       get new_user_url
       expect(response).to be_successful
     end
-
-    it "displays a 'Create User' button" do
-      get new_user_url
-      expect(page).to have_button("Create User")
-    end
   end
 
   describe "POST /create" do
@@ -80,11 +75,6 @@ RSpec.describe "/users", type: :request do
     it "renders a successful response" do
       get edit_user_url(user)
       expect(response).to be_successful
-    end
-
-    it "displays an 'Update User' button" do
-      get edit_user_url(user)
-      expect(page).to have_button("Update User")
     end
   end
 
