@@ -8,6 +8,15 @@ RSpec.describe XmlGenerator::AllProviders do
   let(:provider2) { create(:provider) }
   let!(:topic1) { create(:topic, :tagged, language:, provider: provider1) }
   let!(:topic2) { create(:topic, :tagged, language:, provider: provider2) }
+  let(:tag_topic1) { create(:tag, name: "flu") }
+  let(:tag_topic2) { create(:tag, name: "diabetes") }
+
+  before do
+    topic1.set_tag_list_on(topic1.language.code.to_sym, tag_topic1.name)
+    topic1.save
+    topic2.set_tag_list_on(topic2.language.code.to_sym, tag_topic1.name)
+    topic2.save
+  end
 
   it "generates the xml" do
     expect(subject.perform).to eq(
