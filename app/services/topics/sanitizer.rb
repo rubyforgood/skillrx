@@ -1,4 +1,4 @@
-class TopicSanitizer
+class Topics::Sanitizer
   def initialize(params:, provider:, provider_scope:)
     @params = params
     @provider = provider
