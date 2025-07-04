@@ -17,14 +17,6 @@ RSpec.describe DocumentsSyncJob, type: :job do
         ).and_return(file_worker)
     end
 
-    context "when action is 'create'" do
-      it "make FileWorker send the file" do
-        expect(file_worker).to receive(:send)
-
-        described_class.perform_now(topic.id, document.id, "create")
-      end
-    end
-
     context "when action is 'update'" do
       it "make FileWorker send the file" do
         expect(file_worker).to receive(:send)

@@ -15,12 +15,13 @@ class TopicsController < ApplicationController
   end
 
   def create
-    @topic = scope.new
+    @topic = scope.new(topic_params.except(:document_signed_ids))
 
     case mutator.create
     in [ :ok, _topic ]
       redirect_to topics_path
-    in [ :error, _errors ]
+    in [ :error, errors ]
+      @errors = errors
       render :new, status: :unprocessable_entity
     end
   end
@@ -36,7 +37,8 @@ class TopicsController < ApplicationController
     case mutator.update
     in [ :ok, _topic ]
       redirect_to topics_path
-    in [ :error, _errors ]
+    in [ :error, errors ]
+      @errors = errors
       render :edit, status: :unprocessable_entity
     end
   end
@@ -88,7 +90,7 @@ class TopicsController < ApplicationController
     @mutator ||= Topics::Mutator.new(
       topic: @topic,
       params: topic_params,
-      document_signed_ids: document_signed_ids[:document_signed_ids]
+      document_signed_ids: document_signed_ids[:document_signed_ids],
     )
   end
 

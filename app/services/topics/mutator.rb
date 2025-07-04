@@ -36,6 +36,7 @@ class Topics::Mutator
   attr_reader :topic, :params, :document_signed_ids
 
   def mutate
+    @topic.valid?
     return [ :error,  topic.errors.full_messages ] if topic.errors.any?
 
     ActiveRecord::Base.transaction do

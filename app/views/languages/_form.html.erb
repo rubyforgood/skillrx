@@ -2,7 +2,7 @@
 <%= form_for language do |f| %>
   <div class="form-body">
     <div class="row">
-      <%= render "shared/errors", resource: language %>
+      <%= render "shared/errors", errors: language.errors.full_messages, resource_name: language.class.name %>
       <div class="col-12">
         <div class="form-group">
           <%= f.label :name %>
