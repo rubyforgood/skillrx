@@ -20,6 +20,8 @@ class FileWorker
 
   private
 
+  attr_reader :share, :path, :name, :file
+
   def send_file
     create_subdirs(path)
     return if file.blank?
@@ -52,6 +54,4 @@ class FileWorker
   def client
     @client ||= AzureFileShares.client
   end
-
-  attr_reader :share, :path, :name, :file
 end

@@ -3,10 +3,10 @@ require "rails_helper"
 RSpec.describe Topics::Mutator do
   subject { described_class.new(topic:, params:, document_signed_ids:) }
 
-  let(:topic) { Topic.new }
+  let(:topic) { Topic.new(params) }
   let(:language) { create(:language) }
   let(:provider) { create(:provider) }
-  let(:params) { attributes_for(:topic).merge(language:, provider:) }
+  let(:params) { attributes_for(:topic).merge(language_id: language.id, provider_id: provider.id) }
   let(:document_signed_ids) { [] }
 
   before do
