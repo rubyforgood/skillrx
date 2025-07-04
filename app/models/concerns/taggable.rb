@@ -32,7 +32,7 @@ module Taggable
   def available_tags
     return [] if language_tag_context.nil?
 
-    ActsAsTaggableOn::Tag.for_context(language_tag_context)
+    ActsAsTaggableOn::Tag.for_context(language_tag_context)&.order(name: :asc)
   end
 
   # Retrieves associated tags for the current language context
