@@ -123,12 +123,18 @@ RSpec.describe Tag, type: :model do
   end
 
   describe ".all_available_tags" do
-    it "returns all tags that are not cognates of the given tag" do
-      cognate_tag = create(:tag)
-      create(:tag_cognate, tag: subject, cognate: cognate_tag)
+    let!(:available_tag_1) { create(:tag, name: "zika") }
+    let!(:available_tag_2) { create(:tag, name: "cardiology") }
+    let(:reverse_cognate_tag) { create(:tag) }
+    let(:cognate_tag) { create(:tag) }
 
-      expect(subject.all_available_tags).to include(cognate_tag)
-      expect(subject.all_available_tags).not_to include(subject)
+    before do
+      create(:tag_cognate, tag: subject, cognate: cognate_tag)
+      create(:tag_cognate, tag: reverse_cognate_tag, cognate: subject)
+    end
+
+    it "returns all tags that are not cognates of the given tag" do
+      expect(subject.all_available_tags).to eq([ available_tag_2, available_tag_1 ])
     end
   end
 end

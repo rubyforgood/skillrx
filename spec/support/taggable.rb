@@ -28,7 +28,9 @@ RSpec.shared_examples "taggable" do
 
     describe "#available_tags" do
       it "delegates to ActsAsTaggableOn::Tag with correct context" do
-        expect(ActsAsTaggableOn::Tag).to receive(:for_context).with(:en)
+        tag_collection = double("tag_collection")
+        expect(ActsAsTaggableOn::Tag).to receive(:for_context).with(:en).and_return(tag_collection)
+        expect(tag_collection).to receive(:order).with(name: :asc)
         instance.available_tags
       end
     end
