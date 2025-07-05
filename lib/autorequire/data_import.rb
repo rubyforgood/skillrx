@@ -332,9 +332,9 @@ class DataImport
     begin
       file_content = download_azure_file(file_path, file_name)
       if no_headers
-        CSV.parse(file_content, headers: false)
+        CSV.parse(file_content, headers: false, encoding: "UTF-8")
       else
-        CSV.parse(file_content, headers: true)
+        CSV.parse(file_content, headers: true, encoding: "UTF-8")
       end
     rescue AzureFileShares::Errors::ApiError => e
       puts "Error downloading file from Azure: #{e.message}"
