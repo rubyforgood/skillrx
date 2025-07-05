@@ -66,7 +66,7 @@ class Tag < ActsAsTaggableOn::Tag
   #
   # @return [ActiveRecord::Relation] collection of Tag records excluding self
   def all_available_tags
-    Tag.where.not(id: id)
+    Tag.where.not(id: [ id, cognates.ids, reverse_cognates.ids ].flatten).order(name: :asc)
   end
 
   private
