@@ -1,6 +1,10 @@
 class DataImport
   require "csv"
 
+  def self.source
+    ENV.fetch("DATA_IMPORT_SOURCE", "local")
+  end
+
   # There are dependencies here.
   # Regions must be imported before providers
   def self.reset
@@ -50,7 +54,7 @@ class DataImport
   end
 
   def self.import_regions
-    data = CSV.read(file_path("regions.csv"), headers: true)
+    data = get_data_file("regions.csv")
 
     data.each do |row|
       region = Region.find_or_initialize_by(name: row["Region"])
@@ -61,7 +65,7 @@ class DataImport
   end
 
   def self.import_providers
-    data = CSV.read(file_path("providers_obfuscated.csv"), headers: true)
+    data =  get_data_file("providers.csv")
 
     data.each do |row|
       # First, create the new provider
@@ -85,8 +89,9 @@ class DataImport
 
       # Then, create the user that will be associated with the provider
       puts "Creating user for #{provider.name}"
-      user = User.find_by(email: "#{row["Provider_Name"]}@test.test")
-      user = User.create(email: "#{row["Provider_Name"]}@test.test", password_digest: BCrypt::Password.create(row["Provider_Password"])) if user.blank?
+      email = "#{row['Provider_Name'].parameterize}@test.test"
+      user = User.find_by(email: email)
+      user = User.create(email: email, password_digest: BCrypt::Password.create(row["Provider_Password"])) if user.blank?
 
       # Then, associate the user with the provider
       provider.users << user unless provider.users.include?(user)
@@ -104,7 +109,7 @@ class DataImport
   end
 
   def self.import_topics
-    data = CSV.read(file_path("topics_obfuscated.csv"), headers: true)
+    data = get_data_file("topics.csv")
 
     data.each do |row|
       # FIXME we need to search for LIKE name since the Topic_Language is 2 letter abbreviated
@@ -133,7 +138,8 @@ class DataImport
   end
 
   def self.import_tags
-    data = CSV.read(file_path("tags.csv"), headers: true)
+    data = get_data_file("tags.csv")
+
     data.each do |row|
       tag_id = row["Tag_ID"].to_i
       tag_name = row["Tag_Name"]&.strip
@@ -148,8 +154,8 @@ class DataImport
   end
 
   def self.import_topic_tags
-    tags_data = CSV.read(file_path("tags.csv"))
-    join_data = CSV.read(file_path("topic_tags.csv"))
+    tags_data = get_data_file("tags.csv", no_headers: true)
+    join_data = get_data_file("topic_tags.csv", no_headers: true)
 
     # It returns a hash where the key is the Topic_ID and the value is an array of Tag_ID
     grouped_data = join_data
@@ -209,7 +215,7 @@ class DataImport
     )
 
     begin
-      csv_data = load_training_documents_csv
+      csv_data = get_data_file("cme_files.csv")
       import_stats = initialize_import_stats
 
       valid_csv_rows = filter_rows_with_existing_topics(csv_data, import_stats)
@@ -240,10 +246,6 @@ class DataImport
   end
 
   private
-
-  def self.load_training_documents_csv
-    CSV.read(file_path("CMEFiles.csv"), headers: true)
-  end
 
   def self.initialize_import_stats
     {
@@ -304,6 +306,39 @@ class DataImport
 
     rescue AzureFileShares::Errors::ApiError, URI::InvalidURIError => e
       handle_attachment_error(topic, filename, e, stats, report)
+    end
+  end
+
+  def self.get_data_file(file_name, no_headers: false)
+    # Determine the source of the data file
+    # It can be either "local" or "azure"
+    # The source is determined by the DATA_IMPORT_SOURCE environment variable
+    source = self.source
+
+    if source == "local"
+      CSV.read(file_path(file_name), headers: true)
+    elsif source == "azure"
+      get_data_file_from_azure(file_name, no_headers: no_headers)
+    else
+      raise ArgumentError, "Invalid source: #{source}"
+    end
+  end
+
+  def self.get_data_file_from_azure(file_name, no_headers: false)
+    # Assuming the file is stored in a specific path in Azure
+    # Adjust the file_path as needed based on your Azure structure
+    # For example, if files are stored in a specific directory:
+    file_path = "/import_files"
+    begin
+      file_content = download_azure_file(file_path, file_name)
+      if no_headers
+        CSV.parse(file_content, headers: false)
+      else
+        CSV.parse(file_content, headers: true)
+      end
+    rescue AzureFileShares::Errors::ApiError => e
+      puts "Error downloading file from Azure: #{e.message}"
+      raise e
     end
   end
 
