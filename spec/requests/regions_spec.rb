@@ -50,8 +50,9 @@ RSpec.describe "/regions", type: :request do
   end
 
   describe "GET /edit" do
+    let(:region) { create(:region) }
+
     it "renders a successful response" do
-      region = FactoryBot.create(:region)
       get edit_region_url(region)
       expect(response).to be_successful
     end
