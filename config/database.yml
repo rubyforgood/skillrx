@@ -2,23 +2,19 @@ default: &default
   adapter: postgresql
   encoding: unicode
   pool: <%= ENV.fetch("RAILS_MAX_THREADS") { 5 } %>
-
-development:
-  <<: *default
-  database: skillrx_development
   host: <%= ENV.fetch('DATABASE_HOST', 'localhost') %>
   username: <%= ENV.fetch('DATABASE_USER', 'skillrx') %>
   password: <%= ENV.fetch('DATABASE_PASSWORD', '') %>
   port: <%= ENV.fetch('DATABASE_PORT', 5432) %>
+
+development:
+  <<: *default
+  database: skillrx_development
   <% if RUBY_PLATFORM =~ /darwin/ %>gssencmode: disable<% end %>
 
 test:
   <<: *default
   database: skillrx_test
-  host: <%= ENV.fetch('DATABASE_HOST', 'localhost') %>
-  username: <%= ENV.fetch('DATABASE_USER', 'skillrx') %>
-  password: <%= ENV.fetch('DATABASE_PASSWORD', '') %>
-  port: <%= ENV.fetch('DATABASE_PORT', 5432) %>
   <% if RUBY_PLATFORM =~ /darwin/ %>gssencmode: disable<% end %>
 
 staging:
