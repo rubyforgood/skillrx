@@ -21,6 +21,10 @@ test:
   port: <%= ENV.fetch('DATABASE_PORT', 5432) %>
   <% if RUBY_PLATFORM =~ /darwin/ %>gssencmode: disable<% end %>
 
+staging:
+  <<: *default
+  url: <%= ENV['DATABASE_URL'] %>
+
 production:
   <<: *default
   url: <%= ENV['DATABASE_URL'] %>
