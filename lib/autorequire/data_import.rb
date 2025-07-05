@@ -154,8 +154,8 @@ class DataImport
   end
 
   def self.import_topic_tags
-    tags_data = get_data_file("tags.csv")
-    join_data = get_data_file("topic_tags.csv")
+    tags_data = get_data_file("tags.csv", no_headers: true)
+    join_data = get_data_file("topic_tags.csv", no_headers: true)
 
     # It returns a hash where the key is the Topic_ID and the value is an array of Tag_ID
     grouped_data = join_data
@@ -309,23 +309,33 @@ class DataImport
     end
   end
 
-  def self.get_data_file(file_name)
+  def self.get_data_file(file_name, no_headers: false)
+    # Determine the source of the data file
+    # It can be either "local" or "azure"
+    # The source is determined by the DATA_IMPORT_SOURCE environment variable
     source = self.source
 
     if source == "local"
       CSV.read(file_path(file_name), headers: true)
     elsif source == "azure"
-      get_data_file_from_azure(file_name)
+      get_data_file_from_azure(file_name, no_headers: no_headers)
     else
       raise ArgumentError, "Invalid source: #{source}"
     end
   end
 
-  def self.get_data_file_from_azure(file_name)
+  def self.get_data_file_from_azure(file_name, no_headers: false)
+    # Assuming the file is stored in a specific path in Azure
+    # Adjust the file_path as needed based on your Azure structure
+    # For example, if files are stored in a specific directory:
     file_path = "/import_files"
     begin
       file_content = download_azure_file(file_path, file_name)
-      CSV.parse(file_content, headers: true)
+      if no_headers
+        CSV.parse(file_content, headers: false)
+      else
+        CSV.parse(file_content, headers: true)
+      end
     rescue AzureFileShares::Errors::ApiError => e
       puts "Error downloading file from Azure: #{e.message}"
       raise e
