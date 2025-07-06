@@ -112,6 +112,7 @@ class DataImport
     data = get_data_file("topics.csv")
 
     data.each do |row|
+      next if row["Created_Year"].to_i < 2020
       # FIXME we need to search for LIKE name since the Topic_Language is 2 letter abbreviated
       language = Language.where("name like ?", "#{row["Topic_Language"]}%").first
       puts "Language #{row["Topic_Language"]} not found" unless language
@@ -208,6 +209,12 @@ class DataImport
   end
 
   def self.import_training_documents
+    topics_data = get_data_file("topics.csv")
+    old_topic_ids = Set.new
+    topics_data.each do |row|
+      old_topic_ids << row["id"] if row["Created_Year"].to_i < 2020
+    end
+
     report = ImportReport.create!(
       import_type: "training_documents",
       started_at: Time.current,
@@ -218,7 +225,7 @@ class DataImport
       csv_data = get_data_file("cme_files.csv")
       import_stats = initialize_import_stats
 
-      valid_csv_rows = filter_rows_with_existing_topics(csv_data, import_stats)
+      valid_csv_rows = filter_rows_with_existing_topics(csv_data, import_stats, old_topic_ids)
       azure_files = fetch_azure_files
       importable_rows = match_csv_with_azure_files(valid_csv_rows, azure_files)
       unmatched_files = collect_unmatched_files(csv_data, azure_files, importable_rows, report)
@@ -256,9 +263,11 @@ class DataImport
     }
   end
 
-  def self.filter_rows_with_existing_topics(csv_data, stats)
+  def self.filter_rows_with_existing_topics(csv_data, stats, old_topic_ids)
     csv_data.filter_map do |row|
       topic_id = row["Topic_ID"].to_i
+      next if old_topic_ids.include?(topic_id)
+
       if Topic.find_by(id: topic_id)
         row
       else
