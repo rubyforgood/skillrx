@@ -1,5 +1,5 @@
 class DocumentsSyncJob < ApplicationJob
-  def perform(topic_id, document_id, action, share = ENV["AZURE_STORAGE_SHARE_NAME"])
+  def perform(topic_id:, document_id:, action:, share: ENV["AZURE_STORAGE_SHARE_NAME"])
     return if ENV["AZURE_MEDIA_FILES_SYNC_DISABLED"].present?
 
     @share = share
