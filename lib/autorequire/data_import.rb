@@ -121,8 +121,6 @@ class DataImport
       created_month = [ row["Created_Month"].split("_").first.to_i, 1 ].max
 
       topic = Topic.find_or_initialize_by(id: row["Topic_ID"])
-      # debugger if row["Topic_UID"].empty?
-      # uid = row["Topic_UID"].nil? ? SecureRandom.uuid : row["Topic_UID"]
       topic.assign_attributes(
         id: row["Topic_ID"],
         title: row["Topic_Original_Title"],
@@ -131,7 +129,7 @@ class DataImport
         description: row["Topic_Desc"],
         published_at: DateTime.new(created_year, created_month, 1),
         # uid: uid,
-        state: row["Topic_Archived"].to_i,
+        state: row["Topic_Archived"] == "True" ? "archived" : "active",
         )
       puts "#{topic.title} #{topic.new_record? ? "created" : "already exists"}"
       topic.save!
