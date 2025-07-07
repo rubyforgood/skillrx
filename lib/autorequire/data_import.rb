@@ -141,7 +141,7 @@ class DataImport
 
     data.each do |row|
       tag_id = row["Tag_ID"].to_i
-      tag_name = row["Tag_Name"]&.strip
+      tag_name = row["Tag_Name"]&.strip&.downcase
 
       begin
         Tag.find_or_create_by!(id: tag_id, name: tag_name)

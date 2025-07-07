@@ -8,20 +8,6 @@ class TagsController < ApplicationController
     @pagy, @tags = pagy(Tag.includes(:cognates, :reverse_cognates).references(:tag).search_with_params(tag_search_params))
   end
 
-  def new
-    @tag = Tag.new
-  end
-
-  def create
-    @tag = Tag.new(tag_params)
-
-    if @tag.save
-      redirect_to tags_path
-    else
-      render :new, status: :unprocessable_entity
-    end
-  end
-
   def show
   end
 

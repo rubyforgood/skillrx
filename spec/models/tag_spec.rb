@@ -125,16 +125,17 @@ RSpec.describe Tag, type: :model do
   describe ".all_available_tags" do
     let!(:available_tag_1) { create(:tag, name: "zika") }
     let!(:available_tag_2) { create(:tag, name: "cardiology") }
-    let(:reverse_cognate_tag) { create(:tag) }
-    let(:cognate_tag) { create(:tag) }
+    let(:reverse_cognate_tag) { create(:tag, name: "pregnancy") }
+    let(:cognate_tag) { create(:tag, name: "geriatrics") }
 
     before do
       create(:tag_cognate, tag: subject, cognate: cognate_tag)
       create(:tag_cognate, tag: reverse_cognate_tag, cognate: subject)
     end
 
-    it "returns all tags that are not cognates of the given tag" do
-      expect(subject.all_available_tags).to eq([ available_tag_2, available_tag_1 ])
+    it "returns all tags except the given tag itself" do
+      # We need the current cognates to be part of the collection in order to preselect them on the form
+      expect(subject.all_available_tags).to eq([ available_tag_2, cognate_tag, reverse_cognate_tag, available_tag_1 ])
     end
   end
 end
