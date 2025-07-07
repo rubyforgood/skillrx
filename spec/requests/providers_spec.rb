@@ -36,8 +36,9 @@ RSpec.describe "/providers", type: :request do
   end
 
   describe "GET /edit" do
+    let(:provider) { create(:provider) }
+
     it "renders a successful response" do
-      provider = Provider.create! valid_attributes
       get edit_provider_url(provider)
       expect(response).to be_successful
     end
