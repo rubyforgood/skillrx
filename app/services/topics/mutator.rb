@@ -36,12 +36,14 @@ class Topics::Mutator
   attr_reader :topic, :params, :document_signed_ids
 
   def mutate
-    @topic.valid?
+    topic.valid?
     return [ :error,  topic.errors.full_messages ] if topic.errors.any?
 
+    docs_to_delete = outdated_documents
     ActiveRecord::Base.transaction do
       topic.save_with_tags(params)
       attach_files(document_signed_ids)
+      shadow_delete_documents(docs_to_delete) if updating_documents?
       sync_docs_for_topic_updates if topic.documents.any?
       [ :ok, topic ]
     rescue ActiveRecord::RecordInvalid => e
@@ -73,20 +75,52 @@ class Topics::Mutator
         topic_id: topic.id,
         document_id: doc.id,
         action: "update",
-        # action: doc.previous_changes.keys.include?("blob_id") ? "update" : "create"
       )
     end
   end
 
   def sync_archieve
     topic.documents_attachments.each do |doc|
-      DocumentsSyncJob.perform_later(topic_id: topic.id, document_id: doc.id, action: "archive")
+      DocumentsSyncJob.perform_later(
+        topic_id: topic.id,
+        document_id: doc.id,
+        action: "archive",
+      )
     end
   end
 
   def sync_docs_for_topic_deletion
-    topic.documents_attachments.each do |doc|
-      DocumentsSyncJob.perform_later(topic_id: topic.id, document_id: doc.id, action: "delete")
+    shadow_delete_documents(topic.documents_attachments)
+  end
+
+  def shadow_delete_documents(docs_to_delete)
+    topic_shadow = topic_shadow_with_attachments(docs_to_delete)
+    docs_to_delete.each do |doc|
+      DocumentsSyncJob.perform_later(
+        topic_id: topic_shadow.id,
+        document_id: doc.id,
+        action: "delete",
+      )
     end
+  end
+
+  def topic_shadow_with_attachments(docs_to_delete)
+    topic.dup.tap do |shadow|
+      shadow.shadow_copy = true
+      shadow.documents_attachments = docs_to_delete
+      shadow.save!
+    end
+  end
+
+  def outdated_documents
+    return [] if document_signed_ids.nil?
+
+    topic.documents_attachments.reject do |doc|
+      document_signed_ids&.include?(doc.signed_id)
+    end
+  end
+
+  def updating_documents?
+    topic.persisted? && topic.documents.any? && !document_signed_ids.nil?
   end
 end

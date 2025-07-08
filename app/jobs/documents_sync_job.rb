@@ -29,7 +29,7 @@ class DocumentsSyncJob < ApplicationJob
         share:,
         file: file_content,
         name: file_name,
-        path: file_route[:path],
+        path: (@topic.archived? ? file_route[:archieve] : file_route[:path]),
       )
     end
   end

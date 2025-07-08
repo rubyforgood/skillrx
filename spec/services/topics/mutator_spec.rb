@@ -4,6 +4,7 @@ RSpec.describe Topics::Mutator do
   subject { described_class.new(topic:, params:, document_signed_ids:) }
 
   let(:topic) { Topic.new(params) }
+  let(:topic_shadow) { instance_double(Topic, shadow_copy: true, id: 123, documents: topic.documents) }
   let(:language) { create(:language) }
   let(:provider) { create(:provider) }
   let(:params) { attributes_for(:topic).merge(language_id: language.id, provider_id: provider.id) }
@@ -11,6 +12,7 @@ RSpec.describe Topics::Mutator do
 
   before do
     allow(DocumentsSyncJob).to receive(:perform_later)
+    allow(subject).to receive(:topic_shadow_with_attachments).and_return(topic_shadow)
   end
 
   describe "#create" do
@@ -42,6 +44,11 @@ RSpec.describe Topics::Mutator do
     let(:topic) { create(:topic, :with_documents, description: "topic details") }
 
     it "updates the topic and runs the sync job for documents" do
+      expect(DocumentsSyncJob).to receive(:perform_later).with(
+        topic_id: topic_shadow.id,
+        document_id: topic_shadow.documents.first.id,
+        action: "delete",
+      )
       expect(DocumentsSyncJob).to receive(:perform_later).with(
         topic_id: topic.id,
         document_id: topic.documents.first.id,
@@ -79,8 +86,8 @@ RSpec.describe Topics::Mutator do
 
     it "deletes the topic and runs the sync job for documents" do
       expect(DocumentsSyncJob).to receive(:perform_later).with(
-        topic_id: topic.id,
-        document_id: topic.documents.first.id,
+        topic_id: topic_shadow.id,
+        document_id: topic_shadow.documents.first.id,
         action: "delete",
       )
 
