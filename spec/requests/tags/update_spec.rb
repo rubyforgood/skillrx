@@ -125,7 +125,7 @@ describe "Tag", type: :request do
       it "removes the associations with the removed cognates" do
         expect { put tag_url(tag), params: { tag: tag_params } }
           .to change { tag.reload.cognates_list }
-          .from([ "Cardiovascular", "Cardio" ]).to([])
+          .from(match_array([ "Cardiovascular", "Cardio" ])).to([])
 
         cardiovascular_tag = Tag.find_by(name: "Cardiovascular")
         cardio_tag = Tag.find_by(name: "Cardio")
