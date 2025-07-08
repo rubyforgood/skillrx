@@ -43,14 +43,61 @@ RSpec.shared_examples "taggable" do
   end
 
   describe "#save_with_tags" do
+    let(:tag_list) { [ "malaria", "fever" ] }
+    let(:attrs) { { title: "New Title", tag_list: tag_list } }
+
     it "processes tags correctly" do
-      tag_list = [ "test", "tags" ]
-      attrs = { title: "New Title", tag_list: tag_list }
-
-      expect(instance).to receive(:update).with({ title: "New Title" }).and_return(true)
-      expect(instance).to receive(:process_tags).with(tag_list)
-
       instance.save_with_tags(attrs)
+      expect(instance.reload.title).to eq("New Title")
+      expect(instance.current_tags_list).to eq(tag_list)
+    end
+
+    context "when adding tags that have cognates or reverse cognates" do
+      let(:english_cognate) { create(:tag, name: "paludism") }
+      let(:english_reverse_cognate) { create(:tag, name: "jungle fever") }
+      let(:spanish_cognate) { create(:tag, name: "paludismo") }
+      let(:spanish_reverse_cognate) { create(:tag, name: "fiebre de la jungla") }
+
+      before do
+        tag1 = create(:tag, name: tag_list.first)
+        create(:tag_cognate, tag: tag1, cognate: english_cognate)
+        create(:tag_cognate, tag: tag1, cognate: spanish_cognate)
+        create(:tag_cognate, tag: english_reverse_cognate, cognate: tag1)
+        create(:tag_cognate, tag: spanish_reverse_cognate, cognate: tag1)
+        english_instance = create(described_class.to_s.underscore.to_sym, language: language)
+        spanish_instance = create(described_class.to_s.underscore.to_sym, language: create(:language, name: "Spanish"))
+        english_instance.set_tag_list_on(:en, "paludism,jungle fever")
+        english_instance.save
+        spanish_instance.set_tag_list_on(:sp, "paludismo,fiebre de la jungla")
+        spanish_instance.save
+      end
+
+      it "adds the cognates of the same language as well" do
+        instance.save_with_tags(attrs)
+        expect(instance.reload.title).to eq("New Title")
+        expect(instance.current_tags_list).to match_array(tag_list.push(english_cognate.name, english_reverse_cognate.name))
+      end
+    end
+
+    context "when removing tags that have cognates or reverse cognates" do
+      let(:cognate) { create(:tag, name: "cognate") }
+      let(:reverse_cognate) { create(:tag, name: "reverse cognate") }
+      let(:attrs) { { title: "New Title", tag_list: [ "", "tags", "cognate", "reverse cognate" ] } }
+
+      before do
+        tag1 = create(:tag, name: tag_list.first)
+        create(:tag_cognate, tag: tag1, cognate: cognate)
+        create(:tag_cognate, tag: reverse_cognate, cognate: tag1)
+        tags_and_their_cognates = tag_list.push(cognate.name, reverse_cognate.name)
+        instance.set_tag_list_on(instance.language.code.to_sym, tags_and_their_cognates)
+        instance.save
+      end
+
+      it "removes the cognates as well" do
+        instance.save_with_tags(attrs)
+        expect(instance.reload.title).to eq("New Title")
+        expect(instance.current_tags_list).to eq([ "tags" ])
+      end
     end
   end
 end

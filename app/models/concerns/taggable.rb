@@ -13,6 +13,8 @@ module Taggable
     end
   end
 
+  # after_create_commit :add_relat
+
   # Returns the language-specific tag context based on code
   #
   # @return [Symbol] the language context for tagging
@@ -86,12 +88,22 @@ module Taggable
     return unless tag_list.present?
 
     Rails.logger.info "Processing tags: #{tag_list} for record: #{id}"
-    tags = tag_list.compact_blank.join(",")
+    removed_tags = current_tags_list - tag_list
+    tag_list_without_redundant_cognates = tag_list - get_cognates_list(removed_tags)
+    tag_list_with_cognates_to_add = tag_list_without_redundant_cognates + get_cognates_list(tag_list_without_redundant_cognates)
+    final_tag_list = tag_list_with_cognates_to_add.uniq.compact_blank.join(",")
 
-    raise ArgumentError, "Invalid tags" unless valid_tags?(tags)
-    set_tag_list_on(language.code.to_sym, tags)
+    raise ArgumentError, "Invalid tags" unless valid_tags?(final_tag_list)
+    set_tag_list_on(language.code.to_sym, final_tag_list)
     save!
   end
 
   def valid_tags?(tags) = true
+
+  def get_cognates_list(tag_name_list)
+    cognates = tag_name_list.flat_map do |name|
+      Tag.find_by(name: name)&.cognates_list
+    end
+    Tag.for_context(language.code.to_sym).pluck(:name) & cognates
+  end
 end
