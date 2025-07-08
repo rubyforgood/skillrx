@@ -24,6 +24,6 @@ class ImportReport < ApplicationRecord
 
   enum :status, { pending: "pending", planned: "planned", completed: "completed", failed: "failed" }
 
-  scope :recent, -> { order(created_at: :desc) }
+  scope :recent, -> { order(status: :asc, created_at: :desc) }
   scope :by_type, ->(type) { where(import_type: type) }
 end
