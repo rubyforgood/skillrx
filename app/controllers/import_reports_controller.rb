@@ -11,7 +11,7 @@ class ImportReportsController < ApplicationController
 
     # Collect unique statuses and import types for filter dropdowns
     @available_statuses = ImportReport.statuses.keys
-    @available_import_types = scope.distinct.pluck(:import_type).compact.sort
+    @available_import_types = scope.unscope(:order).distinct.pluck(:import_type).compact.sort
   end
 
   def show
@@ -25,6 +25,6 @@ class ImportReportsController < ApplicationController
   end
 
   def scope
-    @scope ||= ImportReport.all
+    @scope ||= ImportReport.order(completed_at: :desc)
   end
 end
