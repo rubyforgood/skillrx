@@ -43,14 +43,50 @@ RSpec.shared_examples "taggable" do
   end
 
   describe "#save_with_tags" do
+    let(:tag_list) { [ "test", "tags" ] }
+    let(:attrs) { { title: "New Title", tag_list: tag_list } }
+
     it "processes tags correctly" do
-      tag_list = [ "test", "tags" ]
-      attrs = { title: "New Title", tag_list: tag_list }
-
-      expect(instance).to receive(:update).with({ title: "New Title" }).and_return(true)
-      expect(instance).to receive(:process_tags).with(tag_list)
-
       instance.save_with_tags(attrs)
+      expect(instance.reload.title).to eq("New Title")
+      expect(instance.current_tags_list).to eq(tag_list)
+    end
+
+    context "when adding tags that have cognates or reverse cognates" do
+      let(:cognate) { create(:tag, name: "cognate") }
+      let(:reverse_cognate) { create(:tag, name: "reverse cognate") }
+
+      before do
+        tag1 = create(:tag, name: tag_list.first)
+        create(:tag_cognate, tag: tag1, cognate: cognate)
+        create(:tag_cognate, tag: reverse_cognate, cognate: tag1)
+      end
+
+      it "adds the cognates as well" do
+        instance.save_with_tags(attrs)
+        expect(instance.reload.title).to eq("New Title")
+        expect(instance.current_tags_list).to match_array(tag_list.push(cognate.name, reverse_cognate.name))
+      end
+    end
+
+    context "when removing tags that have cognates or reverse cognates" do
+      let(:cognate) { create(:tag, name: "cognate") }
+      let(:reverse_cognate) { create(:tag, name: "reverse cognate") }
+      let(:attrs) { { title: "New Title", tag_list: [ "", "tags", "cognate", "reverse cognate" ] } }
+
+      before do
+        tag1 = create(:tag, name: tag_list.first)
+        create(:tag_cognate, tag: tag1, cognate: cognate)
+        create(:tag_cognate, tag: reverse_cognate, cognate: tag1)
+        tags_and_their_cognates = tag_list.push(cognate.name, reverse_cognate.name)
+        instance.set_tag_list_on(instance.language.code.to_sym, tags_and_their_cognates)
+      end
+
+      it "removes the cognates as well" do
+        instance.save_with_tags(attrs)
+        expect(instance.reload.title).to eq("New Title")
+        expect(instance.current_tags_list).to eq([ "tags" ])
+      end
     end
   end
 end
