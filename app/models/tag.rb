@@ -36,16 +36,16 @@ class Tag < ActsAsTaggableOn::Tag
 
   # Returns a unique list of all cognate tags, including both direct and reverse relationships
   #
-  # @return [Array<Tag>] unique array of associated cognate tags
+  # @return [Collection<Tag>] unique collection of associated cognate tags
   def cognates_tags
-    (cognates + reverse_cognates).uniq
+     Tag.where(id: [ cognate_ids, reverse_cognate_ids ].flatten)
   end
 
   # Returns a list of all cognate tag names
   #
   # @return [Array<String>] array of cognate tag names
   def cognates_list
-    cognates.pluck(:name) + reverse_cognates.pluck(:name)
+    cognates_tags.pluck(:name)
   end
 
   # Sets cognate relationships based on a list of tag names
@@ -87,15 +87,21 @@ class Tag < ActsAsTaggableOn::Tag
   end
 
   def associate_cognates(names)
-    tags_for_passed_names = Tag.where(name: names)
-    related_tags = tags_for_passed_names.excluding(self).or(Tag.where(id: tags_for_passed_names.flat_map(&:cognates_tags).pluck(:id))).uniq
+    new_cognates = Tag.where(name: names)
+    new_cognates_cognates_ids = new_cognates.flat_map(&:cognates_tags).pluck(:id)
+    current_tag_cognates_ids = TagCognate.where(tag_id: id).pluck(:cognate_id) + TagCognate.where(cognate_id: id).pluck(:tag_id)
+    related_tags = new_cognates
+      .or(Tag.where(id: [ new_cognates_cognates_ids, current_tag_cognates_ids ].flatten))
+      .excluding(self)
+      .uniq
     related_tags.each_with_index do |tag, index|
       related_tags[index + 1..].each do |cognate|
+        next if cognate.in?(tag.cognates_tags)
         tag.tag_cognates.create(cognate: cognate)
       end
     end
     self.tag_cognates_attributes = related_tags.filter_map do |tag|
-      { cognate_id: tag.id } if !tag_cognates.find_by(cognate_id: tag.id)
+      { cognate_id: tag.id } if !cognates_tags.find_by(id: tag.id)
     end
   end
 end
