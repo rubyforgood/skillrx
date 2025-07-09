@@ -22,6 +22,14 @@ class Topics::Mutator
     [ :error, topic.errors.full_messages ]
   end
 
+  def unarchive
+    if @topic.active!
+      return [ :ok, topic ]
+    end
+
+    [ :error, topic.errors.full_messages ]
+  end
+
   def destroy
     # If topic deletion fails for some reason, documents deletion still will happen
     # This case is unlikely, and only admins can delete topics

@@ -1,7 +1,7 @@
 require "rails_helper"
 
 describe "Topics", type: :request do
-  describe "PUT /topics/:id" do
+  describe "PUT /topics/:id/archive" do
     let(:user) { create(:user) }
     let(:topic) { create(:topic) }
 

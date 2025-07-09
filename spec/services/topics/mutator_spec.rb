@@ -81,6 +81,18 @@ RSpec.describe Topics::Mutator do
     end
   end
 
+  describe "#unarchive" do
+    let(:topic) { create(:topic, :with_documents) }
+
+    it "unarchive the topics" do
+      status, unarchived_topic = subject.unarchive
+
+      expect(status).to eq(:ok)
+      expect(unarchived_topic).to be_persisted
+      expect(unarchived_topic.state).to eq("active")
+    end
+  end
+
   describe "#destroy" do
     let(:topic) { create(:topic, :with_documents) }
 

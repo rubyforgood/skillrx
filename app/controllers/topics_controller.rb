@@ -2,7 +2,7 @@ class TopicsController < ApplicationController
   include ActiveStorage::SetCurrent
   include Pagy::Backend
 
-  before_action :set_topic, only: [ :show, :edit, :update, :destroy, :archive ]
+  before_action :set_topic, only: [ :show, :edit, :update, :destroy, :archive, :unarchive ]
 
   def index
     @pagy, @topics = pagy(scope.includes(:documents_attachments).search_with_params(search_params))
@@ -51,6 +51,11 @@ class TopicsController < ApplicationController
   end
 
   def archive
+    Topics::Mutator.new(topic: @topic).archive
+    redirect_to topics_path
+  end
+
+  def unarchive
     Topics::Mutator.new(topic: @topic).archive
     redirect_to topics_path
   end

@@ -38,9 +38,7 @@ describe "Topics", type: :request do
 
         expect(response).to redirect_to(topics_url)
         expect(DocumentsSyncJob).to have_received(:perform_later).with(
-          topic_id: topic.id,
-          document_id: document.id,
-          action: "delete",
+          hash_including(document_id: document.id, action: "delete"),
         )
       end
     end

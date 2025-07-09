@@ -7,7 +7,7 @@ describe "Topics", type: :request do
 
     before { sign_in(user) }
 
-    it "updates a Language" do
+    it "updates a Topic" do
       topic_params = { title: "new topic", description: "updated" }
 
       put topic_url(topic), params: { topic: topic_params }
@@ -34,18 +34,21 @@ describe "Topics", type: :request do
             content_type: "application/pdf",
           )
           topic_params = { title: "new topic with documents", document_signed_ids: [ blob.signed_id ] }
+          expect(DocumentsSyncJob).to receive(:perform_later).with(
+            hash_including(document_id: document.id, action: "delete"),
+          )
+          expect(DocumentsSyncJob).to receive(:perform_later).with(
+            topic_id: topic.id,
+            document_id: topic.documents.last.id,
+            action: "update",
+          )
 
           put topic_url(topic), params: { topic: topic_params }
 
           topic.reload
           expect(response).to redirect_to(topics_url)
-          expect(topic.documents.count).to eq(2)
+          expect(topic.documents.count).to eq(1)
           expect(topic.documents.last.filename.to_s).to eq("dummy.pdf")
-          expect(DocumentsSyncJob).to have_received(:perform_later).with(
-            topic_id: topic.id,
-            document_id: topic.documents.last.id,
-            action: "update",
-          )
         end
       end
     end

@@ -7,7 +7,11 @@
   <%= link_to "Back to topics", topics_path %>
 </div>
 
-<% unless @topic.archived? %>
+<% if @topic.archived? %>
+  <div>
+    <%= button_to "Unarchive this topic", unarchive_topic_path(@topic), method: :put, class: "btn btn-danger mt-4" %>
+  </div>
+<% else %>
   <div>
     <%= button_to "Archive this topic", archive_topic_path(@topic), method: :put, class: "btn btn-danger mt-4" %>
   </div>
