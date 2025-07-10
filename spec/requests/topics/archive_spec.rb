@@ -16,7 +16,6 @@ describe "Topics", type: :request do
 
     context "when topic has documents" do
       let(:topic) { create(:topic, :with_documents) }
-      let(:document) { topic.documents.first }
 
       before do
         allow(DocumentsSyncJob).to receive(:perform_later)
@@ -28,7 +27,7 @@ describe "Topics", type: :request do
         expect(response).to redirect_to(topics_url)
         expect(DocumentsSyncJob).to have_received(:perform_later).with(
           topic_id: topic.id,
-          document_id: document.id,
+          document_id: topic.documents.first.id,
           action: "archive",
         )
       end

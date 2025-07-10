@@ -56,7 +56,7 @@ class TopicsController < ApplicationController
   end
 
   def unarchive
-    Topics::Mutator.new(topic: @topic).archive
+    Topics::Mutator.new(topic: @topic).unarchive
     redirect_to topics_path
   end
 

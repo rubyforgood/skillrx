@@ -15,7 +15,7 @@ class Topics::Mutator
 
   def archive
     if @topic.archived!
-      sync_docs_for_topic_updates if topic.documents.any?
+      sync_docs_for_topic_archive if topic.documents.any?
       return [ :ok, topic ]
     end
 
@@ -24,6 +24,7 @@ class Topics::Mutator
 
   def unarchive
     if @topic.active!
+      sync_docs_for_topic_archive if topic.documents.any?
       return [ :ok, topic ]
     end
 
@@ -68,14 +69,6 @@ class Topics::Mutator
   end
 
   def sync_docs_for_topic_updates
-    if topic.saved_change_to_state? && topic.state_previously_was == "active" && topic.state == "archived"
-      return sync_archieve
-    end
-
-    sync_update
-  end
-
-  def sync_update
     topic.documents_attachments.each do |doc|
       next unless doc.previous_changes.present?
 
@@ -85,6 +78,13 @@ class Topics::Mutator
         action: "update",
       )
     end
+  end
+
+  def sync_docs_for_topic_archive
+    return unless topic.saved_change_to_state?
+
+    sync_archieve if topic.state_previously_was == "active" && topic.state == "archived"
+    sync_unarchieve if topic.state_previously_was == "archived" && topic.state == "active"
   end
 
   def sync_archieve
@@ -97,13 +97,25 @@ class Topics::Mutator
     end
   end
 
+  def sync_unarchieve
+    topic.documents_attachments.each do |doc|
+      DocumentsSyncJob.perform_later(
+        topic_id: topic.id,
+        document_id: doc.id,
+        action: "unarchive",
+      )
+    end
+  end
+
   def sync_docs_for_topic_deletion
     shadow_delete_documents(topic.documents_attachments)
   end
 
   def shadow_delete_documents(docs_to_delete)
+    return if docs_to_delete.empty?
+
     topic_shadow = topic_shadow_with_attachments(docs_to_delete)
-    docs_to_delete.each do |doc|
+    topic_shadow.documents.each do |doc|
       DocumentsSyncJob.perform_later(
         topic_id: topic_shadow.id,
         document_id: doc.id,
@@ -115,7 +127,9 @@ class Topics::Mutator
   def topic_shadow_with_attachments(docs_to_delete)
     topic.dup.tap do |shadow|
       shadow.shadow_copy = true
-      shadow.documents_attachments = docs_to_delete
+      docs_to_delete.each do |doc|
+        shadow.documents.attach(doc.signed_id)
+      end
       shadow.save!
     end
   end

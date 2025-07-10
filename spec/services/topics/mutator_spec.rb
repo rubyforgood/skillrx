@@ -82,9 +82,15 @@ RSpec.describe Topics::Mutator do
   end
 
   describe "#unarchive" do
-    let(:topic) { create(:topic, :with_documents) }
+    let(:topic) { create(:topic, :with_documents, state: "archived") }
 
     it "unarchive the topics" do
+      expect(DocumentsSyncJob).to receive(:perform_later).with(
+        topic_id: topic.id,
+        document_id: topic.documents.first.id,
+        action: "unarchive",
+      )
+
       status, unarchived_topic = subject.unarchive
 
       expect(status).to eq(:ok)
