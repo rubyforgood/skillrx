@@ -1,7 +1,7 @@
 <%= form_for tag do |f| %>
   <div class="form-body">
     <div class="row">
-      <%= render "shared/errors", resource: tag %>
+      <%= render "shared/errors", errors: tag.errors.full_messages, resource_name: tag.class.name %>
       <div class="col-12">
         <div class="form-group">
           <%= f.label :name %>

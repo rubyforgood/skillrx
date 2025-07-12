@@ -14,6 +14,7 @@ Rails.application.routes.draw do
   resources :topics do
     member do
       put :archive
+      put :unarchive
     end
     resources :tags, only: %i[index], controller: "topics/tags"
   end

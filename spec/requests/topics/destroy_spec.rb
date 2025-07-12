@@ -24,5 +24,20 @@ describe "Topics", type: :request do
         expect(Topic.count).to eq(1)
       end
     end
+
+    context "when topic has documents" do
+      let(:topic) { create(:topic, :with_documents) }
+
+      before do
+        allow(DocumentsSyncJob).to receive(:perform_later)
+      end
+
+      it "runs sync job for documents" do
+        delete topic_url(topic)
+
+        expect(response).to redirect_to(topics_url)
+        expect(DocumentsSyncJob).to have_received(:perform_later).with(hash_including(action: "delete"))
+      end
+    end
   end
 end

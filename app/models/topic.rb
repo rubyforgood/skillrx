@@ -5,6 +5,7 @@
 #  id           :bigint           not null, primary key
 #  description  :text
 #  published_at :datetime         not null
+#  shadow_copy  :boolean          default(FALSE), not null
 #  state        :integer          default("active"), not null
 #  title        :string           not null
 #  uid          :string
@@ -27,6 +28,8 @@ class Topic < ApplicationRecord
 
   STATES = %i[active archived].freeze
   CONTENT_TYPES = %w[image/jpeg image/png image/svg+xml image/webp image/avif image/gif video/mp4 application/pdf audio/mpeg].freeze
+
+  default_scope { where(shadow_copy: false) }
 
   belongs_to :language
   belongs_to :provider
