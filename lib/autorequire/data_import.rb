@@ -1,6 +1,10 @@
 class DataImport
   require "csv"
 
+  def self.source
+    ENV.fetch("DATA_IMPORT_SOURCE", "local")
+  end
+
   # There are dependencies here.
   # Regions must be imported before providers
   def self.reset
@@ -18,6 +22,11 @@ class DataImport
     self.import_tags
     self.import_topic_tags
     self.restore_default_users
+  end
+
+  def self.purge_reports
+    ImportReport.destroy_all
+    ImportError.destroy_all
   end
 
   # This method will destroy all data in the database.
@@ -50,7 +59,7 @@ class DataImport
   end
 
   def self.import_regions
-    data = CSV.read(file_path("regions.csv"), headers: true)
+    data = get_data_file("regions.csv")
 
     data.each do |row|
       region = Region.find_or_initialize_by(name: row["Region"])
@@ -61,7 +70,7 @@ class DataImport
   end
 
   def self.import_providers
-    data = CSV.read(file_path("providers_obfuscated.csv"), headers: true)
+    data =  get_data_file("providers.csv")
 
     data.each do |row|
       # First, create the new provider
@@ -85,8 +94,9 @@ class DataImport
 
       # Then, create the user that will be associated with the provider
       puts "Creating user for #{provider.name}"
-      user = User.find_by(email: "#{row["Provider_Name"]}@test.test")
-      user = User.create(email: "#{row["Provider_Name"]}@test.test", password_digest: BCrypt::Password.create(row["Provider_Password"])) if user.blank?
+      email = "#{row['Provider_Name'].parameterize}@test.test"
+      user = User.find_by(email: email)
+      user = User.create(email: email, password_digest: BCrypt::Password.create(row["Provider_Password"])) if user.blank?
 
       # Then, associate the user with the provider
       provider.users << user unless provider.users.include?(user)
@@ -104,9 +114,10 @@ class DataImport
   end
 
   def self.import_topics
-    data = CSV.read(file_path("topics_obfuscated.csv"), headers: true)
+    data = get_data_file("topics.csv")
 
     data.each do |row|
+      next if row["Created_Year"].to_i < 2020 || row["Topic_ID"].to_i < 6110
       # FIXME we need to search for LIKE name since the Topic_Language is 2 letter abbreviated
       language = Language.where("name like ?", "#{row["Topic_Language"]}%").first
       puts "Language #{row["Topic_Language"]} not found" unless language
@@ -115,8 +126,6 @@ class DataImport
       created_month = [ row["Created_Month"].split("_").first.to_i, 1 ].max
 
       topic = Topic.find_or_initialize_by(id: row["Topic_ID"])
-      # debugger if row["Topic_UID"].empty?
-      # uid = row["Topic_UID"].nil? ? SecureRandom.uuid : row["Topic_UID"]
       topic.assign_attributes(
         id: row["Topic_ID"],
         title: row["Topic_Original_Title"],
@@ -125,7 +134,7 @@ class DataImport
         description: row["Topic_Desc"],
         published_at: DateTime.new(created_year, created_month, 1),
         # uid: uid,
-        state: row["Topic_Archived"].to_i,
+        state: row["Topic_Archived"] == "True" ? "archived" : "active",
         )
       puts "#{topic.title} #{topic.new_record? ? "created" : "already exists"}"
       topic.save!
@@ -133,10 +142,11 @@ class DataImport
   end
 
   def self.import_tags
-    data = CSV.read(file_path("tags.csv"), headers: true)
+    data = get_data_file("tags.csv")
+
     data.each do |row|
       tag_id = row["Tag_ID"].to_i
-      tag_name = row["Tag_Name"]&.strip
+      tag_name = row["Tag_Name"]&.strip&.downcase
 
       begin
         Tag.find_or_create_by!(id: tag_id, name: tag_name)
@@ -148,8 +158,8 @@ class DataImport
   end
 
   def self.import_topic_tags
-    tags_data = CSV.read(file_path("tags.csv"))
-    join_data = CSV.read(file_path("topic_tags.csv"))
+    tags_data = get_data_file("tags.csv", no_headers: true)
+    join_data = get_data_file("topic_tags.csv", no_headers: true)
 
     # It returns a hash where the key is the Topic_ID and the value is an array of Tag_ID
     grouped_data = join_data
@@ -202,6 +212,12 @@ class DataImport
   end
 
   def self.import_training_documents
+    topics_data = get_data_file("topics.csv")
+    old_topic_ids = Set.new
+    topics_data.each do |row|
+      old_topic_ids << row["Topic_ID"] if row["Created_Year"].to_i < 2020
+    end
+
     report = ImportReport.create!(
       import_type: "training_documents",
       started_at: Time.current,
@@ -209,13 +225,13 @@ class DataImport
     )
 
     begin
-      csv_data = load_training_documents_csv
+      csv_data = get_data_file("cme_files.csv")
       import_stats = initialize_import_stats
 
-      valid_csv_rows = filter_rows_with_existing_topics(csv_data, import_stats)
+      valid_csv_rows = filter_rows_with_existing_topics(csv_data, import_stats, old_topic_ids)
       azure_files = fetch_azure_files
       importable_rows = match_csv_with_azure_files(valid_csv_rows, azure_files)
-      unmatched_files = collect_unmatched_files(csv_data, azure_files, importable_rows, report)
+      unmatched_files = collect_unmatched_files(valid_csv_rows, azure_files, importable_rows, report)
 
       report.update!(
         summary_stats: build_summary_stats(import_stats, csv_data, azure_files),
@@ -241,10 +257,6 @@ class DataImport
 
   private
 
-  def self.load_training_documents_csv
-    CSV.read(file_path("CMEFiles.csv"), headers: true)
-  end
-
   def self.initialize_import_stats
     {
       topics_without_csv: [],
@@ -254,9 +266,11 @@ class DataImport
     }
   end
 
-  def self.filter_rows_with_existing_topics(csv_data, stats)
+  def self.filter_rows_with_existing_topics(csv_data, stats, old_topic_ids)
     csv_data.filter_map do |row|
       topic_id = row["Topic_ID"].to_i
+      next if old_topic_ids.include?("#{topic_id}")
+
       if Topic.find_by(id: topic_id)
         row
       else
@@ -304,6 +318,39 @@ class DataImport
 
     rescue AzureFileShares::Errors::ApiError, URI::InvalidURIError => e
       handle_attachment_error(topic, filename, e, stats, report)
+    end
+  end
+
+  def self.get_data_file(file_name, no_headers: false)
+    # Determine the source of the data file
+    # It can be either "local" or "azure"
+    # The source is determined by the DATA_IMPORT_SOURCE environment variable
+    source = self.source
+
+    if source == "local"
+      CSV.read(file_path(file_name), headers: true)
+    elsif source == "azure"
+      get_data_file_from_azure(file_name, no_headers: no_headers)
+    else
+      raise ArgumentError, "Invalid source: #{source}"
+    end
+  end
+
+  def self.get_data_file_from_azure(file_name, no_headers: false)
+    # Assuming the file is stored in a specific path in Azure
+    # Adjust the file_path as needed based on your Azure structure
+    # For example, if files are stored in a specific directory:
+    file_path = "/import_files"
+    begin
+      file_content = download_azure_file(file_path, file_name)
+      if no_headers
+        CSV.parse(file_content, headers: false, encoding: "UTF-8")
+      else
+        CSV.parse(file_content, headers: true, encoding: "UTF-8")
+      end
+    rescue AzureFileShares::Errors::ApiError => e
+      puts "Error downloading file from Azure: #{e.message}"
+      raise e
     end
   end
 

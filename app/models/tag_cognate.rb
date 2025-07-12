@@ -25,10 +25,17 @@ class TagCognate < ApplicationRecord
 
   validates :tag_id, uniqueness: { scope: :cognate_id }
   validate :no_self_reference
+  validate :no_similar_reverse_tag_cognate
 
   private
 
   def no_self_reference
     errors.add(:base, "Tag can't be its own cognate") if tag_id == cognate_id
+  end
+
+  def no_similar_reverse_tag_cognate
+    if TagCognate.where(tag_id: cognate_id, cognate_id: tag_id).exists?
+      errors.add(:base, "This cognate relationship already exists in reverse")
+    end
   end
 end

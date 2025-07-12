@@ -13,6 +13,7 @@ RSpec.describe "providers/edit", type: :view do
     assert_select "form[action=?][method=?]", provider_path(provider), "post" do
       assert_select "input[name=?]", "provider[name]"
       assert_select "input[name=?]", "provider[provider_type]"
+      assert_select "input[type='submit'][value='Update Provider']"
     end
   end
 end

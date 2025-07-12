@@ -42,5 +42,15 @@ RSpec.describe TagCognate, type: :model do
       expect(tag_cognate).not_to be_valid
       expect(tag_cognate.errors[:base]).to include("Tag can't be its own cognate")
     end
+
+    context "when a reverse TagCognate with the same Tag/Cognate combination already exists" do
+      let!(:reverse_tag_cognate) { create(:tag_cognate, tag: cognate, cognate: tag) }
+      let(:tag_cognate) { build(:tag_cognate, tag: tag, cognate: cognate) }
+
+      it "prevents creation of duplicate TagCognate" do
+        expect(tag_cognate).not_to be_valid
+        expect(tag_cognate.errors[:base]).to include("This cognate relationship already exists in reverse")
+      end
+    end
   end
 end

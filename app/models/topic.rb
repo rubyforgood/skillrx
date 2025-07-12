@@ -33,7 +33,7 @@ class Topic < ApplicationRecord
 
   belongs_to :language
   belongs_to :provider
-  has_many_attached :documents
+  has_many_attached :documents, dependent: :purge
 
   validates :title, :language_id, :provider_id, :published_at, presence: true
   validates :documents, content_type: CONTENT_TYPES, size: { less_than: 200.megabytes }
