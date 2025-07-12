@@ -17,7 +17,14 @@ RSpec.describe XmlGenerator::SingleProvider do
   end
 
   context "with topics" do
-    let!(:topic) { create(:topic, :tagged, :with_documents, provider:) }
+    let!(:topic) { create(:topic, :with_documents, provider:) }
+    let(:tag_1) { create(:tag, name: "iddm") }
+    let(:tag_2) { create(:tag, name: "diabetes") }
+
+  before do
+    topic.set_tag_list_on(topic.language.code.to_sym, "#{tag_1.name},#{tag_2.name}")
+    topic.save
+  end
 
     it "generates the xml" do
       expect(subject.perform).to eq(
