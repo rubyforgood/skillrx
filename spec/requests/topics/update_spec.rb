@@ -35,6 +35,7 @@ RSpec.describe "Topics", type: :request do
 
         it "removes the tag from the topic and destroys the unused tag" do
           put topic_url(topic), params: { topic: topic_params }
+
           expect(response).to redirect_to(topics_url)
           expect(topic.reload.current_tags).to be_empty
           expect(Tag.find_by(name: tag.name)).to be_nil
@@ -72,6 +73,7 @@ RSpec.describe "Topics", type: :request do
 
       it "removes the tag but keeps the cognate" do
         put topic_url(topic), params: { topic: topic_params }
+
         expect(response).to redirect_to(topics_url)
         expect(topic.reload.current_tags).to eq([ cognate ])
         expect(Tag.find_by(name: tag.name)).to be_nil
@@ -96,22 +98,14 @@ RSpec.describe "Topics", type: :request do
       end
 
       context "when new documents is added" do
-        it "runs sync job for documents removed from topic" do
-          expect(DocumentsSyncJob).to receive(:perform_later).with(hash_including(action: "delete"))
-
+        it "runs sync job for documents added and removed" do
           put topic_url(topic), params: { topic: topic_params }
 
           expect(response).to redirect_to(topics_url)
           topic.reload
           expect(topic.documents.count).to eq(2)
           expect(topic.documents.last.filename.to_s).to eq("dummy.pdf")
-        end
-
-        it "runs sync job for documents added to topic" do
-          put topic_url(topic), params: { topic: topic_params }
-
-          expect(response).to redirect_to(topics_url)
-          topic.reload
+          expect(DocumentsSyncJob).to have_received(:perform_later).with(hash_including(action: "delete"))
           expect(DocumentsSyncJob).to have_received(:perform_later).with(
             topic_id: topic.id,
             document_id: topic.documents.last.id,

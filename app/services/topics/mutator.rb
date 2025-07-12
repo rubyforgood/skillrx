@@ -70,8 +70,6 @@ class Topics::Mutator
 
   def sync_docs_for_topic_updates
     topic.documents_attachments.each do |doc|
-      next unless doc.previous_changes.present?
-
       DocumentsSyncJob.perform_later(
         topic_id: topic.id,
         document_id: doc.id,
