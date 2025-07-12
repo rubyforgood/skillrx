@@ -19,7 +19,7 @@ RSpec.describe DocumentsSyncJob, type: :job do
         .with(
           share: ENV["AZURE_STORAGE_SHARE_NAME"],
           name: document.filename.to_s,
-          path: "#{topic.language.file_storage_prefix}SP_CMES-Pi/assets/content",
+          path: "#{topic.language.file_storage_prefix}CMES-mini/assets/content",
           file: document.download,
         ).and_return(file_worker)
 
@@ -34,7 +34,7 @@ RSpec.describe DocumentsSyncJob, type: :job do
         .with(
           share: ENV["AZURE_STORAGE_SHARE_NAME"],
           name: document.filename.to_s,
-          path: "#{topic.language.file_storage_prefix}SP_CMES-Pi_Archive",
+          path: "#{topic.language.file_storage_prefix}CMES-mini_Archive",
           file: document.download,
         ).and_return(file_worker)
     end
@@ -50,7 +50,7 @@ RSpec.describe DocumentsSyncJob, type: :job do
     context "when action is 'archive'" do
       it "makes FileWorker copy the file to archive and then delete it" do
         expect(file_worker).to receive(:copy).with("#{topic.language.file_storage_prefix}CMES-Pi_Archive")
-        expect(file_worker).to receive(:copy).with("#{topic.language.file_storage_prefix}SP_CMES-Pi_Archive")
+        expect(file_worker).to receive(:copy).with("#{topic.language.file_storage_prefix}CMES-mini_Archive")
         expect(file_worker).to receive(:delete).exactly(2).times
 
         described_class.perform_now(topic_id: topic.id, document_id: document.id, action: "archive")
@@ -62,7 +62,7 @@ RSpec.describe DocumentsSyncJob, type: :job do
 
       it "makes FileWorker copy the file back from archive and then delete it" do
         expect(file_worker).to receive(:copy).with("#{topic.language.file_storage_prefix}CMES-Pi/assets/content")
-        expect(file_worker).to receive(:copy).with("#{topic.language.file_storage_prefix}SP_CMES-Pi/assets/content")
+        expect(file_worker).to receive(:copy).with("#{topic.language.file_storage_prefix}CMES-mini/assets/content")
         expect(file_worker).to receive(:delete).exactly(2).times
 
         described_class.perform_now(topic_id: topic.id, document_id: document.id, action: "unarchive")

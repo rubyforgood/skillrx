@@ -53,8 +53,8 @@ class DocumentsSyncJob < ApplicationJob
         archive: "#{language.file_storage_prefix}CMES-Pi_Archive",
       },
       {
-        path: "#{language.file_storage_prefix}SP_CMES-Pi/assets/content",
-        archive: "#{language.file_storage_prefix}SP_CMES-Pi_Archive",
+        path: "#{language.file_storage_prefix}CMES-mini/assets/content",
+        archive: "#{language.file_storage_prefix}CMES-mini_Archive",
       },
     ]
   end
