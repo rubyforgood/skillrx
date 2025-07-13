@@ -30,7 +30,7 @@ class DocumentsSyncJob < ApplicationJob
   private
 
   def file_workers
-    @file_workes ||= file_routes.map do |file_route|
+    @file_workers ||= file_routes.map do |file_route|
       path = if action.include?("archive")
         topic.archived? ? file_route[:path] : file_route[:archive]
       else

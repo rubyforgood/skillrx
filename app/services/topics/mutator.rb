@@ -81,11 +81,11 @@ class Topics::Mutator
   def sync_docs_for_topic_archive
     return unless topic.saved_change_to_state?
 
-    sync_archieve if topic.state_previously_was == "active" && topic.state == "archived"
-    sync_unarchieve if topic.state_previously_was == "archived" && topic.state == "active"
+    sync_archive if topic.state_previously_was == "active" && topic.state == "archived"
+    sync_unarchive if topic.state_previously_was == "archived" && topic.state == "active"
   end
 
-  def sync_archieve
+  def sync_archive
     topic.documents_attachments.each do |doc|
       DocumentsSyncJob.perform_later(
         topic_id: topic.id,
@@ -95,7 +95,7 @@ class Topics::Mutator
     end
   end
 
-  def sync_unarchieve
+  def sync_unarchive
     topic.documents_attachments.each do |doc|
       DocumentsSyncJob.perform_later(
         topic_id: topic.id,
