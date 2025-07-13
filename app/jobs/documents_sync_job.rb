@@ -72,7 +72,7 @@ class DocumentsSyncJob < ApplicationJob
   end
 
   def file_name
-    @file_name ||= document.filename.to_s
+    @file_name ||= [ topic.id, document.filename.to_s ].join("_")
   end
 
   attr_reader :topic, :share, :document, :action

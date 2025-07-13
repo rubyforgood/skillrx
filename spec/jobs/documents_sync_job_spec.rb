@@ -3,6 +3,7 @@ require "rails_helper"
 RSpec.describe DocumentsSyncJob, type: :job do
   let(:topic) { create(:topic, :with_documents) }
   let(:document) { topic.documents.first }
+  let(:file_name) { [ topic.id, document.filename.to_s ] .join("_") }
 
   describe "#perform" do
     let(:file_worker) { instance_double(FileWorker) }
@@ -11,14 +12,14 @@ RSpec.describe DocumentsSyncJob, type: :job do
       allow(FileWorker).to receive(:new)
         .with(
           share: ENV["AZURE_STORAGE_SHARE_NAME"],
-          name: document.filename.to_s,
+          name: file_name,
           path: "#{topic.language.file_storage_prefix}CMES-Pi/assets/content",
           file: document.download,
         ).and_return(file_worker)
       allow(FileWorker).to receive(:new)
         .with(
           share: ENV["AZURE_STORAGE_SHARE_NAME"],
-          name: document.filename.to_s,
+          name: file_name,
           path: "#{topic.language.file_storage_prefix}CMES-mini/assets/content",
           file: document.download,
         ).and_return(file_worker)
@@ -26,14 +27,14 @@ RSpec.describe DocumentsSyncJob, type: :job do
         allow(FileWorker).to receive(:new)
         .with(
           share: ENV["AZURE_STORAGE_SHARE_NAME"],
-          name: document.filename.to_s,
+          name: file_name,
           path: "#{topic.language.file_storage_prefix}CMES-Pi_Archive",
           file: document.download,
         ).and_return(file_worker)
       allow(FileWorker).to receive(:new)
         .with(
           share: ENV["AZURE_STORAGE_SHARE_NAME"],
-          name: document.filename.to_s,
+          name: file_name,
           path: "#{topic.language.file_storage_prefix}CMES-mini_Archive",
           file: document.download,
         ).and_return(file_worker)
