@@ -5,6 +5,7 @@
 #  id           :bigint           not null, primary key
 #  description  :text
 #  published_at :datetime         not null
+#  shadow_copy  :boolean          default(FALSE), not null
 #  state        :integer          default("active"), not null
 #  title        :string           not null
 #  uid          :string

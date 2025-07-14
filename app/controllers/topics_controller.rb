@@ -2,7 +2,7 @@ class TopicsController < ApplicationController
   include ActiveStorage::SetCurrent
   include Pagy::Backend
 
-  before_action :set_topic, only: [ :show, :edit, :update, :destroy, :archive ]
+  before_action :set_topic, only: [ :show, :edit, :update, :destroy, :archive, :unarchive ]
 
   def index
     @pagy, @topics = pagy(scope.includes(:documents_attachments).search_with_params(search_params))
@@ -15,12 +15,15 @@ class TopicsController < ApplicationController
   end
 
   def create
-    document_signed_ids = topic_params.extract!(:document_signed_ids)
-    @topic = scope.new(topic_params)
-    return render :new, status: :unprocessable_entity if @topic.errors.any? || !@topic.save_with_tags(topic_params)
+    @topic = scope.new(topic_params.except(:document_signed_ids))
 
-    attach_files(document_signed_ids[:document_signed_ids])
-    redirect_to topics_path
+    case mutator.create
+    in [ :ok, _topic ]
+      redirect_to topics_path
+    in [ :error, errors ]
+      @errors = errors
+      render :new, status: :unprocessable_entity
+    end
   end
 
   def show
@@ -31,34 +34,33 @@ class TopicsController < ApplicationController
   end
 
   def update
-    document_signed_ids = topic_params.extract!(:document_signed_ids)
-    return render :edit, status: :unprocessable_entity if @topic.errors.any? || !@topic.save_with_tags(topic_params)
-
-    attach_files(document_signed_ids[:document_signed_ids])
-    redirect_to topics_path
+    case mutator.update
+    in [ :ok, _topic ]
+      redirect_to topics_path
+    in [ :error, errors ]
+      @errors = errors
+      render :edit, status: :unprocessable_entity
+    end
   end
 
   def destroy
     redirect_to topics_path and return unless Current.user.is_admin?
 
-    @topic.destroy
+    Topics::Mutator.new(topic: @topic).destroy
     redirect_to topics_path
   end
 
   def archive
-    @topic.archived!
+    Topics::Mutator.new(topic: @topic).archive
+    redirect_to topics_path
+  end
+
+  def unarchive
+    Topics::Mutator.new(topic: @topic).unarchive
     redirect_to topics_path
   end
 
   private
-
-  def attach_files(signed_ids)
-    return if signed_ids.blank?
-
-    signed_ids.each do |signed_id|
-      @topic.documents.attach(signed_id)
-    end
-  end
 
   def other_available_providers
     return [] unless provider_scope.any?
@@ -75,7 +77,7 @@ class TopicsController < ApplicationController
           tag_list: [], documents: [], document_signed_ids: [],
         )
 
-      TopicSanitizer.new(params: permitted_params, provider: current_provider, provider_scope:).sanitize
+      Topics::Sanitizer.new(params: permitted_params, provider: current_provider, provider_scope:).sanitize
     end
   end
 
@@ -85,6 +87,16 @@ class TopicsController < ApplicationController
 
   def scope
     @scope ||= current_provider.topics.includes(:language)
+  end
+
+  def mutator
+    document_signed_ids = topic_params.extract!(:document_signed_ids)
+
+    @mutator ||= Topics::Mutator.new(
+      topic: @topic,
+      params: topic_params,
+      document_signed_ids: document_signed_ids[:document_signed_ids],
+    )
   end
 
   def search_params

@@ -1,7 +1,7 @@
 <%= form_for topic do |f| %>
   <div class="form-body">
     <div class="row">
-      <%= render "shared/errors", resource: topic %>
+      <%= render "shared/errors", errors: errors.presence || [], resource_name: topic.class.name %>
       <div class="col-12">
         <div class="form-group">
           <%= f.label :title %>

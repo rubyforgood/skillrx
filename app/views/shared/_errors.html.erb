@@ -1,9 +1,9 @@
-<% if resource.errors.any? %>
+<% if errors.any? %>
   <div style="color: red">
-    <h4><%= "#{pluralize(resource.errors.count, "error")} prohibited this #{resource.class.name} from being saved:" %></h4>
+    <h4><%= "#{pluralize(errors.count, "error")} prohibited this #{resource_name} from being saved:" %></h4>
     <ul>
-      <% resource.errors.each do |error| %>
-        <li><%= error.full_message %></li>
+      <% errors.each do |error| %>
+        <li><%= error %></li>
       <% end %>
     </ul>
   </div>

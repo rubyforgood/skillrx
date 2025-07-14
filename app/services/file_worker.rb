@@ -1,4 +1,4 @@
-class FileSender
+class FileWorker
   def initialize(share:, name:, path:, file:)
     @share = share
     @name = name
@@ -6,21 +6,31 @@ class FileSender
     @file = file
   end
 
-  def perform
+  def send
     send_file
+  end
+
+  def delete
+    delete_file
+  end
+
+  def copy(new_path)
+    copy_file(new_path)
   end
 
   private
 
+  attr_reader :share, :path, :name, :file
+
   def send_file
-    create_subdirs()
+    create_subdirs(path)
     return if file.blank?
 
     client.files.upload_file(share, path, name, file)
   end
 
-  def create_subdirs
-    path.split("/").each_with_object([]) do |dir, dirs|
+  def create_subdirs(current_path)
+    current_path.split("/").each_with_object([]) do |dir, dirs|
       dir = dir.strip
       dirs << dir unless dir.blank?
       dir_path = dirs.join("/")
@@ -30,9 +40,18 @@ class FileSender
     end
   end
 
+  def delete_file
+    client.files.delete_file(share, path, name)
+  end
+
+  def copy_file(new_path)
+    create_subdirs(new_path)
+    return if file.blank?
+
+    client.files.copy_file(share, path, name, share, new_path, name)
+  end
+
   def client
     @client ||= AzureFileShares.client
   end
-
-  attr_reader :share, :path, :name, :file
 end

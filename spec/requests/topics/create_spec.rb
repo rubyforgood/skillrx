@@ -71,5 +71,33 @@ describe "Topics", type: :request do
         end
       end
     end
+
+    context "when topic has documents" do
+      let(:blob) do
+        ActiveStorage::Blob.create_and_upload!(
+          io: File.open(Rails.root.join("spec", "fixtures", "files", "dummy.pdf")),
+          filename: "dummy.pdf",
+          content_type: "application/pdf",
+        )
+      end
+
+      before do
+        allow(DocumentsSyncJob).to receive(:perform_later)
+      end
+
+      it "attaches documents and runs sync job" do
+        post topics_url, params: { topic: topic_params.merge(document_signed_ids: [ blob.signed_id ]) }
+
+        expect(response).to redirect_to(topics_url)
+        topic = Topic.last
+        expect(topic.documents.count).to eq(1)
+        expect(topic.documents.first.filename.to_s).to eq("dummy.pdf")
+        expect(DocumentsSyncJob).to have_received(:perform_later).with(
+          topic_id: topic.id,
+          document_id: topic.documents.first.id,
+          action: "update",
+        )
+      end
+    end
   end
 end
