@@ -87,7 +87,7 @@ module Taggable
 
     Rails.logger.info "Processing tags: #{tag_list} for record: #{id}"
     removed_tags = current_tags_list - tag_list
-    cognates_names_for(tag_list + removed_tags)
+    @full_list_of_tags = tag_list + removed_tags
     tag_list_without_redundant_cognates = tag_list - tags_with_cognates(removed_tags)
     tag_list_with_cognates_to_add = tag_list_without_redundant_cognates + tags_with_cognates(tag_list_without_redundant_cognates)
     final_tag_list = tag_list_with_cognates_to_add.uniq.compact_blank.join(",")
@@ -96,12 +96,18 @@ module Taggable
   end
 
   def cognates_names_for(tags_to_keep_add_or_remove)
-    @tag_cognates_map ||= Tag.where(name: tags_to_keep_add_or_remove).each_with_object({}) do |tag, hash|
+    Tag.where(name: tags_to_keep_add_or_remove).each_with_object({}) do |tag, hash|
       hash[tag.name] = tag.cognates_tags.for_context(language.code.to_sym).uniq.pluck(:name).push(tag.name)
     end
   end
 
   def tags_with_cognates(list)
-    @tag_cognates_map.slice(*list).values.flatten
+    tag_cognates_map.slice(*list).values.flatten
   end
+
+  def tag_cognates_map
+    @tag_cognates_map ||= cognates_names_for(full_list_of_tags)
+  end
+
+  attr_reader :full_list_of_tags
 end
