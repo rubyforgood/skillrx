@@ -14,9 +14,6 @@ RSpec.describe FileManager do
     )
   end
 
-  before do
-  end
-
   describe "#workers" do
     it "returns an array of file workers for the specified action" do
       workers = manager.workers
@@ -61,7 +58,7 @@ RSpec.describe FileManager do
         expect(workers.size).to eq(1)
       end
 
-      it "initializes file workers with correct parameters" do
+      it "initializes file worker with parameters for video" do
         expect(FileWorker).to receive(:new).with(
           share:,
           name: "#{topic.id}_video_file.mp4",

@@ -22,6 +22,7 @@ class XmlGenerator::SingleProvider < XmlGenerator::Base
                 xml.topic_id topic.id
                 xml.topic_files(files: "Files") {
                   topic.documents.each_with_index do |document, index|
+                    next if document.content_type == "video/mp4"
                     xml.send("file_name_#{index + 1}", document.filename, file_size: document.byte_size)
                   end
                 }

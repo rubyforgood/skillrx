@@ -18,6 +18,17 @@ RSpec.describe XmlGenerator::SingleProvider do
 
   context "with topics" do
     let!(:topic) { create(:topic, :tagged, :with_documents, provider:) }
+    let(:document) do
+      ActiveStorage::Blob.create_and_upload!(
+        io: File.open(Rails.root.join("spec", "fixtures", "files", "video_file_example.mp4")),
+        filename: "video_file.mp4",
+        content_type: "video/mp4",
+      )
+    end
+
+    before do
+      topic.documents.attach(document.signed_id)
+    end
 
     it "generates the xml" do
       expect(subject.perform).to eq(
