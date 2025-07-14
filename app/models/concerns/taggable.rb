@@ -87,19 +87,21 @@ module Taggable
 
     Rails.logger.info "Processing tags: #{tag_list} for record: #{id}"
     removed_tags = current_tags_list - tag_list
-    cognates_hash = cognates_names_for(tag_list + removed_tags)
-    tag_list_without_redundant_cognates = tag_list - cognates_hash.slice(*removed_tags).values.flatten
-    tag_list_with_cognates_to_add = tag_list_without_redundant_cognates + cognates_hash.slice(*tag_list_without_redundant_cognates).values.flatten
+    cognates_names_for(tag_list + removed_tags)
+    tag_list_without_redundant_cognates = tag_list - tags_with_cognates(removed_tags)
+    tag_list_with_cognates_to_add = tag_list_without_redundant_cognates + tags_with_cognates(tag_list_without_redundant_cognates)
     final_tag_list = tag_list_with_cognates_to_add.uniq.compact_blank.join(",")
     set_tag_list_on(language.code.to_sym, final_tag_list)
     save!
   end
 
-  def cognates_names_for(tag_name_list)
-    hash = {}
-    Tag.where(name: tag_name_list).each do |tag|
+  def cognates_names_for(tags_to_keep_add_or_remove)
+    @tag_cognates_map ||= Tag.where(name: tags_to_keep_add_or_remove).each_with_object({}) do |tag, hash|
       hash[tag.name] = tag.cognates_tags.for_context(language.code.to_sym).uniq.pluck(:name).push(tag.name)
     end
-    hash
+  end
+
+  def tags_with_cognates(list)
+    @tag_cognates_map.slice(*list).values.flatten
   end
 end
