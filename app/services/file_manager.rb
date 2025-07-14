@@ -14,13 +14,12 @@ class FileManager
 
   def workers
     file_routes.map do |file_route|
-      path = current_path(file_route)
-
       FileWorker.new(
         share:,
-        path:,
+        path: current_path(file_route),
         file: file_content,
         name: file_name,
+        new_path: new_path(file_route),
       )
     end
   end
@@ -58,11 +57,16 @@ class FileManager
   end
 
   def current_path(file_route)
-    if action.include?("archive")
-      topic.archived? ? file_route[:path] : file_route[:archive]
-    else
-      file_route[:path]
-    end
+    return file_route[:path] if !action.include?("archive")
+
+    topic.archived? ? file_route[:path] : file_route[:archive]
+  end
+
+  def new_path(file_route)
+    return file_route[:archive] if action == "archive"
+    return file_route[:path] if action == "unarchive"
+
+    nil
   end
 
   def video_document?

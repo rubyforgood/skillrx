@@ -1,9 +1,10 @@
 class FileWorker
-  def initialize(share:, name:, path:, file:)
+  def initialize(share:, name:, path:, file:, new_path: nil)
     @share = share
     @name = name
     @path = path
     @file = file
+    @new_path = new_path
   end
 
   def send
@@ -14,13 +15,13 @@ class FileWorker
     delete_file
   end
 
-  def copy(new_path)
+  def copy
     copy_file(new_path)
   end
 
   private
 
-  attr_reader :share, :path, :name, :file
+  attr_reader :share, :path, :name, :file, :new_path
 
   def send_file
     create_subdirs(path)

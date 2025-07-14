@@ -18,12 +18,12 @@ class DocumentsSyncJob < ApplicationJob
       file_workers.each(&:send)
     when "archive"
       file_workers.each_with_index do |worker, i|
-        worker.copy(file_routes[i][:archive])
+        worker.copy
         worker.delete
       end
     when "unarchive"
       file_workers.each_with_index do |worker, i|
-        worker.copy(file_routes[i][:path])
+        worker.copy
         worker.delete
       end
     when "delete"
