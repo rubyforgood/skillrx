@@ -7,6 +7,12 @@ class DocumentsSyncJob < ApplicationJob
     @topic = Topic.unscoped.find(topic_id)
     @document = topic.documents.find(document_id)
 
+    process_action
+  end
+
+  private
+
+  def process_action
     case action
     when "update"
       file_workers.each(&:send)
@@ -27,52 +33,12 @@ class DocumentsSyncJob < ApplicationJob
     end
   end
 
-  private
-
   def file_workers
-    @file_workers ||= file_routes.map do |file_route|
-      path = if action.include?("archive")
-        topic.archived? ? file_route[:path] : file_route[:archive]
-      else
-        file_route[:path]
-      end
-
-      FileWorker.new(
-        share:,
-        path:,
-        file: file_content,
-        name: file_name,
-      )
-    end
+    @file_workers ||= file_manager.workers
   end
 
-  def file_routes
-    [
-      {
-        path: "#{language.file_storage_prefix}CMES-Pi/assets/content",
-        archive: "#{language.file_storage_prefix}CMES-Pi_Archive",
-      },
-      {
-        path: "#{language.file_storage_prefix}CMES-mini/assets/content",
-        archive: "#{language.file_storage_prefix}CMES-mini_Archive",
-      },
-    ]
-  end
-
-  def language
-    @language ||= topic.language
-  end
-
-  def client
-    @client ||= AzureFileShares.client
-  end
-
-  def file_content
-    @file_content ||= document.download
-  end
-
-  def file_name
-    @file_name ||= [ topic.id, document.filename.to_s ].join("_")
+  def file_manager
+    @file_manager ||= FileManager.new(share:, action:, document:, topic:)
   end
 
   attr_reader :topic, :share, :document, :action
