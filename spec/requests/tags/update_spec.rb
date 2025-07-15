@@ -22,6 +22,11 @@ describe "Tag", type: :request do
       expect(cardio_tag.cognates_list).to match_array([ "Heart", "Cardiovascular" ])
     end
 
+    it "enqueues SynchronizeCognatesOnTopicsJob" do
+      put tag_url(tag), params: { tag: tag_params }
+      expect(SynchronizeCognatesOnTopicsJob).to have_been_enqueued.with(tag)
+    end
+
     context "when the same tag is passed twice as cognate" do
       let(:tag_params) { attributes_for(:tag, name: "Heart", cognates_list: [ "", "Heart", "Cardiovascular", "Cardio", "Cardio" ]) }
 
@@ -133,6 +138,11 @@ describe "Tag", type: :request do
         expect(cardiovascular_tag.cognates_list).to be_empty
         expect(cardio_tag).not_to be_nil
         expect(cardio_tag.cognates_list).to be_empty
+      end
+
+      it "does not enqueue SynchronizeCognatesOnTopicsJob" do
+        put tag_url(tag), params: { tag: tag_params }
+        expect(SynchronizeCognatesOnTopicsJob).not_to have_been_enqueued.with(tag)
       end
     end
   end
