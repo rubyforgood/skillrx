@@ -61,22 +61,23 @@ RSpec.describe "Topics", type: :request do
     end
 
     context "when removing a tag whose cognate remains associated to the Topic" do
-      let!(:tag) { create(:tag, name: "Tag to remove") }
-      let!(:cognate) { create(:tag, name: "Cognate to keep") }
-      let(:topic_params) {  { tag_list: [ cognate.name ] } }
+      let!(:tag) { create(:tag, name: "tag") }
+      let!(:cognate) { create(:tag, name: "cognate") }
+      let(:topic_params) {  { tag_list: [ "cognate" ] } }
 
       before do
         tag.cognates << cognate
-        topic.set_tag_list_on(topic.language.code.to_sym, "#{tag.name},#{cognate.name}")
+        topic.set_tag_list_on(topic.language.code.to_sym, "tag,cognate")
         topic.save
       end
 
-      it "removes the tag but keeps the cognate" do
+      it "removes the tag and the cognate" do
         put topic_url(topic), params: { topic: topic_params }
 
         expect(response).to redirect_to(topics_url)
-        expect(topic.reload.current_tags).to eq([ cognate ])
-        expect(Tag.find_by(name: tag.name)).to be_nil
+        expect(topic.reload.current_tags).to eq([])
+        expect(Tag.find_by(name: "tag")).to be_nil
+        expect(Tag.find_by(name: "cognate")).to be_nil
       end
     end
 
