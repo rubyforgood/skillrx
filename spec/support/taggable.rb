@@ -42,6 +42,12 @@ RSpec.shared_examples "taggable" do
     end
   end
 
+  describe "#language_code" do
+    it "returns the instance's language code as a symbol" do
+      expect(instance.language_code).to eq(:en)
+    end
+  end
+
   describe "#save_with_tags" do
     let(:tag_list) { [ "malaria", "fever" ] }
     let(:attrs) { { title: "New Title", tag_list: tag_list } }
@@ -90,7 +96,7 @@ RSpec.shared_examples "taggable" do
         create(:tag_cognate, tag: reverse_cognate, cognate: tag1)
         create(:tag_cognate, tag: reverse_cognate, cognate: cognate)
         tags_and_their_cognates = tag_list.push(cognate.name, reverse_cognate.name)
-        instance.set_tag_list_on(instance.language.code.to_sym, tags_and_their_cognates)
+        instance.set_tag_list_on(instance.language_code, tags_and_their_cognates)
         instance.save
       end
 
