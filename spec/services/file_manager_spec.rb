@@ -34,7 +34,7 @@ RSpec.describe FileManager do
       expect(FileWorker).to receive(:new).with(
         share:,
         name: "#{topic.id}_dummy.pdf",
-        path: "#{topic.language.file_storage_prefix}CMES-mini/assets/Content",
+        path: "#{topic.language.file_storage_prefix}CMES-v2/assets/Content",
         file: document.download,
         new_path: nil,
       ).and_call_original
@@ -62,7 +62,7 @@ RSpec.describe FileManager do
         expect(FileWorker).to receive(:new).with(
           share:,
           name: "#{topic.id}_video_file.mp4",
-          path: "#{topic.language.file_storage_prefix}CMES-mini/assets/VideoContent",
+          path: "#{topic.language.file_storage_prefix}CMES-v2/assets/VideoContent",
           file: document.download,
           new_path: nil,
         ).and_call_original

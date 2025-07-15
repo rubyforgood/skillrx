@@ -37,8 +37,8 @@ class FileManager
   def video_file_routes
     [
       {
-        path: "#{language.file_storage_prefix}CMES-mini/assets/VideoContent",
-        archive: "#{language.file_storage_prefix}CMES-mini_Archive",
+        path: "#{language.file_storage_prefix}CMES-v2/assets/VideoContent",
+        archive: "#{language.file_storage_prefix}CMES-v2_Archive",
       },
     ]
   end
@@ -50,8 +50,8 @@ class FileManager
         archive: "#{language.file_storage_prefix}CMES-Pi_Archive",
       },
       {
-        path: "#{language.file_storage_prefix}CMES-mini/assets/Content",
-        archive: "#{language.file_storage_prefix}CMES-mini_Archive",
+        path: "#{language.file_storage_prefix}CMES-v2/assets/Content",
+        archive: "#{language.file_storage_prefix}CMES-v2_Archive",
       },
     ]
   end

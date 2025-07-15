@@ -21,7 +21,7 @@ RSpec.describe DocumentsSyncJob, type: :job do
         .with(
           share: ENV["AZURE_STORAGE_SHARE_NAME"],
           name: file_name,
-          path: "#{topic.language.file_storage_prefix}CMES-mini/assets/Content",
+          path: "#{topic.language.file_storage_prefix}CMES-v2/assets/Content",
           file: document.download,
           new_path: nil,
         ).and_return(file_worker)
@@ -51,9 +51,9 @@ RSpec.describe DocumentsSyncJob, type: :job do
           .with(
             share: ENV["AZURE_STORAGE_SHARE_NAME"],
             name: file_name,
-            path: "#{topic.language.file_storage_prefix}CMES-mini/assets/Content",
+            path: "#{topic.language.file_storage_prefix}CMES-v2/assets/Content",
             file: document.download,
-            new_path: "#{topic.language.file_storage_prefix}CMES-mini_Archive",
+            new_path: "#{topic.language.file_storage_prefix}CMES-v2_Archive",
           ).and_return(file_worker)
       end
 
@@ -79,9 +79,9 @@ RSpec.describe DocumentsSyncJob, type: :job do
           .with(
             share: ENV["AZURE_STORAGE_SHARE_NAME"],
             name: file_name,
-            path: "#{topic.language.file_storage_prefix}CMES-mini_Archive",
+            path: "#{topic.language.file_storage_prefix}CMES-v2_Archive",
             file: document.download,
-            new_path: "#{topic.language.file_storage_prefix}CMES-mini/assets/Content",
+            new_path: "#{topic.language.file_storage_prefix}CMES-v2/assets/Content",
           ).and_return(file_worker)
       end
 
