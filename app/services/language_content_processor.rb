@@ -53,25 +53,25 @@ class LanguageContentProcessor
         id: :files,
         content: CsvGenerator::Files.new(language).perform,
         name: "#{language.file_storage_prefix}File.csv",
-        path: "#{language.file_storage_prefix}CMES-mini/assets/csv",
+        path: "#{language.file_storage_prefix}CMES-v2/assets/csv",
       ),
       FileToUpload.new(
         id: :topics,
         content: CsvGenerator::Topics.new(language).perform,
         name: "#{language.file_storage_prefix}Topic.csv",
-        path: "#{language.file_storage_prefix}CMES-mini/assets/csv",
+        path: "#{language.file_storage_prefix}CMES-v2/assets/csv",
       ),
       FileToUpload.new(
         id: :tag_details,
         content: CsvGenerator::TagDetails.new(language).perform,
         name: "#{language.file_storage_prefix}Tag.csv",
-        path: "#{language.file_storage_prefix}CMES-mini/assets/csv",
+        path: "#{language.file_storage_prefix}CMES-v2/assets/csv",
       ),
       FileToUpload.new(
         id: :topic_tags,
         content: CsvGenerator::TopicTags.new(language).perform,
         name: "#{language.file_storage_prefix}TopicTag.csv",
-        path: "#{language.file_storage_prefix}CMES-mini/assets/csv",
+        path: "#{language.file_storage_prefix}CMES-v2/assets/csv",
       ),
     ].tap do |files|
       language.providers.find_each do |provider|

@@ -59,25 +59,25 @@ RSpec.describe LanguageContentProcessor do
 
     expect(FileWorker).to have_received(:new).with(
       share:,
-      path: "#{language.file_storage_prefix}CMES-mini/assets/csv",
+      path: "#{language.file_storage_prefix}CMES-v2/assets/csv",
       name: "#{language.file_storage_prefix}File.csv",
       file: instance_of(String),
     )
     expect(FileWorker).to have_received(:new).with(
       share:,
-      path: "#{language.file_storage_prefix}CMES-mini/assets/csv",
+      path: "#{language.file_storage_prefix}CMES-v2/assets/csv",
       name: "#{language.file_storage_prefix}Topic.csv",
       file: instance_of(String),
     )
     expect(FileWorker).to have_received(:new).with(
       share:,
-      path: "#{language.file_storage_prefix}CMES-mini/assets/csv",
+      path: "#{language.file_storage_prefix}CMES-v2/assets/csv",
       name: "#{language.file_storage_prefix}Tag.csv",
       file: instance_of(String),
     )
     expect(FileWorker).to have_received(:new).with(
       share:,
-      path: "#{language.file_storage_prefix}CMES-mini/assets/csv",
+      path: "#{language.file_storage_prefix}CMES-v2/assets/csv",
       name: "#{language.file_storage_prefix}TopicTag.csv",
       file: instance_of(String),
     )
