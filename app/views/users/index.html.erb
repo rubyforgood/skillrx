@@ -62,7 +62,7 @@
                   <%= link_to edit_user_path(user), class: "btn btn-secondary btn-sm pr-2" do %>
                     <i class="bi bi-pencil"></i> Edit
                   <% end %>
-                  <%= button_to  user, data: { confirm: "Are you sure?" }, method: :delete,form_class:"d-inline",  class: "btn btn-danger btn-sm " do %>
+                  <%= button_to user, data: { confirm: "Are you sure?" }, method: :delete, form_class:"d-inline", class: "btn btn-danger btn-sm" do %>
                     <i class="bi bi-trash"></i> Delete
                   <% end %>
                 </td>
