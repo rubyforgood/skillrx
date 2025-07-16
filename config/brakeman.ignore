@@ -1,0 +1,28 @@
+{
+  "ignored_warnings": [
+    {
+      "warning_type": "SQL Injection",
+      "warning_code": 0,
+      "fingerprint": "05636d40d833157e028a2fd9aecd6f263d7f3915f8ed3334a502e18763f1841d",
+      "check_name": "SQL",
+      "message": "Possible SQL injection",
+      "file": "lib/autorequire/data_import.rb",
+      "line": 148,
+      "link": "https://brakemanscanner.org/docs/warning_types/sql_injection/",
+      "code": "ActiveRecord::Base.connection.execute(\"SELECT setval('topics_id_seq', #{((Topic.maximum(:id) or 0) + 1)}, ?)\", false)",
+      "render_path": null,
+      "location": {
+        "type": "method",
+        "class": "DataImport",
+        "method": "s(:self).reset_topic_id_starting_value"
+      },
+      "user_input": "Topic.maximum(:id)",
+      "confidence": "High",
+      "cwe_id": [
+        89
+      ],
+      "note": ""
+    }
+  ],
+  "brakeman_version": "7.0.2"
+}
