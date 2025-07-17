@@ -1,11 +1,12 @@
 require "rails_helper"
 
 RSpec.describe FileWorker do
-  subject(:worker) { described_class.new(share: "skillrx-test", file:, path:, name:) }
+  subject(:worker) { described_class.new(share: "skillrx-test", file:, path:, name:, new_path:) }
 
   let(:file) { "some_content" }
   let(:path) { "destination_path" }
   let(:name) { "destination_name" }
+  let(:new_path) { "new_destination_path" }
 
   let(:files) { instance_double("AzureFileShares::Operations::FileOperations") }
 
@@ -33,10 +34,9 @@ RSpec.describe FileWorker do
 
   context "when moving a file" do
     it "copies the file to a new path" do
-      new_path = "new_destination_path"
       expect(files).to receive(:copy_file).with("skillrx-test", path, name, "skillrx-test", new_path, name)
 
-      worker.copy(new_path)
+      worker.copy
     end
   end
 end

@@ -20,11 +20,19 @@ RSpec.describe XmlGenerator::SingleProvider do
     let!(:topic) { create(:topic, :with_documents, provider:) }
     let(:tag_1) { create(:tag, name: "iddm") }
     let(:tag_2) { create(:tag, name: "diabetes") }
+    let(:document) do
+      ActiveStorage::Blob.create_and_upload!(
+        io: File.open(Rails.root.join("spec", "fixtures", "files", "video_file_example.mp4")),
+        filename: "video_file.mp4",
+        content_type: "video/mp4",
+      )
+    end
 
-  before do
-    topic.set_tag_list_on(topic.language.code.to_sym, "#{tag_1.name},#{tag_2.name}")
-    topic.save
-  end
+    before do
+      topic.set_tag_list_on(topic.language.code.to_sym, "#{tag_1.name},#{tag_2.name}")
+      topic.save
+      topic.documents.attach(document.signed_id) # we need only to attach viodeo file to topic, saving here is redundant
+    end
 
     it "generates the xml" do
       expect(subject.perform).to eq(
