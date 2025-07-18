@@ -1,8 +1,8 @@
 GIT
   remote: https://github.com/dmitrytrager/azure_file_shares.git
-  revision: c27cc7bcdb6be0ae382f7665158262d9936c2eed
+  revision: 657860586bf58167c0d848381cdbe5cda4784c3e
   specs:
-    azure_file_shares (0.1.3)
+    azure_file_shares (0.1.4)
       faraday (~> 2.7)
       faraday-retry (~> 2.0)
       jwt (~> 2.7)
