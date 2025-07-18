@@ -2,7 +2,7 @@ default: &default
   language_files:
     command: LanguageFilesScheduler.new.perform
     queue: default
-    schedule: "@daily"
+    schedule: "00 21 * * *" # Every day at 21
 
 development:
   <<: *default
