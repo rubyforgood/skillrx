@@ -57,13 +57,13 @@ describe "Tag", type: :request do
       it "associates the new cognate to the tag and the old cognate" do
         expect { put tag_url(tag), params: { tag: tag_params } }
           .to change { tag.reload.cognates_list }
-          .from([ "Cardio", "Cardiovascular" ]).to(match_array([ "Cardio", "Cardiovascular", "Cardiac" ]))
+          .from(match_array([ "Cardio", "Cardiovascular" ])).to(match_array([ "Cardio", "Cardiovascular", "Cardiac" ]))
           .and change { cardiac_tag.reload.cognates_list }
           .from([]).to(match_array([ "Heart", "Cardio", "Cardiovascular" ]))
           .and change { cardiovascular_tag.reload.cognates_list }
-          .from([ "Hart", "Cardio" ]).to(match_array([ "Heart", "Cardio", "Cardiac" ]))
+          .from(match_array([ "Hart", "Cardio" ])).to(match_array([ "Heart", "Cardio", "Cardiac" ]))
           .and change { cardio_tag.reload.cognates_list }
-          .from([ "Hart", "Cardiovascular" ]).to(match_array([ "Heart", "Cardiovascular", "Cardiac" ]))
+          .from(match_array([ "Hart", "Cardiovascular" ])).to(match_array([ "Heart", "Cardiovascular", "Cardiac" ]))
       end
     end
 
@@ -103,7 +103,7 @@ describe "Tag", type: :request do
       it "removes the association to the removed cognates" do
         expect { put tag_url(tag), params: { tag: tag_params } }
           .to change { tag.reload.cognates_list }
-          .from([ "Cardiovascular", "Cardio", "Circulatory" ]).to([ "Cardio" ])
+          .from(match_array([ "Cardiovascular", "Cardio", "Circulatory" ])).to([ "Cardio" ])
 
         cardiovascular_tag = Tag.find_by(name: "Cardiovascular")
         cardio_tag = Tag.find_by(name: "Cardio")
