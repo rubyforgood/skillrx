@@ -23,7 +23,7 @@ module Taggable
     raise LanguageContextError, "Language must be present" if language.nil?
     raise LanguageContextError, "Language code must be present" if language.code.blank?
 
-    language.code.to_sym
+    language_code
   end
 
   # Retrieves all available tags for the current language context
@@ -61,7 +61,11 @@ module Taggable
 
     language = Language.find(language_id)
 
-    tags_on(language.code.to_sym)
+    tags_on(language_code)
+  end
+
+  def language_code
+    language.code.to_sym
   end
 
   # Updates the list of tags for a specific record
@@ -91,13 +95,13 @@ module Taggable
     tag_list_without_redundant_cognates = tag_list - tags_with_cognates(removed_tags)
     tag_list_with_cognates_to_add = tag_list_without_redundant_cognates + tags_with_cognates(tag_list_without_redundant_cognates)
     final_tag_list = tag_list_with_cognates_to_add.uniq.compact_blank.join(",")
-    set_tag_list_on(language.code.to_sym, final_tag_list)
+    set_tag_list_on(language_code, final_tag_list)
     save!
   end
 
   def cognates_names_for(tags_to_keep_add_or_remove)
     Tag.where(name: tags_to_keep_add_or_remove).each_with_object({}) do |tag, hash|
-      hash[tag.name] = tag.cognates_tags.for_context(language.code.to_sym).uniq.pluck(:name).push(tag.name)
+      hash[tag.name] = tag.cognates_tags.for_context(language_code).uniq.pluck(:name).push(tag.name)
     end
   end
 

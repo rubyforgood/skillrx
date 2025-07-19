@@ -192,7 +192,7 @@ class DataImport
       end.join(",")
 
       # Set the topic tags in the pertinent context (language comes from the topic's language)
-      topic.set_tag_list_on(topic.language.code.to_sym, tag_names_str)
+      topic.set_tag_list_on(topic.language_code, tag_names_str)
       topic.save!
 
       puts "#{topic.title} - #{topic.id} / Tags: #{topic.current_tags_list}"

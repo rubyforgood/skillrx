@@ -16,6 +16,7 @@ class TagsController < ApplicationController
 
   def update
     if @tag.update!(tag_params)
+      SynchronizeCognatesOnTopicsJob.perform_later(@tag) if tag_params[:cognates_list].reject(&:empty?).any?
       redirect_to tags_path, notice: "Tag was successfully updated."
     else
       render :edit, status: :unprocessable_entity

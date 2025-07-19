@@ -30,7 +30,7 @@ describe "Tags", type: :request do
   private
 
   def tag_topic(topic, tag)
-    topic.set_tag_list_on(topic.language.code.to_sym, tag.name)
+    topic.set_tag_list_on(topic.language_code, tag.name)
     topic.save
   end
 end
