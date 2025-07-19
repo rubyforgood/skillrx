@@ -145,7 +145,7 @@ class DataImport
   def self.reset_topic_id_starting_value
     max_id = Topic.maximum(:id) || 0
     new_start_value = max_id + 1
-      ActiveRecord::Base.connection.execute("SELECT setval('topics_id_seq', #{new_start_value}, ?)", false)
+      ActiveRecord::Base.connection.execute("SELECT setval('topics_id_seq', #{new_start_value}, false)")
     puts "Reset topics ID starting value to #{new_start_value}"
   end
 
