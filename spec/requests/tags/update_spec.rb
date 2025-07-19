@@ -22,6 +22,11 @@ describe "Tag", type: :request do
       expect(cardio_tag.cognates_list).to match_array([ "Heart", "Cardiovascular" ])
     end
 
+    it "enqueues SynchronizeCognatesOnTopicsJob" do
+      put tag_url(tag), params: { tag: tag_params }
+      expect(SynchronizeCognatesOnTopicsJob).to have_been_enqueued.with(tag)
+    end
+
     context "when the same tag is passed twice as cognate" do
       let(:tag_params) { attributes_for(:tag, name: "Heart", cognates_list: [ "", "Heart", "Cardiovascular", "Cardio", "Cardio" ]) }
 
@@ -52,13 +57,13 @@ describe "Tag", type: :request do
       it "associates the new cognate to the tag and the old cognate" do
         expect { put tag_url(tag), params: { tag: tag_params } }
           .to change { tag.reload.cognates_list }
-          .from([ "Cardio", "Cardiovascular" ]).to(match_array([ "Cardio", "Cardiovascular", "Cardiac" ]))
+          .from(match_array([ "Cardio", "Cardiovascular" ])).to(match_array([ "Cardio", "Cardiovascular", "Cardiac" ]))
           .and change { cardiac_tag.reload.cognates_list }
           .from([]).to(match_array([ "Heart", "Cardio", "Cardiovascular" ]))
           .and change { cardiovascular_tag.reload.cognates_list }
-          .from([ "Hart", "Cardio" ]).to(match_array([ "Heart", "Cardio", "Cardiac" ]))
+          .from(match_array([ "Hart", "Cardio" ])).to(match_array([ "Heart", "Cardio", "Cardiac" ]))
           .and change { cardio_tag.reload.cognates_list }
-          .from([ "Hart", "Cardiovascular" ]).to(match_array([ "Heart", "Cardiovascular", "Cardiac" ]))
+          .from(match_array([ "Hart", "Cardiovascular" ])).to(match_array([ "Heart", "Cardiovascular", "Cardiac" ]))
       end
     end
 
@@ -98,7 +103,7 @@ describe "Tag", type: :request do
       it "removes the association to the removed cognates" do
         expect { put tag_url(tag), params: { tag: tag_params } }
           .to change { tag.reload.cognates_list }
-          .from([ "Cardiovascular", "Cardio", "Circulatory" ]).to([ "Cardio" ])
+          .from(match_array([ "Cardiovascular", "Cardio", "Circulatory" ])).to([ "Cardio" ])
 
         cardiovascular_tag = Tag.find_by(name: "Cardiovascular")
         cardio_tag = Tag.find_by(name: "Cardio")
@@ -133,6 +138,11 @@ describe "Tag", type: :request do
         expect(cardiovascular_tag.cognates_list).to be_empty
         expect(cardio_tag).not_to be_nil
         expect(cardio_tag.cognates_list).to be_empty
+      end
+
+      it "does not enqueue SynchronizeCognatesOnTopicsJob" do
+        put tag_url(tag), params: { tag: tag_params }
+        expect(SynchronizeCognatesOnTopicsJob).not_to have_been_enqueued.with(tag)
       end
     end
   end

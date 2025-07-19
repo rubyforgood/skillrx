@@ -30,7 +30,7 @@ RSpec.describe CsvGenerator::TagDetails do
       before do
         topic.tags_on(language.code.to_sym).each do |t|
           tag = build(:tag, name: t.name)
-          second_topic.set_tag_list_on(topic.language.code.to_sym, tag.name)
+          second_topic.set_tag_list_on(topic.language_code, tag.name)
           second_topic.save
         end
       end

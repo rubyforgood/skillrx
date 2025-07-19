@@ -38,7 +38,7 @@ FactoryBot.define do
     trait :tagged do
       after(:create) do |topic|
         tag = build(:tag)
-        topic.set_tag_list_on(topic.language.code.to_sym, tag.name)
+        topic.set_tag_list_on(topic.language_code, tag.name)
         topic.save
       end
     end
