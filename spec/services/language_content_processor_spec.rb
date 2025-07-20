@@ -11,76 +11,23 @@ RSpec.describe LanguageContentProcessor do
   before do
     create(:topic, :tagged, :with_documents, language:, provider:)
 
-    allow(FileWorker).to receive(:new).and_return(file_worker)
-    allow(file_worker).to receive(:send)
+    allow(FileUploadJob).to receive(:perform_later)
   end
 
   it "processes content for every language" do
-    files_number = language.providers.size + 8 # 2 xml files for all provides, 2 xml files for tags, 4 csv files
+    files_number = language.providers.size + 8 # 2 xml files for all provides, 2 text files for tags, 4 csv files
     subject.perform
 
-    expect(FileWorker).to have_received(:new).with(
-      share:,
-      name: instance_of(String),
-      path: instance_of(String),
-      file: instance_of(String),
-    ).exactly(files_number).times
+    expect(FileUploadJob).to have_received(:perform_later).exactly(files_number).times
 
-    expect(FileWorker).to have_received(:new).with(
-      share:,
-      path: "#{language.file_storage_prefix}CMES-Pi/assets/XML",
-      name: "#{language.file_storage_prefix}Server_XML.xml",
-      file: instance_of(String),
-    )
-    expect(FileWorker).to have_received(:new).with(
-      share:,
-      path: "#{language.file_storage_prefix}CMES-Pi/assets/XML",
-      name: "#{language.file_storage_prefix}New_Uploads_Server_XML.xml",
-      file: instance_of(String),
-    )
-    expect(FileWorker).to have_received(:new).with(
-      share:,
-      path: "#{language.file_storage_prefix}CMES-Pi/assets/Tags",
-      name: "#{language.file_storage_prefix}tags.txt",
-      file: instance_of(String),
-    )
-    expect(FileWorker).to have_received(:new).with(
-      share:,
-      path: "#{language.file_storage_prefix}CMES-Pi/assets/Tags",
-      name: "#{language.file_storage_prefix}tagsAndTitle.txt",
-      file: instance_of(String),
-    )
-    expect(FileWorker).to have_received(:new).with(
-      share:,
-      path: "#{language.file_storage_prefix}CMES-Pi/assets/XML",
-      name: "#{language.file_storage_prefix}#{provider.name}.xml",
-      file: instance_of(String),
-    )
-
-    expect(FileWorker).to have_received(:new).with(
-      share:,
-      path: "#{language.file_storage_prefix}CMES-v2/assets/csv",
-      name: "#{language.file_storage_prefix}File.csv",
-      file: instance_of(String),
-    )
-    expect(FileWorker).to have_received(:new).with(
-      share:,
-      path: "#{language.file_storage_prefix}CMES-v2/assets/csv",
-      name: "#{language.file_storage_prefix}Topic.csv",
-      file: instance_of(String),
-    )
-    expect(FileWorker).to have_received(:new).with(
-      share:,
-      path: "#{language.file_storage_prefix}CMES-v2/assets/csv",
-      name: "#{language.file_storage_prefix}Tag.csv",
-      file: instance_of(String),
-    )
-    expect(FileWorker).to have_received(:new).with(
-      share:,
-      path: "#{language.file_storage_prefix}CMES-v2/assets/csv",
-      name: "#{language.file_storage_prefix}TopicTag.csv",
-      file: instance_of(String),
-    )
-    expect(file_worker).to have_received(:send).exactly(files_number).times
+    expect(FileUploadJob).to have_received(:perform_later).with(language.id, :all_providers)
+    expect(FileUploadJob).to have_received(:perform_later).with(language.id, :all_providers_recent)
+    expect(FileUploadJob).to have_received(:perform_later).with(language.id, :tags)
+    expect(FileUploadJob).to have_received(:perform_later).with(language.id, :tags_and_title)
+    expect(FileUploadJob).to have_received(:perform_later).with(language.id, :files)
+    expect(FileUploadJob).to have_received(:perform_later).with(language.id, :topics)
+    expect(FileUploadJob).to have_received(:perform_later).with(language.id, :tag_details)
+    expect(FileUploadJob).to have_received(:perform_later).with(language.id, :topic_tags)
+    expect(FileUploadJob).to have_received(:perform_later).with(language.id, nil, provider.id)
   end
 end
