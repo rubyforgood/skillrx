@@ -94,16 +94,14 @@ RSpec.describe "Upload Management", type: :system do
         expect(page).not_to have_text("logo_ruby_for_good.png")
       end
 
-      context "when the user does not confirm the deletion" do
-        it "does not remove the document" do
-          expect(page).to have_text("logo_ruby_for_good.png")
-          click_button("remove-button-1")
-          expect(page).not_to have_text("logo_ruby_for_good.png")
-          click_link("Cancel")
-          expect(page).to have_text("View")
-          click_link("View", href: topic_path(topic))
-          expect(page).to have_text("logo_ruby_for_good.png")
-        end
+      it "does not remove the document if user does not confirm the deletion" do
+        expect(page).to have_text("logo_ruby_for_good.png")
+        click_button("remove-button-1")
+        expect(page).not_to have_text("logo_ruby_for_good.png")
+        click_link("Cancel")
+        expect(page).to have_text("View")
+        click_link("View", href: topic_path(topic))
+        expect(page).to have_text("logo_ruby_for_good.png")
       end
     end
   end

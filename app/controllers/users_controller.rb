@@ -57,6 +57,7 @@ class UsersController < ApplicationController
 
   def user_search_params
     return {} unless params[:search].present?
+
     params.expect(search: [ :email, :is_admin, :order ])
   end
 end

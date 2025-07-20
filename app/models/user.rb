@@ -23,11 +23,19 @@ class User < ApplicationRecord
 
   validates :email, presence: true, uniqueness: true, format: URI::MailTo::EMAIL_REGEXP
   validates :password_digest, presence: true
+  validate :provider_must_exist
 
   scope :search_with_params, ->(params) do
     self
       .then { |scope| params[:email].present? ? scope.where("email ILIKE ?", "%#{params[:email]}%") : scope }
       .then { |scope| params[:is_admin].present? ? scope.where(is_admin: params[:is_admin]) : scope }
       .then { |scope| scope.order(created_at: params[:order]&.to_sym || :desc) }
+  end
+
+  def provider_must_exist
+    return if providers.any?
+    return if is_admin
+
+    errors.add(:base, "User must have at least one provider")
   end
 end
