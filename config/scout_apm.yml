@@ -9,7 +9,7 @@ common: &defaults
   # log_level: Verboseness of logs.
   # - Default: 'info'
   # - Valid Options: debug, info, warn, error
-  # log_level: debug
+  log_level: debug
 
   # use_prepend: Use the newer `prepend` instrumentation method. In some cases, gems
   #              that use `alias_method` can conflict with gems that use `prepend`.
@@ -31,10 +31,12 @@ common: &defaults
   # monitor: Enable Scout APM or not
   # - Default: none
   # - Valid Options: true, false
-  monitor: true
+  # monitor: true
+  # Commented out to be specific per-environment below
 
 production:
   <<: *defaults
+  monitor: true
 
 development:
   <<: *defaults
@@ -46,3 +48,4 @@ test:
 
 staging:
   <<: *defaults
+  monitor: true
