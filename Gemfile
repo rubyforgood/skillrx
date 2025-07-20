@@ -13,6 +13,7 @@ gem "image_processing", "~> 1.14"
 gem "importmap-rails"
 gem "jbuilder"
 gem "kamal", require: false
+gem "mission_control-jobs"
 gem "pagy"
 gem "pg", "~> 1.1"
 gem "propshaft"
