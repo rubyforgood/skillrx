@@ -23,5 +23,7 @@ module Skillrx
     #
     # config.time_zone = "Central Time (US & Canada)"
     config.eager_load_paths << Rails.root.join("lib/autorequire")
+
+    config.mission_control.jobs.http_basic_auth_enabled = false
   end
 end
