@@ -43,6 +43,7 @@ Rails.application.configure do
   config.active_job.queue_adapter = :solid_queue
   config.solid_queue.connects_to = { database: { writing: :queue } }
   config.solid_queue.logger = ActiveSupport::Logger.new(STDOUT)
+  config.solid_queue.clear_finished_jobs_after = 1.month
 
   # Store uploaded files on the local file system (see config/storage.yml for options).
   config.active_storage.service = ENV["DOCKER_CONTAINER"] == "true" ? :amazon : :local
