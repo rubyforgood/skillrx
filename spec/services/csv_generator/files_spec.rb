@@ -4,7 +4,7 @@ RSpec.describe CsvGenerator::Files do
   subject { described_class.new(language) }
 
   let(:language) { create(:language) }
-  let(:header) { "TopicID,FileName,FileType,FileSize\n" }
+  let(:header) { "FileID,TopicID,FileName,FileType,FileSize\n" }
 
   it "generates empty csv" do
     expect(subject.perform).to eq(header)
@@ -15,7 +15,7 @@ RSpec.describe CsvGenerator::Files do
     let(:data) do
       header.tap do |csv|
         topic.documents.each do |document|
-          csv << "#{topic.id},#{document.filename},#{document.content_type},#{document.byte_size}\n"
+          csv << "#{document.id},#{topic.id},#{document.filename},#{document.content_type},#{document.byte_size}\n"
         end
       end
     end

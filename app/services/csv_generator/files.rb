@@ -9,7 +9,7 @@ class CsvGenerator::Files < CsvGenerator::Base
   attr_reader :language, :args
 
   def headers
-    %w[TopicID FileName FileType FileSize]
+    %w[FileID TopicID FileName FileType FileSize]
   end
 
   def scope
@@ -17,6 +17,7 @@ class CsvGenerator::Files < CsvGenerator::Base
       .flat_map do |topic|
         topic.documents.map do |doc|
           [
+            doc.id,
             topic.id,
             doc.filename,
             doc.content_type,
