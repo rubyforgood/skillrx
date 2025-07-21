@@ -15,7 +15,7 @@ RSpec.describe LanguageContentProcessor do
   end
 
   it "processes content for every language" do
-    files_number = language.providers.size + 8 # 2 xml files for all provides, 2 text files for tags, 4 csv files
+    files_number = language.providers.size + 9 # 2 xml files for all provides, 2 text files for tags, 5 csv files
     subject.perform
 
     expect(FileUploadJob).to have_received(:perform_later).exactly(files_number).times
@@ -28,6 +28,7 @@ RSpec.describe LanguageContentProcessor do
     expect(FileUploadJob).to have_received(:perform_later).with(language.id, :topics)
     expect(FileUploadJob).to have_received(:perform_later).with(language.id, :tag_details)
     expect(FileUploadJob).to have_received(:perform_later).with(language.id, :topic_tags)
+    expect(FileUploadJob).to have_received(:perform_later).with(language.id, :topic_authors)
     expect(FileUploadJob).to have_received(:perform_later).with(language.id, nil, provider.id)
   end
 end

@@ -65,6 +65,11 @@ class LanguageContentProcessor
         name: "#{language.file_storage_prefix}TopicTag.csv",
         path: "#{language.file_storage_prefix}CMES-v2/assets/csv",
       ),
+        topic_authors: FileToUpload.new(
+        content: ->(language) { CsvGenerator::TopicAuthors.new(language).perform },
+        name: "#{language.file_storage_prefix}TopicAuthor.csv",
+        path: "#{language.file_storage_prefix}CMES-v2/assets/csv",
+      ),
     }
   end
 
