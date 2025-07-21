@@ -3,10 +3,11 @@
 <%= render @tag %>
 
 <div id="<%= "delete_tag_#{@tag.id}" %>">
-  <div class="mt-4">
-    <%= link_to "Edit this tag", edit_tag_path(@tag) %> |
-    <%= link_to "Back to tags", tags_path %>
-  </div>
+  <%= link_to "Back to tags", tags_path, class: "mt-4" %>
+
+<div>
+  <%= link_to "Edit this tag", edit_tag_path(@tag), class: "btn btn-primary mt-4" %>
+</div>
 
   <% if Current.user.is_admin? %>
     <div>

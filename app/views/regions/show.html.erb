@@ -2,9 +2,10 @@
 
 <%= render @region %>
 
-<div class="mt-4">
-  <%= link_to "Edit this region", edit_region_path(@region) %> |
-  <%= link_to "Back to regions", regions_path %>
+<%= link_to "Back to regions", regions_path, class: "mt-4" %>
+
+<div>
+  <%= link_to "Edit this region", edit_region_path(@region), class: "btn btn-primary mt-4" %>
 </div>
 
 <div>
