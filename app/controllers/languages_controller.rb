@@ -14,7 +14,7 @@ class LanguagesController < ApplicationController
     @language = Language.new(language_params)
 
     if @language.save
-      redirect_to languages_path
+      redirect_to languages_path, notice: "Language was successfully created."
     else
       render :new
     end
@@ -25,7 +25,7 @@ class LanguagesController < ApplicationController
 
   def update
     @language.update(language_params)
-    redirect_to languages_path
+    redirect_to languages_path, notice: "Language was successfully updated."
   end
 
   private

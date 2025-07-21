@@ -28,7 +28,13 @@ describe "Topics", type: :request do
       expect(topic.state).to eq("active")
     end
 
-    context "when user is ad admin" do
+    it "displays a success message" do
+      post topics_url, params: { topic: topic_params }
+
+      expect(flash[:notice]).to eq("Topic was successfully created.")
+    end
+
+    context "when user is an admin" do
       let(:new_provider) { create(:provider) }
 
       before { user.update(is_admin: true) }

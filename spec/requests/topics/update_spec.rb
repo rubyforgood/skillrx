@@ -11,15 +11,20 @@ RSpec.describe "Topics", type: :request do
   describe "PUT /topics/:id" do
     let(:user) { create(:user) }
     let(:topic) { create(:topic) }
+    let(:topic_params) { { title: "new topic", description: "updated" } }
 
     it "updates a Topic" do
-       topic_params = { title: "new topic", description: "updated" }
-
        put topic_url(topic), params: { topic: topic_params }
 
        topic.reload
        expect(topic.title).to eq("new topic")
        expect(topic.description).to eq("updated")
+    end
+
+    it "displays a success message" do
+      put topics_url, params: { topic: topic_params }
+
+      expect(flash[:notice]).to eq("Topic was successfully updated.")
     end
 
     context "when removing a tag" do
