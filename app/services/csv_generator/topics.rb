@@ -9,7 +9,7 @@ class CsvGenerator::Topics < CsvGenerator::Base
   attr_reader :language, :args
 
   def headers
-    %w[TopicID TopicName TopicVolume TopicYear TopicMonth ContentProvider]
+    %w[TopicID TopicName TopicVolume TopicIssue TopicYear TopicMonth ContentProvider]
   end
 
   def scope
@@ -20,6 +20,7 @@ class CsvGenerator::Topics < CsvGenerator::Base
           topic.id,
           topic.title,
           topic.published_at.year,
+          topic.published_at.month,
           topic.published_at.year,
           topic.published_at.month,
           topic.provider.name,
