@@ -46,8 +46,12 @@ class TopicsController < ApplicationController
   def destroy
     redirect_to topics_path and return unless Current.user.is_admin?
 
-    Topics::Mutator.new(topic: @topic).destroy
-    redirect_to topics_path
+    if params[:confirmed]
+      Topics::Mutator.new(topic: @topic).destroy
+      redirect_to topics_path, notice: "Topic was successfully destroyed."
+    else
+      respond_to { |format| format.turbo_stream }
+    end
   end
 
   def archive
