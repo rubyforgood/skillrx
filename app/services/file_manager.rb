@@ -78,7 +78,7 @@ class FileManager
   end
 
   def file_name
-    @file_name ||= [ topic.id, document.filename.to_s ].join("_")
+    @file_name ||= [ topic.doc_prefix, document.filename.to_s ].join("_")
   end
 
   def language

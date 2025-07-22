@@ -2,18 +2,19 @@
 #
 # Table name: topics
 #
-#  id           :bigint           not null, primary key
-#  description  :text
-#  published_at :datetime         not null
-#  shadow_copy  :boolean          default(FALSE), not null
-#  state        :integer          default("active"), not null
-#  title        :string           not null
-#  uid          :string
-#  created_at   :datetime         not null
-#  updated_at   :datetime         not null
-#  language_id  :bigint
-#  old_id       :integer
-#  provider_id  :bigint
+#  id              :bigint           not null, primary key
+#  description     :text
+#  document_prefix :string
+#  published_at    :datetime         not null
+#  shadow_copy     :boolean          default(FALSE), not null
+#  state           :integer          default("active"), not null
+#  title           :string           not null
+#  uid             :string
+#  created_at      :datetime         not null
+#  updated_at      :datetime         not null
+#  language_id     :bigint
+#  old_id          :integer
+#  provider_id     :bigint
 #
 # Indexes
 #

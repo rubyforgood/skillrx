@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.0].define(version: 2025_07_08_203404) do
+ActiveRecord::Schema[8.0].define(version: 2025_07_22_144049) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_catalog.plpgsql"
 
@@ -168,6 +168,7 @@ ActiveRecord::Schema[8.0].define(version: 2025_07_08_203404) do
     t.string "uid"
     t.datetime "published_at", default: -> { "CURRENT_TIMESTAMP" }, null: false
     t.boolean "shadow_copy", default: false, null: false
+    t.string "document_prefix"
     t.index ["language_id"], name: "index_topics_on_language_id"
     t.index ["old_id"], name: "index_topics_on_old_id", unique: true
     t.index ["provider_id"], name: "index_topics_on_provider_id"

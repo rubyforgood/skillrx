@@ -128,6 +128,7 @@ class Topics::Mutator
   def topic_shadow_with_attachments(docs_to_delete)
     topic.dup.tap do |shadow|
       shadow.shadow_copy = true
+      shadow.document_prefix = topic.id
       docs_to_delete.each do |doc|
         shadow.documents.attach(doc.signed_id)
       end
