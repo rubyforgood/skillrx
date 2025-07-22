@@ -1,10 +1,10 @@
 require "rails_helper"
 
-RSpec.describe CsvGenerator::Topics do
+RSpec.describe CsvGenerator::TopicAuthors do
   subject { described_class.new(language) }
 
   let(:language) { create(:language) }
-  let(:header) { "TopicID,TopicName,TopicVolume,TopicIssue,TopicYear,TopicMonth,ContentProvider\n" }
+  let(:header) { "TopicID,AuthorID\n" }
 
   it "generates empty csv" do
     expect(subject.perform).to eq(header)
@@ -14,7 +14,7 @@ RSpec.describe CsvGenerator::Topics do
     let!(:topic) { create(:topic, language:) }
     let(:data) do
       header.tap do |csv|
-        csv << "#{topic.id},#{topic.title},#{topic.published_at.year},#{topic.published_at.month},#{topic.published_at.year},#{topic.published_at.month},#{topic.provider.name}\n"
+        csv << "#{topic.id},0\n"
       end
     end
 
