@@ -12,30 +12,14 @@ RSpec.describe CsvGenerator::TopicAuthors do
 
   context "when topics exist" do
     let!(:topic) { create(:topic, language:) }
-
-    context "when the provider has at least 1 user" do
-      let!(:user) { create(:contributor, provider: topic.provider).user }
-      let(:data) do
-        header.tap do |csv|
-          csv << "#{topic.id},#{user.id}\n"
-        end
-      end
-
-      it "generates csv with topics info" do
-        expect(subject.perform).to eq(data)
+    let(:data) do
+      header.tap do |csv|
+        csv << "#{topic.id},0\n"
       end
     end
 
-    context "when the provider has no users" do
-      let(:data) do
-        header.tap do |csv|
-          csv << "#{topic.id},\n"
-        end
-      end
-
-      it "generates csv with topics info" do
-        expect(subject.perform).to eq(data)
-      end
+    it "generates csv with topics info" do
+      expect(subject.perform).to eq(data)
     end
   end
 

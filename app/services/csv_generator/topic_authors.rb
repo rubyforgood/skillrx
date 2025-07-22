@@ -13,12 +13,6 @@ class CsvGenerator::TopicAuthors < CsvGenerator::Base
   end
 
   def scope
-    language.topics.active
-      .map do |topic|
-        [
-          topic.id,
-          topic.provider.users.first&.id,
-        ]
-      end
+    language.topics.active.map { |topic| [ topic.id, 0 ] }
   end
 end
