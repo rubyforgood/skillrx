@@ -8,80 +8,77 @@ class LanguageContentProcessor
     process_language_content!
   end
 
+  # Field 'content' is a lambda to allow lazy evaluation
+  # this is needed to avoid loading all files into memory at once
+  # Field 'name' is a lambda to allow dynamic naming based on the provider
+  def provider_files
+    [
+      FileToUpload.new(
+        content: ->(provider) { XmlGenerator::SingleProvider.new(provider).perform },
+        name: ->(provider) { "#{language.file_storage_prefix}#{provider.name}.xml" },
+        path: "#{language.file_storage_prefix}CMES-Pi/assets/XML",
+      ),
+    ]
+  end
+
+  # Field 'content' is a lambda to allow lazy evaluation
+  # this is needed to avoid loading all files into memory at once
+  def language_files
+    {
+      all_providers: FileToUpload.new(
+        content: ->(language) { XmlGenerator::AllProviders.new(language).perform },
+        name: "#{language.file_storage_prefix}Server_XML.xml",
+        path: "#{language.file_storage_prefix}CMES-Pi/assets/XML",
+      ),
+      all_providers_recent: FileToUpload.new(
+        content: ->(language) { XmlGenerator::AllProviders.new(language, recent: true).perform },
+        name: "#{language.file_storage_prefix}New_Uploads_Server_XML.xml",
+        path: "#{language.file_storage_prefix}CMES-Pi/assets/XML",
+      ),
+      tags: FileToUpload.new(
+        content: ->(language) { TextGenerator::Tags.new(language).perform },
+        name: "#{language.file_storage_prefix}tags.txt",
+        path: "#{language.file_storage_prefix}CMES-Pi/assets/Tags",
+      ),
+      tags_and_title: FileToUpload.new(
+        content: ->(language) { TextGenerator::TitleAndTags.new(language).perform },
+        name: "#{language.file_storage_prefix}tagsAndTitle.txt",
+        path: "#{language.file_storage_prefix}CMES-Pi/assets/Tags",
+      ),
+      files: FileToUpload.new(
+        content: ->(language) { CsvGenerator::Files.new(language).perform },
+        name: "#{language.file_storage_prefix}File.csv",
+        path: "#{language.file_storage_prefix}CMES-v2/assets/csv",
+      ),
+      topics: FileToUpload.new(
+        content: ->(language) { CsvGenerator::Topics.new(language).perform },
+        name: "#{language.file_storage_prefix}Topic.csv",
+        path: "#{language.file_storage_prefix}CMES-v2/assets/csv",
+      ),
+      tag_details: FileToUpload.new(
+        content: ->(language) { CsvGenerator::TagDetails.new(language).perform },
+        name: "#{language.file_storage_prefix}Tag.csv",
+        path: "#{language.file_storage_prefix}CMES-v2/assets/csv",
+      ),
+      topic_tags: FileToUpload.new(
+        content: ->(language) { CsvGenerator::TopicTags.new(language).perform },
+        name: "#{language.file_storage_prefix}TopicTag.csv",
+        path: "#{language.file_storage_prefix}CMES-v2/assets/csv",
+      ),
+    }
+  end
+
   private
 
   attr_reader :language, :share
 
   def process_language_content!
-    files_to_upload.each do |file|
-      FileWorker.new(
-        share:,
-        name: file.name,
-        path: file.path,
-        file: file.content,
-      ).send
+    language_files.keys.each do |file_id|
+      FileUploadJob.perform_later(language.id, file_id)
     end
-  end
 
-  def files_to_upload
-    [
-      FileToUpload.new(
-        id: :all_providers,
-        content: XmlGenerator::AllProviders.new(language).perform,
-        name: "#{language.file_storage_prefix}Server_XML.xml",
-        path: "#{language.file_storage_prefix}CMES-Pi/assets/XML",
-      ),
-      FileToUpload.new(
-        id: :all_providers_recent,
-        content: XmlGenerator::AllProviders.new(language, recent: true).perform,
-        name: "#{language.file_storage_prefix}New_Uploads_Server_XML.xml",
-        path: "#{language.file_storage_prefix}CMES-Pi/assets/XML",
-      ),
-      FileToUpload.new(
-        id: :tags,
-        content: TextGenerator::Tags.new(language).perform,
-        name: "#{language.file_storage_prefix}tags.txt",
-        path: "#{language.file_storage_prefix}CMES-Pi/assets/Tags",
-      ),
-      FileToUpload.new(
-        id: :tags_and_title,
-        content: TextGenerator::TitleAndTags.new(language).perform,
-        name: "#{language.file_storage_prefix}tagsAndTitle.txt",
-        path: "#{language.file_storage_prefix}CMES-Pi/assets/Tags",
-      ),
-      FileToUpload.new(
-        id: :files,
-        content: CsvGenerator::Files.new(language).perform,
-        name: "#{language.file_storage_prefix}File.csv",
-        path: "#{language.file_storage_prefix}CMES-v2/assets/csv",
-      ),
-      FileToUpload.new(
-        id: :topics,
-        content: CsvGenerator::Topics.new(language).perform,
-        name: "#{language.file_storage_prefix}Topic.csv",
-        path: "#{language.file_storage_prefix}CMES-v2/assets/csv",
-      ),
-      FileToUpload.new(
-        id: :tag_details,
-        content: CsvGenerator::TagDetails.new(language).perform,
-        name: "#{language.file_storage_prefix}Tag.csv",
-        path: "#{language.file_storage_prefix}CMES-v2/assets/csv",
-      ),
-      FileToUpload.new(
-        id: :topic_tags,
-        content: CsvGenerator::TopicTags.new(language).perform,
-        name: "#{language.file_storage_prefix}TopicTag.csv",
-        path: "#{language.file_storage_prefix}CMES-v2/assets/csv",
-      ),
-    ].tap do |files|
-      language.providers.find_each do |provider|
-        files << FileToUpload.new(
-          id: provider.id,
-          content: XmlGenerator::SingleProvider.new(provider).perform,
-          name: "#{language.file_storage_prefix}#{provider.name}.xml",
-          path: "#{language.file_storage_prefix}CMES-Pi/assets/XML",
-        )
-      end
+    language.providers.find_each do |provider|
+      FileUploadJob.perform_later(language.id, nil, provider.id)
     end
   end
 end

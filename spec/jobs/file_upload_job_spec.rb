@@ -1,0 +1,46 @@
+require "rails_helper"
+
+RSpec.describe FileUploadJob, type: :job do
+  let(:language) { create(:language) }
+  let(:processor) { LanguageContentProcessor.new(language) }
+
+  describe "#perform" do
+    before do
+      allow(FileWorker).to receive(:new).and_return(instance_double(FileWorker, send: true))
+    end
+
+    context "when language specific file" do
+      it "processes specific file" do
+        processor.language_files.each do |file_id, file|
+          expect(FileWorker).to receive(:new).with(
+            share: ENV["AZURE_STORAGE_SHARE_NAME"],
+            name: file.name,
+            path: file.path,
+            file: file.content[language],
+          )
+
+          described_class.perform_now(language.id, file_id)
+        end
+      end
+    end
+
+    context "when provider specific file" do
+      let(:provider) { create(:provider) }
+
+      before { create(:topic, :tagged, language:, provider:) }
+
+      it "processes specific file" do
+        processor.provider_files.each do |file|
+          expect(FileWorker).to receive(:new).with(
+            share: ENV["AZURE_STORAGE_SHARE_NAME"],
+            name: file.name[provider],
+            path: file.path,
+            file: file.content[provider],
+          )
+        end
+
+        described_class.perform_now(language.id, nil, provider.id)
+      end
+    end
+  end
+end
