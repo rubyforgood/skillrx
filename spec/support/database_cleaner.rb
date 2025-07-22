@@ -1,3 +1,7 @@
+DatabaseCleaner.url_allowlist = [
+  "postgres://@localhost:5432/skillrx_test",
+  "postgres://@localhost:5432/skillrx_test_queue",
+]
 RSpec.configure do |config|
   config.before(:suite) do
     DatabaseCleaner.clean_with(:deletion)
