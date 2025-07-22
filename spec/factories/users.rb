@@ -19,6 +19,13 @@ FactoryBot.define do
     password { Faker::Internet.password }
     is_admin { false }
 
+    after(:build) do |user|
+      unless user.is_admin
+        provider = create(:provider)
+        user.providers << provider
+      end
+    end
+
     trait :admin do
       is_admin { true }
     end
