@@ -20,15 +20,15 @@ RSpec.describe LanguageContentProcessor do
 
     expect(FileUploadJob).to have_received(:perform_later).exactly(files_number).times
 
-    expect(FileUploadJob).to have_received(:perform_later).with(language.id, :all_providers)
-    expect(FileUploadJob).to have_received(:perform_later).with(language.id, :all_providers_recent)
-    expect(FileUploadJob).to have_received(:perform_later).with(language.id, :tags)
-    expect(FileUploadJob).to have_received(:perform_later).with(language.id, :tags_and_title)
-    expect(FileUploadJob).to have_received(:perform_later).with(language.id, :files)
-    expect(FileUploadJob).to have_received(:perform_later).with(language.id, :topics)
-    expect(FileUploadJob).to have_received(:perform_later).with(language.id, :tag_details)
-    expect(FileUploadJob).to have_received(:perform_later).with(language.id, :topic_tags)
-    expect(FileUploadJob).to have_received(:perform_later).with(language.id, :topic_authors)
+    expect(FileUploadJob).to have_received(:perform_later).with(language.id, "all_providers")
+    expect(FileUploadJob).to have_received(:perform_later).with(language.id, "all_providers_recent")
+    expect(FileUploadJob).to have_received(:perform_later).with(language.id, "tags")
+    expect(FileUploadJob).to have_received(:perform_later).with(language.id, "tags_and_title")
+    expect(FileUploadJob).to have_received(:perform_later).with(language.id, "files")
+    expect(FileUploadJob).to have_received(:perform_later).with(language.id, "topics")
+    expect(FileUploadJob).to have_received(:perform_later).with(language.id, "tag_details")
+    expect(FileUploadJob).to have_received(:perform_later).with(language.id, "topic_tags")
+    expect(FileUploadJob).to have_received(:perform_later).with(language.id, "topic_authors")
     expect(FileUploadJob).to have_received(:perform_later).with(language.id, nil, provider.id)
   end
 end
