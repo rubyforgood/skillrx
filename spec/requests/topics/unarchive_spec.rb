@@ -14,6 +14,12 @@ describe "Topics", type: :request do
       expect(topic.reload.state).to eq("active")
     end
 
+    it "displays a success message" do
+      put unarchive_topic_url(topic)
+
+      expect(flash[:notice]).to eq("Topic was successfully reinstated.")
+    end
+
     context "when topic has documents" do
       let(:topic) { create(:topic, :with_documents, state: "archived") }
 
