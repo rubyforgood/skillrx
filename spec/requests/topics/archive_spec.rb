@@ -14,6 +14,12 @@ describe "Topics", type: :request do
       expect(topic.reload.state).to eq("archived")
     end
 
+    it "displays a success message" do
+      put archive_topic_url(topic)
+
+      expect(flash[:notice]).to eq("Topic was successfully archived.")
+    end
+
     context "when topic has documents" do
       let(:topic) { create(:topic, :with_documents) }
 

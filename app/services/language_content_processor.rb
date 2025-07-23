@@ -79,7 +79,7 @@ class LanguageContentProcessor
 
   def process_language_content!
     language_files.keys.each do |file_id|
-      FileUploadJob.perform_later(language.id, file_id)
+      FileUploadJob.perform_later(language.id, file_id.to_s)
     end
 
     language.providers.find_each do |provider|

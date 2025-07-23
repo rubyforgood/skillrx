@@ -14,5 +14,11 @@ describe "Languages", type: :request do
       expect(Language.last.name).to eq("french")
       expect(Language.last.file_storage_prefix).to eq("FR_")
     end
+
+    it "displays a success message" do
+      post languages_url, params: { language: language_params }
+
+      expect(flash[:notice]).to eq("Language was successfully created.")
+    end
   end
 end
