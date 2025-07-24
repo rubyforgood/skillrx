@@ -9,7 +9,7 @@ class FileUploadJob < ApplicationJob
       return
     end
 
-    send_language_content(file_id)
+    send_language_content(file_id.to_sym)
   end
 
   private

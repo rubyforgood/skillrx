@@ -96,10 +96,12 @@ class DataImport
       puts "Creating user for #{provider.name}"
       email = "#{row['Provider_Name'].parameterize}@test.test"
       user = User.find_by(email: email)
-      user = User.create(email: email, password_digest: BCrypt::Password.create(row["Provider_Password"])) if user.blank?
+      user = User.build(email: email, password_digest: BCrypt::Password.create(row["Provider_Password"])) if user.blank?
 
       # Then, associate the user with the provider
-      provider.users << user unless provider.users.include?(user)
+      user.providers << provider unless provider.users.include?(user)
+      user.save! if user.new_record?
+      puts "User #{user.email} #{user.new_record? ? "created" : "already exists"}"
     end
   end
 
@@ -205,18 +207,19 @@ class DataImport
 
     admin = User.find_by(email: "admin@mail.com")
     if admin.nil?
-      admin = User.create!(email: "admin@mail.com", password: "test123", is_admin: true)
+      admin = User.build(email: "admin@mail.com", password: "test123", is_admin: true)
     end
     Provider.all.each do |provider|
-      provider.users << admin unless provider.users.include?(admin)
+      admin.providers << provider unless admin.providers.include?(admin)
     end
+    admin.save!
 
     me = User.find_by(email: "me@mail.com")
     if me.nil?
-      me = User.create!(email: "me@mail.com", password: "test123")
+      me = User.build(email: "me@mail.com", password: "test123")
     end
-
-    Provider.first.users << me unless Provider.first.users.include?(me)
+    me.providers << Provider.first unless Provider.first.users.include?(me)
+    me.save!
   end
 
   def self.import_training_documents
@@ -363,11 +366,10 @@ class DataImport
   end
 
   def self.download_azure_file(file_path, filename)
-    encoded_filename = URI.encode_www_form_component(filename)
     AzureFileShares.client.files.download_file(
       ENV["AZURE_STORAGE_SHARE_NAME"],
       file_path,
-      encoded_filename
+      filename
     )
   end
 
