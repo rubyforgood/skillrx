@@ -13,6 +13,7 @@ Topic.destroy_all
 Provider.destroy_all
 Language.destroy_all
 User.destroy_all
+Tag.destroy_all
 
 puts "Creating languages..."
 
@@ -24,6 +25,7 @@ puts "Creating languages..."
 end
 
 puts "Languages created!"
+
 puts "Creating providers..."
 
 [
@@ -33,6 +35,7 @@ puts "Creating providers..."
 end
 
 puts "Providers created!"
+
 puts "Creating topics..."
 
 [
@@ -59,6 +62,7 @@ puts "Creating topics..."
 end
 
 puts "Topics created!"
+
 puts "Tagging topics.."
 Topic.all.each do |topic|
   language_code = topic.language.code
@@ -69,24 +73,37 @@ Topic.all.each do |topic|
 end
 
 puts "Topics tagged!"
+
 puts "Creating tags cognates..."
 Tag.first.tag_cognates.create(cognate_id:  Tag.second.id)
+puts "Cognates created!"
 
-puts "Topics tagged!"
 puts "Creating users..."
 
-User.create(email: "admin@mail.com", password: "test123", is_admin: true)
-me = User.create(email: "me@mail.com", password: "test123")
+users = [
+  { email: "admin@mail.com", password: "test123", is_admin: true },
+  { email: "me@mail.com", password: "test123" },
+].map do |user_data|
+  user = User.find_or_initialize_by(email: user_data[:email]).tap do |u|
+    u.password = user_data[:password]
+    u.is_admin = user_data[:is_admin] || false
+    u.providers << Provider.first unless u.is_admin
+    u.save!
+  end
+end
+
+me = users.last
 Provider.all.each do |provider|
   provider.users << me
 end
 
 10.times do
-  User.create(
-    email: Faker::Internet.email,
-    password: "password",
-    is_admin: false,
-  )
+  user = User.find_or_initialize_by(email: Faker::Internet.email).tap do |u|
+    u.password = Faker::Internet.password
+    u.is_admin = false
+    u.providers << Provider.first unless u.is_admin
+    u.save!
+  end
 end
 
 puts "Users created!"
