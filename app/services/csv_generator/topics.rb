@@ -22,7 +22,7 @@ class CsvGenerator::Topics < CsvGenerator::Base
           topic.published_at.year,
           topic.published_at.month,
           topic.published_at.year,
-          topic.published_at.month,
+          topic.published_at.strftime("%m_%B"),
           topic.provider.name,
         ]
       end

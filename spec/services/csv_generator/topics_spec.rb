@@ -11,10 +11,10 @@ RSpec.describe CsvGenerator::Topics do
   end
 
   context "when topics exist" do
-    let!(:topic) { create(:topic, language:) }
+    let!(:topic) { create(:topic, language:, published_at: DateTime.new(2023, 6, 1)) }
     let(:data) do
       header.tap do |csv|
-        csv << "#{topic.id},#{topic.title},#{topic.published_at.year},#{topic.published_at.month},#{topic.published_at.year},#{topic.published_at.month},#{topic.provider.name}\n"
+        csv << "#{topic.id},#{topic.title},2023,6,2023,06_June,#{topic.provider.name}\n"
       end
     end
 
