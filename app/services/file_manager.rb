@@ -77,8 +77,21 @@ class FileManager
     @file_content ||= document.download
   end
 
+  # naming convention described here: https://github.com/rubyforgood/skillrx/issues/305
+  # [topic.id]_[provider.provider_name_for_file]_[topic.published_at_year]_[topic.published_at_month][document.filename.parameterize].[extension]
   def file_name
-    @file_name ||= [ topic.doc_prefix, document.filename.to_s ].join("_")
+    provider = topic.provider
+    @file_name ||= [].tap do |parts|
+      parts << topic.id
+      if provider.file_name_prefix.present?
+        parts << provider.file_name_prefix
+      else
+        parts << provider.name
+      end
+      parts << topic.published_at_year
+      parts << format("%02d", topic.published_at_month)
+      parts << document.filename
+    end.join("_")
   end
 
   def language

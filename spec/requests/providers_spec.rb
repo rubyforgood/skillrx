@@ -34,7 +34,6 @@ RSpec.describe "/providers", type: :request do
 
   describe "GET /new" do
     it "renders a successful response" do
-
       get new_provider_url
 
       expect(response).to be_successful
@@ -45,7 +44,6 @@ RSpec.describe "/providers", type: :request do
     let(:provider) { create(:provider) }
 
     it "renders a successful response" do
-
       get edit_provider_url(provider)
 
       expect(response).to be_successful
