@@ -94,12 +94,13 @@ class TopicsController < ApplicationController
   end
 
   def mutator
-    document_signed_ids = topic_params.extract!(:document_signed_ids)
+    documents = topic_params.extract!(:document_signed_ids)
+    document_signed_ids = documents[:document_signed_ids]
 
     @mutator ||= Topics::Mutator.new(
       topic: @topic,
       params: topic_params,
-      document_signed_ids: document_signed_ids[:document_signed_ids],
+      document_signed_ids:,
     )
   end
 

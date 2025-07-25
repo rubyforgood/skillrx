@@ -2,7 +2,8 @@ class Topics::Mutator
   def initialize(topic:, params: nil, document_signed_ids: nil)
     @topic = topic
     @params = params
-    @document_signed_ids = document_signed_ids
+    @document_signed_ids = document_signed_ids || []
+    @document_ids = extract_document_ids
   end
 
   def create
@@ -42,18 +43,20 @@ class Topics::Mutator
 
   private
 
-  attr_reader :topic, :params, :document_signed_ids
+  attr_reader :topic, :params, :document_signed_ids, :document_ids
 
   def mutate
     topic.valid?
     return [ :error,  topic.errors.full_messages ] if topic.errors.any?
 
-    docs_to_delete = outdated_documents
+    docs_to_delete = rejected_documents
     ActiveRecord::Base.transaction do
       topic.save_with_tags(params)
       attach_files(document_signed_ids)
-      shadow_delete_documents(docs_to_delete) if updating_documents?
-      sync_docs_for_topic_updates if topic.documents.any?
+      # topic.persisted? means that we are updating existing topic and documents can be removed
+      shadow_delete_documents(docs_to_delete) if topic.persisted?
+      # document_signed_ids.any? means that some new documents were attached and we need to sync them
+      sync_docs_for_topic_updates if document_signed_ids.any?
       [ :ok, topic ]
     rescue ActiveRecord::RecordInvalid => e
       [ :error, e.record.errors.full_messages ]
@@ -113,7 +116,7 @@ class Topics::Mutator
     return if docs_to_delete.empty?
 
     topic_shadow = topic_shadow_with_attachments(docs_to_delete)
-    topic_shadow.documents.each do |doc|
+    topic_shadow.documents_attachments.each do |doc|
       DocumentsSyncJob.perform_later(
         topic_id: topic_shadow.id,
         document_id: doc.id,
@@ -125,6 +128,7 @@ class Topics::Mutator
   def topic_shadow_with_attachments(docs_to_delete)
     topic.dup.tap do |shadow|
       shadow.shadow_copy = true
+      shadow.document_prefix = topic.id
       docs_to_delete.each do |doc|
         shadow.documents.attach(doc.signed_id)
       end
@@ -132,15 +136,17 @@ class Topics::Mutator
     end
   end
 
-  def outdated_documents
-    return [] if document_signed_ids.nil?
+  # We mark documents for deletion if they are not in the list of persisted documents or added documents
+  def rejected_documents
+    maintained_document_ids = document_signed_ids + document_ids
 
     topic.documents_attachments.reject do |doc|
-      document_signed_ids&.include?(doc.signed_id)
+      maintained_document_ids&.include?(doc.signed_id)
     end
   end
 
-  def updating_documents?
-    topic.persisted? && topic.documents.any? && !document_signed_ids.nil?
+  def extract_document_ids
+    documents = params && params[:documents] || []
+    documents.map { |doc| doc.is_a?(String) ? doc : doc.signed_id }
   end
 end
