@@ -1,10 +1,4 @@
 # Production deployment configuration
-# Use the same service name as base config since we share the same Docker image
-service: skillrx
-
-# Name of the container image.
-image: skillrx/skillrx
-
 # Deploy to production server (update with your production server IP)
 servers:
   web:
