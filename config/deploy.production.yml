@@ -33,7 +33,7 @@ env:
     AWS_DEFAULT_REGION: us-east-1
     AWS_BUCKET_NAME: skillrx-production
     AWS_ENDPOINT_URL: ""  # Empty for real AWS
-    AZURE_STORAGE_SHARE_NAME: skillrx-production
+    AZURE_STORAGE_SHARE_NAME: contentshare
     LOCALSTACK_DEBUG: "0"
     S3_SKIP_SIGNATURE_VALIDATION: "0"
     SOLID_QUEUE_IN_PUMA: true
