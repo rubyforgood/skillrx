@@ -28,8 +28,8 @@ jobs:
         context: .
         push: true
         tags: |
-          andremuta/skillrx:${{ github.sha }}
-          andremuta/skillrx:staging-latest
+          skillrx/skillrx:${{ github.sha }}
+          skillrx/skillrx:latest
 
     - name: Set up Ruby
       uses: ruby/setup-ruby@v1

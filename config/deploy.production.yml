@@ -2,7 +2,7 @@
 service: skillrx-production
 
 # Name of the container image.
-image: andremuta/skillrx
+image: skillrx/skillrx
 
 # Deploy to production server (update with your production server IP)
 servers:

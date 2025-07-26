@@ -2,7 +2,7 @@
 service: skillrx-staging
 
 # Name of the container image.
-image: andremuta/skillrx
+image: skillrx/skillrx
 
 # Deploy to staging server
 servers:
