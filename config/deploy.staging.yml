@@ -11,7 +11,7 @@ servers:
 
 proxy:
   ssl: true
-  host: 
+  hosts: 
     - staging.skillrx.org
     - www.staging.skillrx.org
 

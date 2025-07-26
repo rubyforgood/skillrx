@@ -11,7 +11,7 @@ servers:
 
 proxy:
   ssl: true
-  host: 
+  hosts: 
     - skillrx.org
     - www.skillrx.org
 
