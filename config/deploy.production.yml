@@ -1,5 +1,6 @@
 # Production deployment configuration
-service: skillrx-production
+# Use the same service name as base config since we share the same Docker image
+service: skillrx
 
 # Name of the container image.
 image: skillrx/skillrx
