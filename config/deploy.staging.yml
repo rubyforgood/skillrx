@@ -1,6 +1,5 @@
 # Staging deployment configuration
-# Use the same service name as base config since we share the same Docker image
-service: skillrx
+service: skillrx-staging
 
 # Name of the container image.
 image: skillrx/skillrx
