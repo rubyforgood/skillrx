@@ -1,0 +1,5 @@
+# Base deployment configuration
+service: skillrx
+
+# Name of the container image.
+image: skillrx/skillrx
