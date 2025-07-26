@@ -52,6 +52,6 @@ class ProvidersController < ApplicationController
     end
 
     def provider_params
-      params.expect(provider: [ :name, :provider_type, region_ids: [] ])
+      params.expect(provider: [ :name, :provider_type, :file_name_prefix, region_ids: [] ])
     end
 end

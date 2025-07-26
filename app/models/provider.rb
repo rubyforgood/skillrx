@@ -2,12 +2,13 @@
 #
 # Table name: providers
 #
-#  id            :bigint           not null, primary key
-#  name          :string
-#  provider_type :string
-#  created_at    :datetime         not null
-#  updated_at    :datetime         not null
-#  old_id        :integer
+#  id               :bigint           not null, primary key
+#  file_name_prefix :string
+#  name             :string
+#  provider_type    :string
+#  created_at       :datetime         not null
+#  updated_at       :datetime         not null
+#  old_id           :integer
 #
 # Indexes
 #
