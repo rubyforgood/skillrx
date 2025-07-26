@@ -1,0 +1,41 @@
+name: Deploy to Production
+
+on:
+  workflow_dispatch:
+
+jobs:
+  deploy-production:
+    runs-on: ubuntu-latest
+    
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+
+    - name: Set up Ruby
+      uses: ruby/setup-ruby@v1
+      with:
+        ruby-version: '3.4.1'
+        bundler-cache: true
+
+    - name: Install Kamal
+      run: gem install kamal
+
+    - name: Set up SSH key
+      run: |
+        mkdir -p ~/.ssh
+        echo "${{ secrets.PRODUCTION_SSH_PRIVATE_KEY }}" > ~/.ssh/skillrx_web_production.pem
+        chmod 600 ~/.ssh/skillrx_web_production.pem
+
+    - name: Deploy to production with Kamal
+      env:
+        KAMAL_REGISTRY_USERNAME: ${{ secrets.DOCKERHUB_USERNAME }}
+        KAMAL_REGISTRY_PASSWORD: ${{ secrets.DOCKERHUB_PASSWORD }}
+        PRODUCTION_DATABASE_URL: ${{ secrets.PRODUCTION_DATABASE_URL }}
+        PRODUCTION_SECRET_KEY_BASE: ${{ secrets.PRODUCTION_SECRET_KEY_BASE }}
+        RAILS_MASTER_KEY: ${{ secrets.RAILS_MASTER_KEY }}
+        PRODUCTION_AWS_ACCESS_KEY_ID: ${{ secrets.PRODUCTION_AWS_ACCESS_KEY_ID }}
+        PRODUCTION_AWS_SECRET_ACCESS_KEY: ${{ secrets.PRODUCTION_AWS_SECRET_ACCESS_KEY }}
+        PRODUCTION_AZURE_STORAGE_ACCOUNT_NAME: ${{ secrets.PRODUCTION_AZURE_STORAGE_ACCOUNT_NAME }}
+        PRODUCTION_AZURE_STORAGE_ACCOUNT_KEY: ${{ secrets.PRODUCTION_AZURE_STORAGE_ACCOUNT_KEY }}
+      run: |
+        KAMAL_DESTINATION=production bin/kamal deploy --skip-push

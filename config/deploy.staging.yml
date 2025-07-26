@@ -1,0 +1,61 @@
+# Staging deployment configuration
+service: skillrx-staging
+
+# Name of the container image.
+image: skillrx/skillrx
+
+# Deploy to staging server
+servers:
+  web:
+    - 98.85.96.222
+
+proxy:
+  ssl: true
+  host: 
+    - staging.skillrx.org
+    - www.staging.skillrx.org
+
+registry:
+  username: KAMAL_REGISTRY_USERNAME
+  password:
+    - KAMAL_REGISTRY_PASSWORD
+
+# Staging environment variables
+env:
+  secret:
+    - RAILS_MASTER_KEY
+    - DATABASE_URL
+    - SECRET_KEY_BASE
+    - AWS_ACCESS_KEY_ID
+    - AWS_SECRET_ACCESS_KEY
+    - AZURE_STORAGE_ACCOUNT_NAME
+    - AZURE_STORAGE_ACCOUNT_KEY
+  clear:
+    RAILS_ENV: production
+    AWS_DEFAULT_REGION: us-east-1
+    AWS_BUCKET_NAME: skillrx-staging
+    AZURE_STORAGE_SHARE_NAME: skillrx-staging-env
+    AWS_ENDPOINT_URL: ""  # Empty for real AWS
+    LOCALSTACK_DEBUG: "0"
+    S3_SKIP_SIGNATURE_VALIDATION: "0"
+    SOLID_QUEUE_IN_PUMA: true
+
+aliases:
+  console: app exec --interactive --reuse "bin/rails console"
+  shell: app exec --interactive --reuse "bash"
+  logs: app logs -f
+  dbc: app exec --interactive --reuse "bin/rails dbconsole"
+
+volumes:
+  - "skillrx_staging_storage:/rails/storage"
+
+asset_path: /rails/public/assets
+
+builder:
+  arch: amd64
+
+ssh:
+  user: ubuntu
+  keys_only: true
+  keys:
+    - ~/.ssh/skillrx_web_staging.pem

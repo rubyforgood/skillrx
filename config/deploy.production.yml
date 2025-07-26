@@ -1,0 +1,61 @@
+# Production deployment configuration
+service: skillrx-production
+
+# Name of the container image.
+image: skillrx/skillrx
+
+# Deploy to production server (update with your production server IP)
+servers:
+  web:
+    - 3.233.202.191
+
+proxy:
+  ssl: true
+  host: 
+    - skillrx.org
+    - www.skillrx.org
+
+registry:
+  username: KAMAL_REGISTRY_USERNAME
+  password:
+    - KAMAL_REGISTRY_PASSWORD
+
+# Production environment variables
+env:
+  secret:
+    - RAILS_MASTER_KEY
+    - DATABASE_URL
+    - SECRET_KEY_BASE
+    - AWS_ACCESS_KEY_ID
+    - AWS_SECRET_ACCESS_KEY
+    - AZURE_STORAGE_ACCOUNT_NAME
+    - AZURE_STORAGE_ACCOUNT_KEY
+  clear:
+    RAILS_ENV: production
+    AWS_DEFAULT_REGION: us-east-1
+    AWS_BUCKET_NAME: skillrx-production
+    AWS_ENDPOINT_URL: ""  # Empty for real AWS
+    AZURE_STORAGE_SHARE_NAME: contentshare
+    LOCALSTACK_DEBUG: "0"
+    S3_SKIP_SIGNATURE_VALIDATION: "0"
+    SOLID_QUEUE_IN_PUMA: true
+
+aliases:
+  console: app exec --interactive --reuse "bin/rails console"
+  shell: app exec --interactive --reuse "bash"
+  logs: app logs -f
+  dbc: app exec --interactive --reuse "bin/rails dbconsole"
+
+volumes:
+  - "skillrx_production_storage:/rails/storage"
+
+asset_path: /rails/public/assets
+
+builder:
+  arch: amd64
+
+ssh:
+  user: ubuntu
+  keys_only: true
+  keys:
+    - ~/.ssh/skillrx_web_production.pem
