@@ -3,21 +3,21 @@
     {
       "warning_type": "SQL Injection",
       "warning_code": 0,
-      "fingerprint": "b9be381566d68ef14f46a175c99ec4814565753eb616f259e5ddcdd9aff5f819",
+      "fingerprint": "574a24662084f6c06b2ab956a5ab6b850248892cae89bb5fbeb85337895940fc",
       "check_name": "SQL",
       "message": "Possible SQL injection",
       "file": "lib/autorequire/data_import.rb",
-      "line": 148,
+      "line": 155,
       "link": "https://brakemanscanner.org/docs/warning_types/sql_injection/",
-      "code": "ActiveRecord::Base.connection.execute(\"SELECT setval('topics_id_seq', #{((Topic.maximum(:id) or 0) + 1)}, false)\")",
+      "code": "ActiveRecord::Base.connection.execute(\"SELECT setval('#{\"#{model.table_name}_#{model.primary_key}_seq\"}', #{((model.maximum(model.primary_key) or 0) + 1)}, false)\")",
       "render_path": null,
       "location": {
         "type": "method",
         "class": "DataImport",
-        "method": "s(:self).reset_topic_id_starting_value"
+        "method": "s(:self).reset_pk_sequence_for"
       },
-      "user_input": "Topic.maximum(:id)",
-      "confidence": "High",
+      "user_input": "((model.maximum(model.primary_key) or 0) + 1)",
+      "confidence": "Medium",
       "cwe_id": [
         89
       ],
