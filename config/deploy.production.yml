@@ -11,7 +11,9 @@ servers:
 
 proxy:
   ssl: true
-  host: skillrx.org
+  host: 
+    - skillrx.org
+    - www.skillrx.org
 
 registry:
   username: KAMAL_REGISTRY_USERNAME

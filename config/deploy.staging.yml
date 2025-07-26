@@ -11,7 +11,9 @@ servers:
 
 proxy:
   ssl: true
-  host: staging.skillrx.org
+  host: 
+    - staging.skillrx.org
+    - www.staging.skillrx.org
 
 registry:
   username: KAMAL_REGISTRY_USERNAME
