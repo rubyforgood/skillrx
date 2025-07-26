@@ -16,7 +16,8 @@ proxy:
     - www.staging.skillrx.org
 
 registry:
-  username: KAMAL_REGISTRY_USERNAME
+  username: 
+    - KAMAL_REGISTRY_USERNAME
   password:
     - KAMAL_REGISTRY_PASSWORD
 
