@@ -27,6 +27,8 @@ jobs:
       with:
         context: .
         push: true
+        build-args: |
+          SERVICE_NAME=skillrx-staging
         tags: |
           skillrx/skillrx:${{ github.sha }}
           skillrx/skillrx:latest

@@ -11,11 +11,14 @@
 ARG RUBY_VERSION=3.4.1
 FROM docker.io/library/ruby:$RUBY_VERSION-slim AS base
 
+# Build argument for service name
+ARG SERVICE_NAME=skillrx
+
 # Rails app lives here
 WORKDIR /rails
 
 # Add service label for Kamal
-LABEL service="skillrx"
+LABEL service="${SERVICE_NAME}"
 
 # Install base packages
 RUN apt-get update -qq && \
