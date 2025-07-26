@@ -171,3 +171,4 @@ If you encounter issues:
 - Verify that your .env file contains all necessary variables
 - Try rebuilding the environment with make rebuild
 - Check container logs for specific error messages
+# Test staging deployment

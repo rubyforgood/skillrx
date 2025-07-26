@@ -2,12 +2,12 @@
 service: skillrx
 
 # Name of the container image.
-image: your-user/skillrx
+image: andremuta/skillrx
 
 # Deploy to these servers.
 servers:
   web:
-    - 192.168.0.1
+    - 3.239.195.31
   # job:
   #   hosts:
   #     - 192.168.0.1
@@ -18,40 +18,29 @@ servers:
 #
 # Note: If using Cloudflare, set encryption mode in SSL/TLS setting to "Full" to enable CF-to-app encryption.
 proxy:
-  ssl: true
-  host: app.example.com
+  ssl: false
+  host: 3.239.195.31
 
-# Credentials for your image host.
 registry:
-  # Specify the registry server, if you're not using Docker Hub
-  # server: registry.digitalocean.com / ghcr.io / ...
-  username: your-user
-
-  # Always use an access token rather than real password when possible.
+  username: andremuta
   password:
     - KAMAL_REGISTRY_PASSWORD
 
 # Inject ENV variables into containers (secrets come from .kamal/secrets).
+# Note: Environment-specific values are defined in deploy.staging.yml and deploy.production.yml
 env:
   secret:
     - RAILS_MASTER_KEY
+    - DATABASE_URL
+    - SECRET_KEY_BASE
+    - AWS_ACCESS_KEY_ID
+    - AWS_SECRET_ACCESS_KEY
+    - AZURE_STORAGE_ACCOUNT_NAME
+    - AZURE_STORAGE_ACCOUNT_KEY
   clear:
-    # Run the Solid Queue Supervisor inside the web server's Puma process to do jobs.
-    # When you start using multiple servers, you should split out job processing to a dedicated machine.
+    RAILS_ENV: production
+    AWS_DEFAULT_REGION: us-east-1
     SOLID_QUEUE_IN_PUMA: true
-
-    # Set number of processes dedicated to Solid Queue (default: 1)
-    # JOB_CONCURRENCY: 3
-
-    # Set number of cores available to the application on each server (default: 1).
-    # WEB_CONCURRENCY: 2
-
-    # Match this to any external database server to configure Active Record correctly
-    # Use skillrx-db for a db accessory server on same machine via local kamal docker network.
-    # DB_HOST: 192.168.0.2
-
-    # Log everything from Rails
-    # RAILS_LOG_LEVEL: debug
 
 # Aliases are triggered with "bin/kamal <alias>". You can overwrite arguments on invocation:
 # "bin/kamal logs -r job" will tail logs from the first server in the job section.
@@ -74,8 +63,10 @@ volumes:
 asset_path: /rails/public/assets
 
 # Configure the image builder.
+# Disable building - use pre-built image
 builder:
   arch: amd64
+  remote: false
 
   # # Build image via remote server (useful for faster amd64 builds on arm64 computers)
   # remote: ssh://docker@docker-builder-server
@@ -88,8 +79,11 @@ builder:
   #   - RAILS_MASTER_KEY
 
 # Use a different ssh user than root
-# ssh:
-#   user: app
+ssh:
+  user: ubuntu
+  keys_only: true
+  keys:
+    - ~/.ssh/skillrx_web_staging.pem
 
 # Use accessory services (secrets come from .kamal/secrets).
 # accessories:

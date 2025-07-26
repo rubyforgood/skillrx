@@ -99,32 +99,40 @@ production:
   primary:
     <<: *default
     database: skillrx_production
-    urL: <%= ENV['DATABASE_URL'] %>
+    url: <%= ENV['DATABASE_URL'] %>
   cache:
     <<: *default
-    database: sklillrx_production_cache
+    database: skillrx_production_cache
+    url: <%= ENV['DATABASE_URL'] %>
     migrations_paths: db/cache_migrate
   queue:
     <<: *default
     database: skillrx_production_queue
+    url: <%= ENV['DATABASE_URL'] %>
     migrations_paths: db/queue_migrate
   cable:
     <<: *default
     database: skillrx_production_cable
+    url: <%= ENV['DATABASE_URL'] %>
     migrations_paths: db/cable_migrate
 
 staging:
   primary:
     <<: *default
+    database: skillrx_staging
     url: <%= ENV['DATABASE_URL'] %>
   cache:
     <<: *default
+    database: skillrx_staging_cache
+    url: <%= ENV['DATABASE_URL'] %>
     migrations_paths: db/cache_migrate
   queue:
     <<: *default
-    url: <%= ENV['HEROKU_POSTGRESQL_QUEUE_URL'] || ENV['QUEUE_DATABASE_URL'] %>
+    database: skillrx_staging_queue
+    url: <%= ENV['DATABASE_URL'] %>
     migrations_paths: db/queue_migrate
   cable:
     <<: *default
-    url: <%= ENV['HEROKU_POSTGRESQL_CABLE_URL'] || ENV['CABLE_DATABASE_URL'] %>
+    database: skillrx_staging_cable
+    url: <%= ENV['DATABASE_URL'] %>
     migrations_paths: db/cable_migrate
