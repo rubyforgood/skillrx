@@ -103,6 +103,8 @@ class DataImport
       user.save! if user.new_record?
       puts "User #{user.email} #{user.new_record? ? "created" : "already exists"}"
     end
+
+    reset_pk_sequence_for(Provider)
   end
 
   def self.import_languages
@@ -141,14 +143,17 @@ class DataImport
       puts "#{topic.title} #{topic.new_record? ? "created" : "already exists"}"
       topic.save!
     end
-    reset_topic_id_starting_value
+    reset_pk_sequence_for(Topic)
   end
 
-  def self.reset_topic_id_starting_value
-    max_id = Topic.maximum(:id) || 0
+  def self.reset_pk_sequence_for(model)
+    table = model.table_name
+    pk = model.primary_key
+    seq = "#{table}_#{pk}_seq"
+    max_id = model.maximum(pk) || 0
     new_start_value = max_id + 1
-      ActiveRecord::Base.connection.execute("SELECT setval('topics_id_seq', #{new_start_value}, false)")
-    puts "Reset topics ID starting value to #{new_start_value}"
+    ActiveRecord::Base.connection.execute("SELECT setval('#{seq}', #{new_start_value}, false)")
+    puts "Reset #{table} ID starting value to #{new_start_value}"
   end
 
   def self.import_tags
@@ -165,6 +170,8 @@ class DataImport
       end
     end
     puts "Tags import completed"
+
+    reset_pk_sequence_for(Tag)
   end
 
   def self.import_topic_tags
