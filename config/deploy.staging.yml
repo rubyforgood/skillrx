@@ -15,6 +15,7 @@ proxy:
   hosts: 
     - staging.skillrx.org
     - www.staging.skillrx.org
+  app_port: 3000
 
 registry:
   username: 

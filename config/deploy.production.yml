@@ -15,6 +15,7 @@ proxy:
   hosts: 
     - skillrx.org
     - www.skillrx.org
+  app_port: 3000
 
 registry:
   username: 
