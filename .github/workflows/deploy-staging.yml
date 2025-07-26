@@ -27,11 +27,9 @@ jobs:
       with:
         context: .
         push: true
-        build-args: |
-          SERVICE_LABEL=skillrx-staging
         tags: |
           skillrx/skillrx:${{ github.sha }}
-          skillrx/skillrx:staging-latest
+          skillrx/skillrx:latest
 
     - name: Set up Ruby
       uses: ruby/setup-ruby@v1
