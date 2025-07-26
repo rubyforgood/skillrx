@@ -7,11 +7,11 @@ image: andremuta/skillrx
 # Deploy to staging server
 servers:
   web:
-    - 3.233.202.191
+    - 98.85.96.222
 
 proxy:
-  ssl: false
-  host: 3.233.202.191
+  ssl: true
+  host: staging.skillrx.org
 
 registry:
   username: KAMAL_REGISTRY_USERNAME

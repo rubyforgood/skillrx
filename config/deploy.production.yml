@@ -7,11 +7,11 @@ image: andremuta/skillrx
 # Deploy to production server (update with your production server IP)
 servers:
   web:
-    - YOUR_PRODUCTION_SERVER_IP
+    - 3.233.202.191
 
 proxy:
   ssl: true
-  host: your-production-domain.com
+  host: skillrx.org
 
 registry:
   username: KAMAL_REGISTRY_USERNAME

@@ -48,8 +48,8 @@ jobs:
 
     - name: Deploy to staging with Kamal
       env:
-        DOCKER_REGISTRY_USERNAME: ${{ secrets.DOCKERHUB_USERNAME }}
-        DOCKER_REGISTRY_PASSWORD: ${{ secrets.DOCKERHUB_PASSWORD }}
+        KAMAL_REGISTRY_USERNAME: ${{ secrets.DOCKERHUB_USERNAME }}
+        KAMAL_REGISTRY_PASSWORD: ${{ secrets.DOCKERHUB_PASSWORD }}
         STAGING_DATABASE_URL: ${{ secrets.STAGING_DATABASE_URL }}
         STAGING_SECRET_KEY_BASE: ${{ secrets.STAGING_SECRET_KEY_BASE }}
         STAGING_RAILS_MASTER_KEY: ${{ secrets.STAGING_RAILS_MASTER_KEY }}
