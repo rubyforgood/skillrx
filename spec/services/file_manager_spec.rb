@@ -6,6 +6,7 @@ RSpec.describe FileManager do
   let(:share) { "skillrx-test" }
   let(:action) { "create" }
   let(:topic) { create(:topic) }
+  let(:provider) { topic.provider }
   let(:document) do
     ActiveStorage::Blob.create_and_upload!(
       io: File.open(Rails.root.join("spec", "fixtures", "files", "dummy.pdf")),
@@ -13,6 +14,8 @@ RSpec.describe FileManager do
       content_type: "application/pdf",
     )
   end
+
+  before { provider.update(file_name_prefix: "MyPrefix") }
 
   describe "#workers" do
     it "returns an array of file workers for the specified action" do
@@ -26,14 +29,14 @@ RSpec.describe FileManager do
     it "initializes file workers with correct parameters" do
       expect(FileWorker).to receive(:new).with(
         share:,
-        name: "#{topic.id}_dummy.pdf",
+        name: "#{topic.id}_MyPrefix_#{topic.published_at_year}_#{format('%02d', topic.published_at_month)}_dummy.pdf",
         path: "#{topic.language.file_storage_prefix}CMES-Pi/assets/Content",
         file: document.download,
         new_path: nil,
       ).and_call_original
       expect(FileWorker).to receive(:new).with(
         share:,
-        name: "#{topic.id}_dummy.pdf",
+        name: "#{topic.id}_MyPrefix_#{topic.published_at_year}_#{format('%02d', topic.published_at_month)}_dummy.pdf",
         path: "#{topic.language.file_storage_prefix}CMES-v2/assets/Content",
         file: document.download,
         new_path: nil,
@@ -61,7 +64,7 @@ RSpec.describe FileManager do
       it "initializes file worker with parameters for video" do
         expect(FileWorker).to receive(:new).with(
           share:,
-          name: "#{topic.id}_video_file.mp4",
+          name: "#{topic.id}_MyPrefix_#{topic.published_at_year}_#{format('%02d', topic.published_at_month)}_video_file.mp4",
           path: "#{topic.language.file_storage_prefix}CMES-v2/assets/VideoContent",
           file: document.download,
           new_path: nil,
