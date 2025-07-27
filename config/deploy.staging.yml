@@ -7,7 +7,7 @@ servers:
 
 proxy:
   host: staging.skillrx.org
-  app_port: 80
+  app_port: 3000
   ssl: true
 
 registry:
