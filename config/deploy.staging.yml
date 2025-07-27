@@ -11,7 +11,7 @@ proxy:
   ssl: true
 
 registry:
-  username: 
+  username:
     - KAMAL_REGISTRY_USERNAME
   password:
     - KAMAL_REGISTRY_PASSWORD
@@ -36,6 +36,7 @@ env:
     LOCALSTACK_DEBUG: "0"
     S3_SKIP_SIGNATURE_VALIDATION: "0"
     SOLID_QUEUE_IN_PUMA: true
+    DATA_IMPORT_SOURCE: azure
 
 aliases:
   console: app exec --interactive --reuse "bin/rails console"
