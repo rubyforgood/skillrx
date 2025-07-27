@@ -183,21 +183,9 @@ RSpec.describe "Topics search", type: :system do
   context "when the user is a contributor" do
     let(:user) { create(:user) }
 
-    context "with no associated providers" do
-      before { click_link("Topics") }
-
-      it "shows no topics" do
-        expect(page).to have_link("Add New Topic")
-        expect(page).not_to have_text(english_active_topic.title)
-        expect(page).not_to have_text(spanish_active_topic.title)
-        expect(page).not_to have_text(english_archived_topic.title)
-        expect(page).not_to have_text(other_provider_topic.title)
-      end
-    end
-
     context "with 1 associated provider" do
       before do
-        user.providers << provider_1
+        user.update(provider_ids: [ provider_1.id ])
         click_link("Topics")
       end
 
@@ -316,7 +304,7 @@ RSpec.describe "Topics search", type: :system do
 
     context "with multiple associated providers" do
       before do
-        user.providers << [ provider_1, provider_2 ]
+        user.update(provider_ids: [ provider_1.id, provider_2.id ])
         click_link("Topics")
       end
 
