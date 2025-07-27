@@ -2,14 +2,13 @@
 # Deploy to staging server
 servers:
   web:
-    - 98.85.96.222
+    hosts:
+      - staging.skillrx.org
 
 proxy:
+  host: staging.skillrx.org
+  app_port: 80
   ssl: true
-  hosts: 
-    - staging.skillrx.org
-    - www.staging.skillrx.org
-  app_port: 3000
 
 registry:
   username: 

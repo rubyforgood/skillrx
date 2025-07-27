@@ -6,9 +6,7 @@ servers:
 
 proxy:
   ssl: true
-  hosts: 
-    - skillrx.org
-    - www.skillrx.org
+  host: skillrx.org
   app_port: 3000
 
 registry:
