@@ -11,7 +11,7 @@ proxy:
   app_port: 3000
 
 registry:
-  username: 
+  username:
     - KAMAL_REGISTRY_USERNAME
   password:
     - KAMAL_REGISTRY_PASSWORD
@@ -32,9 +32,11 @@ env:
     AWS_BUCKET_NAME: skillrx-production
     AWS_ENDPOINT_URL: ""  # Empty for real AWS
     AZURE_STORAGE_SHARE_NAME: contentshare
+    AZURE_MEDIA_FILES_SYNC_DISABLED: "true"
     LOCALSTACK_DEBUG: "0"
     S3_SKIP_SIGNATURE_VALIDATION: "0"
     SOLID_QUEUE_IN_PUMA: true
+    DATA_IMPORT_SOURCE: azure
 
 aliases:
   console: app exec --interactive --reuse "bin/rails console"
