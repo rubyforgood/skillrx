@@ -1,22 +1,18 @@
 # Staging deployment configuration
-service: skillrx-staging
-
-# Name of the container image.
-image: skillrx/skillrx
-
 # Deploy to staging server
 servers:
   web:
-    - 98.85.96.222
+    hosts:
+      - staging.skillrx.org
 
 proxy:
+  host: staging.skillrx.org
+  app_port: 3000
   ssl: true
-  hosts: 
-    - staging.skillrx.org
-    - www.staging.skillrx.org
 
 registry:
-  username: KAMAL_REGISTRY_USERNAME
+  username: 
+    - KAMAL_REGISTRY_USERNAME
   password:
     - KAMAL_REGISTRY_PASSWORD
 
@@ -35,6 +31,7 @@ env:
     AWS_DEFAULT_REGION: us-east-1
     AWS_BUCKET_NAME: skillrx-staging
     AZURE_STORAGE_SHARE_NAME: skillrx-staging-env
+    AZURE_MEDIA_FILES_SYNC_DISABLED: "true"
     AWS_ENDPOINT_URL: ""  # Empty for real AWS
     LOCALSTACK_DEBUG: "0"
     S3_SKIP_SIGNATURE_VALIDATION: "0"

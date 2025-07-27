@@ -1,22 +1,18 @@
 # Production deployment configuration
-service: skillrx-production
-
-# Name of the container image.
-image: skillrx/skillrx
-
 # Deploy to production server (update with your production server IP)
 servers:
   web:
-    - 3.233.202.191
+    hosts:
+      - skillrx.org
 
 proxy:
   ssl: true
-  hosts: 
-    - skillrx.org
-    - www.skillrx.org
+  host: skillrx.org
+  app_port: 3000
 
 registry:
-  username: KAMAL_REGISTRY_USERNAME
+  username: 
+    - KAMAL_REGISTRY_USERNAME
   password:
     - KAMAL_REGISTRY_PASSWORD
 
