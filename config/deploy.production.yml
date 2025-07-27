@@ -2,7 +2,8 @@
 # Deploy to production server (update with your production server IP)
 servers:
   web:
-    - 3.233.202.191
+    hosts:
+      - skillrx.org
 
 proxy:
   ssl: true
