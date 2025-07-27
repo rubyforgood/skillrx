@@ -55,7 +55,7 @@ class DataImport
   end
 
   def self.file_path(file_name)
-    Rails.root.join("import_files", file_name)
+    Rails.root.join("CMES-v2-CodeBase/import_files", file_name)
   end
 
   def self.import_regions
