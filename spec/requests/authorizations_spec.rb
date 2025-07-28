@@ -55,6 +55,18 @@ RSpec.describe "Authorizations", type: :request do
       get "/users"
       expect(response).to redirect_to(topics_path)
     end
+
+    context "Import Reports-related actions" do
+      let!(:import_report) { ImportReport.create }
+
+      it "cannot access the ImportReport index" do
+        expect(get "/import_reports").to redirect_to(topics_path)
+      end
+
+      it "cannot access ImportReport show page" do
+        expect(get "/import_reports/#{import_report.id}").to redirect_to(topics_path)
+      end
+    end
   end
 
   context "administrator" do
