@@ -15,7 +15,7 @@ RSpec.describe "home/index", type: :view do
 
     it "displays link to the dashboard" do
       render
-      expect(rendered).to have_link("Dashboard", href: dashboard_path)
+      expect(rendered).to have_link("Dashboard", href: topics_path)
     end
 
     it "has button to sign out" do

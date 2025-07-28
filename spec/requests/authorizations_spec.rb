@@ -13,22 +13,22 @@ RSpec.describe "Authorizations", type: :request do
 
     it "cannot access the Regions tab" do
       get "/regions"
-      expect(response).to redirect_to(dashboard_path)
+      expect(response).to redirect_to(topics_path)
     end
 
     it "cannot access the Providers tab" do
       get "/providers"
-      expect(response).to redirect_to(dashboard_path)
+      expect(response).to redirect_to(topics_path)
     end
 
     it "cannot access the Languages tab" do
       get "/languages"
-      expect(response).to redirect_to(dashboard_path)
+      expect(response).to redirect_to(topics_path)
     end
 
     it "cannot access the Users tab" do
       get "/users"
-      expect(response).to redirect_to(dashboard_path)
+      expect(response).to redirect_to(topics_path)
     end
   end
 

@@ -12,7 +12,7 @@
         <!-- New Sign In link using Rails 8 authentication -->
         <% if authenticated? %>
           <li class="nav-item">
-            <%= link_to "Dashboard", dashboard_path, class: "nav-link" %>
+            <%= link_to "Dashboard", topics_path, class: "nav-link" %>
           </li>
           <li class="nav-item">
             <%= button_to "Sign Out", session_path, method: :delete, class: "nav-link" %>
@@ -35,9 +35,6 @@
         <h1 class="display-4 fw-bold">Medical Education Without Borders</h1>
         <p class="lead">Empowering healthcare professionals worldwide with accessible continuing medical education</p>
         <%= link_to "Get Started", new_session_path, class: "btn btn-light btn-lg" %>
-      </div>
-      <div class="col-lg-6">
-        <img src="/api/placeholder/600/400" alt="Medical professionals using SkillRx" class="img-fluid rounded">
       </div>
     </div>
   </div>
@@ -88,9 +85,6 @@
           <li class="mb-2">✓ Cutting-edge medical literature</li>
           <li class="mb-2">✓ Adaptable to local needs</li>
       </ul>
-      </div>
-      <div class="col-lg-6">
-        <img src="/api/placeholder/600/400" alt="Healthcare professionals collaborating" class="img-fluid rounded">
       </div>
     </div>
   </div>

@@ -17,7 +17,6 @@
               <% if @available_providers.any? %>
                 <%= render "choose_provider", providers: @available_providers %>
               <% end %>
-              <p class="card-text"> Some important information or instruction can be placed here.</p>
               <%= turbo_frame_tag "topic-list" do %>
                 <div class="table-responsive">
                   <table class="table table-lg table-striped mb-0">

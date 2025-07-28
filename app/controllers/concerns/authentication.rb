@@ -13,7 +13,7 @@ module Authentication
   end
 
   def redirect_contributors
-    redirect_to dashboard_path unless Current.user.is_admin?
+    redirect_to topics_path unless Current.user.is_admin?
   end
 
   private
@@ -39,7 +39,7 @@ module Authentication
     end
 
     def after_authentication_url
-      session.delete(:return_to_after_authenticating) || dashboard_url
+      session.delete(:return_to_after_authenticating) || topics_url
     end
 
     def start_new_session_for(user)
