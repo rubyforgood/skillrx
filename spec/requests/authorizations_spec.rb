@@ -6,24 +6,100 @@ RSpec.describe "Authorizations", type: :request do
   before { sign_in(user) }
 
   context "contributor" do
-    it "can access the Topics tab" do
-      get "/topics"
-      expect(response).to be_successful
+    context "Region-related actions" do
+      let!(:region) { create(:region) }
+
+      it "cannot access the Regions index" do
+        expect(get "/regions").to redirect_to(topics_path)
+      end
+
+      it "cannot access Region show page" do
+        expect(get "/regions/#{region.id}").to redirect_to(topics_path)
+      end
+
+      it "cannot access Region new page" do
+        expect(get "/regions/new").to redirect_to(topics_path)
+      end
+
+      it "cannot make a Region create request" do
+        expect { post "/regions", params: { region: { name: "A new Region" } } }.not_to change { Region.count }
+        expect(response).to redirect_to(topics_path)
+      end
+
+      it "cannot access Region edit page" do
+        expect(get "/regions/#{region.id}/edit").to redirect_to(topics_path)
+      end
+
+      it "cannot make a Region update request" do
+        expect { put "/regions/#{region.id}", params: { region: { name: "Updated Region" } } }.not_to change { region.reload.updated_at }
+        expect(response).to redirect_to(topics_path)
+      end
+
+      it "cannot make a Region delete request" do
+         expect { delete "/regions/#{region.id}" }.not_to change { Region.count }
+        expect(response).to redirect_to(topics_path)
+      end
     end
 
-    it "cannot access the Regions tab" do
-      get "/regions"
-      expect(response).to redirect_to(topics_path)
+    context "Provider-related actions" do
+      let!(:provider) { create(:provider) }
+
+      it "cannot access the Providers index" do
+        expect(get "/providers").to redirect_to(topics_path)
+      end
+
+      it "cannot access Provider show page" do
+        expect(get "/providers/#{provider.id}").to redirect_to(topics_path)
+      end
+
+      it "cannot access Provider new page" do
+        expect(get "/providers/new").to redirect_to(topics_path)
+      end
+
+      it "cannot make a Provider create request" do
+        expect { post "/providers", params: { provider: { name: "A new Provider", provider_type: "provider" } } }.not_to change { Provider.count }
+        expect(response).to redirect_to(topics_path)
+      end
+
+      it "cannot access Provider edit page" do
+        expect(get "/providers/#{provider.id}/edit").to redirect_to(topics_path)
+      end
+
+      it "cannot make a Provider update request" do
+        expect { put "/providers/#{provider.id}", params: { provider: { name: "Updated Provider" } } }.not_to change { provider.reload.updated_at }
+        expect(response).to redirect_to(topics_path)
+      end
+
+      it "cannot make a Provider delete request" do
+         expect { delete "/providers/#{provider.id}" }.not_to change { Provider.count }
+        expect(response).to redirect_to(topics_path)
+      end
     end
 
-    it "cannot access the Providers tab" do
-      get "/providers"
-      expect(response).to redirect_to(topics_path)
-    end
+    context "Language-related actions" do
+      let!(:language) { create(:language) }
 
-    it "cannot access the Languages tab" do
-      get "/languages"
-      expect(response).to redirect_to(topics_path)
+      it "cannot access the Languages index" do
+        expect(get "/languages").to redirect_to(topics_path)
+      end
+
+      it "cannot access Language new page" do
+        expect(get "/languages/new").to redirect_to(topics_path)
+      end
+
+      it "cannot make a Language create request" do
+        expect { post "/languages", params: { language: { name: "A new Language", language_type: "language" } } }.not_to change { Language.count }
+        expect(response).to redirect_to(topics_path)
+      end
+
+      it "cannot access Language edit page" do
+        expect(get "/languages/#{language.id}/edit").to redirect_to(topics_path)
+      end
+
+      it "cannot make a Language update request" do
+        expect { put "/languages/#{language.id}", params: { language: { name: "Updated Language" } } }.not_to change { language.reload.updated_at }
+        expect(response).to redirect_to(topics_path)
+      end
     end
 
     context "Tag-related actions" do
@@ -51,9 +127,37 @@ RSpec.describe "Authorizations", type: :request do
       end
     end
 
-    it "cannot access the Users tab" do
-      get "/users"
-      expect(response).to redirect_to(topics_path)
+    context "User-related actions" do
+      let!(:user) { create(:user) }
+
+      it "cannot access the Users index" do
+        expect(get "/users").to redirect_to(topics_path)
+      end
+
+      it "cannot access User new page" do
+        expect(get "/users/new").to redirect_to(topics_path)
+      end
+
+      it "cannot make a User create request" do
+        provider = create(:provider)
+        expect { post "/users", params: { user: { email: Faker::Internet.email, password: "password123", provider_ids: [ provider.id ] } } }
+          .not_to change { User.count }
+        expect(response).to redirect_to(topics_path)
+      end
+
+      it "cannot access User edit page" do
+        expect(get "/users/#{user.id}/edit").to redirect_to(topics_path)
+      end
+
+      it "cannot make a User update request" do
+        expect { put "/users/#{user.id}", params: { user: { is_admin: "true" } } }.not_to change { user.reload.updated_at }
+        expect(response).to redirect_to(topics_path)
+      end
+
+      it "cannot make a User delete request" do
+         expect { delete "/users/#{user.id}" }.not_to change { User.count }
+        expect(response).to redirect_to(topics_path)
+      end
     end
 
     context "Import Reports-related actions" do
