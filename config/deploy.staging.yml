@@ -31,7 +31,6 @@ env:
     AWS_DEFAULT_REGION: us-east-1
     AWS_BUCKET_NAME: skillrx-staging
     AZURE_STORAGE_SHARE_NAME: skillrx-staging-env
-    AZURE_MEDIA_FILES_SYNC_DISABLED: "true"
     AWS_ENDPOINT_URL: ""  # Empty for real AWS
     LOCALSTACK_DEBUG: "0"
     S3_SKIP_SIGNATURE_VALIDATION: "0"
