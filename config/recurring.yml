@@ -2,7 +2,7 @@ default: &default
   language_files:
     command: LanguageFilesScheduler.new.perform
     queue: default
-    schedule: "00 21 * * *" # Every day at 21
+    schedule: "@hourly"
   periodic_job_cleanup:
     command: SolidQueue::Job.clear_finished_in_batches
     queue: default
