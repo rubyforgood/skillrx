@@ -2,7 +2,7 @@ require "rails_helper"
 
 describe "Tag", type: :request do
   describe "PUT /tags/:id" do
-    let(:user) { create(:user) }
+    let(:user) { create(:user, :admin) }
     let!(:tag) { create(:tag, name: "Hart") }
     let(:tag_params) { attributes_for(:tag, name: "Heart", cognates_list: [ "", "Cardiovascular", "Cardio" ]) }
 
