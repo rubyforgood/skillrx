@@ -1,4 +1,6 @@
 class FileUploadJob < ApplicationJob
+  limits_concurrency  to: 1, key: ->(language_id) { language_id }, duration: 5.minutes
+
   def perform(language_id, file_id = nil, provider_id = nil, share = ENV["AZURE_STORAGE_SHARE_NAME"])
     @language = Language.find(language_id)
     @processor = LanguageContentProcessor.new(language)
