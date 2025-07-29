@@ -3,14 +3,14 @@ require "solid_queue_monitor"
 Rails.application.routes.draw do
   mount SolidQueueMonitor::Engine => "/solid_queue"
   mount MissionControl::Jobs::Engine, at: "/jobs"
-  resources :languages, only: %i[index show new create edit update]
+  resources :languages, only: %i[index new create edit update]
   resources :passwords, param: :token
   resources :providers
   resources :regions
   resource :registration, only: %i[new create]
   resource :session
   resources :uploads, only: %i[create destroy]
-  resources :users
+  resources :users, except: :show
   resources :tags, only: %i[index show edit update destroy]
   resources :topics do
     member do

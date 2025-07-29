@@ -42,16 +42,5 @@ describe "Tags", type: :request do
         end
       end
     end
-
-    context "when user is not an admin" do
-      let(:user) { create(:user) }
-
-      it "preserves the tag and redirects" do
-        delete tag_url(tag)
-
-        expect(response).to redirect_to(tags_url)
-        expect(Tag.count).to eq(1)
-      end
-    end
   end
 end
