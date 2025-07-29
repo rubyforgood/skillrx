@@ -1,5 +1,5 @@
 class FileUploadJob < ApplicationJob
-  limits_concurrency key: ->(language_id, file_id = nil, provider_id = nil, share = ENV["AZURE_STORAGE_SHARE_NAME"]) { language_id }
+  limits_concurrency key: ->(language_id, *args) { language_id }
 
   def perform(language_id, file_id = nil, provider_id = nil, share = ENV["AZURE_STORAGE_SHARE_NAME"])
     @language = Language.find(language_id)
