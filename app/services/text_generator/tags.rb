@@ -11,7 +11,7 @@ class TextGenerator::Tags < TextGenerator::Base
   def text_content
     scope
       .flat_map do |topic|
-        topic.current_tags_for_language(language.id).map(&:name)
+        topic.tags
       end
       .uniq
       .sort
@@ -19,6 +19,6 @@ class TextGenerator::Tags < TextGenerator::Base
   end
 
   def scope
-    language.topics.includes(taggings: :tags).active
+    language.topics.includes(:tags).active
   end
 end

@@ -11,12 +11,12 @@ class TextGenerator::TitleAndTags < TextGenerator::Base
   def text_content
     scope
       .flat_map do |topic|
-        [ topic.title ] + topic.current_tags_list
+        [ topic.title ] + topic.tags
       end
       .join("\n")
   end
 
   def scope
-    language.topics.includes(taggings: :tags).active
+    language.topics.includes(:tags).active
   end
 end

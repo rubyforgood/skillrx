@@ -13,9 +13,9 @@ class CsvGenerator::TagDetails < CsvGenerator::Base
   end
 
   def scope
-    language.topics.active.includes(taggings: :tags)
+    language.topics.active.includes(:tags)
       .flat_map do |topic|
-        topic.tags_on(language.code.to_sym)
+        topic.tags # since we are already handling the language limitation when adding tags, we can add them directly
       end
       .uniq
       .map do |tag|
