@@ -17,6 +17,6 @@ class TextGenerator::TitleAndTags < TextGenerator::Base
   end
 
   def scope
-    language.topics
+    language.topics.includes(taggings: :tags).active
   end
 end
