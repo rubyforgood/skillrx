@@ -1,4 +1,6 @@
 class FileWorker
+  UPLOAD_TIMEOUT
+
   def initialize(share:, name:, path:, file:, new_path: nil)
     @share = share
     @name = name
@@ -68,7 +70,7 @@ class FileWorker
   end
 
   def upload_with_timeout
-    Timeout.timeout(30, Timeout::Error, "Azure FileShares upload timed out after 30 seconds") do
+    Timeout.timeout(UPLOAD_TIMEOUT, Timeout::Error, "Azure FileShares upload timed out after #{UPLOAD_TIMEOUT} seconds") do
       client.files.upload_file(share, path, name, file)
     end
   rescue Timeout::Error => e
