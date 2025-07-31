@@ -1,7 +1,4 @@
-require "solid_queue_monitor"
-
 Rails.application.routes.draw do
-  mount SolidQueueMonitor::Engine => "/solid_queue"
   mount MissionControl::Jobs::Engine, at: "/jobs"
   resources :languages, only: %i[index new create edit update]
   resources :passwords, param: :token
