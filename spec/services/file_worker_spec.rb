@@ -19,7 +19,7 @@ RSpec.describe FileWorker do
 
   context "when sending a file" do
     it "sends a temporary file to destination with timeout" do
-      expect(Timeout).to receive(:timeout).with(30, Timeout::Error, anything).and_yield
+      expect(Timeout).to receive(:timeout).with(300, Timeout::Error, anything).and_yield
       expect(files).to receive(:upload_file).with("skillrx-test", path, name, file)
 
       worker.send
@@ -84,7 +84,6 @@ RSpec.describe FileWorker do
     before do
       allow(files).to receive(:directory_exists?).and_return(false)
     end
-
     it "creates all directory levels that don't exist" do
       expect(files).to receive(:directory_exists?).with("skillrx-test", "level1")
       expect(files).to receive(:directory_exists?).with("skillrx-test", "level1/level2")
@@ -94,7 +93,7 @@ RSpec.describe FileWorker do
       expect(files).to receive(:create_directory).with("skillrx-test", "level1/level2")
       expect(files).to receive(:create_directory).with("skillrx-test", "level1/level2/level3")
 
-      worker.__send__(:create_subdirs, path)
+      worker.send
     end
 
     it "skips existing directories" do
@@ -104,7 +103,7 @@ RSpec.describe FileWorker do
       expect(files).to receive(:create_directory).with("skillrx-test", "level1/level2")
       expect(files).to receive(:create_directory).with("skillrx-test", "level1/level2/level3")
 
-      worker.__send__(:create_subdirs, path)
+      worker.send
     end
   end
 

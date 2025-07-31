@@ -1,5 +1,5 @@
 class FileWorker
-  UPLOAD_TIMEOUT
+  UPLOAD_TIMEOUT = 300
 
   def initialize(share:, name:, path:, file:, new_path: nil)
     @share = share
