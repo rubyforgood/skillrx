@@ -30,11 +30,11 @@ class LanguageContentProcessor
       #   name: "#{language.file_storage_prefix}Server_XML.xml",
       #   path: "#{language.file_storage_prefix}CMES-Pi/assets/XML",
       # ),
-      all_providers_recent: FileToUpload.new(
-        content: ->(language) { XmlGenerator::AllProviders.new(language, recent: true).perform },
-        name: "#{language.file_storage_prefix}New_Uploads_Server_XML.xml",
-        path: "#{language.file_storage_prefix}CMES-Pi/assets/XML",
-      ),
+      # all_providers_recent: FileToUpload.new(
+      #   content: ->(language) { XmlGenerator::AllProviders.new(language, recent: true).perform },
+      #   name: "#{language.file_storage_prefix}New_Uploads_Server_XML.xml",
+      #   path: "#{language.file_storage_prefix}CMES-Pi/assets/XML",
+      # ),
       tags: FileToUpload.new(
         content: ->(language) { TextGenerator::Tags.new(language).perform },
         name: "#{language.file_storage_prefix}tags.txt",
