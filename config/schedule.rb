@@ -6,7 +6,7 @@ every 15.minutes do
   rake "solid_queue:monitor"
 end
 
-# Clean up stuck jobs every hour  
+# Clean up stuck jobs every hour
 every 1.hour do
   rake "solid_queue:cleanup"
 end

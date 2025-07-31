@@ -8,9 +8,9 @@ class ApplicationJob < ActiveJob::Base
   around_perform do |job, block|
     start_time = Time.current
     Rails.logger.debug "[Job Start] #{job.class.name} ID=#{job.job_id} Args=#{job.arguments}"
-    
+
     block.call
-    
+
     duration = (Time.current - start_time).round(2)
     Rails.logger.debug "[Job Finish] #{job.class.name} ID=#{job.job_id} Duration=#{duration}s"
   rescue => e

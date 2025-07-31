@@ -27,17 +27,17 @@ RSpec.describe FileWorker do
 
     it "logs warnings for invalid filenames" do
       worker_with_invalid_name = described_class.new(
-        share: "skillrx-test", 
-        file: file, 
-        path: path, 
+        share: "skillrx-test",
+        file: file,
+        path: path,
         name: "WHO/Guidelines.xml"
       )
-      
+
       expect(Rails.logger).to receive(:warn).with(/Invalid filename detected/)
       expect(Rails.logger).to receive(:warn).with(/Contains invalid characters: \//)
       expect(Rails.logger).to receive(:warn).with(/This will likely cause Azure FileShares API failures/)
       expect(Rails.logger).to receive(:warn).with(/Provider should be renamed/)
-      
+
       allow(Timeout).to receive(:timeout).and_yield
       allow(files).to receive(:upload_file)
 
@@ -46,29 +46,29 @@ RSpec.describe FileWorker do
 
     it "handles timeout errors with proper logging" do
       allow(Timeout).to receive(:timeout).and_raise(Timeout::Error.new("Upload timed out"))
-      
+
       expect(Rails.logger).to receive(:error).with(/Upload timeout/)
       expect(Rails.logger).to receive(:error).with(/File: #{name}/)
-      
+
       expect { worker.send }.to raise_error(Timeout::Error)
     end
 
     it "handles Azure API errors with helpful logging" do
       allow(Timeout).to receive(:timeout).and_yield
       allow(files).to receive(:upload_file).and_raise(AzureFileShares::Errors::ApiError.new("ParentNotFound"))
-      
+
       expect(Rails.logger).to receive(:error).with(/Azure API Error/)
       expect(Rails.logger).to receive(:error).with(/File: #{name}/)
       expect(Rails.logger).to receive(:error).with(/Hint: Check if filename contains invalid characters/)
-      
+
       expect { worker.send }.to raise_error(AzureFileShares::Errors::ApiError)
     end
 
     it "does not upload blank files" do
       worker_with_blank_file = described_class.new(
-        share: "skillrx-test", 
-        file: "", 
-        path: path, 
+        share: "skillrx-test",
+        file: "",
+        path: path,
         name: name
       )
 
@@ -89,7 +89,7 @@ RSpec.describe FileWorker do
       expect(files).to receive(:directory_exists?).with("skillrx-test", "level1")
       expect(files).to receive(:directory_exists?).with("skillrx-test", "level1/level2")
       expect(files).to receive(:directory_exists?).with("skillrx-test", "level1/level2/level3")
-      
+
       expect(files).to receive(:create_directory).with("skillrx-test", "level1")
       expect(files).to receive(:create_directory).with("skillrx-test", "level1/level2")
       expect(files).to receive(:create_directory).with("skillrx-test", "level1/level2/level3")
@@ -99,7 +99,7 @@ RSpec.describe FileWorker do
 
     it "skips existing directories" do
       allow(files).to receive(:directory_exists?).with("skillrx-test", "level1").and_return(true)
-      
+
       expect(files).not_to receive(:create_directory).with("skillrx-test", "level1")
       expect(files).to receive(:create_directory).with("skillrx-test", "level1/level2")
       expect(files).to receive(:create_directory).with("skillrx-test", "level1/level2/level3")
