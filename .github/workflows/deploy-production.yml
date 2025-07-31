@@ -37,5 +37,6 @@ jobs:
         AWS_SECRET_ACCESS_KEY: ${{ secrets.PRODUCTION_AWS_SECRET_ACCESS_KEY }}
         AZURE_STORAGE_ACCOUNT_NAME: ${{ secrets.PRODUCTION_AZURE_STORAGE_ACCOUNT_NAME }}
         AZURE_STORAGE_ACCOUNT_KEY: ${{ secrets.PRODUCTION_AZURE_STORAGE_ACCOUNT_KEY }}
+        SCOUT_KEY: ${{ secrets.PRODUCTION_SCOUT_KEY }}
       run: |
         bin/kamal deploy -d production --skip-push

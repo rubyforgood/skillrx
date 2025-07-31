@@ -9,6 +9,23 @@ RSpec.describe FileUploadJob, type: :job do
       allow(FileWorker).to receive(:new).and_return(instance_double(FileWorker, send: true))
     end
 
+    describe "retry behavior" do
+      it "includes retry_on declarations in job class" do
+        job_source = File.read(Rails.root.join("app/jobs/file_upload_job.rb"))
+        expect(job_source).to include("retry_on AzureFileShares::Errors::ApiError")
+        expect(job_source).to include("retry_on Timeout::Error")
+        expect(job_source).to include("discard_on StandardError")
+      end
+    end
+
+    describe "concurrency control" do
+      it "includes limits_concurrency declaration in job class" do
+        job_source = File.read(Rails.root.join("app/jobs/file_upload_job.rb"))
+        expect(job_source).to include("limits_concurrency")
+        expect(job_source).to include('key: ->(language_id, file_id, provider_id) { "#{language_id}-#{provider_id}" }')
+      end
+    end
+
     context "when language specific file" do
       it "processes specific file" do
         processor.language_files.each do |file_id, file|

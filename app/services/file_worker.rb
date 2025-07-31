@@ -24,10 +24,11 @@ class FileWorker
   attr_reader :share, :path, :name, :file, :new_path
 
   def send_file
+    validate_filename
     create_subdirs(path)
     return if file.blank?
 
-    client.files.upload_file(share, path, name, file)
+    upload_with_timeout
   end
 
   def create_subdirs(current_path)
@@ -54,5 +55,30 @@ class FileWorker
 
   def client
     @client ||= AzureFileShares.client
+  end
+
+  def validate_filename
+    invalid_chars = name.scan(/[\/\\<>:"|?*]/)
+    return if invalid_chars.empty?
+
+    Rails.logger.warn "[FileWorker] Invalid filename detected: '#{name}'"
+    Rails.logger.warn "[FileWorker] Contains invalid characters: #{invalid_chars.uniq.join(', ')}"
+    Rails.logger.warn "[FileWorker] This will likely cause Azure FileShares API failures"
+    Rails.logger.warn "[FileWorker] Provider should be renamed to avoid these characters: /\\<>:\"|?*"
+  end
+
+  def upload_with_timeout
+    Timeout.timeout(30, Timeout::Error, "Azure FileShares upload timed out after 30 seconds") do
+      client.files.upload_file(share, path, name, file)
+    end
+  rescue Timeout::Error => e
+    Rails.logger.error "[FileWorker] Upload timeout: #{e.message}"
+    Rails.logger.error "[FileWorker] File: #{name}, Path: #{path}"
+    raise
+  rescue AzureFileShares::Errors::ApiError => e
+    Rails.logger.error "[FileWorker] Azure API Error: #{e.message}"
+    Rails.logger.error "[FileWorker] File: #{name}, Path: #{path}"
+    Rails.logger.error "[FileWorker] Hint: Check if filename contains invalid characters"
+    raise
   end
 end
