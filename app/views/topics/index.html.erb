@@ -1,48 +1,290 @@
 <% content_for :title, "Topics" %>
 
-<section class="section">
-  <div class="row" id="table-striped">
-    <div class="col-12 cold-md-12">
-      <%= render "search", providers: @providers, languages: @languages, params: search_params  %>
-      <%= turbo_frame_tag "topics" do %>
-        <div class="card">
-          <div class="card-header d-flex justify-content-between align-items-center">
-            <h2 class="card-title"><%= topics_title %></h2>
-            <%= link_to new_topic_path, class: "btn btn-primary", data: {turbo: false } do %>
-              <i class="bi bi-plus"></i> Add New Topic
-            <% end %>
+<div style="min-height: 100vh; background: linear-gradient(135deg, #f8fafc 0%, #e2e8f0 100%); padding: 2rem 0;">
+  <div style="max-width: 1200px; margin: 0 auto; padding: 0 1rem; overflow-x: hidden;">
+
+  <!-- Header Section -->
+  <div style="margin-bottom: 2rem;">
+    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.5rem; flex-wrap: wrap; gap: 1rem;">
+      <div style="min-width: 0; flex: 1;">
+        <div style="display: flex; align-items: center; gap: 1rem; margin-bottom: 0.5rem;">
+          <div style="background: linear-gradient(135deg, #7c3aed 0%, #5b21b6 100%); color: white; padding: 0.75rem; border-radius: 0.75rem; flex-shrink: 0;">
+            <svg style="width: 1.5rem; height: 1.5rem;" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 7h.01M7 3h5c.512 0 1.024.195 1.414.586l7 7a2 2 0 010 2.828l-7 7a2 2 0 01-2.828 0l-7-7A1.994 1.994 0 013 12V7a4 4 0 014-4z"/>
+            </svg>
           </div>
-          <div class="card-content">
-            <div class="card-body">
-              <% if @available_providers.any? %>
-                <%= render "choose_provider", providers: @available_providers %>
-              <% end %>
-              <%= turbo_frame_tag "topic-list" do %>
-                <div class="table-responsive">
-                  <table class="table table-lg table-striped mb-0">
-                    <thead>
-                      <tr>
-                        <th>Title</th>
-                        <th>Description</th>
-                        <th>UID</th>
-                        <th>Language</th>
-                        <th>Provider</th>
-                        <th># of Documents</th>
-                        <th>State</th>
-                        <th class="text-end">Actions</th>
-                      </tr>
-                    </thead>
-                    <%= render "list", topics: @topics, params: search_params %>
-                  </table>
-                </div>
-                <div class="card-footer d-flex justify-content-end">
-                  <%== pagy_bootstrap_nav(@pagy) %>
-                </div>
-              <% end %>
+          <h1 style="font-size: 2.5rem; font-weight: 700; color: #1f2937; margin: 0; min-width: 0;">Topics</h1>
+        </div>
+        <p style="color: #6b7280; margin: 0; font-size: 1rem;">Manage educational topics and their associated content</p>
+      </div>
+
+      <%= link_to new_topic_path, style: "background: linear-gradient(135deg, #3b82f6 0%, #1d4ed8 100%); color: white; padding: 0.875rem 1.75rem; border-radius: 0.75rem; text-decoration: none; font-weight: 600; font-size: 0.875rem; display: inline-flex; align-items: center; gap: 0.5rem; box-shadow: 0 10px 15px -3px rgba(59, 130, 246, 0.4), 0 4px 6px -2px rgba(59, 130, 246, 0.05); transition: all 0.2s;", data: {turbo: false } do %>
+        <svg style="width: 1.125rem; height: 1.125rem;" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"></path>
+        </svg>
+        <span>Add New Topic</span>
+      <% end %>
+    </div>
+
+    <!-- Breadcrumb -->
+    <nav style="font-size: 0.875rem; color: #6b7280;">
+      <ol style="display: flex; gap: 0.5rem; list-style: none; padding: 0; margin: 0;">
+        <li><%= link_to "Dashboard", root_path, style: "color: #6b7280; text-decoration: none; hover:color: #374151;" %></li>
+        <li style="color: #d1d5db;">/</li>
+        <li style="color: #374151; font-weight: 500;">Topics</li>
+      </ol>
+    </nav>
+  </div>
+
+  <!-- Search Card -->
+  <div style="margin-bottom: 2rem;">
+    <%= render "search", providers: @providers, languages: @languages, params: search_params  %>
+  </div>
+
+  <!-- Topics Table Card -->
+  <%= turbo_frame_tag "topics" do %>
+    <div style="background: white; border-radius: 1rem; box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04); overflow: hidden;">
+
+      <!-- Card Header -->
+      <div style="background: linear-gradient(135deg, #7c3aed 0%, #5b21b6 100%); padding: 2rem; color: white;">
+        <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 1rem;">
+          <div style="display: flex; align-items: center; gap: 1rem;">
+            <div style="background: rgba(255, 255, 255, 0.2); padding: 0.75rem; border-radius: 0.75rem;">
+              <svg style="width: 1.5rem; height: 1.5rem;" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10"/>
+              </svg>
+            </div>
+            <div>
+              <h2 style="font-size: 1.5rem; font-weight: 700; margin: 0;"><%= topics_title %></h2>
+              <p style="margin: 0.25rem 0 0 0; color: rgba(255, 255, 255, 0.8); font-size: 0.875rem;">
+                <%= pluralize(@topics.count, 'topic') %> found
+              </p>
+            </div>
+          </div>
+
+          <!-- Optional stats or filters can go here -->
+          <div style="display: flex; gap: 0.75rem; align-items: center;">
+            <div style="background: rgba(255, 255, 255, 0.1); padding: 0.5rem 1rem; border-radius: 9999px; font-size: 0.75rem; font-weight: 500;">
+              Total: <%= @topics.count %>
             </div>
           </div>
         </div>
+      </div>
+
+      <!-- Provider Selection -->
+      <% if @available_providers.any? %>
+        <div style="background: #f8fafc; border-bottom: 1px solid #e2e8f0; padding: 1rem 2rem;">
+          <%= render "choose_provider", providers: @available_providers %>
+        </div>
       <% end %>
+
+      <!-- Table Content -->
+      <div style="padding: 0;">
+        <%= turbo_frame_tag "topic-list" do %>
+          <div class="table-container" style="overflow-x: auto;">
+            <table style="width: 100%; border-collapse: collapse;">
+              <thead>
+                <tr style="background: linear-gradient(135deg, #f8fafc 0%, #f1f5f9 100%); border-bottom: 2px solid #e2e8f0;">
+                  <th style="padding: 1.25rem 1.5rem; text-align: left; font-size: 0.75rem; font-weight: 700; color: #475569; text-transform: uppercase; letter-spacing: 0.1em;">
+                    <div style="display: flex; align-items: center; gap: 0.5rem;">
+                      <svg style="width: 1rem; height: 1rem;" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 7h.01M7 3h5c.512 0 1.024.195 1.414.586l7 7a2 2 0 010 2.828l-7 7a2 2 0 01-2.828 0l-7-7A1.994 1.994 0 013 12V7a4 4 0 014-4z"/>
+                      </svg>
+                      Title
+                    </div>
+                  </th>
+                  <th style="padding: 1.25rem 1.5rem; text-align: left; font-size: 0.75rem; font-weight: 700; color: #475569; text-transform: uppercase; letter-spacing: 0.1em;">Description</th>
+                  <th class="hide-mobile" style="padding: 1.25rem 1.5rem; text-align: left; font-size: 0.75rem; font-weight: 700; color: #475569; text-transform: uppercase; letter-spacing: 0.1em;">UID</th>
+                  <th style="padding: 1.25rem 1.5rem; text-align: left; font-size: 0.75rem; font-weight: 700; color: #475569; text-transform: uppercase; letter-spacing: 0.1em;">
+                    <div style="display: flex; align-items: center; gap: 0.5rem;">
+                      <svg style="width: 1rem; height: 1rem;" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 5h12M9 3v2m1.048 9.5A18.022 18.022 0 016.412 9m6.088 9h7M11 21l5-10 5 10M12.751 5C11.783 10.77 8.07 15.61 3 18.129"/>
+                      </svg>
+                      Language
+                    </div>
+                  </th>
+                  <th class="hide-mobile" style="padding: 1.25rem 1.5rem; text-align: left; font-size: 0.75rem; font-weight: 700; color: #475569; text-transform: uppercase; letter-spacing: 0.1em;">
+                    <div style="display: flex; align-items: center; gap: 0.5rem;">
+                      <svg style="width: 1rem; height: 1rem;" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4"/>
+                      </svg>
+                      Provider
+                    </div>
+                  </th>
+                  <th class="hide-mobile" style="padding: 1.25rem 1.5rem; text-align: left; font-size: 0.75rem; font-weight: 700; color: #475569; text-transform: uppercase; letter-spacing: 0.1em;">
+                    <div style="display: flex; align-items: center; gap: 0.5rem;">
+                      <svg style="width: 1rem; height: 1rem;" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/>
+                      </svg>
+                      Documents
+                    </div>
+                  </th>
+                  <th style="padding: 1.25rem 1.5rem; text-align: left; font-size: 0.75rem; font-weight: 700; color: #475569; text-transform: uppercase; letter-spacing: 0.1em;">
+                    <div style="display: flex; align-items: center; gap: 0.5rem;">
+                      <svg style="width: 1rem; height: 1rem;" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/>
+                      </svg>
+                      Status
+                    </div>
+                  </th>
+                  <th style="padding: 1.25rem 1.5rem; text-align: right; font-size: 0.75rem; font-weight: 700; color: #475569; text-transform: uppercase; letter-spacing: 0.1em;">Actions</th>
+                </tr>
+              </thead>
+              <%= render "list", topics: @topics %>
+            </table>
+          </div>
+
+          <!-- Pagination -->
+          <div style="background: #f8fafc; padding: 1.5rem 2rem; border-top: 1px solid #e2e8f0; display: flex; justify-content: space-between; align-items: center;">
+            <div style="color: #6b7280; font-size: 0.875rem;">
+              Showing <%= @topics.count %> of <%= @pagy.count %> topics
+            </div>
+            <div>
+              <%== pagy_bootstrap_nav(@pagy) %>
+            </div>
+          </div>
+        <% end %>
+      </div>
     </div>
-  </div>
-</section>
+  <% end %>
+</div>
+
+<style>
+  /* Enhanced button hover effects */
+  a[href*="new_topic"]:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 20px 25px -5px rgba(59, 130, 246, 0.4), 0 10px 10px -5px rgba(59, 130, 246, 0.1) !important;
+  }
+
+  /* Table hover effects */
+  tbody tr:hover {
+    background-color: #f8fafc !important;
+  }
+
+  /* Responsive design */
+  @media (max-width: 768px) {
+    /* Container adjustments */
+    div[style*="max-width: 1200px"] {
+      padding: 0 0.5rem !important;
+    }
+
+    /* Page padding adjustments */
+    div[style*="min-height: 100vh"] {
+      padding: 1rem 0 !important;
+    }
+
+    /* Header adjustments */
+    div[style*="justify-content: space-between"] {
+      flex-direction: column !important;
+      align-items: flex-start !important;
+      gap: 1rem !important;
+    }
+
+    /* Title adjustments */
+    h1 {
+      font-size: 2rem !important;
+    }
+
+    /* Hide less important columns on mobile */
+    .hide-mobile {
+      display: none !important;
+    }
+
+    /* Make remaining columns more compact */
+    th, td {
+      padding: 0.75rem 0.5rem !important;
+      font-size: 0.875rem !important;
+    }
+
+    /* Card adjustments */
+    div[style*="border-radius: 1rem"] {
+      border-radius: 0.5rem !important;
+      margin: 0 -0.5rem !important;
+    }
+
+    /* Card header adjustments */
+    div[style*="background: linear-gradient(135deg, #7c3aed"] {
+      padding: 1.5rem 1rem !important;
+    }
+
+    /* Stack pagination on mobile */
+    div[style*="justify-content: space-between"][style*="align-items: center"] {
+      flex-direction: column !important;
+      gap: 1rem !important;
+      align-items: flex-start !important;
+    }
+
+    /* Adjust card header on mobile */
+    div[style*="background: linear-gradient(135deg, #7c3aed"] div[style*="justify-content: space-between"] {
+      flex-direction: column !important;
+      align-items: flex-start !important;
+      gap: 1rem !important;
+    }
+
+    /* Remove table min-width */
+    table {
+      min-width: auto !important;
+      width: 100% !important;
+    }
+
+    /* Table container */
+    .table-container {
+      overflow-x: auto !important;
+      -webkit-overflow-scrolling: touch !important;
+    }
+  }
+
+  @media (max-width: 640px) {
+    /* Further mobile adjustments */
+    div[style*="padding: 0 1rem"] {
+      padding: 0 0.25rem !important;
+    }
+
+    /* Extend cards to screen edge on very small screens */
+    div[style*="border-radius: 1rem"] {
+      border-radius: 0 !important;
+      margin: 0 -0.25rem !important;
+    }
+
+    /* Reduce padding on cards */
+    div[style*="padding: 2rem"] {
+      padding: 1rem 0.75rem !important;
+    }
+
+    /* Smaller text on very small screens */
+    h1 {
+      font-size: 1.75rem !important;
+    }
+
+    /* Even more compact table */
+    th, td {
+      padding: 0.5rem 0.25rem !important;
+      font-size: 0.75rem !important;
+    }
+
+    /* Make action buttons more compact */
+    td[style*="text-align: right"] a {
+      padding: 0.375rem 0.5rem !important;
+      font-size: 0.625rem !important;
+    }
+
+    /* Reduce title avatar size */
+    div[style*="width: 2.5rem; height: 2.5rem"] {
+      width: 2rem !important;
+      height: 2rem !important;
+      font-size: 0.75rem !important;
+    }
+
+    /* Ensure no horizontal overflow */
+    * {
+      max-width: 100% !important;
+      box-sizing: border-box !important;
+    }
+
+    /* Force word wrapping */
+    th, td {
+      word-wrap: break-word !important;
+      word-break: break-word !important;
+    }
+  }
+</style>

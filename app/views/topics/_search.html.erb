@@ -1,75 +1,86 @@
-<div class="card">
-  <div class="card-header d-flex justify-content-between align-items-center">
-    <h2 class="card-title">Search</h2>
-  </div>
-  <div class="card-content">
-    <div class="card-body">
-      <%= form_for :search, url: topics_path, method: :get, data: { controller: "topics", topics_target: "searchForm", turbo_frame: "topic-list", turbo_action: "advance" } do |f| %>
-        <div class="form-body">
-          <div class="row">
-            <div class="col-md-6 col-12">
-              <div class="form-group">
-                <%= f.label :query %>
-                <%= f.text_field :query, value: params[:query], class: "form-control", data: { action: "input->topics#searchTopics" } %>
-              </div>
-            </div>
-            <div class="col-md-6 col-12"
-                 data-controller="select-tags"
-                 data-action="select-tags:notify->topics#searchTopics:captures">
-              <div class="form-group">
-                <div class="d-flex">
-                  <%= f.label :tag_list, class: "flex-fill" %>
-                </div>
-                <%= f.select :tag_list,
-                             options_from_collection_for_select(
-                               Tag.order(:name),
-                               :name,
-                               :name,
-                               []
-                             ),
-                             { prompt: "Select tags", include_hidden: false },
-                             multiple: true,
-                             class: "form-select",
-                             data: { "allow-clear": "true", "select-tags-target": "tagList", "action": "change->select-tags#notify" }
-                %>
-              </div>
-            </div>
-            <div class="col-md-6 col-12">
-              <div class="form-group">
-                <%= f.label :language %>
-                <%= f.select :language_id, options_from_collection_for_select(languages, :id, :name, params[:language_id]),  { prompt: "Select language" }, class: "form-select", data: { action: "change->topics#searchTopics" } %>
-              </div>
-            </div>
-            <div class="col-md-3 col-12">
-              <div class="form-group">
-                <%= f.label :year %>
-                <%= f.select :year, options_for_select((Date.today.year-10..Date.today.year).to_a, params[:year]), { prompt: "Select year" }, class: "form-select", data: { action: "change->topics#searchTopics" } %>
-              </div>
-            </div>
-            <div class="col-md-3 col-12">
-              <div class="form-group">
-                <%= f.label :month %>
-                <%= f.select :month, options_for_select((1..12).to_a, params[:month]), { prompt: "Select month" }, class: "form-select", data: { action: "change->topics#searchTopics" } %>
-              </div>
-            </div>
-            <div class="col-md-6 col-12">
-              <div class="form-group">
-                <%= f.label :state %>
-                <%= f.select :state, options_for_select(Topic::STATES.index_with(&:itself), params[:state]), { prompt: "Select state" }, class: "form-select", data: { action: "change->topics#searchTopics" } %>
-              </div>
-            </div>
-            <div class="col-md-6 col-12">
-              <div class="form-group">
-                <%= f.label :order %>
-                <%= f.select :order, options_for_select(Topic::SORTS.reverse.index_with(&:itself), params[:order]), {}, class: "form-select", data: { action: "change->topics#searchTopics" } %>
-              </div>
-            </div>
-            <div class="col-12 d-flex justify-content-end">
-              <%= link_to "Clear", topics_path, class: "btn btn-light-secondary me-1 mb-1" %>
-            </div>
-          </div>
-        </div>
-      <% end %>
+<div style="background: white; border-radius: 1rem; box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06); overflow: hidden; margin-bottom: 1.5rem;">
+  <div style="background: linear-gradient(135deg, #f0f9ff 0%, #e0f2fe 100%); padding: 1.5rem; border-bottom: 1px solid #bae6fd;">
+    <div style="display: flex; align-items: center; gap: 0.75rem;">
+      <svg style="width: 1.5rem; height: 1.5rem; color: #0284c7;" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path>
+      </svg>
+      <h2 style="font-size: 1.25rem; font-weight: 700; color: #0c4a6e; margin: 0;">Search & Filter Topics</h2>
     </div>
   </div>
+
+  <div style="padding: 2rem;">
+    <%= form_for :search, url: topics_path, method: :get, data: { controller: "topics", topics_target: "searchForm", turbo_frame: "topic-list", turbo_action: "advance" } do |f| %>
+      <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 1.5rem;">
+
+        <!-- Search Query -->
+        <div style="grid-column: span 2;">
+          <%= f.label :query, style: "display: block; font-size: 0.875rem; font-weight: 600; color: #374151; margin-bottom: 0.5rem;" %>
+          <%= f.text_field :query, value: params[:query], placeholder: "Search topics by title, description, or UID...", style: "width: 100%; padding: 0.75rem 1rem; border: 2px solid #e5e7eb; border-radius: 0.5rem; font-size: 0.875rem; transition: all 0.2s; background: #f9fafb;", data: { action: "input->topics#searchTopics" } %>
+        </div>
+
+        <!-- Tags -->
+        <div data-controller="select-tags" data-action="select-tags:notify->topics#searchTopics:captures" style="grid-column: span 2;">
+          <%= f.label :tag_list, style: "display: block; font-size: 0.875rem; font-weight: 600; color: #374151; margin-bottom: 0.5rem;" %>
+          <%= f.select :tag_list,
+                       options_from_collection_for_select(Tag.all, :name, :name, []),
+                       { prompt: "Select tags", include_hidden: false },
+                       multiple: true,
+                       style: "width: 100%; padding: 0.75rem 1rem; border: 2px solid #e5e7eb; border-radius: 0.5rem; font-size: 0.875rem; transition: all 0.2s; background: #f9fafb;",
+                       data: { "allow-clear": "true", "select-tags-target": "tagList", "action": "change->select-tags#notify" } %>
+        </div>
+
+        <!-- Language -->
+        <div>
+          <%= f.label :language, style: "display: block; font-size: 0.875rem; font-weight: 600; color: #374151; margin-bottom: 0.5rem;" %>
+          <%= f.select :language_id, options_from_collection_for_select(languages, :id, :name, params[:provider_id]), { prompt: "Select language" }, style: "width: 100%; padding: 0.75rem 1rem; border: 2px solid #e5e7eb; border-radius: 0.5rem; font-size: 0.875rem; transition: all 0.2s; background: #f9fafb;", data: { action: "change->topics#searchTopics" } %>
+        </div>
+
+        <!-- Year -->
+        <div>
+          <%= f.label :year, style: "display: block; font-size: 0.875rem; font-weight: 600; color: #374151; margin-bottom: 0.5rem;" %>
+          <%= f.select :year, options_for_select((Date.today.year-10..Date.today.year).to_a, params[:year]), { prompt: "Select year" }, style: "width: 100%; padding: 0.75rem 1rem; border: 2px solid #e5e7eb; border-radius: 0.5rem; font-size: 0.875rem; transition: all 0.2s; background: #f9fafb;", data: { action: "change->topics#searchTopics" } %>
+        </div>
+
+        <!-- Month -->
+        <div>
+          <%= f.label :month, style: "display: block; font-size: 0.875rem; font-weight: 600; color: #374151; margin-bottom: 0.5rem;" %>
+          <%= f.select :month, options_for_select((1..12).to_a, params[:month]), { prompt: "Select month" }, style: "width: 100%; padding: 0.75rem 1rem; border: 2px solid #e5e7eb; border-radius: 0.5rem; font-size: 0.875rem; transition: all 0.2s; background: #f9fafb;", data: { action: "change->topics#searchTopics" } %>
+        </div>
+
+        <!-- State -->
+        <div>
+          <%= f.label :state, style: "display: block; font-size: 0.875rem; font-weight: 600; color: #374151; margin-bottom: 0.5rem;" %>
+          <%= f.select :state, options_for_select(Topic::STATES.index_with(&:itself), params[:state]), { prompt: "Select state" }, style: "width: 100%; padding: 0.75rem 1rem; border: 2px solid #e5e7eb; border-radius: 0.5rem; font-size: 0.875rem; transition: all 0.2s; background: #f9fafb;", data: { action: "change->topics#searchTopics" } %>
+        </div>
+
+        <!-- Order -->
+        <div>
+          <%= f.label :order, style: "display: block; font-size: 0.875rem; font-weight: 600; color: #374151; margin-bottom: 0.5rem;" %>
+          <%= f.select :order, options_for_select(Topic::SORTS.reverse.index_with(&:itself), params[:order]), {}, style: "width: 100%; padding: 0.75rem 1rem; border: 2px solid #e5e7eb; border-radius: 0.5rem; font-size: 0.875rem; transition: all 0.2s; background: #f9fafb;", data: { action: "change->topics#searchTopics" } %>
+        </div>
+
+        <!-- Clear Button -->
+        <div style="display: flex; align-items: end;">
+          <%= link_to "Clear Filters", topics_path, style: "background: #f3f4f6; color: #6b7280; font-weight: 600; padding: 0.75rem 1.5rem; border-radius: 0.5rem; text-decoration: none; font-size: 0.875rem; transition: all 0.2s; display: inline-block; text-align: center;" %>
+        </div>
+      </div>
+    <% end %>
+  </div>
 </div>
+
+<style>
+  /* Form input focus states */
+  input[type="text"]:focus, select:focus {
+    outline: none !important;
+    border-color: #3b82f6 !important;
+    box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1) !important;
+    background: white !important;
+  }
+
+  /* Clear button hover */
+  a[href*="topics"]:hover {
+    background: #e5e7eb !important;
+    color: #374151 !important;
+    transform: translateY(-1px);
+  }
+</style>

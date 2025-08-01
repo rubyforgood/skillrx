@@ -1,109 +1,113 @@
 
-<div id="sidebar">
-  <div class="sidebar-wrapper active">
-    <div class="sidebar-header position-relative">
-      <div class="d-flex justify-content-between align-items-center">
-        <div class="logo">
-          <%= link_to("SkillRx", root_path) %>
-        </div>
-        <div class="theme-toggle d-flex gap-2  align-items-center mt-2">
-          <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" aria-hidden="true"
-                    role="img" class="iconify iconify--system-uicons" width="20" height="20"
-                    preserveAspectRatio="xMidYMid meet" viewBox="0 0 21 21">
-            <g fill="none" fill-rule="evenodd" stroke="currentColor" stroke-linecap="round"
-                        stroke-linejoin="round">
-              <path
-                            d="M10.5 14.5c2.219 0 4-1.763 4-3.982a4.003 4.003 0 0 0-4-4.018c-2.219 0-4 1.781-4 4c0 2.219 1.781 4 4 4zM4.136 4.136L5.55 5.55m9.9 9.9l1.414 1.414M1.5 10.5h2m14 0h2M4.135 16.863L5.55 15.45m9.899-9.9l1.414-1.415M10.5 19.5v-2m0-14v-2"
-                            opacity=".3"></path>
-              <g transform="translate(-210 -1)">
-                <path d="M220.5 2.5v2m6.5.5l-1.5 1.5"></path>
-                <circle cx="220.5" cy="11.5" r="4"></circle>
-                <path d="m214 5l1.5 1.5m5 14v-2m6.5-.5l-1.5-1.5M214 18l1.5-1.5m-4-5h2m14 0h2"></path>
-              </g>
-            </g>
-          </svg>
-          <div class="form-check form-switch fs-6">
-            <input class="form-check-input  me-0" type="checkbox" id="toggle-dark" style="cursor: pointer">
-            <label class="form-check-label"></label>
-          </div>
-          <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" aria-hidden="true"
-                    role="img" class="iconify iconify--mdi" width="20" height="20" preserveAspectRatio="xMidYMid meet"
-                    viewBox="0 0 24 24">
-            <path fill="currentColor"
-                        d="m17.75 4.09l-2.53 1.94l.91 3.06l-2.63-1.81l-2.63 1.81l.91-3.06l-2.53-1.94L12.44 4l1.06-3l1.06 3l3.19.09m3.5 6.91l-1.64 1.25l.59 1.98l-1.7-1.17l-1.7 1.17l.59-1.98L15.75 11l2.06-.05L18.5 9l.69 1.95l2.06.05m-2.28 4.95c.83-.08 1.72 1.1 1.19 1.85c-.32.45-.66.87-1.08 1.27C15.17 23 8.84 23 4.94 19.07c-3.91-3.9-3.91-10.24 0-14.14c.4-.4.82-.76 1.27-1.08c.75-.53 1.93.36 1.85 1.19c-.27 2.86.69 5.83 2.89 8.02a9.96 9.96 0 0 0 8.02 2.89m-1.64 2.02a12.08 12.08 0 0 1-7.8-3.47c-2.17-2.19-3.33-5-3.49-7.82c-2.81 3.14-2.7 7.96.31 10.98c3.02 3.01 7.84 3.12 10.98.31Z">
-            </path>
-          </svg>
-        </div>
-        <div class="sidebar-toggler  x">
-          <a href="#" class="sidebar-hide d-xl-none d-block"><i class="bi bi-x bi-middle"></i></a>
-        </div>
+<div class="w-full h-full bg-white shadow-lg overflow-y-auto" style="border-right: 1px solid #e5e7eb;">
+  <div class="p-6" style="border-bottom: 1px solid #f3f4f6;">
+    <div class="flex justify-between items-center mb-6">
+      <div class="text-xl font-bold text-gray-800">
+        <%= link_to("SkillRx", root_path, class: "hover:text-blue-600", style: "text-decoration: none; color: #1f2937; font-size: 1.5rem; font-weight: 700;") %>
       </div>
-      <%= button_to session_path, method: :delete, class: "btn btn-danger mt-2" do %>
-        <i class="bi bi-box-arrow-right"></i> Log out
-      <% end %>
+      <div class="flex items-center space-x-2" style="gap: 0.5rem;">
+        <div style="width: 1.25rem; height: 1.25rem; color: #6b7280; cursor: pointer;" title="Light mode">☀️</div>
+        <div style="width: 1.25rem; height: 1.25rem; color: #6b7280; cursor: pointer;" title="Dark mode">🌙</div>
+      </div>
     </div>
+    <%= button_to session_path, method: :delete, style: "width: 100%; background-color: #dc2626; color: white; font-weight: 500; padding: 0.75rem 1rem; border-radius: 0.5rem; border: none; cursor: pointer; transition: background-color 0.2s; display: flex; align-items: center; justify-content: center; gap: 0.5rem;" do %>
+      <span style="font-size: 1.1rem;">↗</span>
+      <span>Log out</span>
+    <% end %>
+  </div>
 
-    <div class="sidebar-menu">
-      <ul class="menu">
-        <li class="sidebar-item">
-          <%= link_to topics_path, class: "sidebar-link" do %>
-            <i class="bi bi-tags-fill"></i>
-            <span>Topics</span>
+  <nav class="px-4 py-2 flex-1">
+    <ul style="list-style: none; padding: 0; margin: 0;">
+      <li style="margin-bottom: 0.5rem;">
+        <%= link_to topics_path, style: nav_link_class(topics_path) do %>
+          <span style="font-size: 1.1rem;">🏷️</span>
+          <span>Topics</span>
+        <% end %>
+      </li>
+
+      <% if Current.user.is_admin? %>
+        <li style="margin: 1.5rem 0 1rem 0;">
+          <div style="padding: 0.5rem 1rem; font-size: 0.75rem; font-weight: 600; color: #6b7280; text-transform: uppercase; letter-spacing: 0.05em; border-bottom: 1px solid #f3f4f6; margin-bottom: 0.75rem;">Administration</div>
+        </li>
+        <li style="margin-bottom: 0.5rem;">
+          <%= link_to regions_path, style: nav_link_class(regions_path) do %>
+            <span style="font-size: 1.1rem;">🌍</span>
+            <span>Regions</span>
           <% end %>
         </li>
 
-        <% if Current.user.is_admin? %>
-          <li class="sidebar-title">Administration</li>
-          <li class="sidebar-item">
-            <%= link_to regions_path, class: "sidebar-link" do %>
-              <i class="bi bi-globe"></i>
-              <span>Regions</span>
-            <% end %>
-          </li>
+        <li style="margin-bottom: 0.5rem;">
+          <%= link_to providers_path, style: nav_link_class(providers_path) do %>
+            <span style="font-size: 1.1rem;">🏥</span>
+            <span>Providers</span>
+          <% end %>
+        </li>
 
-          <li class="sidebar-item">
-            <%= link_to providers_path, class: "sidebar-link" do %>
-              <i class="bi bi-hospital-fill"></i>
-              <span>Providers</span>
-            <% end %>
-          </li>
+        <li style="margin-bottom: 0.5rem;">
+          <%= link_to languages_path, style: nav_link_class(languages_path) do %>
+            <span style="font-size: 1.1rem;">🌐</span>
+            <span>Languages</span>
+          <% end %>
+        </li>
 
-          <li class="sidebar-item">
-            <%= link_to languages_path, class: "sidebar-link" do %>
-              <i class="bi bi-translate"></i>
-              <span>Languages</span>
-            <% end %>
-          </li>
+        <li style="margin-bottom: 0.5rem;">
+          <%= link_to tags_path, style: nav_link_class(tags_path) do %>
+            <span style="font-size: 1.1rem;">🏷️</span>
+            <span>Tags</span>
+          <% end %>
+        </li>
 
-          <li class="sidebar-item">
-            <%= link_to tags_path, class: "sidebar-link" do %>
-              <i class="bi bi-tags-fill"></i>
-              <span>Tags</span>
-            <% end %>
-          </li>
+        <li style="margin-bottom: 0.5rem;">
+          <%= link_to users_path, style: nav_link_class(users_path) do %>
+            <span style="font-size: 1.1rem;">👥</span>
+            <span>Users</span>
+          <% end %>
+        </li>
 
-          <li class="sidebar-item">
-            <%= link_to users_path, class: 'sidebar-link' do %>
-              <i class="bi bi-people"></i>
-              <span>Users</span>
-            <% end %>
-          </li>
+        <li style="margin-bottom: 0.5rem;">
+          <%= link_to import_reports_path, style: nav_link_class(import_reports_path) do %>
+            <span style="font-size: 1.1rem;">📊</span>
+            <span>Import Reports</span>
+          <% end %>
+        </li>
 
-          <li class="sidebar-item">
-            <%= link_to import_reports_path, class: 'sidebar-link' do %>
-              <i class="bi bi-circle"></i>
-              <span>Import Reports</span>
-            <% end %>
-          </li>
-
-          <li class="sidebar-item">
-            <%= link_to "/jobs", class: 'sidebar-link', target: "_blank" do %>
-              <i class="bi bi-window-stack"></i>
-              <span>Jobs</span>
-            <% end %>
-          </li>
-        <% end %>
-      </ul>
-    </div>
+        <li style="margin-bottom: 0.5rem;">
+          <%= link_to "/jobs", style: nav_link_class("/jobs"), target: "_blank" do %>
+            <span style="font-size: 1.1rem;">🛠️</span>
+            <span>Jobs</span>
+          <% end %>
+        </li>
+      <% end %>
+    </ul>
   </div>
 </div>
+
+<style>
+  /* Sidebar hover effects */
+  nav a:hover {
+    background-color: #f3f4f6 !important;
+    color: #2563eb !important;
+  }
+
+  /* Active link styling - you can add logic to detect current page */
+  nav a[href*="languages"]:hover {
+    background-color: #dbeafe !important;
+    color: #1d4ed8 !important;
+  }
+
+  /* Logout button hover */
+  button[form]:hover {
+    background-color: #b91c1c !important;
+  }
+
+  /* Logo hover */
+  a[href="/"]:hover {
+    color: #2563eb !important;
+  }
+
+  /* Theme toggle hover */
+  div[title]:hover {
+    color: #374151 !important;
+    transform: scale(1.1);
+  }
+</style>

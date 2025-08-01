@@ -1,48 +1,108 @@
-<%= form_with(model: provider) do |form| %>
-  <% if provider.errors.any? %>
-    <div style="color: red">
-      <h2><%= pluralize(provider.errors.count, "error") %> prohibited this provider from being saved:</h2>
+<%= form_with(model: provider, local: true) do |form| %>
+  <div style="space-y: 1.5rem;">
+    <%= render "shared/errors", errors: provider.errors.full_messages, resource_name: provider.class.name %>
 
-      <ul>
-        <% provider.errors.each do |error| %>
-          <li><%= error.full_message %></li>
+    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 1.5rem;">
+
+      <!-- Provider Name -->
+      <div>
+        <%= form.label :name, style: "display: block; font-size: 0.875rem; font-weight: 600; color: #374151; margin-bottom: 0.5rem;" do %>
+          Provider Name
+          <span style="color: #ef4444;">*</span>
         <% end %>
-      </ul>
-    </div>
-  <% end %>
+        <%= form.text_field :name,
+            placeholder: "Enter provider name (e.g., Johns Hopkins, Mayo Clinic)",
+            autofocus: true,
+            style: "width: 100%; padding: 0.75rem 1rem; border: 2px solid #e5e7eb; border-radius: 0.5rem; font-size: 0.875rem; transition: all 0.2s; background: #f9fafb;" %>
+        <p style="margin-top: 0.5rem; font-size: 0.75rem; color: #6b7280;">The official name of the healthcare provider or organization.</p>
+      </div>
 
-  <div class="col-md-4">
-    <div class="form-group">
-      <%= form.label :name, style: "display: block" %>
-      <%= form.text_field :name, id: "basicInput", class: "form-control", autofocus: true %>
-    </div>
-  </div>
+      <!-- Provider Type -->
+      <div>
+        <%= form.label :provider_type, style: "display: block; font-size: 0.875rem; font-weight: 600; color: #374151; margin-bottom: 0.5rem;" do %>
+          Provider Type
+          <span style="color: #ef4444;">*</span>
+        <% end %>
+        <%= form.text_field :provider_type,
+            placeholder: "e.g., Hospital, Clinic, Health System",
+            style: "width: 100%; padding: 0.75rem 1rem; border: 2px solid #e5e7eb; border-radius: 0.5rem; font-size: 0.875rem; transition: all 0.2s; background: #f9fafb;" %>
+        <p style="margin-top: 0.5rem; font-size: 0.75rem; color: #6b7280;">The type or category of healthcare provider.</p>
+      </div>
 
-  <div class="col-md-4">
-    <div class="form-group">
-      <%= form.label :provider_type, style: "display: block" %>
-      <%= form.text_field :provider_type, id: "basicInput", class: "form-control" %>
-    </div>
-  </div>
+      <!-- File Name Prefix -->
+<!--      <div>-->
+        <%#= form.label :file_name_prefix, style: "display: block; font-size: 0.875rem; font-weight: 600; color: #374151; margin-bottom: 0.5rem;" %>
+        <%#= form.text_field :file_name_prefix,
+            id: "basicInput",
+            placeholder: "e.g., jhu, mayo, cleveland",
+            style: "width: 100%; padding: 0.75rem 1rem; border: 2px solid #e5e7eb; border-radius: 0.5rem; font-size: 0.875rem; transition: all 0.2s; background: #f9fafb; font-family: 'SF Mono', Monaco, monospace;" %>
+<!--        <p style="margin-top: 0.5rem; font-size: 0.75rem; color: #6b7280;">Used for organizing files and documents. Keep it short and lowercase.</p>
+      </div>-->
 
-  <!--div class="col-md-4">
-    <div class="form-group">
-      <%= form.label :file_name_prefix, style: "display: block" %>
-      <%= form.text_field :file_name_prefix, id: "basicInput", class: "form-control" %>
+      <!-- Regions -->
+      <div>
+        <%= form.label :region, style: "display: block; font-size: 0.875rem; font-weight: 600; color: #374151; margin-bottom: 0.5rem;" do %>
+          Associated Regions
+        <% end %>
+        <%= form.collection_select :region_ids, Region.order(:name), :id, :name,
+            { include_hidden: false },
+            multiple: true,
+            style: "width: 100%; padding: 0.75rem 1rem; border: 2px solid #e5e7eb; border-radius: 0.5rem; font-size: 0.875rem; transition: all 0.2s; background: #f9fafb;" %>
+        <p style="margin-top: 0.5rem; font-size: 0.75rem; color: #6b7280;">Select one or more regions this provider serves. Hold Ctrl/Cmd to select multiple.</p>
+      </div>
     </div>
-  </div-->
 
-  <div class="col-md-4">
-    <div class="form-group">
-      <%= form.label :region, style: "display: block" %>
-      <%= form.collection_select :region_ids, Region.order(:name), :id, :name, { include_hidden: false }, class: "form-select", multiple: true %>
-    </div>
-  </div>
+    <div style="display: flex; justify-content: space-between; align-items: center; padding-top: 2rem; border-top: 1px solid #f3f4f6; margin-top: 2rem;">
+      <div style="display: flex; gap: 1rem;">
+        <%= form.submit "Save Provider",
+            style: "background: linear-gradient(135deg, #10b981 0%, #059669 100%); color: white; font-weight: 600; padding: 0.75rem 2rem; border-radius: 0.5rem; border: none; cursor: pointer; font-size: 0.875rem; box-shadow: 0 4px 6px -1px rgba(16, 185, 129, 0.3); transition: all 0.2s;" %>
+        <%= link_to "Cancel", providers_path,
+            style: "background: #f3f4f6; color: #6b7280; font-weight: 600; padding: 0.75rem 2rem; border-radius: 0.5rem; text-decoration: none; font-size: 0.875rem; transition: all 0.2s; display: inline-block;" %>
+      </div>
 
-  <div class="mt-4">
-    <div class="col-12 d-flex justify-content-end">
-      <%= form.submit class: "btn btn-primary me-1 mb-1" %>
-      <%= link_to "Cancel", providers_path, class: "btn btn-light-secondary me-1 mb-1" %>
+      <% if provider.persisted? %>
+        <div style="color: #6b7280; font-size: 0.75rem;">
+          Last updated: <%= provider.updated_at.strftime("%B %d, %Y at %I:%M %p") %>
+        </div>
+      <% end %>
     </div>
   </div>
 <% end %>
+
+<style>
+  /* Form input focus states */
+  input[type="text"]:focus, select:focus {
+    outline: none !important;
+    border-color: #3b82f6 !important;
+    box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1) !important;
+    background: white !important;
+  }
+
+  /* Submit button hover */
+  input[type="submit"]:hover {
+    transform: translateY(-2px) !important;
+    box-shadow: 0 10px 25px -5px rgba(16, 185, 129, 0.4) !important;
+  }
+
+  /* Cancel link hover */
+  a[href*="providers"]:hover {
+    background: #e5e7eb !important;
+    color: #374151 !important;
+    transform: translateY(-1px);
+  }
+
+  /* Input placeholder styling */
+  input::placeholder {
+    color: #9ca3af;
+    font-style: italic;
+  }
+
+  /* Multi-select styling */
+  select[multiple] {
+    min-height: 120px;
+  }
+
+  select[multiple]:focus {
+    min-height: 120px;
+  }
+</style>

@@ -1,89 +1,182 @@
 <%= form_for topic do |f| %>
-  <div class="form-body">
-    <div class="row">
-      <%= render "shared/errors", errors: errors.presence || [], resource_name: topic.class.name %>
-      <div class="col-12">
-        <div class="form-group">
-          <%= f.label :title %>
-          <%= f.text_field :title, class: "form-control", placeholder: "Title" %>
-        </div>
-        <div class="form-group">
-          <%= f.label :description %>
-          <%= f.text_area :description, class: "form-control", placeholder: "Description" %>
-        </div>
-        <% if Current.user.is_admin? %>
-          <div class="form-group">
-            <%= f.label :provider %>
-            <%= f.collection_select :provider_id, Provider.all, :id, :name, { prompt: "Select Provider" }, class: "form-select" %>
-          </div>
+  <div style="space-y: 1.5rem;">
+    <%= render "shared/errors", errors: errors.presence || [], resource_name: topic.class.name %>
+
+    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 1.5rem;">
+
+      <!-- Topic Title -->
+      <div style="grid-column: 1 / -1;">
+        <%= f.label :title, style: "display: block; font-size: 0.875rem; font-weight: 600; color: #374151; margin-bottom: 0.5rem;" do %>
+          Topic Title
+          <span style="color: #ef4444;">*</span>
         <% end %>
+        <%= f.text_field :title,
+            placeholder: "Enter a clear, descriptive title",
+            style: "width: 100%; padding: 0.75rem 1rem; border: 2px solid #e5e7eb; border-radius: 0.5rem; font-size: 0.875rem; transition: all 0.2s; background: #f9fafb;" %>
+        <p style="margin-top: 0.5rem; font-size: 0.75rem; color: #6b7280;">Choose a title that clearly describes the educational content.</p>
+      </div>
+
+      <!-- Description -->
+      <div style="grid-column: 1 / -1;">
+        <%= f.label :description, style: "display: block; font-size: 0.875rem; font-weight: 600; color: #374151; margin-bottom: 0.5rem;" %>
+        <%= f.text_area :description,
+            placeholder: "Provide a detailed description of this educational topic...",
+            rows: 4,
+            style: "width: 100%; padding: 0.75rem 1rem; border: 2px solid #e5e7eb; border-radius: 0.5rem; font-size: 0.875rem; transition: all 0.2s; background: #f9fafb; resize: vertical;" %>
+        <p style="margin-top: 0.5rem; font-size: 0.75rem; color: #6b7280;">Describe the learning objectives and content covered in this topic.</p>
+      </div>
+
+      <!-- Provider (Admin Only) -->
+      <% if Current.user.is_admin? %>
         <div>
-          <div class="form-group">
-            <%= f.label :language %>
-            <%= f.collection_select :language_id,
-                                    Language.all,
-                                    :id,
-                                    :name,
-                                    { prompt: "Select language", selected: topic.language&.id || Language.first.id },
-                                    class: "form-select"
-            %>
-          </div>
-          <div class="form-group">
-            <%= f.label :publishing_year %>
-            <%= f.select :published_at_year, options_for_select((2016..Date.today.year).to_a, topic.published_at_year || Date.today.year), { prompt: "Select year of publishing" }, class: "form-select" %>
-          </div>
-          <div class="form-group">
-            <%= f.label :publishing_month %>
-            <%= f.select :published_at_month, options_for_select((1..12).to_a, topic.published_at_month || Date.today.month), { prompt: "Select month of publishing" }, class: "form-select" %>
-          </div>
-          <div class="form-group" data-controller="select-tags">
-            <div class="d-flex">
-              <%= f.label :tag_list, class: "flex-fill" %>
-              <small class="flex-fill text-end fw-light text-muted text-uppercase">Press enter to add a new tag</small>
-            </div>
-            <p>Please note: For any tag you add or remove, its cognates are also added or removed.</p>
-            <%= f.select :tag_list,
-                         options_from_collection_for_select(
-                           ActsAsTaggableOn::Tag.all&.order(name: :asc),
-                           :name,
-                           :name,
-                           topic.tag_list
-                         ),
-                         { prompt: "Select tags", include_blank: true },
-                         multiple: true,
-                         class: "form-select",
-                         data: { "allow-new": "true", "allow-clear": "true", "select-tags-target": "tagList", "resource-type": "topics", "resource-id": f.object.id }
-            %>
-          </div>
+          <%= f.label :provider, style: "display: block; font-size: 0.875rem; font-weight: 600; color: #374151; margin-bottom: 0.5rem;" %>
+          <%= f.collection_select :provider_id, Provider.all, :id, :name,
+              { prompt: "Select Provider" },
+              style: "width: 100%; padding: 0.75rem 1rem; border: 2px solid #e5e7eb; border-radius: 0.5rem; font-size: 0.875rem; transition: all 0.2s; background: #f9fafb;" %>
+          <p style="margin-top: 0.5rem; font-size: 0.75rem; color: #6b7280;">Choose the healthcare provider associated with this content.</p>
         </div>
-        <div class="form-group" data-controller="upload" <% if topic.persisted? %> data-upload-topic-id-value="<%= topic.id %>" <% end %>>
-          <%= f.label :documents, style: "display: block" %>
+      <% end %>
 
-          <div data-upload-target="filesContainer">
-            <% if topic.documents_blobs.present? %>
-              <%= render partial: "topics/document_list", locals: { blobs: topic.documents_blobs, hidden_input: false } %>
-            <% end %>
-          </div>
+      <!-- Language -->
+      <div data-controller="select-tags">
+        <%= f.label :language, style: "display: block; font-size: 0.875rem; font-weight: 600; color: #374151; margin-bottom: 0.5rem;" do %>
+          Language
+          <span style="color: #ef4444;">*</span>
+        <% end %>
+        <%= f.collection_select :language_id,
+                                Language.all,
+                                :id,
+                                :name,
+                                { prompt: "Select Language" },
+                                style: "width: 100%; padding: 0.75rem 1rem; border: 2px solid #e5e7eb; border-radius: 0.5rem; font-size: 0.875rem; transition: all 0.2s; background: #f9fafb;"
+        %>
+        <p style="margin-top: 0.5rem; font-size: 0.75rem; color: #6b7280;">Select the primary language for this educational content.</p>
+      </div>
 
-          <% topic.documents.each do |document| %>
-            <%= f.hidden_field :documents, multiple: true, value: document.signed_id, data: { upload_target: "hiddenField" } %>
+      <!-- Publishing Year -->
+      <div>
+        <%= f.label :publishing_year, style: "display: block; font-size: 0.875rem; font-weight: 600; color: #374151; margin-bottom: 0.5rem;" %>
+        <%= f.select :published_at_year,
+            options_for_select((2016..Date.today.year).to_a, topic.published_at_year || Date.today.year),
+            { prompt: "Select year of publishing" },
+            style: "width: 100%; padding: 0.75rem 1rem; border: 2px solid #e5e7eb; border-radius: 0.5rem; font-size: 0.875rem; transition: all 0.2s; background: #f9fafb;" %>
+        <p style="margin-top: 0.5rem; font-size: 0.75rem; color: #6b7280;">When was this content originally published?</p>
+      </div>
+
+      <!-- Publishing Month -->
+      <div>
+        <%= f.label :publishing_month, style: "display: block; font-size: 0.875rem; font-weight: 600; color: #374151; margin-bottom: 0.5rem;" %>
+        <%= f.select :published_at_month,
+            options_for_select((1..12).map { |m| [Date::MONTHNAMES[m], m] }, topic.published_at_month  || Date.today.month),
+            { prompt: "Select month of publishing" },
+            style: "width: 100%; padding: 0.75rem 1rem; border: 2px solid #e5e7eb; border-radius: 0.5rem; font-size: 0.875rem; transition: all 0.2s; background: #f9fafb;" %>
+        <p style="margin-top: 0.5rem; font-size: 0.75rem; color: #6b7280;">Specify the month of publication for better organization.</p>
+      </div>
+
+      <!-- Tags Section -->
+      <div style="grid-column: 1 / -1;">
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.5rem;">
+          <small style="font-size: 0.75rem; color: #6b7280; font-weight: 400; text-transform: uppercase;">Press enter to add a new tag</small>
+          <%= f.label :tag_list, style: "font-size: 0.875rem; font-weight: 600; color: #374151;" %>
+        </div>
+        <div style="background: #fef3c7; border: 1px solid #fbbf24; border-radius: 0.5rem; padding: 0.75rem; margin-bottom: 0.75rem;">
+          <p style="margin: 0; font-size: 0.75rem; color: #92400e;">
+            <strong>Note:</strong> For any tag you add or remove, its cognates are also added or removed automatically.
+          </p>
+        </div>
+        <%= f.select :tag_list,
+                     options_from_collection_for_select(
+                       ActsAsTaggableOn::Tag.all&.order(name: :asc),
+                       :name,
+                       :name,
+                       topic.tag_list
+                     ),
+                     { prompt: "Select tags", include_blank: true },
+                     multiple: true,
+                     style: "width: 100%; min-height: 120px; padding: 0.75rem 1rem; border: 2px solid #e5e7eb; border-radius: 0.5rem; font-size: 0.875rem; transition: all 0.2s; background: #f9fafb;",
+                     data: { "allow-new": "true", "allow-clear": "true", "select-tags-target": "tagList" }
+        %>
+        <p style="margin-top: 0.5rem; font-size: 0.75rem; color: #6b7280;">Add relevant tags to help users discover this content. You can select existing tags or create new ones.</p>
+      </div>
+
+      <!-- Documents Upload -->
+      <div style="grid-column: 1 / -1;" data-controller="upload" <% if topic.persisted? %> data-upload-topic-id-value="<%= topic.id %>" <% end %>>
+        <%= f.label :documents, style: "display: block; font-size: 0.875rem; font-weight: 600; color: #374151; margin-bottom: 0.5rem;" do %>
+          Supporting Documents
+        <% end %>
+
+        <div data-upload-target="filesContainer" style="margin-bottom: 1rem;">
+          <% if topic.documents_blobs.present? %>
+            <%= render partial: "topics/document_list", locals: { blobs: topic.documents_blobs, hidden_input: false } %>
           <% end %>
+        </div>
 
-          <%= f.file_field :documents, multiple: true, class: "form-control mt-4", id: "documents", data: { upload_target: "filesInput", action: "change->upload#uploadFile" } %>
+        <% topic.documents.each do |document| %>
+          <%= f.hidden_field :documents, multiple: true, value: document.signed_id, data: { upload_target: "hiddenField" } %>
+        <% end %>
 
-          <div class="d-none" data-upload-target="spinner">
-            <div class="spinner-border spinner-border-sm mt-4" role="status">
-              <span class="visually-hidden">Uploading in progress...</span>
-            </div>
-            <span>Uploading in progress...</span>
-          </div>
-
-          <div class="col-12 d-flex justify-content-end mt-4">
-            <%= f.submit class: "btn btn-primary me-1 mb-1", data: { upload_target: "submitButton" } %>
-            <%= link_to "Cancel", topics_path, class: "btn btn-light-secondary me-1 mb-1" %>
-          </div>
+        <div style="border: 2px dashed #d1d5db; border-radius: 0.5rem; padding: 2rem; text-align: center; background: #f9fafb; transition: all 0.2s;">
+          <%= f.file_field :documents,
+              multiple: true,
+              style: "width: 100%; padding: 0.75rem 1rem; border: 2px solid #e5e7eb; border-radius: 0.5rem; font-size: 0.875rem; background: white; cursor: pointer;",
+              data: { upload_target: "filesInput", action: "change->upload#uploadFile" } %>
+          <p style="margin-top: 0.75rem; font-size: 0.75rem; color: #6b7280;">Upload PDFs, documents, or other supporting materials. You can select multiple files at once.</p>
         </div>
       </div>
     </div>
+
+    <div style="display: flex; justify-content: space-between; align-items: center; padding-top: 2rem; border-top: 1px solid #f3f4f6; margin-top: 2rem;">
+      <div style="display: flex; gap: 1rem;">
+        <%= f.submit "Save Topic",
+            style: "background: linear-gradient(135deg, #10b981 0%, #059669 100%); color: white; font-weight: 600; padding: 0.75rem 2rem; border-radius: 0.5rem; border: none; cursor: pointer; font-size: 0.875rem; box-shadow: 0 4px 6px -1px rgba(16, 185, 129, 0.3); transition: all 0.2s;" %>
+        <%= link_to "Cancel", topics_path,
+            style: "background: #f3f4f6; color: #6b7280; font-weight: 600; padding: 0.75rem 2rem; border-radius: 0.5rem; text-decoration: none; font-size: 0.875rem; transition: all 0.2s; display: inline-block;" %>
+      </div>
+
+      <% if topic.persisted? %>
+        <div style="color: #6b7280; font-size: 0.75rem;">
+          Last updated: <%= topic.updated_at.strftime("%B %d, %Y at %I:%M %p") %>
+        </div>
+      <% end %>
+    </div>
   </div>
 <% end %>
+
+<style>
+  /* Form input focus states */
+  input[type="text"]:focus, textarea:focus, select:focus {
+    outline: none !important;
+    border-color: #3b82f6 !important;
+    box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1) !important;
+    background: white !important;
+  }
+
+  /* Submit button hover */
+  input[type="submit"]:hover {
+    transform: translateY(-2px) !important;
+    box-shadow: 0 10px 25px -5px rgba(16, 185, 129, 0.4) !important;
+  }
+
+  /* Cancel link hover */
+  a[href*="topics"]:hover {
+    background: #e5e7eb !important;
+    color: #374151 !important;
+    transform: translateY(-1px);
+  }
+
+  /* File input styling */
+  input[type="file"] {
+    cursor: pointer !important;
+  }
+
+  /* Multi-select styling */
+  select[multiple] {
+    min-height: 120px !important;
+  }
+
+  /* Upload area hover */
+  div[style*="border: 2px dashed"]:hover {
+    border-color: #3b82f6 !important;
+    background: #f0f9ff !important;
+  }
+</style>

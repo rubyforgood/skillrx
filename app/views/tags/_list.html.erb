@@ -1,25 +1,94 @@
 <tbody>
-  <% @tags.each do |tag| %>
+  <% if @tags.any? %>
+    <% @tags.each_with_index do |tag, index| %>
+      <tr style="border-bottom: 1px solid #f1f5f9; transition: all 0.2s;" onmouseover="this.style.backgroundColor='#f8fafc'" onmouseout="this.style.backgroundColor='white'">
+        <td style="padding: 1.5rem;">
+          <div style="display: flex; align-items: center; gap: 0.75rem;">
+            <div style="width: 2.5rem; height: 2.5rem; background: linear-gradient(135deg, #8b5cf6 0%, #7c3aed 100%); border-radius: 0.5rem; display: flex; align-items: center; justify-content: center; color: white; font-weight: 600; font-size: 0.875rem;">
+              <%= tag.name.first.upcase %>
+            </div>
+            <div>
+              <div style="font-weight: 600; color: #111827; font-size: 0.875rem;"><%= tag.name %></div>
+              <div style="color: #6b7280; font-size: 0.75rem;">Content Tag</div>
+            </div>
+          </div>
+        </td>
+        <td class="hide-mobile" style="padding: 1.5rem;">
+          <div style="display: flex; gap: 0.5rem; flex-wrap: wrap;">
+            <% if tag.cognates_tags.any? %>
+              <% tag.cognates_tags.each do |cognate| %>
+                <%= link_to cognate.name, tag_path(cognate), style: "display: inline-flex; align-items: center; padding: 0.25rem 0.75rem; background: linear-gradient(135deg, #10b981 0%, #059669 100%); color: white; border-radius: 9999px; font-size: 0.75rem; font-weight: 500; text-decoration: none; transition: all 0.2s;", data: { turbo: false } %>
+              <% end %>
+            <% else %>
+              <span style="color: #94a3b8; font-style: italic; font-size: 0.75rem;">No cognates</span>
+            <% end %>
+          </div>
+        </td>
+        <td style="padding: 1.5rem;">
+          <div style="display: flex; align-items: center; gap: 0.5rem;">
+            <div style="background: linear-gradient(135deg, #f59e0b 0%, #d97706 100%); color: white; padding: 0.25rem 0.5rem; border-radius: 0.375rem; font-size: 0.75rem; font-weight: 600;">
+              <%= tag.taggings_count %>
+            </div>
+            <span style="color: #6b7280; font-size: 0.75rem;">
+              <%= pluralize(tag.taggings_count, 'usage') %>
+            </span>
+          </div>
+        </td>
+        <td style="padding: 1.5rem; text-align: right;">
+          <div style="display: flex; gap: 0.5rem; justify-content: flex-end;">
+            <%= link_to tag, style: "background: #3b82f6; color: white; padding: 0.5rem 0.75rem; border-radius: 0.375rem; text-decoration: none; font-size: 0.75rem; font-weight: 600; display: inline-flex; align-items: center; gap: 0.375rem; transition: all 0.2s;", data: { turbo: false } do %>
+              <svg style="width: 0.875rem; height: 0.875rem;" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path>
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"></path>
+              </svg>
+              <span>View</span>
+            <% end %>
+            <%= link_to edit_tag_path(tag), style: "background: #6b7280; color: white; padding: 0.5rem 0.75rem; border-radius: 0.375rem; text-decoration: none; font-size: 0.75rem; font-weight: 600; display: inline-flex; align-items: center; gap: 0.375rem; transition: all 0.2s;", data: { turbo: false } do %>
+              <svg style="width: 0.875rem; height: 0.875rem;" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"></path>
+              </svg>
+              <span>Edit</span>
+            <% end %>
+          </div>
+        </td>
+      </tr>
+    <% end %>
+  <% else %>
     <tr>
-      <td class="text-bold-500">
-        <%= tag.name %>
-      </td>
-      <td class="text-bold-500">
-        <% tag.cognates_tags.each do |cognate| %>
-          <%= link_to cognate.name, tag_path(cognate), class: "badge bg-success" %>
-        <% end %>
-      </td>
-      <td class="text-bold-500">
-        <%= tag.taggings_count %>
-      </td>
-      <td class="text-end">
-        <%= link_to tag, class: "btn btn-primary btn-sm", data: {turbo: false } do %>
-          <i class="bi bi-search"></i> View
-        <% end %>
-        <%= link_to edit_tag_path(tag), class: "btn btn-secondary btn-sm", data: {turbo: false } do %>
-          <i class="bi bi-pencil"></i> Edit
-        <% end %>
+      <td colspan="4" style="padding: 3rem 1.5rem; text-align: center;">
+        <div style="color: #9ca3af;">
+          <svg style="width: 3rem; height: 3rem; margin: 0 auto 1rem; color: #d1d5db;" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1" d="M7 7h.01M7 3h5c.512 0 1.024.195 1.414.586l7 7a2 2 0 010 2.828l-7 7a2 2 0 01-2.828 0l-7-7A1.994 1.994 0 013 12V7a4 4 0 014-4z"/>
+          </svg>
+          <p style="font-size: 1rem; font-weight: 500; color: #6b7280; margin: 0;">No tags found</p>
+          <p style="font-size: 0.875rem; color: #9ca3af; margin: 0.5rem 0 0 0;">Try adjusting your search filters or create a new tag.</p>
+        </div>
       </td>
     </tr>
   <% end %>
 </tbody>
+
+<style>
+  /* Action button hover effects */
+  a[href*="tags/"]:hover {
+    transform: translateY(-1px);
+  }
+  
+  a[href*="tags/"][style*="background: #3b82f6"]:hover {
+    background: #2563eb !important;
+  }
+  
+  a[href*="edit"]:hover {
+    background: #4b5563 !important;
+  }
+  
+  /* Cognate badge hover effects */
+  a[style*="background: linear-gradient(135deg, #10b981"]:hover {
+    transform: scale(1.05);
+  }
+  
+  /* Table row hover animation */
+  tbody tr:hover td:first-child > div > div:first-child {
+    transform: scale(1.05);
+  }
+</style>

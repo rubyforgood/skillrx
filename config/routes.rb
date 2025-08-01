@@ -7,8 +7,8 @@ Rails.application.routes.draw do
   resource :registration, only: %i[new create]
   resource :session
   resources :uploads, only: %i[create destroy]
-  resources :users, except: :show
-  resources :tags, only: %i[index show edit update destroy]
+  resources :users
+  resources :tags
   resources :topics do
     member do
       put :archive
