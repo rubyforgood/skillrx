@@ -61,7 +61,7 @@ module Taggable
 
     language = Language.find(language_id)
 
-    tags_on(language_code)
+    tags_on(language.code.to_sym)
   end
 
   def language_code

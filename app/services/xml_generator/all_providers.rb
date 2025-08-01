@@ -7,7 +7,7 @@ class XmlGenerator::AllProviders < XmlGenerator::SingleProvider
   attr_reader :language, :args
 
   def xml_content(xml)
-    language.providers
+    language.providers.includes(:topics)
       .map do |provider|
         provider_xml(xml, provider)
       end

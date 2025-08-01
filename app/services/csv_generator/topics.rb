@@ -13,8 +13,7 @@ class CsvGenerator::Topics < CsvGenerator::Base
   end
 
   def scope
-    language.topics.active
-      .includes(:provider)
+    language.topics.active.includes(:provider)
       .map do |topic|
         [
           topic.id,
