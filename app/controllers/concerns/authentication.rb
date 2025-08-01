@@ -26,6 +26,7 @@ module Authentication
     end
 
     def resume_session
+      session.delete(:return_to_after_authenticating) # Avoid stale redirects
       Current.session ||= find_session_by_cookie
     end
 
