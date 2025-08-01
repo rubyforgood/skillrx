@@ -4,7 +4,7 @@ common: &defaults
 
   # key: Your Organization key for Scout APM. Found on the settings screen.
   # - Default: none
-  key: SROGnGaXsm2ZTeDQPOqt
+  key: <%= ENV["SCOUT_KEY"] %>
 
   # log_level: Verboseness of logs.
   # - Default: 'info'
@@ -26,7 +26,7 @@ common: &defaults
 
   # name: Application name in APM Web UI
   # - Default: the application names comes from the Rails or Sinatra class name
-  # name:
+  name: <%= ENV["SCOUT_APP_NAME"] || "SkillRX" %>
 
   # monitor: Enable Scout APM or not
   # - Default: none
@@ -40,7 +40,7 @@ production:
 
 development:
   <<: *defaults
-  monitor: false
+  monitor: true  # Enable for local testing
 
 test:
   <<: *defaults

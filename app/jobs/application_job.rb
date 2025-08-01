@@ -6,12 +6,18 @@ class ApplicationJob < ActiveJob::Base
   # discard_on ActiveJob::DeserializationError
 
   around_perform do |job, block|
-    Rails.logger.debug "[Job Start] #{job.class.name} ID=#{job.job_id}"
+    start_time = Time.current
+    Rails.logger.debug "[Job Start] #{job.class.name} ID=#{job.job_id} Args=#{job.arguments}"
+
     block.call
-    Rails.logger.debug "[Job Finish] #{job.class.name} ID=#{job.job_id}"
+
+    duration = (Time.current - start_time).round(2)
+    Rails.logger.debug "[Job Finish] #{job.class.name} ID=#{job.job_id} Duration=#{duration}s"
   rescue => e
-    Rails.logger.error "[Job Error] #{job.class.name} ID=#{job.job_id} - #{e.class}: #{e.message}"
-    Rails.logger.error e.backtrace.join("\n")
+    duration = (Time.current - start_time).round(2)
+    Rails.logger.error "[Job Error] #{job.class.name} ID=#{job.job_id} Duration=#{duration}s - #{e.class}: #{e.message}"
+    Rails.logger.error "Job Arguments: #{job.arguments}"
+    Rails.logger.error e.backtrace.first(10).join("\n")
     raise
   end
 end

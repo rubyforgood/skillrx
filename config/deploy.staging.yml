@@ -26,10 +26,12 @@ env:
     - AWS_SECRET_ACCESS_KEY
     - AZURE_STORAGE_ACCOUNT_NAME
     - AZURE_STORAGE_ACCOUNT_KEY
+    - SCOUT_KEY
   clear:
     RAILS_ENV: production
     AWS_DEFAULT_REGION: us-east-1
     AWS_BUCKET_NAME: skillrx-staging
+    SCOUT_APP_NAME: "SkillRX Staging"
     AZURE_STORAGE_SHARE_NAME: skillrx-staging-env
     AWS_ENDPOINT_URL: ""  # Empty for real AWS
     LOCALSTACK_DEBUG: "0"
