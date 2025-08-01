@@ -1,18 +1,77 @@
 <% content_for :title, "New provider" %>
 
-<section id="multiple-column-form">
-  <div class="row match-height">
-    <div class="col-12">
-      <div class="card">
-        <div class="card-header">
-          <h4>Create New Provider</h4>
-        </div>
-        <div class="card-content">
-          <div class="card-body">
-            <%= render "form", provider: @provider %>
+<div style="min-height: 100vh; background: linear-gradient(135deg, #f8fafc 0%, #e2e8f0 100%); padding: 2rem 0;">
+  <div style="max-width: 1200px; margin: 0 auto; padding: 0 1rem;">
+    
+    <!-- Header Section -->
+    <div style="margin-bottom: 2rem;">
+      <div style="display: flex; align-items: center; gap: 1rem; margin-bottom: 1.5rem;">
+        <%= link_to providers_path, style: "color: #6b7280; hover:color: #374151; transition: colors 0.2s;" do %>
+          <svg style="width: 1.5rem; height: 1.5rem;" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18"/>
+          </svg>
+        <% end %>
+        <h1 style="font-size: 2rem; font-weight: 700; color: #1f2937; margin: 0;">
+          Add New Provider
+        </h1>
+      </div>
+      
+      <!-- Breadcrumb -->
+      <nav style="font-size: 0.875rem; color: #6b7280;">
+        <ol style="display: flex; gap: 0.5rem; list-style: none; padding: 0; margin: 0;">
+          <li><%= link_to "Dashboard", root_path, style: "color: #6b7280; text-decoration: none; hover:color: #374151;" %></li>
+          <li style="color: #d1d5db;">/</li>
+          <li><%= link_to "Providers", providers_path, style: "color: #6b7280; text-decoration: none; hover:color: #374151;" %></li>
+          <li style="color: #d1d5db;">/</li>
+          <li style="color: #374151; font-weight: 500;">New Provider</li>
+        </ol>
+      </nav>
+    </div>
+
+    <!-- Main Form Card -->
+    <div style="background: white; border-radius: 1rem; box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04); overflow: hidden;">
+      
+      <!-- Card Header -->
+      <div style="background: linear-gradient(135deg, #1e40af 0%, #3730a3 100%); padding: 2rem; color: white;">
+        <div style="display: flex; align-items: center; gap: 1rem;">
+          <div style="background: rgba(255, 255, 255, 0.2); padding: 0.75rem; border-radius: 0.75rem;">
+            <svg style="width: 2rem; height: 2rem;" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4"/>
+            </svg>
           </div>
+          <div>
+            <h2 style="font-size: 1.5rem; font-weight: 700; margin: 0;">Provider Information</h2>
+            <p style="margin: 0.5rem 0 0 0; color: rgba(255, 255, 255, 0.8);">
+              Add a new healthcare provider to the system
+            </p>
+          </div>
+        </div>
+      </div>
+      
+      <!-- Form Content -->
+      <div style="padding: 2rem;">
+        <%= render "form", provider: @provider %>
+      </div>
+    </div>
+
+    <!-- Help Section -->
+    <div style="margin-top: 2rem; background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 0.75rem; padding: 1.5rem;">
+      <div style="display: flex; align-items: start; gap: 1rem;">
+        <div style="background: #dbeafe; color: #1e40af; padding: 0.5rem; border-radius: 0.5rem; margin-top: 0.25rem;">
+          <svg style="width: 1.25rem; height: 1.25rem;" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/>
+          </svg>
+        </div>
+        <div>
+          <h3 style="font-size: 1rem; font-weight: 600; color: #374151; margin: 0 0 0.75rem 0;">Adding Provider Information</h3>
+          <ul style="color: #6b7280; font-size: 0.875rem; line-height: 1.6; margin: 0; padding-left: 1.25rem;">
+            <li><strong>Provider Name:</strong> Use the official name as it appears in documentation</li>
+            <li><strong>Provider Type:</strong> Categories like Hospital, Clinic, Health System, Medical Center</li>
+            <li><strong>File Name Prefix:</strong> Short identifier for file organization (e.g., "jhu" for Johns Hopkins)</li>
+            <li><strong>Regions:</strong> Geographic areas served by this provider</li>
+          </ul>
         </div>
       </div>
     </div>
   </div>
-</section>
+</div>

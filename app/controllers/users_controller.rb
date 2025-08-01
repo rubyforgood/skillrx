@@ -2,14 +2,17 @@ class UsersController < ApplicationController
   include Pagy::Backend
 
   before_action :redirect_contributors
-  before_action :set_user, only: %i[ edit update destroy ]
+  before_action :set_user, only: %i[ show edit update destroy ]
 
   def index
-    @pagy, @users = pagy(User.all.search_with_params(user_search_params))
+    @pagy, @users = pagy(User.includes(:providers).search_with_params(user_search_params))
   end
 
   def new
     @user = User.new
+  end
+
+  def show
   end
 
   def create
@@ -48,7 +51,7 @@ class UsersController < ApplicationController
   private
 
   def set_user
-    @user = User.find(params.expect(:id))
+    @user = User.includes(:providers).find(params.expect(:id))
   end
 
   def user_params

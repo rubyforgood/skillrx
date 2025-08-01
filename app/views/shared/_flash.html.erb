@@ -1,8 +1,8 @@
 <% flash.each do |name, msg| %>
   <% if msg.is_a?(String) %>
-    <div class="alert <%= flash_class(name) %> alert-dismissible fade show" role="alert">
-      <%= msg %>
-      <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+    <div class="<%= tailwind_flash_class(name) %> p-4 mb-4 rounded-md flex items-center justify-between" role="alert">
+      <span><%= msg %></span>
+      <button type="button" class="ml-4 text-lg font-semibold hover:opacity-70" onclick="this.parentElement.remove()">×</button>
     </div>
   <% end %>
 <% end %>

@@ -1,18 +1,61 @@
 
-<%= form_for language do |f| %>
-  <div class="form-body">
-    <div class="row">
-      <%= render "shared/errors", errors: language.errors.full_messages, resource_name: language.class.name %>
-      <div class="col-12">
-        <div class="form-group">
-          <%= f.label :name %>
-          <%= f.text_field :name, class: "form-control", placeholder: "Name" %>
-        </div>
-        <div class="col-12 d-flex justify-content-end">
-          <%= f.submit class: "btn btn-primary me-1 mb-1" %>
-          <%= link_to "Cancel", languages_path, class: "btn btn-light-secondary me-1 mb-1" %>
-        </div>
+<%= form_for language, local: true do |f| %>
+  <div style="space-y: 1.5rem;">
+    <%= render "shared/errors", errors: language.errors.full_messages, resource_name: language.class.name %>
+    
+    <div style="margin-bottom: 1.5rem;">
+      <%= f.label :name, style: "display: block; font-size: 0.875rem; font-weight: 600; color: #374151; margin-bottom: 0.5rem;" do %>
+        Language Name
+        <span style="color: #ef4444;">*</span>
+      <% end %>
+      <%= f.text_field :name, 
+          placeholder: "Enter language name (e.g., English, Spanish, French)", 
+          style: "width: 100%; padding: 0.75rem 1rem; border: 2px solid #e5e7eb; border-radius: 0.5rem; font-size: 0.875rem; transition: all 0.2s; background: #f9fafb;" %>
+      <p style="margin-top: 0.5rem; font-size: 0.75rem; color: #6b7280;">This will be used to identify the language throughout the system.</p>
+    </div>
+    
+    <div style="display: flex; justify-content: space-between; align-items: center; padding-top: 2rem; border-top: 1px solid #f3f4f6;">
+      <div style="display: flex; gap: 1rem;">
+        <%= f.submit "Save Language", 
+            style: "background: linear-gradient(135deg, #10b981 0%, #059669 100%); color: white; font-weight: 600; padding: 0.75rem 2rem; border-radius: 0.5rem; border: none; cursor: pointer; font-size: 0.875rem; box-shadow: 0 4px 6px -1px rgba(16, 185, 129, 0.3); transition: all 0.2s;" %>
+        <%= link_to "Cancel", languages_path, 
+            style: "background: #f3f4f6; color: #6b7280; font-weight: 600; padding: 0.75rem 2rem; border-radius: 0.5rem; text-decoration: none; font-size: 0.875rem; transition: all 0.2s; display: inline-block;" %>
       </div>
+      
+      <% if language.persisted? %>
+        <div style="color: #6b7280; font-size: 0.75rem;">
+          Last updated: <%= language.updated_at.strftime("%B %d, %Y at %I:%M %p") %>
+        </div>
+      <% end %>
     </div>
   </div>
 <% end %>
+
+<style>
+  /* Form input focus states */
+  input[type="text"]:focus {
+    outline: none !important;
+    border-color: #3b82f6 !important;
+    box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1) !important;
+    background: white !important;
+  }
+  
+  /* Submit button hover */
+  input[type="submit"]:hover {
+    transform: translateY(-2px) !important;
+    box-shadow: 0 10px 25px -5px rgba(16, 185, 129, 0.4) !important;
+  }
+  
+  /* Cancel link hover */
+  a[href*="languages"]:hover {
+    background: #e5e7eb !important;
+    color: #374151 !important;
+    transform: translateY(-1px);
+  }
+  
+  /* Input placeholder styling */
+  input::placeholder {
+    color: #9ca3af;
+    font-style: italic;
+  }
+</style>

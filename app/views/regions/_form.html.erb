@@ -1,27 +1,89 @@
-<%= form_with(model: region) do |form| %>
+<%= form_with(model: region, local: true) do |form| %>
   <% if region.errors.any? %>
-    <div style="color: red">
-      <h2><%= pluralize(region.errors.count, "error") %> prohibited this region from being saved:</h2>
-
-      <ul>
+    <div style="background: linear-gradient(135deg, #fef2f2 0%, #fee2e2 100%); border: 1px solid #f87171; color: #dc2626; padding: 1.5rem; border-radius: 0.75rem; margin-bottom: 2rem;">
+      <div style="display: flex; align-items: center; gap: 0.75rem; margin-bottom: 1rem;">
+        <svg style="width: 1.25rem; height: 1.25rem; flex-shrink: 0;" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+        </svg>
+        <h3 style="font-size: 1.125rem; font-weight: 600; margin: 0;">
+          <%= pluralize(region.errors.count, "error") %> prohibited this region from being saved:
+        </h3>
+      </div>
+      <ul style="margin: 0; padding-left: 1.5rem;">
         <% region.errors.each do |error| %>
-          <li><%= error.full_message %></li>
+          <li style="margin-bottom: 0.5rem; font-weight: 500;"><%= error.full_message %></li>
         <% end %>
       </ul>
     </div>
   <% end %>
 
-  <div class="col-md-4">
-    <div class="form-group">
-      <%= form.label :name, style: "display: block" %>
-      <%= form.text_field :name, id: "basicInput", class: "form-control", autofocus: true %>
+  <div style="space-y: 1.5rem;">
+    
+    <!-- Region Name Field -->
+    <div>
+      <%= form.label :name, style: "display: block; font-size: 0.875rem; font-weight: 600; color: #374151; margin-bottom: 0.5rem;" do %>
+        <div style="display: flex; align-items: center; gap: 0.5rem;">
+          <svg style="width: 1rem; height: 1rem;" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"/>
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"/>
+          </svg>
+          Region Name
+        </div>
+      <% end %>
+      <%= form.text_field :name, 
+          autofocus: true, 
+          placeholder: "Enter region name (e.g., North America, Europe, Asia-Pacific)",
+          style: "width: 100%; padding: 0.875rem 1rem; border: 2px solid #e5e7eb; border-radius: 0.5rem; font-size: 0.875rem; transition: all 0.2s; background: white;",
+          onfocus: "this.style.borderColor='#059669'; this.style.boxShadow='0 0 0 3px rgba(5, 150, 105, 0.1)';",
+          onblur: "this.style.borderColor='#e5e7eb'; this.style.boxShadow='none';" %>
+      <p style="margin: 0.5rem 0 0 0; font-size: 0.75rem; color: #6b7280;">
+        Provide a clear, descriptive name for the geographical region this service area covers.
+      </p>
     </div>
+
   </div>
 
-  <div class="mt-4">
-    <div class="col-12 d-flex justify-content-end">
-      <%= form.submit class: "btn btn-primary me-1 mb-1" %>
-      <%= link_to "Cancel", regions_path, class: "btn btn-light-secondary me-1 mb-1" %>
-    </div>
+  <!-- Form Actions -->
+  <div style="margin-top: 2rem; padding-top: 2rem; border-top: 1px solid #e5e7eb; display: flex; gap: 1rem; justify-content: flex-end; flex-wrap: wrap;">
+    <%= link_to regions_path, style: "background: #6b7280; color: white; padding: 0.875rem 1.75rem; border-radius: 0.5rem; text-decoration: none; font-weight: 600; font-size: 0.875rem; display: inline-flex; align-items: center; gap: 0.5rem; transition: all 0.2s;" do %>
+      <svg style="width: 1rem; height: 1rem;" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
+      </svg>
+      <span>Cancel</span>
+    <% end %>
+    
+    <%= form.submit (region.persisted? ? "Update Region" : "Create Region"), 
+        style: "background: linear-gradient(135deg, #059669 0%, #047857 100%); color: white; padding: 0.875rem 1.75rem; border-radius: 0.5rem; border: none; font-weight: 600; font-size: 0.875rem; display: inline-flex; align-items: center; gap: 0.5rem; cursor: pointer; transition: all 0.2s;" %>
   </div>
 <% end %>
+
+<style>
+  /* Form input focus effects */
+  form input[type="text"]:focus {
+    outline: none;
+  }
+  
+  /* Button hover effects */
+  a[style*="background: #6b7280"]:hover {
+    background: #4b5563 !important;
+    transform: translateY(-1px);
+  }
+  
+  input[type="submit"]:hover {
+    box-shadow: 0 10px 15px -3px rgba(5, 150, 105, 0.4), 0 4px 6px -2px rgba(5, 150, 105, 0.05) !important;
+    transform: translateY(-1px);
+  }
+  
+  /* Responsive design */
+  @media (max-width: 640px) {
+    div[style*="justify-content: flex-end"] {
+      flex-direction: column !important;
+      align-items: stretch !important;
+    }
+    
+    a, input[type="submit"] {
+      text-align: center !important;
+      justify-content: center !important;
+    }
+  }
+</style>
