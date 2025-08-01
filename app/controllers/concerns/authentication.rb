@@ -26,6 +26,7 @@ module Authentication
     end
 
     def resume_session
+      session.delete(:return_to_after_authenticating) # Avoid stale redirects
       Current.session ||= find_session_by_cookie
     end
 
@@ -34,8 +35,8 @@ module Authentication
     end
 
     def request_authentication
-      session[:return_to_after_authenticating] = request.url
-      redirect_to new_session_path
+      session[:return_to_after_authenticating] = request.fullpath
+      redirect_to main_app.new_session_path
     end
 
     def after_authentication_url
