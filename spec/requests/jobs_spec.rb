@@ -29,7 +29,7 @@ RSpec.describe "Jobs", type: :request do
     it "redirects to the login page" do
       get "/jobs"
       expect(response).to redirect_to("/session/new")
-      expect(session[:return_to_after_authenticating]).to end_with("/jobs/")
+      expect(session[:return_to_after_authenticating]).to eq("/jobs/")
     end
   end
 end

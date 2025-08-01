@@ -34,7 +34,7 @@ module Authentication
     end
 
     def request_authentication
-      session[:return_to_after_authenticating] = request.url
+      session[:return_to_after_authenticating] = request.fullpath
       redirect_to main_app.new_session_path
     end
 
