@@ -31,7 +31,6 @@ env:
     AWS_BUCKET_NAME: skillrx-production
     AWS_DEFAULT_REGION: us-east-1
     AWS_ENDPOINT_URL: ""  # Empty for real AWS
-    AZURE_MEDIA_FILES_SYNC_DISABLED: "true"
     AZURE_STORAGE_SHARE_NAME: contentshare
     DATA_IMPORT_SOURCE: azure
     LOCALSTACK_DEBUG: "0"
