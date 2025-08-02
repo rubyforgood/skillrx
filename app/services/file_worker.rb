@@ -27,10 +27,32 @@ class FileWorker
 
   def send_file
     validate_filename
-    create_subdirs(path)
     return if file.blank?
 
-    upload_with_timeout
+    create_subdirs(path)
+
+    with_timeout do
+      client.files.upload_file(share, path, name, file)
+    end
+  end
+
+  def delete_file
+    validate_filename
+
+    with_timeout do
+      client.files.delete_file(share, path, name)
+    end
+  end
+
+  def copy_file(new_path)
+    validate_filename
+    return if file.blank?
+
+    create_subdirs(new_path)
+
+    with_timeout do
+      client.files.copy_file(share, path, name, share, new_path, name)
+    end
   end
 
   def create_subdirs(current_path)
@@ -42,17 +64,6 @@ class FileWorker
 
       client.files.create_directory(share, dir_path)
     end
-  end
-
-  def delete_file
-    client.files.delete_file(share, path, name)
-  end
-
-  def copy_file(new_path)
-    create_subdirs(new_path)
-    return if file.blank?
-
-    client.files.copy_file(share, path, name, share, new_path, name)
   end
 
   def client
@@ -69,9 +80,9 @@ class FileWorker
     Rails.logger.warn "[FileWorker] Provider should be renamed to avoid these characters: /\\<>:\"|?*"
   end
 
-  def upload_with_timeout
+  def with_timeout(&block)
     Timeout.timeout(UPLOAD_TIMEOUT, Timeout::Error, "Azure FileShares upload timed out after #{UPLOAD_TIMEOUT} seconds") do
-      client.files.upload_file(share, path, name, file)
+      block.call
     end
   rescue Timeout::Error => e
     Rails.logger.error "[FileWorker] Upload timeout: #{e.message}"
