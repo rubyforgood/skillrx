@@ -26,7 +26,7 @@ class XmlGenerator::SingleProvider < XmlGenerator::Base
                     xml.send("file_name_#{index + 1}", document.filename, file_size: document.byte_size)
                   end
                 }
-                xml.topic_tags topic.current_tags_list.join(", ")
+                xml.topic_tags topic.taggings.map { |tg| tg.tag.name }.uniq.join(", ")
               }
             end
           }
@@ -40,8 +40,8 @@ class XmlGenerator::SingleProvider < XmlGenerator::Base
   end
 
   def topic_scope(prov)
-    return prov.topics.where("created_at > ?", 1.month.ago) if args.fetch(:recent, false)
-
-    prov.topics
+    scope = prov.topics
+    scope = scope.where("created_at > ?", 1.month.ago) if args.fetch(:recent, false)
+    scope.eager_load(:language, taggings: :tag).with_attached_documents
   end
 end
