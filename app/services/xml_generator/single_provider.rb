@@ -42,26 +42,6 @@ class XmlGenerator::SingleProvider < XmlGenerator::Base
         end
       end
     end
-    # xml.content_provider(name: provider.name) {
-    #   grouped_topics(provider).each do |(year, month), topics|
-    #     xml.topic_year(year: year) {
-    #       xml.topic_month(month: month) {
-    #         topics.each do |topic|
-    #           xml.title(name: topic.title) {
-    #             xml.topic_id topic.id
-    #             xml.topic_files(files: "Files") {
-    #               topic.documents.each_with_index do |document, index|
-    #                 next if document.content_type == "video/mp4"
-    #                 xml.send("file_name_#{index + 1}", document.filename, file_size: document.byte_size)
-    #               end
-    #             }
-    #             xml.topic_tags topic.current_tags_list.join(", ")
-    #           }
-    #         end
-    #       }
-    #     }
-    #   end
-    # }
   end
 
   def grouped_topics(prov)
