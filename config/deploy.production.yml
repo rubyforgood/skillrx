@@ -19,26 +19,29 @@ registry:
 # Production environment variables
 env:
   secret:
-    - RAILS_MASTER_KEY
-    - DATABASE_URL
-    - SECRET_KEY_BASE
     - AWS_ACCESS_KEY_ID
     - AWS_SECRET_ACCESS_KEY
-    - AZURE_STORAGE_ACCOUNT_NAME
     - AZURE_STORAGE_ACCOUNT_KEY
+    - AZURE_STORAGE_ACCOUNT_NAME
+    - DATABASE_URL
+    - RAILS_MASTER_KEY
+    - SECRET_KEY_BASE
     - SCOUT_KEY
   clear:
-    RAILS_ENV: production
-    AWS_DEFAULT_REGION: us-east-1
     AWS_BUCKET_NAME: skillrx-production
-    SCOUT_APP_NAME: "SkillRX Production"
+    AWS_DEFAULT_REGION: us-east-1
     AWS_ENDPOINT_URL: ""  # Empty for real AWS
-    AZURE_STORAGE_SHARE_NAME: contentshare
     AZURE_MEDIA_FILES_SYNC_DISABLED: "true"
-    LOCALSTACK_DEBUG: "0"
-    S3_SKIP_SIGNATURE_VALIDATION: "0"
-    SOLID_QUEUE_IN_PUMA: true
+    AZURE_STORAGE_SHARE_NAME: contentshare
     DATA_IMPORT_SOURCE: azure
+    LOCALSTACK_DEBUG: "0"
+    RAILS_ENV: production
+    RAILS_MAX_THREADS: 5
+    S3_SKIP_SIGNATURE_VALIDATION: "0"
+    SCOUT_APP_NAME: SkillRX Production
+    SOLID_QUEUE_IN_PUMA: true
+    WEB_CONCURRENCY: 2
+
 
 aliases:
   console: app exec --interactive --reuse "bin/rails console"
