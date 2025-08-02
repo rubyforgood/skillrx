@@ -9,8 +9,6 @@ class XmlGenerator::Base
     Ox::Document.new.tap do |doc|
       instruct = Ox::Instruct.new(:xml)
       instruct[:version] = "1.0"
-      instruct[:encoding] = "UTF-8"
-      instruct[:standalone] = "yes"
       doc << instruct
 
       xml = Ox::Element.new("cmes")

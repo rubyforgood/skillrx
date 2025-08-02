@@ -16,21 +16,21 @@ class XmlGenerator::SingleProvider < XmlGenerator::Base
     Ox::Element.new("content_provider").tap do |xml|
       xml[:name] = provider.name
 
-      xml << grouped_topics(provider).each do |(year, month), topics|
-        Ox::Element.new("topic_year").tap do |year_element|
+      grouped_topics(provider).each do |(year, month), topics|
+        xml << Ox::Element.new("topic_year").tap do |year_element|
           year_element[:year] = year.to_s
           year_element << Ox::Element.new("topic_month").tap do |month_element|
             month_element[:month] = month
-            month_element << topics.each do |topic|
+            topics.each do |topic|
               month_element << Ox::Element.new("title").tap do |title_element|
                 title_element[:name] = topic.title
-                title_element << Ox::Element.new("topic_id").tap { |id| id << topic.id }
+                title_element << Ox::Element.new("topic_id").tap { |id| id << topic.id.to_s }
                 title_element << Ox::Element.new("topic_files").tap do |files|
                   files[:files] = "Files"
                   topic.documents.each_with_index do |document, index|
                     next if document.content_type == "video/mp4"
                     files << Ox::Element.new("file_name_#{index + 1}").tap do |file_name|
-                      file_name << document.filename
+                      file_name << document.filename.to_s
                       file_name[:file_size] = document.byte_size
                     end
                   end

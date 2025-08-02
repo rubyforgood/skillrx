@@ -38,6 +38,7 @@ group :development, :test do
   gem "dotenv-rails"
   gem "factory_bot_rails"
   gem "faker"
+  gem "memory_profiler"
   gem "rspec-rails"
   gem "rubocop-rails-omakase", require: false
 end
