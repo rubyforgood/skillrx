@@ -8,8 +8,8 @@ class XmlGenerator::AllProviders < XmlGenerator::SingleProvider
 
   def xml_content(xml)
     language.providers.includes(:topics)
-      .map do |provider|
-        provider_xml(xml, provider)
+      .each do |provider|
+        xml << provider_xml(provider)
       end
   end
 end

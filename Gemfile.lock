@@ -301,6 +301,8 @@ GEM
     nokogiri (1.18.9-x86_64-linux-musl)
       racc (~> 1.4)
     ostruct (0.6.3)
+    ox (2.14.23)
+      bigdecimal (>= 3.0)
     pagy (9.3.5)
     parallel (1.27.0)
     parser (3.3.9.0)
@@ -543,6 +545,7 @@ DEPENDENCIES
   kamal
   letter_opener
   mission_control-jobs
+  ox
   pagy
   pg (~> 1.6)
   propshaft
