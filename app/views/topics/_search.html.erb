@@ -22,7 +22,7 @@
                 </div>
                 <%= f.select :tag_list,
                              options_from_collection_for_select(
-                               Tag.all,
+                               Tag.order(:name),
                                :name,
                                :name,
                                []
