@@ -14,6 +14,7 @@ gem "importmap-rails"
 gem "jbuilder"
 gem "kamal", require: false
 gem "mission_control-jobs"
+gem "ox"
 gem "pagy"
 gem "pg", "~> 1.6"
 gem "propshaft"
