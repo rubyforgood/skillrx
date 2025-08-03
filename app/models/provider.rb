@@ -23,4 +23,10 @@ class Provider < ApplicationRecord
 
   validates :name, :provider_type, presence: true
   validates :name, uniqueness: true
+
+
+  def filename
+    filename = file_name_prefix.present? ? file_name_prefix : name
+    filename.parameterize
+  end
 end

@@ -83,11 +83,7 @@ class FileManager
     provider = topic.provider
     @file_name ||= [].tap do |parts|
       parts << topic.id
-      if provider.file_name_prefix.present?
-        parts << provider.file_name_prefix
-      else
-        parts << provider.name
-      end
+      parts << provider.filename
       parts << topic.published_at_year
       parts << format("%02d", topic.published_at_month)
       parts << document.filename
