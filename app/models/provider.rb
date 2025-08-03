@@ -25,8 +25,8 @@ class Provider < ApplicationRecord
   validates :name, uniqueness: true
 
 
-  def filename
-    filename = file_name_prefix.present? ? file_name_prefix : name
-    filename.parameterize
+  def name_for_filename
+    name_for_filename = file_name_prefix.present? ? file_name_prefix : name
+    name_for_filename.parameterize
   end
 end

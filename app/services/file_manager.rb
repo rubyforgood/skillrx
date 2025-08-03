@@ -83,7 +83,7 @@ class FileManager
     provider = topic.provider
     @file_name ||= [].tap do |parts|
       parts << topic.id
-      parts << provider.filename
+      parts << provider.name_for_filename
       parts << topic.published_at_year
       parts << format("%02d", topic.published_at_month)
       parts << document.filename

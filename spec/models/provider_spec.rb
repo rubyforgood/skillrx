@@ -15,16 +15,16 @@ RSpec.describe Provider, type: :model do
     it { should validate_uniqueness_of(:name) }
   end
 
-  describe "#filename" do
+  describe "#name_for_filename" do
     let(:provider) { described_class.new(name: "Test Provider", file_name_prefix: nil) }
 
     it "parameterizes the name if file_name_prefix is not present" do
-      expect(provider.filename).to eq("test-provider")
+      expect(provider.name_for_filename).to eq("test-provider")
     end
 
     it "parameterizes the file_name_prefix if present" do
       provider.file_name_prefix = "Prefix Name"
-      expect(provider.filename).to eq("prefix-name")
+      expect(provider.name_for_filename).to eq("prefix-name")
     end
   end
 end
