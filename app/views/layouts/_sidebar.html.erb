@@ -1,22 +1,16 @@
 
-<div class="w-full h-full bg-white shadow-lg overflow-y-auto" style="border-right: 1px solid #e5e7eb;">
+<div class="w-full h-full bg-white shadow-lg overflow-y-auto" style="border-right: 1px solid #e5e7eb; display: flex; flex-direction: column;">
   <div class="p-6" style="border-bottom: 1px solid #f3f4f6;">
-    <div class="flex justify-between items-center mb-6">
+    <div class="flex justify-start items-center mb-6">
       <div class="text-xl font-bold text-gray-800">
-        <%= link_to("SkillRx", root_path, class: "hover:text-blue-600", style: "text-decoration: none; color: #1f2937; font-size: 1.5rem; font-weight: 700;") %>
-      </div>
-      <div class="flex items-center space-x-2" style="gap: 0.5rem;">
-        <div style="width: 1.25rem; height: 1.25rem; color: #6b7280; cursor: pointer;" title="Light mode">☀️</div>
-        <div style="width: 1.25rem; height: 1.25rem; color: #6b7280; cursor: pointer;" title="Dark mode">🌙</div>
+        <%= link_to(root_path, class: "hover:opacity-80", style: "text-decoration: none; transition: opacity 0.2s;") do %>
+          <%= image_tag("skill.svg", alt: "SkillRx", style: "height: 4rem; width: auto;") %>
+        <% end %>
       </div>
     </div>
-    <%= button_to session_path, method: :delete, style: "width: 100%; background-color: #dc2626; color: white; font-weight: 500; padding: 0.75rem 1rem; border-radius: 0.5rem; border: none; cursor: pointer; transition: background-color 0.2s; display: flex; align-items: center; justify-content: center; gap: 0.5rem;" do %>
-      <span style="font-size: 1.1rem;">↗</span>
-      <span>Log out</span>
-    <% end %>
   </div>
 
-  <nav class="px-4 py-2 flex-1">
+  <nav class="px-4 py-2" style="flex: 1;">
     <ul style="list-style: none; padding: 0; margin: 0;">
       <li style="margin-bottom: 0.5rem;">
         <%= link_to topics_path, style: nav_link_class(topics_path) do %>
@@ -79,6 +73,13 @@
         </li>
       <% end %>
     </ul>
+  </nav>
+
+  <div class="p-6" style="border-top: 1px solid #f3f4f6;">
+    <%= button_to session_path, method: :delete, style: "width: 100%; background-color: #dc2626; color: white; font-weight: 500; padding: 0.75rem 1rem; border-radius: 0.5rem; border: none; cursor: pointer; transition: background-color 0.2s; display: flex; align-items: center; justify-content: center; gap: 0.5rem;" do %>
+      <span style="font-size: 1.1rem;">↗</span>
+      <span>Log out</span>
+    <% end %>
   </div>
 </div>
 
