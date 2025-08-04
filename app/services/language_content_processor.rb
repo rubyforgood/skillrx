@@ -15,7 +15,7 @@ class LanguageContentProcessor
     [
       FileToUpload.new(
         content: ->(provider) { XmlGenerator::SingleProvider.new(provider).perform },
-        name: ->(provider) { "#{language.file_storage_prefix}#{provider.name}.xml" },
+        name: ->(provider) { "#{language.file_storage_prefix}#{provider.name.parameterize}.xml" },
         path: "#{language.file_storage_prefix}CMES-Pi/assets/XML",
       ),
     ]
