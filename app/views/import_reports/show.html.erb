@@ -1,132 +1,431 @@
 <% content_for :title, "Import Report ##{@import_report.id}" %>
 
-<div class="section">
-  <h3 class="mb-4">Import Report: #<%= @import_report.id %></h3>
-  <div class="card mb-6">
-    <div class="card-header">
-      <div class="card-title">
-        <h3><%= @import_report.import_type.humanize %> Import</h3>
-      </div>
-    </div>
-    <div class="card-body">
-      <div class="row mb-2">
-        <div class="col-md-3"><strong>Status:</strong></div>
-        <div class="col-md-9">
-          <span class="badge bg-alert %>">
-            <%= @import_report.status %>
-          </span>
-        </div>
-      </div>
-      <div class="row mb-2">
-        <div class="col-md-3"><strong>Import Type:</strong></div>
-        <div class="col-md-9"><%= @import_report.import_type.humanize %></div>
-      </div>
-      <div class="row mb-2">
-        <div class="col-md-3"><strong>Started At:</strong></div>
-        <div class="col-md-9">
-          <%= @import_report.started_at&.strftime('%m/%d/%Y %I:%M %p') || "Not started" %>
-        </div>
-      </div>
-      <div class="row mb-2">
-        <div class="col-md-3"><strong>Completed At:</strong></div>
-        <div class="col-md-9">
-          <%= @import_report.completed_at&.strftime('%m/%d/%Y %I:%M %p') || "Not completed" %>
-        </div>
-      </div>
-      <% if @import_report.summary_stats.present? %>
-        <div class="row mb-2">
-          <div class="col-md-3"><strong>Summary Stats:</strong></div>
-          <div class="col-md-9">
-            <pre class="bg-light p-2 rounded"><%= JSON.pretty_generate(@import_report.summary_stats) %></pre>
-          </div>
-        </div>
-      <% end %>
-    </div>
-    <div class="card-footer">
-      <div class="row">
-        <div class="col-md-3"><strong>Created:</strong></div>
-        <div class="col-md-9"><%= @import_report.created_at.strftime('%m/%d/%Y %I:%M %p') %></div>
-      </div>
-    </div>
+<% if notice %>
+  <div style="background: #dcfce7; border: 1px solid #bbf7d0; color: #166534; padding: 1rem; border-radius: 0.5rem; margin-bottom: 2rem;">
+    <%= notice %>
   </div>
-</div>
+<% end %>
 
-<div class="section">
-  <div class="col-12">
-    <h3 class="mb-4">
-      Import Errors 
-      <span class="badge bg-<%= @import_errors.any? ? 'danger' : 'success' %>">
-        <%= @import_errors.count %>
-      </span>
-    </h3>
-  </div>
-  
-  <% if @import_errors.any? %>
-    <div class="card">
-      <div class="card-content">
-        <div class="card-body">
-          <div class="table-responsive">
-            <table class="table table-lg table-striped mb-0">
-              <thead>
-                <tr>
-                  <th>Error Type</th>
-                  <th>File Name</th>
-                  <th>Error Message</th>
-                  <th>Topic ID</th>
-                </tr>
-              </thead>
-              <tbody>
-                <% @import_errors.each do |error| %>
-                  <tr>
-                    <td>
-                      <span class="badge bg-danger"><%= error.error_type %></span>
-                    </td>
-                    <td class="text-bold-500">
-                      <div class="text-truncate"title="<%= error.file_name %>">
-                        <%= error.file_name || "N/A" %>
-                      </div>
-                    </td>
-                    <td class="text-bold-500">
-                      <% if error.error_message.present? %>
-                        <div class="text-truncate" style="max-width: 300px;" title="<%= error.error_message %>">
-                          <%= error.error_message %>
-                        </div>
-                      <% else %>
-                        N/A
-                      <% end %>
-                    </td>
-                    <td class="text-bold-500">
-                      <%= error.topic_id || "N/A" %>
-                    </td>
-                  </tr>
-                  <% if error.metadata.present? %>
-                    <tr>
-                      <td colspan="5" class="bg-light">
-                        <small><strong>Metadata:</strong></small>
-                        <pre class="small mb-0"><%= JSON.pretty_generate(error.metadata) %></pre>
-                      </td>
-                    </tr>
+<div style="min-height: 100vh; background: linear-gradient(135deg, #f8fafc 0%, #e2e8f0 100%); padding: 2rem 0;">
+  <div style="max-width: 1000px; margin: 0 auto; padding: 0 1rem;">
+    
+    <!-- Header Section -->
+    <div style="margin-bottom: 2rem;">
+      <div style="display: flex; align-items: center; justify-content: between; gap: 1rem; margin-bottom: 1.5rem; flex-wrap: wrap;">
+        <div style="display: flex; align-items: center; gap: 1rem;">
+          <%= link_to import_reports_path, style: "color: #6b7280; hover:color: #374151; transition: colors 0.2s;" do %>
+            <svg style="width: 1.5rem; height: 1.5rem;" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18"/>
+            </svg>
+          <% end %>
+          <h1 style="font-size: 2rem; font-weight: 700; color: #1f2937; margin: 0;">
+            Import Report #<%= @import_report.id %>
+          </h1>
+          <% if @import_report.status == "completed" %>
+            <div style="background: linear-gradient(135deg, #10b981 0%, #059669 100%); color: white; padding: 0.375rem 0.75rem; border-radius: 9999px; font-size: 0.75rem; font-weight: 500;">
+              Completed
+            </div>
+          <% elsif @import_report.status == "failed" %>
+            <div style="background: linear-gradient(135deg, #dc2626 0%, #b91c1c 100%); color: white; padding: 0.375rem 0.75rem; border-radius: 9999px; font-size: 0.75rem; font-weight: 500;">
+              Failed
+            </div>
+          <% else %>
+            <div style="background: linear-gradient(135deg, #3b82f6 0%, #1d4ed8 100%); color: white; padding: 0.375rem 0.75rem; border-radius: 9999px; font-size: 0.75rem; font-weight: 500;">
+              <%= @import_report.status.humanize %>
+            </div>
+          <% end %>
+        </div>
+      </div>
+      
+      <!-- Breadcrumb -->
+      <nav style="font-size: 0.875rem; color: #6b7280;">
+        <ol style="display: flex; gap: 0.5rem; list-style: none; padding: 0; margin: 0;">
+          <li><%= link_to "Dashboard", root_path, style: "color: #6b7280; text-decoration: none; hover:color: #374151;" %></li>
+          <li style="color: #d1d5db;">/</li>
+          <li><%= link_to "Import Reports", import_reports_path, style: "color: #6b7280; text-decoration: none; hover:color: #374151;" %></li>
+          <li style="color: #d1d5db;">/</li>
+          <li style="color: #374151; font-weight: 500;">#<%= @import_report.id %></li>
+        </ol>
+      </nav>
+    </div>
+
+    <!-- Main Content -->
+    <div id="<%= dom_id @import_report %>">
+      
+      <!-- Import Details Section -->
+      <div style="margin-bottom: 2rem;">
+        <div style="background: white; border-radius: 1rem; box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.1), 0 8px 10px -6px rgba(0, 0, 0, 0.1); overflow: hidden; border: 1px solid #e5e7eb;">
+          
+          <!-- Card Header -->
+          <div style="background: linear-gradient(135deg, #3b82f6 0%, #1d4ed8 100%); padding: 2rem; color: white;">
+            <div style="display: flex; align-items: center; gap: 1rem; margin-bottom: 0.5rem;">
+              <svg style="width: 2rem; height: 2rem;" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/>
+              </svg>
+              <h2 style="font-size: 1.5rem; font-weight: 700; margin: 0;"><%= @import_report.import_type.humanize %> Import Details</h2>
+            </div>
+            <p style="margin: 0; opacity: 0.9; font-size: 0.875rem;">Import operation information and statistics</p>
+          </div>
+          
+          <!-- Card Body -->
+          <div style="padding: 2rem;">
+            <div style="display: grid; gap: 1.5rem;">
+              
+              <!-- Status -->
+              <div style="display: grid; grid-template-columns: 1fr 2fr; gap: 1rem; padding: 1rem; background: #f8fafc; border-radius: 0.5rem; border-left: 4px solid #3b82f6;">
+                <div style="font-weight: 600; color: #374151; display: flex; align-items: center; gap: 0.5rem;">
+                  <svg style="width: 1rem; height: 1rem; color: #3b82f6;" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/>
+                  </svg>
+                  Status:
+                </div>
+                <div style="color: #1f2937;">
+                  <% if @import_report.status == "completed" %>
+                    <div style="background: linear-gradient(135deg, #10b981 0%, #059669 100%); color: white; padding: 0.375rem 0.75rem; border-radius: 9999px; font-size: 0.75rem; font-weight: 600; display: inline-flex; align-items: center; gap: 0.375rem;">
+                      <svg style="width: 0.75rem; height: 0.75rem;" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/>
+                      </svg>
+                      Completed
+                    </div>
+                  <% elsif @import_report.status == "failed" %>
+                    <div style="background: linear-gradient(135deg, #dc2626 0%, #b91c1c 100%); color: white; padding: 0.375rem 0.75rem; border-radius: 9999px; font-size: 0.75rem; font-weight: 600; display: inline-flex; align-items: center; gap: 0.375rem;">
+                      <svg style="width: 0.75rem; height: 0.75rem;" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/>
+                      </svg>
+                      Failed
+                    </div>
+                  <% else %>
+                    <div style="background: linear-gradient(135deg, #3b82f6 0%, #1d4ed8 100%); color: white; padding: 0.375rem 0.75rem; border-radius: 9999px; font-size: 0.75rem; font-weight: 600; display: inline-flex; align-items: center; gap: 0.375rem;">
+                      <svg style="width: 0.75rem; height: 0.75rem;" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"/>
+                      </svg>
+                      <%= @import_report.status.humanize %>
+                    </div>
                   <% end %>
-                <% end %>
-              </tbody>
-            </table>
+                </div>
+              </div>
+              
+              <!-- Import Type -->
+              <div style="display: grid; grid-template-columns: 1fr 2fr; gap: 1rem; padding: 1rem; background: #f8fafc; border-radius: 0.5rem; border-left: 4px solid #3b82f6;">
+                <div style="font-weight: 600; color: #374151; display: flex; align-items: center; gap: 0.5rem;">
+                  <svg style="width: 1rem; height: 1rem; color: #3b82f6;" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12"/>
+                  </svg>
+                  Import Type:
+                </div>
+                <div style="color: #1f2937; font-weight: 500;">
+                  <%= @import_report.import_type.humanize %>
+                </div>
+              </div>
+              
+              <!-- Started At -->
+              <div style="display: grid; grid-template-columns: 1fr 2fr; gap: 1rem; padding: 1rem; background: #f8fafc; border-radius: 0.5rem; border-left: 4px solid #3b82f6;">
+                <div style="font-weight: 600; color: #374151; display: flex; align-items: center; gap: 0.5rem;">
+                  <svg style="width: 1rem; height: 1rem; color: #3b82f6;" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"/>
+                  </svg>
+                  Started At:
+                </div>
+                <div style="color: #1f2937; font-weight: 500;">
+                  <%= @import_report.started_at&.strftime('%B %d, %Y at %I:%M %p') || "Not started" %>
+                </div>
+              </div>
+              
+              <!-- Completed At -->
+              <div style="display: grid; grid-template-columns: 1fr 2fr; gap: 1rem; padding: 1rem; background: #f8fafc; border-radius: 0.5rem; border-left: 4px solid #3b82f6;">
+                <div style="font-weight: 600; color: #374151; display: flex; align-items: center; gap: 0.5rem;">
+                  <svg style="width: 1rem; height: 1rem; color: #3b82f6;" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/>
+                  </svg>
+                  Completed At:
+                </div>
+                <div style="color: #1f2937; font-weight: 500;">
+                  <%= @import_report.completed_at&.strftime('%B %d, %Y at %I:%M %p') || "Not completed" %>
+                </div>
+              </div>
+              
+              <!-- Created -->
+              <div style="display: grid; grid-template-columns: 1fr 2fr; gap: 1rem; padding: 1rem; background: #f8fafc; border-radius: 0.5rem; border-left: 4px solid #3b82f6;">
+                <div style="font-weight: 600; color: #374151; display: flex; align-items: center; gap: 0.5rem;">
+                  <svg style="width: 1rem; height: 1rem; color: #3b82f6;" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"/>
+                  </svg>
+                  Created:
+                </div>
+                <div style="color: #1f2937; font-weight: 500;">
+                  <%= @import_report.created_at.strftime('%B %d, %Y at %I:%M %p') %>
+                </div>
+              </div>
+              
+              <!-- Summary Stats -->
+              <% if @import_report.summary_stats.present? %>
+                <div style="display: grid; grid-template-columns: 1fr 2fr; gap: 1rem; padding: 1rem; background: #f8fafc; border-radius: 0.5rem; border-left: 4px solid #3b82f6;">
+                  <div style="font-weight: 600; color: #374151; display: flex; align-items: center; gap: 0.5rem;">
+                    <svg style="width: 1rem; height: 1rem; color: #3b82f6;" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"/>
+                    </svg>
+                    Summary Stats:
+                  </div>
+                  <div style="color: #1f2937;">
+                    <pre style="background: white; padding: 1rem; border-radius: 0.375rem; border: 1px solid #e5e7eb; font-size: 0.75rem; overflow-x: auto; margin: 0;"><%= JSON.pretty_generate(@import_report.summary_stats) %></pre>
+                  </div>
+                </div>
+              <% end %>
+              
+            </div>
           </div>
         </div>
       </div>
-    </div>
-  <% else %>
-    <div class="card">
-      <div class="card-body text-center">
-        <div class="text-success">
-          <i class="bi bi-check-circle-fill" style="font-size: 3rem;"></i>
+
+      <!-- Import Errors Section -->
+      <div style="margin-bottom: 2rem;">
+        <div style="background: white; border-radius: 1rem; box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.1), 0 8px 10px -6px rgba(0, 0, 0, 0.1); overflow: hidden; border: 1px solid #e5e7eb;">
+          
+          <!-- Card Header -->
+          <div style="background: linear-gradient(135deg, <%= @import_errors.any? ? '#dc2626 0%, #b91c1c 100%' : '#10b981 0%, #059669 100%' %>); padding: 2rem; color: white;">
+            <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 1rem;">
+              <div style="display: flex; align-items: center; gap: 1rem;">
+                <div style="background: rgba(255, 255, 255, 0.2); padding: 0.75rem; border-radius: 0.75rem;">
+                  <% if @import_errors.any? %>
+                    <svg style="width: 1.5rem; height: 1.5rem;" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-2.5L13.732 4c-.77-.833-1.964-.833-2.732 0L3.732 16.5c-.77.833.192 2.5 1.732 2.5z"/>
+                    </svg>
+                  <% else %>
+                    <svg style="width: 1.5rem; height: 1.5rem;" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/>
+                    </svg>
+                  <% end %>
+                </div>
+                <div>
+                  <h2 style="font-size: 1.5rem; font-weight: 700; margin: 0;">Import Errors</h2>
+                  <p style="margin: 0.25rem 0 0 0; color: rgba(255, 255, 255, 0.8); font-size: 0.875rem;">
+                    <%= pluralize(@import_errors.count, 'error') %> found
+                  </p>
+                </div>
+              </div>
+              
+              <div style="display: flex; gap: 0.75rem; align-items: center;">
+                <div style="background: rgba(255, 255, 255, 0.1); padding: 0.5rem 1rem; border-radius: 9999px; font-size: 0.75rem; font-weight: 500;">
+                  Total: <%= @import_errors.count %>
+                </div>
+              </div>
+            </div>
+          </div>
+          
+          <!-- Table Content -->
+          <div style="padding: 0;">
+            <% if @import_errors.any? %>
+              <div class="table-container" style="overflow-x: auto;">
+                <table style="width: 100%; border-collapse: collapse;">
+                  <thead>
+                    <tr style="background: linear-gradient(135deg, #f8fafc 0%, #f1f5f9 100%); border-bottom: 2px solid #e2e8f0;">
+                      <th style="padding: 1.25rem 1.5rem; text-align: left; font-size: 0.75rem; font-weight: 700; color: #475569; text-transform: uppercase; letter-spacing: 0.1em;">
+                        Error Type
+                      </th>
+                      <th style="padding: 1.25rem 1.5rem; text-align: left; font-size: 0.75rem; font-weight: 700; color: #475569; text-transform: uppercase; letter-spacing: 0.1em;">
+                        File Name
+                      </th>
+                      <th style="padding: 1.25rem 1.5rem; text-align: left; font-size: 0.75rem; font-weight: 700; color: #475569; text-transform: uppercase; letter-spacing: 0.1em;">
+                        Error Message
+                      </th>
+                      <th style="padding: 1.25rem 1.5rem; text-align: left; font-size: 0.75rem; font-weight: 700; color: #475569; text-transform: uppercase; letter-spacing: 0.1em;">
+                        Topic ID
+                      </th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <% @import_errors.each do |error| %>
+                      <tr style="border-bottom: 1px solid #f1f5f9;">
+                        <td style="padding: 1.25rem 1.5rem;">
+                          <div style="background: linear-gradient(135deg, #dc2626 0%, #b91c1c 100%); color: white; padding: 0.375rem 0.75rem; border-radius: 9999px; font-size: 0.75rem; font-weight: 600; display: inline-block;">
+                            <%= error.error_type %>
+                          </div>
+                        </td>
+                        <td style="padding: 1.25rem 1.5rem;">
+                          <div style="font-weight: 600; color: #111827; font-size: 0.875rem; max-width: 200px; word-wrap: break-word;">
+                            <%= error.file_name || "N/A" %>
+                          </div>
+                        </td>
+                        <td style="padding: 1.25rem 1.5rem;">
+                          <% if error.error_message.present? %>
+                            <div style="color: #6b7280; font-size: 0.875rem; max-width: 300px; word-wrap: break-word;">
+                              <%= error.error_message %>
+                            </div>
+                          <% else %>
+                            <div style="color: #9ca3af; font-style: italic; font-size: 0.875rem;">
+                              N/A
+                            </div>
+                          <% end %>
+                        </td>
+                        <td style="padding: 1.25rem 1.5rem;">
+                          <div style="font-weight: 600; color: #111827; font-size: 0.875rem;">
+                            <%= error.topic_id || "N/A" %>
+                          </div>
+                        </td>
+                      </tr>
+                      <% if error.metadata.present? %>
+                        <tr style="border-bottom: 1px solid #f1f5f9;">
+                          <td colspan="4" style="padding: 1rem 1.5rem; background: #f8fafc;">
+                            <div style="font-weight: 600; color: #374151; margin-bottom: 0.5rem; font-size: 0.75rem;">
+                              Metadata:
+                            </div>
+                            <pre style="background: white; padding: 0.75rem; border-radius: 0.375rem; border: 1px solid #e5e7eb; font-size: 0.625rem; overflow-x: auto; margin: 0; color: #1f2937;"><%= JSON.pretty_generate(error.metadata) %></pre>
+                          </td>
+                        </tr>
+                      <% end %>
+                    <% end %>
+                  </tbody>
+                </table>
+              </div>
+            <% else %>
+              <div style="padding: 3rem 1.5rem; text-align: center;">
+                <div style="color: #10b981;">
+                  <svg style="width: 4rem; height: 4rem; margin: 0 auto 1.5rem;" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/>
+                  </svg>
+                </div>
+                <h3 style="font-size: 1.25rem; font-weight: 600; color: #1f2937; margin: 0 0 0.5rem 0;">No Errors Found</h3>
+                <p style="color: #6b7280; margin: 0; font-size: 0.875rem;">This import completed successfully without any errors.</p>
+              </div>
+            <% end %>
+          </div>
         </div>
-        <h4 class="mt-3">No Errors Found</h4>
-        <p class="text-muted">This import completed successfully without any errors.</p>
+      </div>
+
+      <!-- Actions -->
+      <div style="display: flex; gap: 1rem; justify-content: flex-start;">
+        <%= link_to import_reports_path, style: "background: linear-gradient(135deg, #6b7280 0%, #4b5563 100%); color: white; font-weight: 600; padding: 0.75rem 1.5rem; border-radius: 0.5rem; text-decoration: none; font-size: 0.875rem; box-shadow: 0 4px 6px -1px rgba(107, 114, 128, 0.3); transition: all 0.2s; display: inline-flex; align-items: center; gap: 0.5rem;" do %>
+          <svg style="width: 1rem; height: 1rem;" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18"/>
+          </svg>
+          Back to Import Reports
+        <% end %>
       </div>
     </div>
-  <% end %>
+  </div>
 </div>
 
-<div class="mt-4">
-  <%= link_to "Back to Import Reports", import_reports_path, class: "btn btn-secondary" %>
-</div>
+<style>
+  /* Button hover effects */
+  a[href*="import_reports"]:hover {
+    transform: translateY(-2px) !important;
+    box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.25) !important;
+  }
+  
+  /* Responsive design */
+  @media (max-width: 768px) {
+    /* Container adjustments */
+    div[style*="max-width: 1000px"] {
+      padding: 0 1rem !important;
+      margin: 0 auto !important;
+    }
+    
+    /* Page padding adjustments */
+    div[style*="min-height: 100vh"] {
+      padding: 1rem 0 !important;
+    }
+    
+    /* Header adjustments */
+    div[style*="justify-content: between"] {
+      flex-direction: column !important;
+      align-items: flex-start !important;
+      gap: 1rem !important;
+    }
+    
+    /* Title adjustments */
+    h1 {
+      font-size: 1.75rem !important;
+    }
+    
+    /* Card adjustments - prevent overflow */
+    div[style*="border-radius: 1rem"] {
+      border-radius: 0.5rem !important;
+      margin: 0 !important;
+      max-width: 100% !important;
+      box-sizing: border-box !important;
+    }
+    
+    /* Grid adjustments */
+    div[style*="grid-template-columns: 1fr 2fr"] {
+      grid-template-columns: 1fr !important;
+      gap: 0.5rem !important;
+    }
+    
+    /* Card padding adjustments */
+    div[style*="padding: 2rem"] {
+      padding: 1.5rem 1rem !important;
+    }
+    
+    /* Table adjustments */
+    th, td {
+      padding: 0.75rem 0.5rem !important;
+      font-size: 0.875rem !important;
+    }
+    
+    /* Make tables more responsive */
+    .table-container {
+      margin: 0 !important;
+      padding: 0 !important;
+    }
+    
+    /* Ensure table fits */
+    table {
+      min-width: 100% !important;
+      width: 100% !important;
+    }
+  }
+  
+  @media (max-width: 640px) {
+    /* Very small screen adjustments */
+    div[style*="max-width: 1000px"] {
+      padding: 0 0.5rem !important;
+    }
+    
+    /* Ensure no overflow */
+    * {
+      max-width: 100% !important;
+      box-sizing: border-box !important;
+    }
+    
+    /* Remove border radius on very small screens */
+    div[style*="border-radius: 1rem"] {
+      border-radius: 0.25rem !important;
+      margin: 0 !important;
+    }
+    
+    /* More compact padding */
+    div[style*="padding: 2rem"] {
+      padding: 1rem 0.75rem !important;
+    }
+    
+    div[style*="padding: 1.5rem"] {
+      padding: 1rem !important;
+    }
+    
+    /* More compact table */
+    th, td {
+      padding: 0.5rem 0.25rem !important;
+      font-size: 0.75rem !important;
+      word-wrap: break-word !important;
+      word-break: break-word !important;
+    }
+    
+    /* Prevent horizontal scroll */
+    body, html {
+      overflow-x: hidden !important;
+    }
+    
+    /* Ensure cards don't exceed viewport */
+    div[style*="background: white"] {
+      max-width: calc(100vw - 1rem) !important;
+      overflow: hidden !important;
+    }
+    
+    /* Better pre formatting for small screens */
+    pre {
+      font-size: 0.625rem !important;
+      white-space: pre-wrap !important;
+      word-wrap: break-word !important;
+    }
+  }
+</style>
