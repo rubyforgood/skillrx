@@ -55,6 +55,7 @@ class Topics::Mutator
       attach_files(document_signed_ids)
       # topic.persisted? means that we are updating existing topic and documents can be removed
       shadow_delete_documents(docs_to_delete) if topic.persisted?
+      rename_files(document_signed_ids)
       # document_signed_ids.any? means that some new documents were attached and we need to sync them
       sync_docs_for_topic_updates if document_signed_ids.any?
       [ :ok, topic ]
@@ -69,6 +70,40 @@ class Topics::Mutator
     signed_ids.each do |signed_id|
       topic.documents.attach(signed_id)
     end
+  end
+
+  def rename_files(signed_ids)
+    return if signed_ids.blank?
+    signed_ids.each do |signed_id|
+    document = topic.documents.find { |doc| doc.blob.signed_id == signed_id }
+      next unless document
+
+      new_filename = custom_file_name(document)
+      rename_document(document, new_filename)
+    end
+  end
+
+  def rename_document(document, new_filename)
+    return unless document.blob.filename.to_s.split("_").first == "rename"
+    return if document.filename == new_filename
+
+    file_io = StringIO.new(document.download)
+      topic.documents.attach(
+        io: file_io,
+        filename: new_filename,
+        content_type: document.content_type
+      )
+      document.purge
+  end
+
+  def custom_file_name(document)
+    [
+      topic.id,
+      topic.provider.file_name_prefix.present? ? topic.provider.file_name_prefix.parameterize : topic.provider.name.parameterize,
+      topic.published_at_year,
+      topic.published_at_month,
+      document.filename.base.sub("rename_", "").parameterize,
+    ].compact.join("_") + "." + document.filename.extension
   end
 
   def sync_docs_for_topic_updates
