@@ -1,8 +1,32 @@
 <% flash.each do |name, msg| %>
   <% if msg.is_a?(String) %>
-    <div class="<%= tailwind_flash_class(name) %> p-4 mb-4 rounded-md flex items-center justify-between" role="alert">
-      <span><%= msg %></span>
-      <button type="button" class="ml-4 text-lg font-semibold hover:opacity-70" onclick="this.parentElement.remove()">×</button>
+    <div class="<%= tailwind_flash_class(name) %> px-4 py-3 mb-3 rounded-md flex items-center justify-between text-sm" role="alert">
+      <div class="flex items-center gap-2">
+        <% case name %>
+        <% when "notice", "success" %>
+          <svg class="w-4 h-4 text-green-600 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/>
+          </svg>
+        <% when "alert", "error" %>
+          <svg class="w-4 h-4 text-red-600 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/>
+          </svg>
+        <% when "warning" %>
+          <svg class="w-4 h-4 text-yellow-600 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-2.5L13.732 4c-.77-.833-1.732-.833-2.5 0L3.732 16.5c-.77.833.192 2.5 1.732 2.5z"/>
+          </svg>
+        <% when "info" %>
+          <svg class="w-4 h-4 text-blue-600 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/>
+          </svg>
+        <% else %>
+          <svg class="w-4 h-4 text-gray-600 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/>
+          </svg>
+        <% end %>
+        <span class="font-medium"><%= msg %></span>
+      </div>
+      <button type="button" class="ml-3 text-sm font-semibold hover:opacity-70 text-gray-500 hover:text-gray-700 transition-colors" onclick="this.parentElement.style.opacity='0'; setTimeout(() => this.parentElement.remove(), 200)">×</button>
     </div>
   <% end %>
 <% end %>

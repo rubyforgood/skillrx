@@ -1,16 +1,25 @@
 <% content_for :title, "Languages" %>
 
-<div style="padding: 2rem;">
-  <div style="max-width: 1200px; margin: 0 auto;">
+<div style="min-height: 100vh; background: linear-gradient(135deg, #f8fafc 0%, #e2e8f0 100%); padding: 2rem 0;">
+  <div style="max-width: 1200px; margin: 0 auto; padding: 0 1rem; overflow-x: hidden;">
+    
     <!-- Header Section -->
     <div style="margin-bottom: 2rem;">
-      <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1rem;">
-        <div>
-          <h1 style="font-size: 2rem; font-weight: 700; color: #111827; margin: 0;">Languages</h1>
-          <p style="color: #6b7280; margin: 0.5rem 0 0 0; font-size: 0.875rem;">Manage system languages and their file storage configurations</p>
+      <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.5rem; flex-wrap: wrap; gap: 1rem;">
+        <div style="min-width: 0; flex: 1;">
+          <div style="display: flex; align-items: center; gap: 1rem; margin-bottom: 0.5rem;">
+            <div style="background: linear-gradient(135deg, #3b82f6 0%, #1d4ed8 100%); color: white; padding: 0.75rem; border-radius: 0.75rem; flex-shrink: 0;">
+              <svg style="width: 1.5rem; height: 1.5rem;" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 5h12M9 3v2m1.048 9.5A18.022 18.022 0 016.412 9m6.088 9h7M11 21l5-10 5 10M12.751 5C11.783 10.77 8.07 15.61 3 18.129"/>
+              </svg>
+            </div>
+            <h1 style="font-size: 2.5rem; font-weight: 700; color: #1f2937; margin: 0; min-width: 0;">Languages</h1>
+          </div>
+          <p style="color: #6b7280; margin: 0; font-size: 1rem;">Manage system languages and their file storage configurations</p>
         </div>
-        <%= link_to new_language_path, style: "background: linear-gradient(135deg, #3b82f6 0%, #1d4ed8 100%); color: white; padding: 0.75rem 1.5rem; border-radius: 0.5rem; text-decoration: none; font-weight: 600; font-size: 0.875rem; display: inline-flex; align-items: center; gap: 0.5rem; box-shadow: 0 4px 6px -1px rgba(59, 130, 246, 0.3); transition: all 0.2s;" do %>
-          <svg style="width: 1rem; height: 1rem;" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        
+        <%= link_to new_language_path, style: "background: linear-gradient(135deg, #3b82f6 0%, #1d4ed8 100%); color: white; padding: 0.875rem 1.75rem; border-radius: 0.75rem; text-decoration: none; font-weight: 600; font-size: 0.875rem; display: inline-flex; align-items: center; gap: 0.5rem; box-shadow: 0 10px 15px -3px rgba(59, 130, 246, 0.4), 0 4px 6px -2px rgba(59, 130, 246, 0.05); transition: all 0.2s;", data: {turbo: false } do %>
+          <svg style="width: 1.125rem; height: 1.125rem;" fill="none" stroke="currentColor" viewBox="0 0 24 24">
             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"></path>
           </svg>
           <span>Add New Language</span>
