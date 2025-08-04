@@ -1,32 +1,130 @@
-<%= tag.div(flash[:alert], style: "color:red") if flash[:alert] %>
-
-<div class="row h-100 p-4">
-  <div class="col-lg-5 col-12">
-    <div id="auth-left">
-      <div class="auth-logo">
-
+<div class="min-h-screen flex items-center justify-center px-4 sm:px-6 lg:px-8 bg-gradient-to-br from-gray-50 to-gray-100">
+  <div class="max-w-md w-full">
+    <div class="bg-white py-8 px-6 shadow-xl rounded-lg sm:px-10">
+      <div class="text-center mb-8">
+        <%= link_to root_path, class: "inline-block" do %>
+          <%= image_tag("skill.svg", alt: "SkillRx", class: "h-16 w-auto mx-auto") %>
+        <% end %>
+        
+        <h2 class="mt-6 text-3xl font-bold text-gray-900">Reset Your Password</h2>
+        <p class="mt-2 text-gray-600">Enter your email address and we'll send you a link to reset your password</p>
       </div>
-      <h1 class="auth-title">Forgot Password</h1>
-      <p class="auth-subtitle mb-5">Input your email and we will send you reset password link.</p>
-
-      <%= form_with url: passwords_path do |form| %>
-        <div class="form-group position-relative has-icon-left mb-4">
-          <%= form.email_field :email, required: true, class:"form-control form-control-xl", autofocus: true, autocomplete: "username", placeholder: "Enter your email address", value: params[:email] %><br>
-          <div class="form-control-icon">
-            <i class="bi bi-envelope"></i>
+      
+      <% if flash[:alert] %>
+        <div class="mb-6 bg-red-50 border border-red-200 text-red-700 px-4 py-3 rounded-lg flex items-start">
+          <svg class="w-5 h-5 mr-2 flex-shrink-0 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/>
+          </svg>
+          <span><%= flash[:alert] %></span>
+        </div>
+      <% end %>
+      
+      <%= form_with url: passwords_path, local: true, class: "space-y-6" do |form| %>
+        <div>
+          <%= form.label :email, "Email address", class: "block text-sm font-medium text-gray-700 mb-2" %>
+          <%= form.email_field :email, 
+              required: true, 
+              class: "appearance-none block w-full px-4 py-3 border border-gray-300 rounded-lg text-gray-900 placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent", 
+              autofocus: true, 
+              autocomplete: "email", 
+              placeholder: "you@example.com", 
+              value: params[:email] %>
+        </div>
+        
+        <div>
+          <%= form.submit "Send Reset Instructions", 
+              class: "w-full flex justify-center items-center px-6 py-3 border border-transparent text-base font-medium rounded-lg text-white bg-gradient-to-r from-indigo-500 to-purple-600 hover:from-indigo-600 hover:to-purple-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 transition-all cursor-pointer" %>
+        </div>
+      <% end %>
+      
+      <div class="mt-8 text-center">
+        <div class="relative">
+          <div class="absolute inset-0 flex items-center">
+            <div class="w-full border-t border-gray-300"></div>
+          </div>
+          <div class="relative flex justify-center text-sm">
+            <span class="px-4 bg-white text-gray-500">Remember your password?</span>
           </div>
         </div>
-
-        <%= form.submit "Email reset instructions", class:"btn btn-primary btn-block btn-lg shadow-lg mt-5" %>
-      <% end %>
-
-      <div class="text-center mt-5 text-lg fs-4">
-        <p class="text-gray-600">Remember your account? <%= link_to "Login", new_session_path, class:"font-bold" %></p>
+        
+        <div class="mt-6 space-y-2">
+          <%= link_to "Back to Sign In", new_session_path, 
+              class: "font-medium text-indigo-600 hover:text-indigo-500" %>
+          <p class="text-sm text-gray-600">
+            Need help? 
+            <a href="mailto:contact@skillrx.org" class="font-medium text-indigo-600 hover:text-indigo-500">
+              Contact Support
+            </a>
+          </p>
+        </div>
       </div>
     </div>
   </div>
-  <div class="col-lg-7 d-none d-lg-block">
-    <div id="auth-right">
+</div>
+  </div>
+  
+  <!-- Right side - Visual/Information -->
+  <div class="hidden lg:block relative w-0 flex-1">
+    <div class="absolute inset-0 bg-gradient-to-br from-amber-400 to-orange-500">
+      <div class="absolute inset-0 bg-black/10"></div>
+      <div class="absolute inset-0" style="background-image: url('data:image/svg+xml,%3Csvg width="60" height="60" viewBox="0 0 60 60" xmlns="http://www.w3.org/2000/svg"%3E%3Cg fill="none" fill-rule="evenodd"%3E%3Cg fill="%23ffffff" fill-opacity="0.05"%3E%3Cpath d="M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z"/%3E%3C/g%3E%3C/g%3E%3C/svg%3E'); background-size: 60px 60px;"></div>
+    </div>
+    
+    <div class="absolute inset-0 flex items-center justify-center p-12">
+      <div class="max-w-lg">
+        <h1 class="text-4xl font-bold text-white mb-6">Secure & Simple</h1>
+        <p class="text-xl text-white/90 mb-12">
+          Your account security is our priority. We'll help you get back to learning quickly and safely.
+        </p>
+        
+        <div class="space-y-8">
+          <div class="flex items-start">
+            <div class="flex-shrink-0">
+              <div class="w-12 h-12 bg-white/20 rounded-full flex items-center justify-center">
+                <svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"/>
+                </svg>
+              </div>
+            </div>
+            <div class="ml-4">
+              <h3 class="text-lg font-semibold text-white">Secure Reset</h3>
+              <p class="text-white/80">Encrypted email verification</p>
+            </div>
+          </div>
+          
+          <div class="flex items-start">
+            <div class="flex-shrink-0">
+              <div class="w-12 h-12 bg-white/20 rounded-full flex items-center justify-center">
+                <svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"/>
+                </svg>
+              </div>
+            </div>
+            <div class="ml-4">
+              <h3 class="text-lg font-semibold text-white">Quick Process</h3>
+              <p class="text-white/80">Back to learning in minutes</p>
+            </div>
+          </div>
+        </div>
+        
+        <div class="mt-12 p-6 bg-white/10 backdrop-blur-sm rounded-xl">
+          <h4 class="font-semibold text-white mb-2 flex items-center">
+            <span class="text-2xl mr-2">💡</span> Security Tip
+          </h4>
+          <p class="text-white/90 text-sm">
+            Use a strong, unique password and consider enabling two-factor authentication for enhanced security.
+          </p>
+        </div>
+        
+        <div class="mt-8">
+          <%= link_to root_path, class: "inline-flex items-center text-white hover:text-white/90 transition-colors" do %>
+            <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18"/>
+            </svg>
+            Back to Home
+          <% end %>
+        </div>
+      </div>
     </div>
   </div>
 </div>

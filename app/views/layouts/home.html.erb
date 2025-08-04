@@ -20,6 +20,7 @@
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/zuramai/mazer@docs/demo/assets/compiled/css/app.css">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/zuramai/mazer@docs/demo/assets/compiled/css/app-dark.css">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/zuramai/mazer@docs/demo/assets/compiled/css/iconly.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.0/font/bootstrap-icons.css">
 
     <%# Includes all stylesheet files in app/assets/stylesheets %>
     <%= stylesheet_link_tag :app, "data-turbo-track": "reload" %>
@@ -28,6 +29,179 @@
 
   <body class="d-flex flex-column min-vh-100">
     <script src="https://cdn.jsdelivr.net/gh/zuramai/mazer@docs/demo/assets/static/js/initTheme.js"></script>
+
+    <style>
+      /* Modern animations and effects */
+      @keyframes fadeInUp {
+        from {
+          opacity: 0;
+          transform: translateY(30px);
+        }
+        to {
+          opacity: 1;
+          transform: translateY(0);
+        }
+      }
+      
+      @keyframes fadeInRight {
+        from {
+          opacity: 0;
+          transform: translateX(30px);
+        }
+        to {
+          opacity: 1;
+          transform: translateX(0);
+        }
+      }
+      
+      @keyframes bounce {
+        0%, 20%, 50%, 80%, 100% {
+          transform: translateY(0);
+        }
+        40% {
+          transform: translateY(-10px);
+        }
+        60% {
+          transform: translateY(-5px);
+        }
+      }
+      
+      /* Smooth scrolling */
+      html {
+        scroll-behavior: smooth;
+      }
+      
+      /* Custom scrollbar */
+      ::-webkit-scrollbar {
+        width: 8px;
+      }
+      
+      ::-webkit-scrollbar-track {
+        background: #f1f1f1;
+      }
+      
+      ::-webkit-scrollbar-thumb {
+        background: #c1c1c1;
+        border-radius: 4px;
+      }
+      
+      ::-webkit-scrollbar-thumb:hover {
+        background: #a8a8a8;
+      }
+      
+      /* Navbar blur effect when scrolled */
+      .navbar.scrolled {
+        backdrop-filter: blur(10px);
+        background-color: rgba(255, 255, 255, 0.95) !important;
+      }
+      
+      /* Button hover effects */
+      .btn {
+        transition: all 0.3s ease;
+      }
+      
+      .btn:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 10px 25px rgba(0, 0, 0, 0.15);
+      }
+      
+      /* Card hover effects */
+      .card {
+        transition: all 0.3s ease;
+      }
+      
+      .feature-card:hover {
+        transform: translateY(-10px);
+        box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
+      }
+      
+      .contact-card:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 15px 30px rgba(0, 0, 0, 0.1);
+      }
+      
+      /* Gradient text */
+      .text-gradient {
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        background-clip: text;
+      }
+      
+      /* Hero section enhancements */
+      .hero-content h1 {
+        text-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+      }
+      
+      /* Feature icons */
+      .feature-icon {
+        transition: all 0.3s ease;
+      }
+      
+      .card:hover .feature-icon {
+        transform: scale(1.1);
+      }
+      
+      /* Statistics counter animation */
+      .statistic h3 {
+        transition: all 0.3s ease;
+      }
+      
+      .statistic:hover h3 {
+        transform: scale(1.1);
+      }
+      
+      /* Ensure proper spacing for fixed navbar */
+      body {
+        padding-top: 76px;
+      }
+      
+      /* Mobile responsiveness fixes */
+      @media (max-width: 768px) {
+        body {
+          padding-top: 70px;
+        }
+        
+        .hero-content h1 {
+          font-size: 2.5rem;
+        }
+        
+        .display-5 {
+          font-size: 2rem;
+        }
+      }
+      
+      /* Loading states */
+      .loading {
+        opacity: 0.7;
+        pointer-events: none;
+        position: relative;
+      }
+      
+      /* Icon fallbacks */
+      .bi::before {
+        font-family: "bootstrap-icons" !important;
+      }
+      
+      /* Improved accessibility */
+      @media (prefers-reduced-motion: reduce) {
+        * {
+          animation: none !important;
+          transition: none !important;
+        }
+      }
+      
+      /* Print styles */
+      @media print {
+        .navbar, .btn, footer {
+          display: none !important;
+        }
+        
+        .hero-content {
+          color: black !important;
+        }
+      }
+    </style>
 
     <!-- Start content here -->
     <%= yield %>
@@ -41,5 +215,100 @@
     <!-- Need: Apexcharts -->
     <script src="https://cdn.jsdelivr.net/gh/zuramai/mazer@docs/demo/assets/extensions/apexcharts/apexcharts.min.js"></script>
     <script src="https://cdn.jsdelivr.net/gh/zuramai/mazer@docs/demo/assets/static/js/pages/dashboard.js"></script>
+    
+    <script>
+      // Navbar scroll effect
+      window.addEventListener('scroll', function() {
+        const navbar = document.querySelector('.navbar');
+        if (navbar && window.scrollY > 50) {
+          navbar.classList.add('scrolled');
+        } else if (navbar) {
+          navbar.classList.remove('scrolled');
+        }
+      });
+      
+      // Smooth scroll for anchor links
+      document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+        anchor.addEventListener('click', function (e) {
+          e.preventDefault();
+          const targetId = this.getAttribute('href');
+          const target = document.querySelector(targetId);
+          if (target) {
+            const navbarHeight = document.querySelector('.navbar')?.offsetHeight || 76;
+            const targetPosition = target.offsetTop - navbarHeight;
+            window.scrollTo({
+              top: targetPosition,
+              behavior: 'smooth'
+            });
+          }
+        });
+      });
+      
+      // Add loading animation for cards with intersection observer
+      const observerOptions = {
+        threshold: 0.1,
+        rootMargin: '0px 0px -50px 0px'
+      };
+      
+      const observer = new IntersectionObserver((entries) => {
+        entries.forEach((entry, index) => {
+          if (entry.isIntersecting) {
+            setTimeout(() => {
+              entry.target.style.opacity = '1';
+              entry.target.style.transform = 'translateY(0)';
+            }, index * 100);
+            observer.unobserve(entry.target);
+          }
+        });
+      }, observerOptions);
+      
+      // Initialize intersection observer when DOM is ready
+      document.addEventListener('DOMContentLoaded', function() {
+        const cards = document.querySelectorAll('.card');
+        cards.forEach(card => {
+          card.style.opacity = '0';
+          card.style.transform = 'translateY(20px)';
+          card.style.transition = 'all 0.6s ease';
+          observer.observe(card);
+        });
+        
+        // Handle statistics animation
+        const statistics = document.querySelectorAll('.statistic h3');
+        statistics.forEach(stat => {
+          observer.observe(stat.parentElement);
+        });
+      });
+      
+      // Handle button loading states
+      document.querySelectorAll('a[href*="session"], button[type="submit"]').forEach(button => {
+        button.addEventListener('click', function() {
+          if (!this.classList.contains('loading')) {
+            this.classList.add('loading');
+            const originalText = this.innerHTML;
+            this.innerHTML = '<i class="bi bi-hourglass-split me-2"></i>Loading...';
+            
+            // Reset after 3 seconds if still loading
+            setTimeout(() => {
+              if (this.classList.contains('loading')) {
+                this.classList.remove('loading');
+                this.innerHTML = originalText;
+              }
+            }, 3000);
+          }
+        });
+      });
+      
+      // Add error handling for missing icons
+      document.addEventListener('DOMContentLoaded', function() {
+        const icons = document.querySelectorAll('i[class*="bi-"]');
+        icons.forEach(icon => {
+          // Check if icon is rendering properly
+          const computedStyle = window.getComputedStyle(icon, '::before');
+          if (!computedStyle.content || computedStyle.content === 'none') {
+            console.warn('Bootstrap icon not loading:', icon.className);
+          }
+        });
+      });
+    </script>
   </body>
 </html>
