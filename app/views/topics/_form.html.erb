@@ -24,18 +24,18 @@
                                     Language.all,
                                     :id,
                                     :name,
-                                    { prompt: "Select Language" },
+                                    { prompt: "Select language", selected: topic.language&.id || Language.first.id },
                                     class: "form-select",
                                     data: { "resource-type": "topics", "resource-id": f.object.id, "select-tags-target": "language", "action": "change->select-tags#changeLanguage" }
             %>
           </div>
           <div class="form-group">
             <%= f.label :publishing_year %>
-            <%= f.select :published_at_year, options_for_select((2016..Date.today.year).to_a, topic.published_at_year), { prompt: "Select year of publishing" }, class: "form-select" %>
+            <%= f.select :published_at_year, options_for_select((2016..Date.today.year).to_a, topic.published_at_year || Date.today.year), { prompt: "Select year of publishing" }, class: "form-select" %>
           </div>
           <div class="form-group">
             <%= f.label :publishing_month %>
-            <%= f.select :published_at_month, options_for_select((1..12).to_a, topic.published_at_month), { prompt: "Select month of publishing" }, class: "form-select" %>
+            <%= f.select :published_at_month, options_for_select((1..12).to_a, topic.published_at_month || Date.today.month), { prompt: "Select month of publishing" }, class: "form-select" %>
           </div>
           <div class="form-group">
             <div class="d-flex">
