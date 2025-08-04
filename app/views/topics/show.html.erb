@@ -2,7 +2,7 @@
 
 <%= render @topic %>
 
-<%= link_to "Back to topics", topics_path, class: "mt-4" %>
+<%= link_to "Back to topics", topics_path(search: search_params), class: "mt-4" %>
 
 <div>
   <%= link_to "Edit this topic", edit_topic_path(@topic), class: "btn btn-primary mt-4" %>

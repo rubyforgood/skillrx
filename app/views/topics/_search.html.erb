@@ -37,7 +37,7 @@
             <div class="col-md-6 col-12">
               <div class="form-group">
                 <%= f.label :language %>
-                <%= f.select :language_id, options_from_collection_for_select(languages, :id, :name, params[:provider_id]),  { prompt: "Select language" }, class: "form-select", data: { action: "change->topics#searchTopics" } %>
+                <%= f.select :language_id, options_from_collection_for_select(languages, :id, :name, params[:language_id]),  { prompt: "Select language" }, class: "form-select", data: { action: "change->topics#searchTopics" } %>
               </div>
             </div>
             <div class="col-md-3 col-12">
