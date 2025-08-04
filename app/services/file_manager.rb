@@ -78,19 +78,17 @@ class FileManager
   end
 
   # naming convention described here: https://github.com/rubyforgood/skillrx/issues/305
-  # [topic.id]_[provider.provider_name_for_file]_[topic.published_at_year]_[topic.published_at_month][document.filename.parameterize].[extension]
+  # [topic.id]_[provider.provider_name_for_file.parameterize]_[topic.published_at_year]_[topic.published_at_month][document_filename.parameterize].[document_extension]
   def file_name
     provider = topic.provider
     @file_name ||= [].tap do |parts|
       parts << topic.id
-      if provider.file_name_prefix.present?
-        parts << provider.file_name_prefix
-      else
-        parts << provider.name
-      end
+      provider_part = provider.file_name_prefix.present? ? provider.file_name_prefix : provider.name
+      parts << provider_part.parameterize
       parts << topic.published_at_year
       parts << format("%02d", topic.published_at_month)
-      parts << document.filename
+      name, extension = document.filename.to_s.split(".")
+      parts << [ name.parameterize, extension ].reject(&:blank?).join(".")
     end.join("_")
   end
 

@@ -29,20 +29,51 @@ RSpec.describe FileManager do
     it "initializes file workers with correct parameters" do
       expect(FileWorker).to receive(:new).with(
         share:,
-        name: "#{topic.id}_MyPrefix_#{topic.published_at_year}_#{format('%02d', topic.published_at_month)}_dummy.pdf",
+        name: "#{topic.id}_myprefix_#{topic.published_at_year}_#{format('%02d', topic.published_at_month)}_dummy.pdf",
         path: "#{topic.language.file_storage_prefix}CMES-Pi/assets/Content",
         file: document.download,
         new_path: nil,
       ).and_call_original
       expect(FileWorker).to receive(:new).with(
         share:,
-        name: "#{topic.id}_MyPrefix_#{topic.published_at_year}_#{format('%02d', topic.published_at_month)}_dummy.pdf",
+        name: "#{topic.id}_myprefix_#{topic.published_at_year}_#{format('%02d', topic.published_at_month)}_dummy.pdf",
         path: "#{topic.language.file_storage_prefix}CMES-v2/assets/Content",
         file: document.download,
         new_path: nil,
       ).and_call_original
 
       manager.workers
+    end
+
+    context "when names contain special characters" do
+      let(:document) do
+        ActiveStorage::Blob.create_and_upload!(
+          io: File.open(Rails.root.join("spec", "fixtures", "files", "dummy.pdf")),
+          filename: "file/with|special\\chars.pdf",
+          content_type: "application/pdf",
+        )
+      end
+
+      before { provider.update(file_name_prefix: "My/Prefix") }
+
+      it "handles special characters in file names" do
+        expect(FileWorker).to receive(:new).with(
+          share:,
+          name: "#{topic.id}_my-prefix_#{topic.published_at_year}_#{format('%02d', topic.published_at_month)}_file-with-special-chars.pdf",
+          path: "#{topic.language.file_storage_prefix}CMES-Pi/assets/Content",
+          file: document.download,
+          new_path: nil,
+        ).and_call_original
+        expect(FileWorker).to receive(:new).with(
+          share:,
+          name: "#{topic.id}_my-prefix_#{topic.published_at_year}_#{format('%02d', topic.published_at_month)}_file-with-special-chars.pdf",
+          path: "#{topic.language.file_storage_prefix}CMES-v2/assets/Content",
+          file: document.download,
+          new_path: nil,
+        ).and_call_original
+
+        manager.workers
+      end
     end
 
     context "when video document" do
@@ -64,7 +95,7 @@ RSpec.describe FileManager do
       it "initializes file worker with parameters for video" do
         expect(FileWorker).to receive(:new).with(
           share:,
-          name: "#{topic.id}_MyPrefix_#{topic.published_at_year}_#{format('%02d', topic.published_at_month)}_video_file.mp4",
+          name: "#{topic.id}_myprefix_#{topic.published_at_year}_#{format('%02d', topic.published_at_month)}_video_file.mp4",
           path: "#{topic.language.file_storage_prefix}CMES-v2/assets/VideoContent",
           file: document.download,
           new_path: nil,
