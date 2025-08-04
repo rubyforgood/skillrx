@@ -171,11 +171,12 @@
               <div style="display: flex; gap: 0.5rem; flex-wrap: wrap;">
                 <% if @user.providers.any? %>
                   <% @user.providers.each do |provider| %>
-                    <%= link_to provider.name, provider_path(provider), 
+                    <%= link_to provider_path(provider), 
                         target: "_blank",
                         style: "background: linear-gradient(135deg, #6366f1 0%, #4f46e5 100%); color: white; padding: 0.375rem 0.75rem; border-radius: 9999px; font-size: 0.75rem; font-weight: 600; text-decoration: none; transition: all 0.2s; display: inline-flex; align-items: center; gap: 0.25rem;",
                         onmouseover: "this.style.transform='scale(1.05)'",
                         onmouseout: "this.style.transform='scale(1)'" do %>
+                      <%= provider.name %>
                       <svg style="width: 0.75rem; height: 0.75rem;" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"/>
                       </svg>
