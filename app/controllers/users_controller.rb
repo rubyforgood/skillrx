@@ -6,6 +6,16 @@ class UsersController < ApplicationController
 
   def index
     @pagy, @users = pagy(User.includes(:providers).search_with_params(user_search_params))
+    
+    respond_to do |format|
+      format.html do
+        if turbo_frame_request?
+          render partial: 'user_list'
+        else
+          render :index
+        end
+      end
+    end
   end
 
   def new
