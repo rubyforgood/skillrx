@@ -43,4 +43,15 @@ RSpec.describe Topic, type: :model do
   context "tagging" do
     it_behaves_like "taggable"
   end
+
+  describe "#fullname_for_document" do
+    subject { create(:topic, :with_documents) }
+
+    let(:document) { subject.documents.first }
+
+    it "generates the correct fullname" do
+      expect(subject.fullname_for_document(document))
+        .to eq("#{subject.id}_prefix_#{subject.published_at_year}_#{format('%02d', subject.published_at_month)}_test_image.png")
+    end
+  end
 end

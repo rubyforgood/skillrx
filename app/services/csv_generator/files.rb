@@ -19,7 +19,7 @@ class CsvGenerator::Files < CsvGenerator::Base
           [
             doc.id,
             topic.id,
-            doc.filename,
+            topic.fullname_for_document(doc),
             doc.content_type,
             doc.byte_size,
           ]
