@@ -57,6 +57,16 @@ class Topic < ApplicationRecord
     id
   end
 
+  def custom_file_name(document)
+    [
+      id,
+      provider.file_name_prefix.present? ? provider.file_name_prefix.parameterize : provider.name.parameterize(separator: "_"),
+      published_at_year,
+      published_at_month,
+      document.filename.base.sub("rename_", "").parameterize(separator: "_"),
+    ].compact.join("_") + "." + document.filename.extension
+  end
+
   class << self
     def by_year(year)
       where("extract(year from published_at) = ?", year)

@@ -78,7 +78,7 @@ class Topics::Mutator
     document = topic.documents.find { |doc| doc.blob.signed_id == signed_id }
       next unless document
 
-      new_filename = custom_file_name(document)
+      new_filename = topic.custom_file_name(document)
       rename_document(document, new_filename)
     end
   end
@@ -94,16 +94,6 @@ class Topics::Mutator
         content_type: document.content_type
       )
       document.purge
-  end
-
-  def custom_file_name(document)
-    [
-      topic.id,
-      topic.provider.file_name_prefix.present? ? topic.provider.file_name_prefix.parameterize : topic.provider.name.parameterize,
-      topic.published_at_year,
-      topic.published_at_month,
-      document.filename.base.sub("rename_", "").parameterize,
-    ].compact.join("_") + "." + document.filename.extension
   end
 
   def sync_docs_for_topic_updates
