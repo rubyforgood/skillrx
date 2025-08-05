@@ -194,6 +194,29 @@ GEM
       raabro (~> 1.4)
     globalid (1.2.1)
       activesupport (>= 6.1)
+    google-protobuf (4.31.1)
+      bigdecimal
+      rake (>= 13)
+    google-protobuf (4.31.1-aarch64-linux-gnu)
+      bigdecimal
+      rake (>= 13)
+    google-protobuf (4.31.1-aarch64-linux-musl)
+      bigdecimal
+      rake (>= 13)
+    google-protobuf (4.31.1-arm64-darwin)
+      bigdecimal
+      rake (>= 13)
+    google-protobuf (4.31.1-x86_64-darwin)
+      bigdecimal
+      rake (>= 13)
+    google-protobuf (4.31.1-x86_64-linux-gnu)
+      bigdecimal
+      rake (>= 13)
+    google-protobuf (4.31.1-x86_64-linux-musl)
+      bigdecimal
+      rake (>= 13)
+    googleapis-common-protos-types (1.20.0)
+      google-protobuf (>= 3.18, < 5.a)
     hotwire-spark (0.1.13)
       listen
       rails (>= 7.0.0)
@@ -300,6 +323,37 @@ GEM
       racc (~> 1.4)
     nokogiri (1.18.9-x86_64-linux-musl)
       racc (~> 1.4)
+    opentelemetry-api (1.5.0)
+    opentelemetry-common (0.22.0)
+      opentelemetry-api (~> 1.0)
+    opentelemetry-exporter-otlp-logs (0.2.0)
+      google-protobuf (>= 3.18)
+      googleapis-common-protos-types (~> 1.3)
+      opentelemetry-api (~> 1.1)
+      opentelemetry-common (~> 0.20)
+      opentelemetry-logs-api (~> 0.1)
+      opentelemetry-logs-sdk (~> 0.1)
+      opentelemetry-sdk
+      opentelemetry-semantic_conventions
+    opentelemetry-instrumentation-base (0.23.0)
+      opentelemetry-api (~> 1.0)
+      opentelemetry-common (~> 0.21)
+      opentelemetry-registry (~> 0.1)
+    opentelemetry-logs-api (0.2.0)
+      opentelemetry-api (~> 1.0)
+    opentelemetry-logs-sdk (0.2.0)
+      opentelemetry-api (~> 1.2)
+      opentelemetry-logs-api (~> 0.1)
+      opentelemetry-sdk (~> 1.3)
+    opentelemetry-registry (0.4.0)
+      opentelemetry-api (~> 1.1)
+    opentelemetry-sdk (1.8.0)
+      opentelemetry-api (~> 1.1)
+      opentelemetry-common (~> 0.20)
+      opentelemetry-registry (~> 0.2)
+      opentelemetry-semantic_conventions
+    opentelemetry-semantic_conventions (1.11.0)
+      opentelemetry-api (~> 1.0)
     ostruct (0.6.3)
     ox (2.14.23)
       bigdecimal (>= 3.0)
@@ -438,6 +492,16 @@ GEM
     rubyzip (2.4.1)
     scout_apm (5.6.5)
       parser
+    scout_apm_logging (2.1.0)
+      google-protobuf (>= 3.18)
+      googleapis-common-protos-types
+      opentelemetry-api
+      opentelemetry-common
+      opentelemetry-exporter-otlp-logs (>= 0.2.0)
+      opentelemetry-instrumentation-base
+      opentelemetry-logs-sdk (>= 0.2.0)
+      opentelemetry-sdk (>= 1.2)
+      scout_apm
     securerandom (0.4.1)
     selenium-webdriver (4.34.0)
       base64 (~> 0.2)
@@ -557,6 +621,7 @@ DEPENDENCIES
   rspec-rails
   rubocop-rails-omakase
   scout_apm
+  scout_apm_logging (~> 2.1)
   selenium-webdriver
   shoulda-matchers
   solid_cable
