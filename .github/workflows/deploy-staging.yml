@@ -40,5 +40,6 @@ jobs:
         AZURE_STORAGE_ACCOUNT_NAME: ${{ secrets.STAGING_AZURE_STORAGE_ACCOUNT_NAME }}
         AZURE_STORAGE_ACCOUNT_KEY: ${{ secrets.STAGING_AZURE_STORAGE_ACCOUNT_KEY }}
         SCOUT_KEY: ${{ secrets.STAGING_SCOUT_KEY }}
+        SCOUT_LOGS_INGEST_KEY: ${{ secrets.STAGING_SCOUT_LOGS_INGEST_KEY }}
       run: |
         bin/kamal deploy -d staging
