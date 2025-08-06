@@ -53,8 +53,7 @@ class Topics::Mutator
     ActiveRecord::Base.transaction do
       topic.save_with_tags(params)
       attach_files(document_signed_ids)
-      # topic.persisted? means that we are updating existing topic and documents can be removed
-      shadow_delete_documents(docs_to_delete) if topic.persisted?
+      shadow_delete_documents(docs_to_delete)
       rename_files(document_signed_ids)
       # document_signed_ids.any? means that some new documents were attached and we need to sync them
       sync_docs_for_topic_updates if document_signed_ids.any?
@@ -75,7 +74,7 @@ class Topics::Mutator
   def rename_files(signed_ids)
     return if signed_ids.blank?
     signed_ids.each do |signed_id|
-    document = topic.documents.find { |doc| doc.blob.signed_id == signed_id }
+      document = topic.documents.find { |doc| doc.blob.signed_id == signed_id }
       next unless document
 
       new_filename = topic.custom_file_name(document)
