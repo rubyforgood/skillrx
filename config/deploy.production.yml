@@ -27,7 +27,6 @@ env:
     - RAILS_MASTER_KEY
     - SECRET_KEY_BASE
     - SCOUT_KEY
-    - SCOUT_LOGS_INGEST_KEY
   clear:
     AWS_BUCKET_NAME: skillrx-production
     AWS_DEFAULT_REGION: us-east-1
