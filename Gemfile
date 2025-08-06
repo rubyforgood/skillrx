@@ -22,6 +22,7 @@ gem "puma", ">= 5.0"
 gem "rails", "~> 8.0.1"
 gem "requestjs-rails"
 gem "scout_apm"
+gem "scout_apm_logging", "~> 2.1"
 gem "solid_cable"
 gem "solid_cache"
 gem "solid_queue"
@@ -47,6 +48,7 @@ group :development do
   gem "bullet"
   gem "hotwire-spark"
   gem "letter_opener"
+
   gem "rack-mini-profiler"
   gem "web-console"
 end

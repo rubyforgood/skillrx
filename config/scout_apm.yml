@@ -6,6 +6,8 @@ common: &defaults
   # - Default: none
   key: <%= ENV["SCOUT_KEY"] %>
 
+
+
   # log_level: Verboseness of logs.
   # - Default: 'info'
   # - Valid Options: debug, info, warn, error

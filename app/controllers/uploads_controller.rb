@@ -31,9 +31,16 @@ class UploadsController < ApplicationController
     params.require(:documents).map do |document|
       {
         io: document,
-        filename: document.original_filename,
+        filename: derived_filename(document),
         content_type: document.content_type,
       }
     end
+  end
+
+  def derived_filename(document)
+    [
+      "rename",
+      document.original_filename,
+    ].join("_")
   end
 end

@@ -38,5 +38,6 @@ jobs:
         AZURE_STORAGE_ACCOUNT_NAME: ${{ secrets.PRODUCTION_AZURE_STORAGE_ACCOUNT_NAME }}
         AZURE_STORAGE_ACCOUNT_KEY: ${{ secrets.PRODUCTION_AZURE_STORAGE_ACCOUNT_KEY }}
         SCOUT_KEY: ${{ secrets.PRODUCTION_SCOUT_KEY }}
+        SCOUT_LOGS_INGEST_KEY: ${{ secrets.PRODUCTION_SCOUT_LOGS_INGEST_KEY }}
       run: |
         bin/kamal deploy -d production --skip-push

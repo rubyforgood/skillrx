@@ -45,13 +45,27 @@ RSpec.describe Topic, type: :model do
   end
 
   describe "#fullname_for_document" do
-    subject { create(:topic, :with_documents) }
+    let(:document) { double("Document", filename: ActiveStorage::Filename.new("Document name.pdf")) }
+    let(:topic) { create(:topic, provider: provider, published_at: Time.new(2023, 12, 22)) }
 
-    let(:document) { subject.documents.first }
+    context "when provider has a file name prefix" do
+      let(:provider) { create(:provider, file_name_prefix: "prefix") }
 
-    it "generates the correct fullname" do
-      expect(subject.fullname_for_document(document))
-        .to eq("#{subject.id}_prefix_#{subject.published_at_year}_#{format('%02d', subject.published_at_month)}_test_image.png")
+      it "returns a custom file name based on topic attributes" do
+        expect(topic.custom_file_name(document)).to eq(
+          "#{topic.id}_prefix_2023_12_document_name.pdf"
+        )
+      end
+    end
+
+    context "when provider does not have a file name prefix" do
+      let(:provider) { create(:provider, file_name_prefix: nil, name: "Provider Name") }
+
+      it "returns a custom file name based on topic attributes" do
+        expect(topic.custom_file_name(document)).to eq(
+          "#{topic.id}_provider_name_2023_12_document_name.pdf"
+        )
+      end
     end
   end
 end

@@ -4,7 +4,7 @@ RSpec.describe DocumentsSyncJob, type: :job do
   let(:topic) { create(:topic, :with_documents) }
   let(:provider) { topic.provider }
   let(:document) { topic.documents.first }
-  let(:file_name) { topic.fullname_for_document(document) }
+  let(:file_name) { document.filename }
 
   before { provider.update(file_name_prefix: "MyPrefix") }
 
