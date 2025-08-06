@@ -43,6 +43,16 @@ class Topic < ApplicationRecord
 
   scope :active, -> { where(state: :active) }
 
+  class << self
+    def by_year(year)
+      where("extract(year from published_at) = ?", year)
+    end
+
+    def by_month(month)
+      where("extract(month from published_at) = ?", month)
+    end
+  end
+
   def published_at_year
     published_at&.year
   end
@@ -57,6 +67,8 @@ class Topic < ApplicationRecord
     id
   end
 
+  # naming convention described here: https://github.com/rubyforgood/skillrx/issues/305
+  # [topic.id]_[provider.provider_name_for_file.parameterize]_[topic.published_at_year]_[topic.published_at_month][document_filename.parameterize].[document_extension]
   def custom_file_name(document)
     [
       id,
@@ -65,15 +77,5 @@ class Topic < ApplicationRecord
       published_at_month,
       document.filename.base.sub("rename_", "").parameterize(separator: "_"),
     ].compact.join("_") + "." + document.filename.extension
-  end
-
-  class << self
-    def by_year(year)
-      where("extract(year from published_at) = ?", year)
-    end
-
-    def by_month(month)
-      where("extract(month from published_at) = ?", month)
-    end
   end
 end
