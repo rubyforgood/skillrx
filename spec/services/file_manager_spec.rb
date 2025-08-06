@@ -29,14 +29,14 @@ RSpec.describe FileManager do
     it "initializes file workers with correct parameters" do
       expect(FileWorker).to receive(:new).with(
         share:,
-        name: "#{topic.id}_MyPrefix_#{topic.published_at_year}_#{format('%02d', topic.published_at_month)}_dummy.pdf",
+        name: "dummy.pdf",
         path: "#{topic.language.file_storage_prefix}CMES-Pi/assets/Content",
         file: document.download,
         new_path: nil,
       ).and_call_original
       expect(FileWorker).to receive(:new).with(
         share:,
-        name: "#{topic.id}_MyPrefix_#{topic.published_at_year}_#{format('%02d', topic.published_at_month)}_dummy.pdf",
+        name: "dummy.pdf",
         path: "#{topic.language.file_storage_prefix}CMES-v2/assets/Content",
         file: document.download,
         new_path: nil,
@@ -64,7 +64,7 @@ RSpec.describe FileManager do
       it "initializes file worker with parameters for video" do
         expect(FileWorker).to receive(:new).with(
           share:,
-          name: "#{topic.id}_MyPrefix_#{topic.published_at_year}_#{format('%02d', topic.published_at_month)}_video_file.mp4",
+          name: "video_file.mp4",
           path: "#{topic.language.file_storage_prefix}CMES-v2/assets/VideoContent",
           file: document.download,
           new_path: nil,

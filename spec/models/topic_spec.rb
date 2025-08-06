@@ -43,4 +43,29 @@ RSpec.describe Topic, type: :model do
   context "tagging" do
     it_behaves_like "taggable"
   end
+
+  describe "#custom_file_name" do
+    let(:document) { double("Document", filename: ActiveStorage::Filename.new("Document name.pdf")) }
+    let(:topic) { create(:topic, provider: provider, published_at: Time.new(2023, 12, 22)) }
+
+    context "when provider has a file name prefix" do
+      let(:provider) { create(:provider, file_name_prefix: "prefix") }
+
+      it "returns a custom file name based on topic attributes" do
+        expect(topic.custom_file_name(document)).to eq(
+          "#{topic.id}_prefix_2023_12_document_name.pdf"
+        )
+      end
+    end
+
+    context "when provider does not have a file name prefix" do
+      let(:provider) { create(:provider, file_name_prefix: nil, name: "Provider Name") }
+
+      it "returns a custom file name based on topic attributes" do
+        expect(topic.custom_file_name(document)).to eq(
+          "#{topic.id}_provider_name_2023_12_document_name.pdf"
+        )
+      end
+    end
+  end
 end
