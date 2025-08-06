@@ -63,7 +63,7 @@ class Topic < ApplicationRecord
       provider.file_name_prefix.present? ? provider.file_name_prefix.parameterize : provider.name.parameterize(separator: "_"),
       published_at_year,
       published_at_month,
-      document.filename.base.parameterize(separator: "_"),
+      document.filename.base.sub("rename_", "").parameterize(separator: "_"),
     ].compact.join("_") + "." + document.filename.extension
   end
 
