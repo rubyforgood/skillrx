@@ -44,7 +44,7 @@ RSpec.describe Topic, type: :model do
     it_behaves_like "taggable"
   end
 
-  describe "#fullname_for_document" do
+  describe "#custom_file_name" do
     let(:document) { double("Document", filename: ActiveStorage::Filename.new("Document name.pdf")) }
     let(:topic) { create(:topic, provider: provider, published_at: Time.new(2023, 12, 22)) }
 

@@ -69,7 +69,7 @@ class Topic < ApplicationRecord
 
   # naming convention described here: https://github.com/rubyforgood/skillrx/issues/305
   # [topic.id]_[provider.provider_name_for_file.parameterize]_[topic.published_at_year]_[topic.published_at_month][document_filename.parameterize].[document_extension]
-  def fullname_for_document(document)
+  def custom_file_name(document)
     [
       id,
       provider.file_name_prefix.present? ? provider.file_name_prefix.parameterize : provider.name.parameterize(separator: "_"),

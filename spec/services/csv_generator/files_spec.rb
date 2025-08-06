@@ -15,9 +15,13 @@ RSpec.describe CsvGenerator::Files do
     let(:data) do
       header.tap do |csv|
         topic.documents.each do |document|
-          csv << "#{document.id},#{topic.id},#{topic.fullname_for_document(document)},#{document.content_type},#{document.byte_size}\n"
+          csv << "#{document.id},#{topic.id},#{document.filename},#{document.content_type},#{document.byte_size}\n"
         end
       end
+    end
+
+    it "generates csv with documents info" do
+      expect(subject.perform).to eq(data)
     end
   end
 
