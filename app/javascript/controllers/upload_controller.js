@@ -42,10 +42,10 @@ export default class extends Controller {
           this.filesContainerTarget.innerHTML += data.html;
           filesInput.value = "";
         }
-      });
 
-    this.submitButtonTarget.classList.remove("disabled");
-    this.spinnerTarget.classList.add("d-none");
+        this.submitButtonTarget.classList.remove("disabled");
+        this.spinnerTarget.classList.add("d-none");
+      });
   }
 
   removeFile(event) {
