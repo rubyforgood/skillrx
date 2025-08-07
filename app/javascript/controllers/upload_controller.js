@@ -1,10 +1,20 @@
 import { Controller } from "@hotwired/stimulus";
 
 export default class extends Controller {
-  static targets = ["filesInput", "fileItem", "filesContainer", "hiddenField"];
+  static targets = [
+    "filesInput",
+    "fileItem",
+    "filesContainer",
+    "hiddenField",
+    "submitButton",
+    "spinner",
+  ];
 
   uploadFile(event) {
     event.preventDefault();
+
+    this.submitButtonTarget.classList.add("disabled");
+    this.spinnerTarget.classList.remove("d-none");
 
     const filesInput = this.filesInputTarget;
     let files = Array.from(filesInput.files);
@@ -33,6 +43,9 @@ export default class extends Controller {
           filesInput.value = "";
         }
       });
+
+    this.submitButtonTarget.classList.remove("disabled");
+    this.spinnerTarget.classList.add("d-none");
   }
 
   removeFile(event) {
