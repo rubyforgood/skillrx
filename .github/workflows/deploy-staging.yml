@@ -8,6 +8,10 @@ on:
 jobs:
   deploy-staging:
     runs-on: ubuntu-latest
+
+    concurrency:
+      group: deploy-staging
+      cancel-in-progress: false
     
     steps:
     - name: Checkout code
