@@ -7,12 +7,14 @@ export default class extends Controller {
     "filesContainer",
     "hiddenField",
     "submitButton",
+    "spinner",
   ];
 
   uploadFile(event) {
     event.preventDefault();
 
     this.submitButtonTarget.classList.add("disabled");
+    this.spinnerTarget.classList.remove("d-none");
 
     const filesInput = this.filesInputTarget;
     let files = Array.from(filesInput.files);
@@ -43,6 +45,7 @@ export default class extends Controller {
       });
 
     this.submitButtonTarget.classList.remove("disabled");
+    this.spinnerTarget.classList.add("d-none");
   }
 
   removeFile(event) {
