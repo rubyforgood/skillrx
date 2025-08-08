@@ -37,7 +37,7 @@ class Topic < ApplicationRecord
   has_many_attached :documents, dependent: :purge
 
   validates :title, :language_id, :provider_id, :published_at, presence: true
-  validates :documents, content_type: CONTENT_TYPES, size: { less_than: 200.megabytes }
+  validates :documents, content_type: CONTENT_TYPES, size: { less_than: 500.megabytes }
 
   enum :state, STATES.map.with_index.to_h
 
