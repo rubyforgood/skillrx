@@ -19,7 +19,7 @@ RSpec.describe FileUploadJob, type: :job do
             file: file.content[language],
           )
 
-          described_class.perform_now(language.id, file_id.to_s)
+          described_class.perform_now(language.id, file_id.to_s, "file")
         end
       end
     end
@@ -39,7 +39,7 @@ RSpec.describe FileUploadJob, type: :job do
           )
         end
 
-        described_class.perform_now(language.id, nil, provider.id)
+        described_class.perform_now(language.id, provider.id, "provider")
       end
     end
   end

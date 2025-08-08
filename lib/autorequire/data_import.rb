@@ -346,7 +346,7 @@ class DataImport
     source = self.source
 
     if source == "local"
-      CSV.read(file_path(file_name), headers: true)
+      CSV.read(file_path(file_name), headers: !no_headers)
     elsif source == "azure"
       get_data_file_from_azure(file_name, no_headers: no_headers)
     else

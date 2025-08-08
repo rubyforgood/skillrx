@@ -15,20 +15,20 @@ RSpec.describe LanguageContentProcessor do
   end
 
   it "processes content for every language" do
-    files_number = language.providers.size + 8 # 2 xml files for all provides, 2 text files for tags, 5 csv files
+    files_number = language.providers.size + 7 # 2 xml files for all provides, 2 text files for tags, 5 csv files
     subject.perform
 
     expect(FileUploadJob).to have_received(:perform_later).exactly(files_number).times
 
-    # expect(FileUploadJob).to have_received(:perform_later).with(language.id, "all_providers")
-    expect(FileUploadJob).to have_received(:perform_later).with(language.id, "all_providers_recent")
-    expect(FileUploadJob).to have_received(:perform_later).with(language.id, "tags")
-    expect(FileUploadJob).to have_received(:perform_later).with(language.id, "tags_and_title")
-    expect(FileUploadJob).to have_received(:perform_later).with(language.id, "files")
-    expect(FileUploadJob).to have_received(:perform_later).with(language.id, "topics")
-    expect(FileUploadJob).to have_received(:perform_later).with(language.id, "tag_details")
-    expect(FileUploadJob).to have_received(:perform_later).with(language.id, "topic_tags")
-    expect(FileUploadJob).to have_received(:perform_later).with(language.id, "topic_authors")
-    expect(FileUploadJob).to have_received(:perform_later).with(language.id, nil, provider.id)
+    # expect(FileUploadJob).to have_received(:perform_later).with(language.id, "all_providers", "file")
+    # expect(FileUploadJob).to have_received(:perform_later).with(language.id, "all_providers_recent", "file")
+    expect(FileUploadJob).to have_received(:perform_later).with(language.id, "tags", "file")
+    expect(FileUploadJob).to have_received(:perform_later).with(language.id, "tags_and_title", "file")
+    expect(FileUploadJob).to have_received(:perform_later).with(language.id, "files", "file")
+    expect(FileUploadJob).to have_received(:perform_later).with(language.id, "topics", "file")
+    expect(FileUploadJob).to have_received(:perform_later).with(language.id, "tag_details", "file")
+    expect(FileUploadJob).to have_received(:perform_later).with(language.id, "topic_tags", "file")
+    expect(FileUploadJob).to have_received(:perform_later).with(language.id, "topic_authors", "file")
+    expect(FileUploadJob).to have_received(:perform_later).with(language.id, provider.id, "provider")
   end
 end

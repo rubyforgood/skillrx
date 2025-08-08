@@ -13,7 +13,7 @@ class CsvGenerator::TopicTags < CsvGenerator::Base
   end
 
   def scope
-    language.topics.active # try joining tags
+    language.topics.active.includes(:tags)
       .flat_map do |topic|
         topic.tags_on(language.code.to_sym).map do |tag|
           [

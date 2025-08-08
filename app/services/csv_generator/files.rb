@@ -13,7 +13,7 @@ class CsvGenerator::Files < CsvGenerator::Base
   end
 
   def scope
-    language.topics.active # try joining documents
+    language.topics.active
       .flat_map do |topic|
         topic.documents.map do |doc|
           [

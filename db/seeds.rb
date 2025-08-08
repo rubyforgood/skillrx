@@ -107,3 +107,21 @@ end
 end
 
 puts "Users created!"
+
+if ENV["SEED_MODE_HEAVY_LOAD"]
+  times = ENV["SEED_MODE_HEAVY_LOAD"].to_i
+  times.times do
+    provider = Provider.find_or_create_by!(name: Faker::Company.name, provider_type: "government")
+    times.times do
+      Topic.find_or_create_by!(
+        title: Faker::Book.title,
+        description: Faker::Lorem.paragraph,
+        language_id: Language.first.id,
+        provider_id: provider.id,
+        uid: SecureRandom.uuid,
+        published_at: Time.now - rand(1..365).days,
+        state: [ :active, :archived ].sample,
+      )
+    end
+  end
+end

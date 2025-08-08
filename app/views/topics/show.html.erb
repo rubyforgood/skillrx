@@ -1,6 +1,20 @@
-<% if notice %>
-  <div style="background: #dcfce7; border: 1px solid #bbf7d0; color: #166534; padding: 1rem; border-radius: 0.5rem; margin-bottom: 2rem;">
-    <%= notice %>
+<div style="color: green"><%= notice %></div>
+
+<%= render @topic %>
+
+<%= link_to "Back to topics", topics_path(search: search_params), class: "mt-4" %>
+
+<div>
+  <%= link_to "Edit this topic", edit_topic_path(@topic), class: "btn btn-primary mt-4" %>
+</div>
+
+<% if @topic.archived? %>
+  <div>
+    <%= button_to "Unarchive this topic", unarchive_topic_path(@topic), method: :put, class: "btn btn-danger mt-4" %>
+  </div>
+<% else %>
+  <div>
+    <%= button_to "Archive this topic", archive_topic_path(@topic), method: :put, class: "btn btn-danger mt-4" %>
   </div>
 <% end %>
 

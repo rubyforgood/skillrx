@@ -30,11 +30,11 @@ class LanguageContentProcessor
       #   name: "#{language.file_storage_prefix}Server_XML.xml",
       #   path: "#{language.file_storage_prefix}CMES-Pi/assets/XML",
       # ),
-      all_providers_recent: FileToUpload.new(
-        content: ->(language) { XmlGenerator::AllProviders.new(language, recent: true).perform },
-        name: "#{language.file_storage_prefix}New_Uploads_Server_XML.xml",
-        path: "#{language.file_storage_prefix}CMES-Pi/assets/XML",
-      ),
+      # all_providers_recent: FileToUpload.new(
+      #   content: ->(language) { XmlGenerator::AllProviders.new(language, recent: true).perform },
+      #   name: "#{language.file_storage_prefix}New_Uploads_Server_XML.xml",
+      #   path: "#{language.file_storage_prefix}CMES-Pi/assets/XML",
+      # ),
       tags: FileToUpload.new(
         content: ->(language) { TextGenerator::Tags.new(language).perform },
         name: "#{language.file_storage_prefix}tags.txt",
@@ -79,11 +79,11 @@ class LanguageContentProcessor
 
   def process_language_content!
     language_files.keys.each do |file_id|
-      FileUploadJob.perform_later(language.id, file_id.to_s)
+      FileUploadJob.perform_later(language.id, file_id.to_s, "file")
     end
 
     language.providers.distinct.find_each do |provider|
-      FileUploadJob.perform_later(language.id, nil, provider.id)
+      FileUploadJob.perform_later(language.id, provider.id, "provider")
     end
   end
 end

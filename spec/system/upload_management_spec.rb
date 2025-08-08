@@ -5,6 +5,7 @@ RSpec.describe "Upload Management", type: :system do
 
   before do
     login_as(admin)
+    create(:language)
   end
 
   context "when creating a new topic" do
