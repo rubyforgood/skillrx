@@ -1,7 +1,7 @@
 <% content_for :title, "Topics" %>
 
 <div style="min-height: 100vh; background: linear-gradient(135deg, #f8fafc 0%, #e2e8f0 100%); padding: 1.5rem 0;">
-  <div style="max-width: 1400px; margin: 0 auto; padding: 0 1rem; overflow-x: hidden;">
+  <div style="max-width: 1200px; margin: 0 auto; padding: 0 1rem; overflow-x: hidden;">
 
     <!-- Header Section -->
     <div style="margin-bottom: 1.5rem;">
@@ -13,7 +13,7 @@
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 7h.01M7 3h5c.512 0 1.024.195 1.414.586l7 7a2 2 0 010 2.828l-7 7a2 2 0 01-2.828 0l-7-7A1.994 1.994 0 013 12V7a4 4 0 014-4z"/>
               </svg>
             </div>
-            <h1 style="font-size: 2rem; font-weight: 700; color: #1f2937; margin: 0; min-width: 0;">Topics</h1>
+            <h1 style="font-size: 1.5rem; font-weight: 700; color: #1f2937; margin: 0; min-width: 0;">Topics</h1>
           </div>
           <p style="color: #6b7280; margin: 0; font-size: 0.875rem;">Manage educational topics and their associated content</p>
         </div>
@@ -37,7 +37,7 @@
     </div>
 
     <!-- Search Card -->
-    <div style="margin-bottom: 1.5rem;">
+    <div class="search-card" style="margin-bottom: 1.5rem;">
       <%= render "search", providers: @providers, languages: @languages, params: search_params  %>
     </div>
 
@@ -57,7 +57,7 @@
               <div>
                 <h2 style="font-size: 1.25rem; font-weight: 700; margin: 0;"><%= topics_title %></h2>
                 <p style="margin: 0.25rem 0 0 0; color: rgba(255, 255, 255, 0.8); font-size: 0.75rem;">
-                  <%= pluralize(@topics.count, 'topic') %> found
+                  <%= pluralize(@pagy.count, 'topic') %> found
                 </p>
               </div>
             </div>
@@ -65,7 +65,7 @@
             <!-- Optional stats or filters can go here -->
             <div style="display: flex; gap: 0.5rem; align-items: center;">
               <div style="background: rgba(255, 255, 255, 0.1); padding: 0.375rem 0.75rem; border-radius: 9999px; font-size: 0.625rem; font-weight: 500;">
-                Total: <%= @topics.count %>
+                Total: <%= @pagy.count %>
               </div>
             </div>
           </div>
@@ -141,7 +141,7 @@
                         Status
                       </div>
                     </th>
-                    <th style="padding: 1rem 1.25rem; text-align: right; font-size: 0.6875rem; font-weight: 700; color: #475569; text-transform: uppercase; letter-spacing: 0.1em;">Actions</th>
+                    <th class="actions-col" style="padding: 1rem 1.25rem; text-align: right; font-size: 0.6875rem; font-weight: 700; color: #475569; text-transform: uppercase; letter-spacing: 0.1em;">Actions</th>
                   </tr>
                 </thead>
                 <%= render "list", topics: @topics %>
@@ -151,13 +151,14 @@
             <!-- Pagination -->
             <div style="background: #f8fafc; padding: 1rem 1.5rem; border-top: 1px solid #e2e8f0; display: flex; justify-content: space-between; align-items: center;">
               <div style="color: #6b7280; font-size: 0.75rem;">
-                Showing <%= @topics.count %> of <%= @pagy.count %> topics
+                Showing <%= @topics.size %> of <%= @pagy.count %> topics
               </div>
               <div>
                 <% if @pagy.pages > 1 %>
                   <%= render "shared/pagination", pagy: @pagy %>
                 <% end %>
               </div>
+            </div>
           <% end %>
         </div>
       <% end %>
@@ -166,196 +167,166 @@
 </div>
 
 <style>
-  /* Enhanced button hover effects */
+  .table-container table { table-layout: fixed; }
+  .table-container th, .table-container td { white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+
+  .table-container th.actions-col { width: 180px; }
+  .table-container td:last-child {
+    display: flex;
+    justify-content: flex-end;
+    gap: 0.5rem;
+    white-space: nowrap;
+    overflow: visible;
+    text-overflow: clip;
+    width: 180px;
+  }
+  .table-container td:last-child a {
+    padding: 0.5rem 0.75rem;
+    font-size: 0.8rem;
+  }
+
   a[href*="new_topic"]:hover {
     transform: translateY(-2px);
     box-shadow: 0 8px 15px -3px rgba(59, 130, 246, 0.4), 0 4px 6px -2px rgba(59, 130, 246, 0.1) !important;
   }
+  tbody tr:hover { background-color: #f8fafc !important; }
 
-  /* Table hover effects */
-  tbody tr:hover {
-    background-color: #f8fafc !important;
+  /* Tag pills in search */
+  .search-card input[type="checkbox"][id*="tag"],
+  .search-card input[type="checkbox"][name*="tag"] {
+    position: absolute;
+    opacity: 0;
+    width: 0;
+    height: 0;
+  }
+  .search-card label[for*="tag_"],
+  .search-card label[for*="tag"],
+  .search-card [data-tag] {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.35rem;
+    padding: 0.4rem 0.7rem;
+    margin: 0.25rem 0.3rem 0 0;
+    border-radius: 9999px;
+    border: 1px solid #e5e7eb;
+    background: #ffffff;
+    color: #374151;
+    font-size: 0.75rem;
+    line-height: 1;
+    cursor: pointer;
+    user-select: none;
+    transition: background-color 0.15s ease, color 0.15s ease, border-color 0.15s ease, box-shadow 0.15s ease;
+  }
+  .search-card label[for*="tag_"]:hover,
+  .search-card label[for*="tag"]:hover,
+  .search-card [data-tag]:hover {
+    border-color: #cbd5e1;
+    background: #f8fafc;
+  }
+  .search-card input[type="checkbox"][id*="tag"]:focus-visible + label,
+  .search-card input[type="checkbox"][name*="tag"]:focus-visible + label {
+    outline: none;
+    box-shadow: 0 0 0 3px rgba(124, 58, 237, 0.25);
+    border-color: #7c3aed;
+  }
+  .search-card input[type="checkbox"][id*="tag"]:checked + label,
+  .search-card input[type="checkbox"][name*="tag"]:checked + label,
+  .search-card [data-tag][aria-pressed="true"] {
+    background: linear-gradient(135deg, #7c3aed 0%, #5b21b6 100%);
+    color: #ffffff;
+    border-color: #5b21b6;
+  }
+  .search-card input[type="checkbox"][id*="tag"]:checked + label::before,
+  .search-card input[type="checkbox"][name*="tag"]:checked + label::before,
+  .search-card [data-tag][aria-pressed="true"]::before {
+    content: "✓";
+    font-weight: 700;
+    font-size: 0.75rem;
+  }
+  /* Compact on small screens */
+  @media (max-width: 640px) {
+    .search-card label[for*="tag_"],
+    .search-card label[for*="tag"],
+    .search-card [data-tag] {
+      padding: 0.35rem 0.55rem;
+      font-size: 0.7rem;
+      margin-right: 0.25rem;
+    }
   }
 
-  /* Responsive design */
   @media (max-width: 1024px) {
-    /* Container adjustments for tablets */
-    div[style*="max-width: 1400px"] {
+    div[style*="max-width: 1200px"] {
       max-width: 100% !important;
       padding: 0 1rem !important;
     }
+    .table-container th.actions-col,
+    .table-container td:last-child { width: 160px; }
   }
 
   @media (max-width: 768px) {
-    /* Container adjustments */
-    div[style*="max-width: 1400px"] {
-      padding: 0 1rem !important;
-    }
-
-    /* Page padding adjustments */
-    div[style*="min-height: 100vh"] {
-      padding: 1rem 0 !important;
-    }
-
-    /* Header adjustments */
+    div[style*="max-width: 1200px"] { padding: 0 1rem !important; }
+    div[style*="min-height: 100vh"] { padding: 1rem 0 !important; }
     div[style*="justify-content: space-between"] {
       flex-direction: column !important;
       align-items: flex-start !important;
       gap: 1rem !important;
     }
-
-    /* Title adjustments */
-    h1 {
-      font-size: 1.75rem !important;
-    }
-
-    /* Hide less important columns on mobile */
-    .hide-mobile {
-      display: none !important;
-    }
-
-    /* Make remaining columns more compact */
-    th, td {
-      padding: 0.75rem 0.5rem !important;
-      font-size: 0.75rem !important;
-    }
-
-    /* Card adjustments - prevent overflow */
+    h1 { font-size: 1.75rem !important; }
+    .hide-mobile { display: none !important; }
+    th, td { padding: 0.75rem 0.5rem !important; font-size: 0.75rem !important; }
     div[style*="border-radius: 0.75rem"] {
       border-radius: 0.5rem !important;
       margin: 0 !important;
       max-width: 100% !important;
       box-sizing: border-box !important;
     }
-
-    /* Card header adjustments */
-    div[style*="background: linear-gradient(135deg, #7c3aed"] {
-      padding: 1rem !important;
-    }
-
-    /* Stack pagination on mobile */
+    div[style*="background: linear-gradient(135deg, #7c3aed"] { padding: 1rem !important; }
     div[style*="justify-content: space-between"][style*="align-items: center"] {
       flex-direction: column !important;
       gap: 0.75rem !important;
       align-items: flex-start !important;
     }
-
-    /* Adjust card header on mobile */
     div[style*="background: linear-gradient(135deg, #7c3aed"] div[style*="justify-content: space-between"] {
       flex-direction: column !important;
       align-items: flex-start !important;
       gap: 0.75rem !important;
     }
+    .table-container { overflow-x: auto !important; -webkit-overflow-scrolling: touch !important; }
+    table { font-size: 0.75rem !important; }
 
-    /* Table container */
-    .table-container {
-      overflow-x: auto !important;
-      -webkit-overflow-scrolling: touch !important;
+    .table-container th, .table-container td { white-space: normal; overflow: visible; text-overflow: unset; }
+    .table-container td:last-child {
+      display: grid;
+      grid-auto-flow: row;
+      justify-items: end;
+      gap: 0.4rem;
+      white-space: normal;
+      width: auto;
     }
-
-    /* Reduce table font size */
-    table {
-      font-size: 0.75rem !important;
-    }
+    .table-container td:last-child a { padding: 0.4rem 0.6rem; font-size: 0.75rem; }
   }
 
   @media (max-width: 640px) {
-    /* Very small screen adjustments */
-    div[style*="max-width: 1400px"] {
-      padding: 0 0.5rem !important;
-    }
-
-    /* Ensure no overflow */
-    * {
-      max-width: 100% !important;
-      box-sizing: border-box !important;
-    }
-
-    /* Remove border radius on very small screens */
-    div[style*="border-radius: 0.75rem"] {
-      border-radius: 0.25rem !important;
-      margin: 0 !important;
-    }
-
-    /* Reduce padding on cards */
-    div[style*="padding: 1.5rem"] {
-      padding: 1rem 0.75rem !important;
-    }
-
-    div[style*="padding: 1rem 1.5rem"] {
-      padding: 0.75rem 1rem !important;
-    }
-
-    /* Smaller text on very small screens */
-    h1 {
-      font-size: 1.5rem !important;
-    }
-
-    /* Even more compact table */
-    th, td {
-      padding: 0.5rem 0.375rem !important;
-      font-size: 0.6875rem !important;
-    }
-
-    /* Make action buttons more compact */
-    td[style*="text-align: right"] a {
-      padding: 0.25rem 0.5rem !important;
-      font-size: 0.625rem !important;
-    }
-
-    /* Prevent horizontal scroll */
-    body, html {
-      overflow-x: hidden !important;
-    }
-
-    /* Ensure cards don't exceed viewport */
-    div[style*="background: white"] {
-      max-width: calc(100vw - 1rem) !important;
-      overflow: hidden !important;
-    }
-
-    /* Force word wrapping */
-    th, td {
-      word-wrap: break-word !important;
-      word-break: break-word !important;
-      max-width: 150px !important;
-    }
-
-    /* More compact header elements */
-    div[style*="gap: 0.75rem"] {
-      gap: 0.5rem !important;
-    }
-
-    /* Smaller icons */
-    svg {
-      width: 0.75rem !important;
-      height: 0.75rem !important;
-    }
+    div[style*="max-width: 1200px"] { padding: 0 0.5rem !important; }
+    * { max-width: 100% !important; box-sizing: border-box !important; }
+    div[style*="border-radius: 0.75rem"] { border-radius: 0.25rem !important; margin: 0 !important; }
+    div[style*="padding: 1.5rem"] { padding: 1rem 0.75rem !important; }
+    div[style*="padding: 1rem 1.5rem"] { padding: 0.75rem 1rem !important; }
+    h1 { font-size: 1.5rem !important; }
+    th, td { padding: 0.5rem 0.375rem !important; font-size: 0.6875rem !important; }
+    td[style*="text-align: right"] a { padding: 0.25rem 0.5rem !important; font-size: 0.625rem !important; }
+    body, html { overflow-x: hidden !important; }
+    div[style*="background: white"] { max-width: calc(100vw - 1rem) !important; overflow: hidden !important; }
+    th, td { word-wrap: break-word !important; word-break: break-word !important; max-width: 150px !important; }
+    div[style*="gap: 0.75rem"] { gap: 0.5rem !important; }
+    svg { width: 0.75rem !important; height: 0.75rem !important; }
   }
 
   @media (max-width: 480px) {
-    /* Extra small screens */
-    div[style*="max-width: 1400px"] {
-      padding: 0 0.25rem !important;
-    }
-
-    /* Ultra compact */
-    th, td {
-      padding: 0.375rem 0.25rem !important;
-      font-size: 0.625rem !important;
-      max-width: 120px !important;
-    }
-
-    /* Stack everything */
-    div[style*="display: flex"] {
-      flex-direction: column !important;
-      gap: 0.5rem !important;
-    }
-
-    /* Full width buttons */
-    a[href*="new_topic"] {
-      width: 100% !important;
-      justify-content: center !important;
-    }
+    div[style*="max-width: 1200px"] { padding: 0 0.25rem !important; }
+    th, td { padding: 0.375rem 0.25rem !important; font-size: 0.625rem !important; max-width: 120px !important; }
+    div[style*="display: flex"] { flex-direction: column !important; gap: 0.5rem !important; }
+    a[href*="new_topic"] { width: 100% !important; justify-content: center !important; }
+    .table-container td:last-child a { width: 100%; }
   }
 </style>
