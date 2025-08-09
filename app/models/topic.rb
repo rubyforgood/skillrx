@@ -58,6 +58,8 @@ class Topic < ApplicationRecord
     id
   end
 
+  # naming convention described here: https://github.com/rubyforgood/skillrx/issues/305
+  # it is now enforced here for the files that were uploaded and received special prefix [skillrx_internal_upload]
   def custom_file_name(document)
     topic_data = [
       id,
@@ -66,7 +68,7 @@ class Topic < ApplicationRecord
       published_at_month,
     ].compact.join("_")
 
-    document.filename.sub(/#{INTERNAL_FILENAME_PREFIX}/, topic_data)
+    document.filename.to_s.sub(INTERNAL_FILENAME_PREFIX, topic_data)
   end
 
   class << self
