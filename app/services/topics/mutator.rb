@@ -72,27 +72,29 @@ class Topics::Mutator
   end
 
   def rename_files(signed_ids)
-    return if signed_ids.blank?
     signed_ids.each do |signed_id|
       document = topic.documents.find { |doc| doc.blob.signed_id == signed_id }
-      next unless document
+      next unless document && need_rename?(document)
 
       new_filename = topic.custom_file_name(document)
+      return if document.filename == new_filename
+
       rename_document(document, new_filename)
+      document.purge
     end
   end
 
-  def rename_document(document, new_filename)
-    return unless document.blob.filename.to_s.split("_").first == "rename"
-    return if document.filename == new_filename
+  def need_rename?(document)
+    document.blob.filename.to_s.start_with?("rename_")
+  end
 
+  def rename_document(document, new_filename)
     file_io = StringIO.new(document.download)
-      topic.documents.attach(
-        io: file_io,
-        filename: new_filename,
-        content_type: document.content_type
-      )
-      document.purge
+    topic.documents.attach(
+      io: file_io,
+      filename: new_filename,
+      content_type: document.content_type
+    )
   end
 
   def sync_docs_for_topic_updates
