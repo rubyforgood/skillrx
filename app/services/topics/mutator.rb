@@ -54,7 +54,6 @@ class Topics::Mutator
       topic.save_with_tags(params)
       attach_files(document_signed_ids)
       shadow_delete_documents(docs_to_delete)
-      rename_files(document_signed_ids)
       # document_signed_ids.any? means that some new documents were attached and we need to sync them
       sync_docs_for_topic_updates if document_signed_ids.any?
       [ :ok, topic ]
@@ -69,32 +68,6 @@ class Topics::Mutator
     signed_ids.each do |signed_id|
       topic.documents.attach(signed_id)
     end
-  end
-
-  def rename_files(signed_ids)
-    signed_ids.each do |signed_id|
-      document = topic.documents.find { |doc| doc.blob.signed_id == signed_id }
-      next unless document && need_rename?(document)
-
-      new_filename = topic.custom_file_name(document)
-      return if document.filename == new_filename
-
-      rename_document(document, new_filename)
-      document.purge
-    end
-  end
-
-  def need_rename?(document)
-    document.blob.filename.to_s.start_with?("rename_")
-  end
-
-  def rename_document(document, new_filename)
-    file_io = StringIO.new(document.download)
-    topic.documents.attach(
-      io: file_io,
-      filename: new_filename,
-      content_type: document.content_type
-    )
   end
 
   def sync_docs_for_topic_updates
