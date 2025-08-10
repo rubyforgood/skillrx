@@ -62,7 +62,7 @@ class Topic < ApplicationRecord
   # it is now enforced here for the files that were uploaded and received special prefix [skillrx_internal_upload]
   def custom_file_name(document)
     topic_data = [
-      id,
+      doc_prefix,
       provider.file_name_prefix.present? ? provider.file_name_prefix.parameterize : provider.name.parameterize(separator: "_"),
       published_at_year,
       published_at_month,

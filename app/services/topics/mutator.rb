@@ -71,7 +71,6 @@ class Topics::Mutator
   end
 
   def sync_docs_for_topic_updates
-    topic.documents_attachments.reload
     topic.documents_attachments.each do |doc|
       DocumentsSyncJob.perform_later(
         topic_id: topic.id,
