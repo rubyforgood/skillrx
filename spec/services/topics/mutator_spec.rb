@@ -41,7 +41,7 @@ RSpec.describe Topics::Mutator do
         document_id: created_topic.documents.first.id,
         action: "update",
       )
-      expect(created_topic.reload.documents.first.blob.filename.to_s).to eq("#{created_topic.id}_prefix_2023_1_dummy.pdf")
+      expect(created_topic.reload.documents.first.blob.filename.to_s).to eq("rename_dummy.pdf")
     end
   end
 

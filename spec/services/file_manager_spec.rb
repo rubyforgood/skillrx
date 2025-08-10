@@ -45,6 +45,35 @@ RSpec.describe FileManager do
       manager.workers
     end
 
+    context "when uploaded documents have a special prefix" do
+      let(:document) do
+        ActiveStorage::Blob.create_and_upload!(
+          io: File.open(Rails.root.join("spec", "fixtures", "files", "dummy.pdf")),
+          filename: "[skillrx_internal_upload]_dummy.pdf",
+          content_type: "application/pdf",
+        )
+      end
+
+      it "follows the naming convention for special prefixes" do
+        expect(FileWorker).to receive(:new).with(
+          share:,
+          name: "#{topic.id}_#{topic.provider.file_name_prefix.parameterize}_#{topic.published_at_year}_#{topic.published_at_month}_dummy.pdf",
+          path: "#{topic.language.file_storage_prefix}CMES-Pi/assets/Content",
+          file: document.download,
+          new_path: nil,
+        ).and_call_original
+        expect(FileWorker).to receive(:new).with(
+          share:,
+          name: "#{topic.id}_#{topic.provider.file_name_prefix.parameterize}_#{topic.published_at_year}_#{topic.published_at_month}_dummy.pdf",
+          path: "#{topic.language.file_storage_prefix}CMES-v2/assets/Content",
+          file: document.download,
+          new_path: nil,
+        ).and_call_original
+
+        manager.workers
+      end
+    end
+
     context "when video document" do
       let(:document) do
         ActiveStorage::Blob.create_and_upload!(
