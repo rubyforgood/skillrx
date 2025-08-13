@@ -1,75 +1,75 @@
 <tbody>
   <% if @topics.any? %>
-    <% @topics.each_with_index do |topic, index| %>
+    <% @topics.each do |topic| %>
       <tr style="border-bottom: 1px solid #f1f5f9; transition: all 0.2s;" onmouseover="this.style.backgroundColor='#f8fafc'" onmouseout="this.style.backgroundColor='white'">
-        <td style="padding: 1rem 1.5rem;">
+        <!-- Title -->
+        <td style="padding: 1.25rem 1.5rem;">
           <div style="display: flex; align-items: center; gap: 0.75rem;">
-            <div style="width: 2.5rem; height: 2.5rem; background: linear-gradient(135deg, #8b5cf6 0%, #7c3aed 100%); border-radius: 0.5rem; display: flex; align-items: center; justify-content: center; color: white; font-weight: 600; font-size: 0.875rem;">
+            <div style="width: 2.25rem; height: 2.25rem; background: linear-gradient(135deg, #7c3aed 0%, #5b21b6 100%); border-radius: 0.5rem; display: flex; align-items: center; justify-content: center; color: white; font-weight: 600; font-size: 0.875rem;">
               <%= topic.title.first.upcase %>
             </div>
             <div>
-              <div style="font-weight: 600; color: #111827; font-size: 0.875rem;"><%= topic.title %></div>
+              <div style="font-weight: 600; color: #111827; font-size: 0.95rem;"><%= topic.title %></div>
+              <div style="color: #6b7280; font-size: 0.75rem;">Published <%= topic.published_at&.strftime('%b %d, %Y') %></div>
             </div>
           </div>
         </td>
-        <td style="padding: 1rem 1.5rem;">
-          <span style="color: #6b7280; font-size: 0.875rem;">
-            <%= topic.description.present? ? topic.description.truncate(50, omission: "...") : "No description" %>
+
+        <!-- Description -->
+        <td class="hide-mobile" style="padding: 1.25rem 1.5rem; color: #374151; font-size: 0.875rem;">
+          <% if topic.description.present? %>
+            <%= truncate(topic.description, length: 60, omission: '…') %>
+          <% else %>
+            <span style="color: #94a3b8; font-style: italic;">No description</span>
+          <% end %>
+        </td>
+
+        <!-- UID -->
+        <td class="hide-mobile" style="padding: 1.25rem 1.5rem; color: #6b7280; font-family: ui-monospace, SFMono-Regular, Menlo, monospace; font-size: 0.8rem;">
+          <%= topic.uid.present? ? truncate(topic.uid, length: 12, omission: '…') : '-' %>
+        </td>
+
+        <!-- Language -->
+        <td style="padding: 1.25rem 1.5rem;">
+          <span style="background: #e0e7ff; color: #3730a3; padding: 0.25rem 0.5rem; border-radius: 0.375rem; font-size: 0.75rem; font-weight: 600;">
+            <%= topic.language.name %>
           </span>
         </td>
-        <td class="hide-mobile" style="padding: 1rem 1.5rem;">
-          <% if topic.uid %>
-            <span style="background: #f1f5f9; color: #475569; padding: 0.25rem 0.75rem; border-radius: 9999px; font-size: 0.75rem; font-weight: 500; font-family: 'SF Mono', Monaco, monospace;">
-              <%= topic.uid.truncate(12, omission: "...") %>
-            </span>
+
+        <!-- Provider -->
+        <td class="hide-mobile" style="padding: 1.25rem 1.5rem; color: #374151; font-size: 0.875rem;">
+          <%= topic.provider.name %>
+        </td>
+
+        <!-- Documents count -->
+        <td style="padding: 1.25rem 1.5rem;">
+          <span style="background: linear-gradient(135deg, #f59e0b 0%, #d97706 100%); color: white; padding: 0.25rem 0.5rem; border-radius: 0.375rem; font-size: 0.75rem; font-weight: 700;">
+            <%= topic.documents.size %>
+          </span>
+        </td>
+
+        <!-- State -->
+        <td style="padding: 1.25rem 1.5rem;">
+          <% if topic.active? %>
+            <span style="background: #dcfce7; color: #166534; padding: 0.25rem 0.5rem; border-radius: 9999px; font-size: 0.75rem; font-weight: 600;">Active</span>
           <% else %>
-            <span style="color: #9ca3af; font-size: 0.75rem; font-style: italic;">No UID</span>
+            <span style="background: #fee2e2; color: #991b1b; padding: 0.25rem 0.5rem; border-radius: 9999px; font-size: 0.75rem; font-weight: 600;">Archived</span>
           <% end %>
         </td>
-        <td style="padding: 1rem 1.5rem;">
-          <div style="display: flex; align-items: center; gap: 0.5rem;">
-            <div style="width: 1.5rem; height: 1.5rem; background: linear-gradient(135deg, #06b6d4 0%, #0891b2 100%); border-radius: 0.25rem; display: flex; align-items: center; justify-content: center; color: white; font-weight: 600; font-size: 0.625rem;">
-              <%= topic.language.name.first.upcase %>
-            </div>
-            <span style="color: #374151; font-size: 0.875rem; font-weight: 500;"><%= topic.language.name %></span>
-          </div>
-        </td>
-        <td class="hide-mobile" style="padding: 1rem 1.5rem;">
-          <span style="color: #374151; font-size: 0.875rem; font-weight: 500;"><%= topic.provider.name %></span>
-        </td>
-        <td class="hide-mobile" style="padding: 1rem 1.5rem;">
-          <div style="display: flex; align-items: center; gap: 0.375rem;">
-            <svg style="width: 1rem; height: 1rem; color: #6b7280;" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path>
-            </svg>
-            <span style="color: #374151; font-size: 0.875rem; font-weight: 600;"><%= topic.documents.size %></span>
-          </div>
-        </td>
-        <td style="padding: 1rem 1.5rem;">
-          <% if topic.state == "active" %>
-            <span style="background: #dcfce7; color: #166534; padding: 0.25rem 0.75rem; border-radius: 9999px; font-size: 0.75rem; font-weight: 600;">
-              <span style="display: inline-block; width: 0.5rem; height: 0.5rem; background: #22c55e; border-radius: 50%; margin-right: 0.375rem;"></span>
-              Active
-            </span>
-          <% else %>
-            <span style="background: #fef2f2; color: #991b1b; padding: 0.25rem 0.75rem; border-radius: 9999px; font-size: 0.75rem; font-weight: 600;">
-              <span style="display: inline-block; width: 0.5rem; height: 0.5rem; background: #ef4444; border-radius: 50%; margin-right: 0.375rem;"></span>
-              <%= topic.state.capitalize %>
-            </span>
-          <% end %>
-        </td>
-        <td style="padding: 1rem 1.5rem; text-align: right;">
+
+  <!-- Actions -->
+  <td class="actions-col" style="padding: 1.25rem 1.5rem; text-align: right;">
           <div style="display: flex; gap: 0.5rem; justify-content: flex-end;">
-            <%= link_to topic, style: "background: #3b82f6; color: white; padding: 0.5rem 0.75rem; border-radius: 0.375rem; text-decoration: none; font-size: 0.75rem; font-weight: 600; display: inline-flex; align-items: center; gap: 0.375rem; transition: all 0.2s;", data: { turbo: false } do %>
+            <%= link_to topic_path(topic, search: search_params), style: "background: #3b82f6; color: white; padding: 0.5rem 0.75rem; border-radius: 0.375rem; text-decoration: none; font-size: 0.75rem; font-weight: 600; display: inline-flex; align-items: center; gap: 0.375rem; transition: all 0.2s;", data: { turbo: false } do %>
               <svg style="width: 0.875rem; height: 0.875rem;" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path>
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"></path>
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/>
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"/>
               </svg>
               <span>View</span>
             <% end %>
             <%= link_to edit_topic_path(topic), style: "background: #6b7280; color: white; padding: 0.5rem 0.75rem; border-radius: 0.375rem; text-decoration: none; font-size: 0.75rem; font-weight: 600; display: inline-flex; align-items: center; gap: 0.375rem; transition: all 0.2s;", data: { turbo: false } do %>
               <svg style="width: 0.875rem; height: 0.875rem;" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"></path>
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"/>
               </svg>
               <span>Edit</span>
             <% end %>
@@ -82,7 +82,7 @@
       <td colspan="8" style="padding: 3rem 1.5rem; text-align: center;">
         <div style="color: #9ca3af;">
           <svg style="width: 3rem; height: 3rem; margin: 0 auto 1rem; color: #d1d5db;" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path>
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1" d="M7 7h.01M7 3h5c.512 0 1.024.195 1.414.586l7 7a2 2 0 010 2.828l-7 7a2 2 0 01-2.828 0l-7-7A1.994 1.994 0 013 12V7a4 4 0 014-4z"/>
           </svg>
           <p style="font-size: 1rem; font-weight: 500; color: #6b7280; margin: 0;">No topics found</p>
           <p style="font-size: 0.875rem; color: #9ca3af; margin: 0.5rem 0 0 0;">Try adjusting your search filters or create a new topic.</p>
@@ -94,20 +94,8 @@
 
 <style>
   /* Action button hover effects */
-  a[href*="topics/"]:hover {
-    transform: translateY(-1px);
-  }
-
-  a[href*="topics/"][style*="background: #3b82f6"]:hover {
-    background: #2563eb !important;
-  }
-
-  a[href*="edit"]:hover {
-    background: #4b5563 !important;
-  }
-
-  /* Table row hover animation */
-  tbody tr:hover td:first-child > div > div:first-child {
-    transform: scale(1.05);
-  }
+  a[href*="topics/"]:hover { transform: translateY(-1px); }
+  a[href*="topics/"][style*="background: #3b82f6"]:hover { background: #2563eb !important; }
+  a[href*="edit"]:hover { background: #4b5563 !important; }
+  tbody tr:hover td:first-child > div > div:first-child { transform: scale(1.05); }
 </style>
