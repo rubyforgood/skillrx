@@ -40,11 +40,6 @@ RSpec.configure do |config|
     Rails.root.join("spec/fixtures"),
   ]
 
-  config.after(:each) do
-    # Clean database after each test
-    ApplicationRecord.subclasses.each(&:delete_all)
-  end
-
   # If you're not using ActiveRecord, or you'd prefer not to run each of your
   # examples within a transaction, remove the following line or assign false
   # instead of true.
