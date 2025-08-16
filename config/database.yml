@@ -12,7 +12,7 @@
 # Configure Using Gemfile
 # gem "pg"
 #
-default: &default
+common: &common
   adapter: postgresql
   encoding: unicode
   host: <%= ENV.fetch('DATABASE_HOST') { 'localhost' } %>
@@ -22,17 +22,19 @@ default: &default
   # For details on connection pooling, see Rails configuration guide
   # https://guides.rubyonrails.org/configuring.html#database-pooling
   pool: <%= ENV.fetch("RAILS_MAX_THREADS") { 5 } %>
+  gssencmode: disable # fixes SEGFAULT on MacOS https://github.com/ged/ruby-pg/issues/311
+
+queue_config: &queue
+  <<: *common
+  migrations_paths: db/queue_migrate
 
 development:
   primary:
-    <<: *default
+    <<: *common
     database: skillrx_development
-    <% if RUBY_PLATFORM =~ /darwin/ %>gssencmode: disable<% end %>
   queue:
-    <<: *default
+    <<: *queue
     database: skillrx_development_queue
-    <% if RUBY_PLATFORM =~ /darwin/ %>gssencmode: disable<% end %>
-    migrations_paths: db/queue_migrate
 
   # The specified database role being used to connect to PostgreSQL.
   # To create additional roles in PostgreSQL see `$ createuser --help`.
@@ -66,14 +68,11 @@ development:
 # Do not set this db to the same as development or production.
 test:
   primary:
-    <<: *default
-    <% if RUBY_PLATFORM =~ /darwin/ %>gssencmode: disable<% end %>
+    <<: *common
     database: skillrx_test
   queue:
-    <<: *default
+    <<: *queue
     database: skillrx_test_queue
-    <% if RUBY_PLATFORM =~ /darwin/ %>gssencmode: disable<% end %>
-    migrations_paths: db/queue_migrate
 
 # As with config/credentials.yml, you never want to store sensitive information,
 # like your database password, in your source code. If your source code is
@@ -97,42 +96,40 @@ test:
 #
 production:
   primary:
-    <<: *default
+    <<: *common
     database: skillrx_production
     url: <%= ENV['DATABASE_URL'] %>
   cache:
-    <<: *default
+    <<: *common
     database: skillrx_production_cache
     url: <%= ENV['DATABASE_URL'] %>
     migrations_paths: db/cache_migrate
   queue:
-    <<: *default
+    <<: *queue
     database: skillrx_production_queue
     url: <%= ENV['DATABASE_URL'] %>
-    migrations_paths: db/queue_migrate
   cable:
-    <<: *default
+    <<: *common
     database: skillrx_production_cable
     url: <%= ENV['DATABASE_URL'] %>
     migrations_paths: db/cable_migrate
 
 staging:
   primary:
-    <<: *default
+    <<: *common
     database: skillrx_staging
     url: <%= ENV['DATABASE_URL'] %>
   cache:
-    <<: *default
+    <<: *common
     database: skillrx_staging_cache
     url: <%= ENV['DATABASE_URL'] %>
     migrations_paths: db/cache_migrate
   queue:
-    <<: *default
+    <<: *queue
     database: skillrx_staging_queue
     url: <%= ENV['DATABASE_URL'] %>
-    migrations_paths: db/queue_migrate
   cable:
-    <<: *default
+    <<: *common
     database: skillrx_staging_cable
     url: <%= ENV['DATABASE_URL'] %>
     migrations_paths: db/cable_migrate
