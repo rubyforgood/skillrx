@@ -45,7 +45,7 @@ class Topics::Sanitizer
       blob = ActiveStorage::Blob.find_signed(signed_id)
       next if blob.blank?
 
-      if blob.content_type.in?(Topic::CONTENT_TYPES) && blob.byte_size < 10.megabytes
+      if blob.content_type.in?(Topic::CONTENT_TYPES) && blob.byte_size < 200.megabytes
         next signed_id
       end
 

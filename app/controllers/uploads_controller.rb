@@ -1,7 +1,7 @@
 class UploadsController < ApplicationController
   def create
     blobs = document_params.map do |document|
-        ActiveStorage::Blob.create_and_upload!(**document)
+      ActiveStorage::Blob.create_and_upload!(**document)
     end
 
     html_content =
@@ -38,9 +38,20 @@ class UploadsController < ApplicationController
   end
 
   def derived_filename(document)
+    filename =
+      if document.respond_to?(:original_filename)
+        document.original_filename
+      elsif document.respond_to?(:filename)
+        document.filename.to_s
+      else
+        "unnamed"
+      end
+
+    name = File.basename(filename, ".*")
+    ext = File.extname(filename).delete_prefix(".")
     [
-      "rename",
-      document.original_filename,
+      Topic::INTERNAL_FILENAME_PREFIX,
+      [ name.parameterize(separator: "_"), ext ].compact.join("."),
     ].join("_")
   end
 end

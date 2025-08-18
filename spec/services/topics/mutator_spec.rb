@@ -24,7 +24,7 @@ RSpec.describe Topics::Mutator do
       [
         ActiveStorage::Blob.create_and_upload!(
           io: StringIO.new("dummy content"),
-          filename: "dummy.pdf",
+          filename: "rename_dummy.pdf",
           content_type: "application/pdf",
         ).signed_id,
       ]
@@ -41,6 +41,7 @@ RSpec.describe Topics::Mutator do
         document_id: created_topic.documents.first.id,
         action: "update",
       )
+      expect(created_topic.reload.documents.first.blob.filename.to_s).to eq("rename_dummy.pdf")
     end
   end
 
@@ -86,6 +87,10 @@ RSpec.describe Topics::Mutator do
         expect(status).to eq(:ok)
         expect(updated_topic).to be_persisted
         expect(updated_topic.description).to eq("many topic details")
+      end
+
+      it "does not rename existing documents" do
+        expect { subject.update }.not_to change { topic.reload.documents.first.blob.filename.to_s }.from("test_image.png")
       end
     end
   end

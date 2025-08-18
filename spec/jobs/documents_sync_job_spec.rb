@@ -30,6 +30,22 @@ RSpec.describe DocumentsSyncJob, type: :job do
         ).and_return(file_worker)
     end
 
+    context "when filename is prefixed with [skillrx_internal_upload]" do
+      let(:file_name) do
+        "#{topic.id}_#{topic.provider.file_name_prefix.parameterize}_#{topic.published_at_year}_#{topic.published_at_month}_#{document.filename}"
+      end
+
+      before do
+        document.update(filename: "[skillrx_internal_upload]_test_image.png")
+      end
+
+      it "make FileWorker send the file" do
+        expect(file_worker).to receive(:send).exactly(2).times
+
+        described_class.perform_now(topic_id: topic.id, document_id: document.id, action: "update")
+      end
+    end
+
     context "when action is 'update'" do
       it "make FileWorker send the file" do
         expect(file_worker).to receive(:send).exactly(2).times

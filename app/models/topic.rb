@@ -29,6 +29,7 @@ class Topic < ApplicationRecord
 
   STATES = %i[active archived].freeze
   CONTENT_TYPES = %w[image/jpeg image/png image/svg+xml image/webp image/avif image/gif video/mp4 application/pdf audio/mpeg].freeze
+  INTERNAL_FILENAME_PREFIX = "[skillrx_internal_upload]".freeze
 
   default_scope { where(shadow_copy: false) }
 
@@ -57,14 +58,17 @@ class Topic < ApplicationRecord
     id
   end
 
+  # naming convention described here: https://github.com/rubyforgood/skillrx/issues/305
+  # it is now enforced here for the files that were uploaded and received special prefix [skillrx_internal_upload]
   def custom_file_name(document)
-    [
-      id,
+    topic_data = [
+      doc_prefix,
       provider.file_name_prefix.present? ? provider.file_name_prefix.parameterize : provider.name.parameterize(separator: "_"),
       published_at_year,
       published_at_month,
-      document.filename.base.sub("rename_", "").parameterize(separator: "_"),
-    ].compact.join("_") + "." + document.filename.extension
+    ].compact.join("_")
+
+    document.filename.to_s.sub(INTERNAL_FILENAME_PREFIX, topic_data)
   end
 
   class << self
