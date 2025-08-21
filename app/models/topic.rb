@@ -44,6 +44,16 @@ class Topic < ApplicationRecord
 
   scope :active, -> { where(state: :active) }
 
+  class << self
+    def by_year(year)
+      where("extract(year from published_at) = ?", year)
+    end
+
+    def by_month(month)
+      where("extract(month from published_at) = ?", month)
+    end
+  end
+
   def published_at_year
     published_at&.year
   end
@@ -59,7 +69,7 @@ class Topic < ApplicationRecord
   end
 
   # naming convention described here: https://github.com/rubyforgood/skillrx/issues/305
-  # it is now enforced here for the files that were uploaded and received special prefix [skillrx_internal_upload]
+  # [topic.id]_[provider.provider_name_for_file.parameterize]_[topic.published_at_year]_[topic.published_at_month][document_filename.parameterize].[document_extension]
   def custom_file_name(document)
     topic_data = [
       doc_prefix,
@@ -69,15 +79,5 @@ class Topic < ApplicationRecord
     ].compact.join("_")
 
     document.filename.to_s.sub(INTERNAL_FILENAME_PREFIX, topic_data)
-  end
-
-  class << self
-    def by_year(year)
-      where("extract(year from published_at) = ?", year)
-    end
-
-    def by_month(month)
-      where("extract(month from published_at) = ?", month)
-    end
   end
 end
