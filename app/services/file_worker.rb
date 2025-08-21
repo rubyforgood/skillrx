@@ -27,6 +27,7 @@ class FileWorker
 
   def send_file
     validate_filename
+
     return if file.blank?
 
     create_subdirs(path)
