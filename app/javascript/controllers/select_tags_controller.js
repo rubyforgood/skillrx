@@ -7,6 +7,7 @@ export default class extends Controller {
 
   connect() {
     this.initializeTags()
+    this.changeLanguage();
   }
 
   notify() {
@@ -17,7 +18,7 @@ export default class extends Controller {
    * Handle language change event and update tags accordingly
    * @param {Event} event - Change event
    */
-  async changeLanguage(event) {
+  async changeLanguage(_event) {
     try {
       const { resourceId, languageId } = this.getIds()
 
