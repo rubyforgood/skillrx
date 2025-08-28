@@ -5,7 +5,7 @@ ruby "3.4.1"
 gem "active_storage_validations"
 gem "acts-as-taggable-on"
 gem "aws-sdk-s3", require: false
-gem "azure_file_shares", github: "dmitrytrager/azure_file_shares"
+gem "azure_file_shares"
 gem "bcrypt", "~> 3.1.7"
 gem "bootsnap", require: false
 gem "csv"
