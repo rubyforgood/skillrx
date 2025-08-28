@@ -1,13 +1,3 @@
-GIT
-  remote: https://github.com/dmitrytrager/azure_file_shares.git
-  revision: 1df11d8f198e726e8eb8a2a9cc6826cc1c6707a6
-  specs:
-    azure_file_shares (0.1.5)
-      faraday (~> 2.7)
-      faraday-retry (~> 2.0)
-      jwt (~> 2.7)
-      nokogiri (~> 1.15)
-
 GEM
   remote: https://rubygems.org/
   specs:
@@ -116,6 +106,11 @@ GEM
       aws-sigv4 (~> 1.5)
     aws-sigv4 (1.12.1)
       aws-eventstream (~> 1, >= 1.0.2)
+    azure_file_shares (0.1.5)
+      faraday (~> 2.7)
+      faraday-retry (~> 2.0)
+      jwt (~> 2.7)
+      nokogiri (~> 1.15)
     base64 (0.3.0)
     bcrypt (3.1.20)
     bcrypt_pbkdf (1.1.1)
@@ -594,7 +589,7 @@ DEPENDENCIES
   acts-as-taggable-on
   annotaterb
   aws-sdk-s3
-  azure_file_shares!
+  azure_file_shares
   bcrypt (~> 3.1.7)
   bootsnap
   brakeman
