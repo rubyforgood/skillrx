@@ -7,7 +7,7 @@ RSpec.describe XmlGenerator::AllProviders do
   let(:provider1) { create(:provider) }
   let(:provider2) { create(:provider) }
   let!(:topic1) { create(:topic, :tagged, language:, provider: provider1) }
-  let!(:topic2) { create(:topic, :tagged, language:, provider: provider2) }
+  let!(:topic2) { create(:topic, :with_documents, :tagged, language:, provider: provider2) }
   let(:tag_topic1) { create(:tag, name: "flu") }
   let(:tag_topic2) { create(:tag, name: "diabetes") }
 
@@ -39,7 +39,9 @@ RSpec.describe XmlGenerator::AllProviders do
               <topic_month month="#{topic2.created_at.strftime("%m_%B")}">
                 <title name="#{topic2.title}">
                   <topic_id>#{topic2.id}</topic_id>
-                  <topic_files files="Files"/>
+                  <topic_files files="Files">
+                    <file_name_1 file_size="494323">test_image.png</file_name_1>
+                  </topic_files>
                   <topic_tags>#{topic2.current_tags_list.join(", ")}</topic_tags>
                 </title>
               </topic_month>
