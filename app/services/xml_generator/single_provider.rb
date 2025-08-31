@@ -58,6 +58,6 @@ class XmlGenerator::SingleProvider < XmlGenerator::Base
       .select(:id, :title, :published_at, :language_id, :provider_id)
       .includes(:language, taggings: :tag)  # eager-load language and taggings->tag
       .with_attached_documents              # eager-load Active Storage attachments + blobs
-      .order(:published_at)
+      .order(published_at: :desc)
   end
 end

@@ -24,8 +24,8 @@ RSpec.describe XmlGenerator::AllProviders do
         <?xml version="1.0"?>
         <cmes>
           <content_provider name="#{provider1.name}">
-            <topic_year year="#{topic1.created_at.year}">
-              <topic_month month="#{topic1.created_at.strftime("%m_%B")}">
+            <topic_year year="#{topic1.published_at.year}">
+              <topic_month month="#{topic1.published_at.strftime("%m_%B")}">
                 <title name="#{topic1.title}">
                   <topic_id>#{topic1.id}</topic_id>
                   <topic_files files="Files"/>
@@ -35,8 +35,8 @@ RSpec.describe XmlGenerator::AllProviders do
             </topic_year>
           </content_provider>
           <content_provider name="#{provider2.name}">
-            <topic_year year="#{topic2.created_at.year}">
-              <topic_month month="#{topic2.created_at.strftime("%m_%B")}">
+            <topic_year year="#{topic2.published_at.year}">
+              <topic_month month="#{topic2.published_at.strftime("%m_%B")}">
                 <title name="#{topic2.title}">
                   <topic_id>#{topic2.id}</topic_id>
                   <topic_files files="Files">
