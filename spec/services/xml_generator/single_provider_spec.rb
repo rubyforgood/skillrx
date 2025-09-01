@@ -40,8 +40,8 @@ RSpec.describe XmlGenerator::SingleProvider do
           <?xml version="1.0"?>
           <cmes>
             <content_provider name="#{provider.name}">
-              <topic_year year="#{topic.created_at.year}">
-                <topic_month month="#{topic.created_at.strftime("%m_%B")}">
+              <topic_year year="#{topic.published_at.year}">
+                <topic_month month="#{topic.published_at.strftime("%m_%B")}">
                   <title name="#{topic.title}">
                     <topic_id>#{topic.id}</topic_id>
                     <topic_files files="Files">

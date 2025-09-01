@@ -1,7 +1,7 @@
 class FileUploadJob < ApplicationJob
   # Consider removing concurrency limits due to SolidQueue blocking issues
   # or use a more specific key to avoid blocking all jobs for a language
-  limits_concurrency key: ->(language_id, content_id, content_type) { "#{language_id}-#{content_type}-#{content_id}" }
+  limits_concurrency to: 3, key: ->(_language_id, content_id, _content_type) { "hard-limit" }
 
   retry_on AzureFileShares::Errors::ApiError, wait: :exponentially_longer, attempts: 3
   retry_on Timeout::Error, wait: :exponentially_longer, attempts: 2
