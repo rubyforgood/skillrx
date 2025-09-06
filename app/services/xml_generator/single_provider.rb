@@ -35,10 +35,7 @@ class XmlGenerator::SingleProvider < XmlGenerator::Base
                     end
                   end
                 end
-                title_element << Ox::Element.new("topic_tags").tap do |tags|
-                  names = topic.taggings.map { |tg| tg.tag&.name }.compact.uniq
-                  tags << names.join(", ")
-                end
+                title_element << Ox::Element.new("topic_tags").tap { |tags| tags << topic.current_tags_list.join(", ") }
               end
             end
           end
@@ -48,16 +45,12 @@ class XmlGenerator::SingleProvider < XmlGenerator::Base
   end
 
   def grouped_topics(prov)
-    topic_scope(prov).group_by { |topic| [ topic.published_at.year, topic.published_at.strftime("%m_%B") ] }
+    topic_scope(prov).group_by { |topic| [ topic.created_at.year, topic.created_at.strftime("%m_%B") ] }
   end
 
   def topic_scope(prov)
-    scope = prov.topics
-    scope = scope.where("published_at > ?", 1.month.ago) if args.fetch(:recent, false)
-    scope
-      .select(:id, :title, :published_at, :language_id, :provider_id)
-      .includes(:language, taggings: :tag)  # eager-load language and taggings->tag
-      .with_attached_documents              # eager-load Active Storage attachments + blobs
-      .order(published_at: :desc)
+    return prov.topics.where("created_at > ?", 1.month.ago) if args.fetch(:recent, false)
+
+    prov.topics
   end
 end
