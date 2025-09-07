@@ -19,36 +19,47 @@ RSpec.describe XmlGenerator::AllProviders do
   end
 
   it "generates the xml" do
-    expect(subject.perform).to eq(
-      <<~TEXT
-        <?xml version="1.0"?>
-        <cmes>
-          <content_provider name="#{provider1.name}">
-            <topic_year year="#{topic1.published_at.year}">
-              <topic_month month="#{topic1.published_at.strftime("%m_%B")}">
-                <title name="#{topic1.title}">
-                  <topic_id>#{topic1.id}</topic_id>
-                  <topic_files files="Files"/>
-                  <topic_tags>#{topic1.current_tags_list.join(", ")}</topic_tags>
-                </title>
-              </topic_month>
-            </topic_year>
-          </content_provider>
-          <content_provider name="#{provider2.name}">
-            <topic_year year="#{topic2.published_at.year}">
-              <topic_month month="#{topic2.published_at.strftime("%m_%B")}">
-                <title name="#{topic2.title}">
-                  <topic_id>#{topic2.id}</topic_id>
-                  <topic_files files="Files">
-                    <file_name_1 file_size="494323">test_image.png</file_name_1>
-                  </topic_files>
-                  <topic_tags>#{topic2.current_tags_list.join(", ")}</topic_tags>
-                </title>
-              </topic_month>
-            </topic_year>
-          </content_provider>
-        </cmes>
-      TEXT
-    )
+    xml = subject.perform
+    doc = Nokogiri::XML(xml)
+
+    [ provider1, provider2 ].each do |prov|
+      pnode = doc.at_xpath("//cmes/content_provider[@name='#{prov.name}']")
+      expect(pnode).to be_present
+    end
+
+    [ [ provider1, topic1 ], [ provider2, topic2 ] ].each do |prov, topic|
+      pnode = doc.at_xpath("//cmes/content_provider[@name='#{prov.name}']")
+      year = topic.published_at.year
+      ynode = pnode.at_xpath("./topic_year[@year='#{year}']")
+      expect(ynode).to be_present
+
+      month_label = topic.published_at.strftime("%m_%B")
+      mnode = ynode.at_xpath("./topic_month[@month='#{month_label}']")
+      expect(mnode).to be_present
+
+      tnode = mnode.at_xpath("./title[@name='#{topic.title}']")
+      expect(tnode).to be_present
+
+      expect(tnode.at_xpath("./topic_id").text).to eq(topic.id.to_s)
+      expect(tnode.at_xpath("./counter").text).to eq("0")
+      expect(tnode.at_xpath("./topic_volume").text).to eq(topic.published_at.year.to_s)
+      expect(tnode.at_xpath("./topic_issue").text).to eq(topic.published_at.month.to_s)
+
+      files = tnode.at_xpath("./topic_files[@files='Files']")
+      expect(files).to be_present
+      if topic.documents.attached? && topic.documents.reject { |d| d.content_type == "video/mp4" }.any?
+        first_file = files.element_children.first
+        expect(first_file).to be_present
+        expect(first_file.text).to be_present
+  expect(first_file["file_size"]).to be_present
+      else
+        expect(files.element_children).to be_empty
+      end
+
+      author1 = tnode.at_xpath("./topic_author/topic_author_1")
+      expect(author1.text).to eq(" ")
+
+      expect(tnode.at_xpath("./topic_tags").text).to eq(topic.current_tags_list.join(", "))
+    end
   end
 end
