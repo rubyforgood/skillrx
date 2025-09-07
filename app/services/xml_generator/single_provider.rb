@@ -26,6 +26,9 @@ class XmlGenerator::SingleProvider < XmlGenerator::Base
                 month_element << Ox::Element.new("title").tap do |title_element|
                   title_element[:name] = topic.title
                   title_element << Ox::Element.new("topic_id").tap { |id| id << topic.id.to_s }
+                  title_element << Ox::Element.new("counter").tap { |c| c << "0" }
+                  title_element << Ox::Element.new("topic_volume").tap { |e| e << topic.published_at.year.to_s }
+                  title_element << Ox::Element.new("topic_issue").tap { |e| e << topic.published_at.month.to_s }
                   title_element << Ox::Element.new("topic_files").tap do |files|
                     files[:files] = "Files"
                     topic.documents.each_with_index do |document, index|
@@ -35,6 +38,9 @@ class XmlGenerator::SingleProvider < XmlGenerator::Base
                         file_name[:file_size] = document.byte_size
                       end
                     end
+                  end
+                  title_element << Ox::Element.new("topic_author").tap do |author|
+                    author << Ox::Element.new("topic_author_1").tap { |a| a << " " }
                   end
                   title_element << Ox::Element.new("topic_tags").tap do |tags|
                     names = topic.taggings.map { |tg| tg.tag&.name }.compact.uniq
