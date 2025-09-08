@@ -1,11 +1,75 @@
 require "rails_helper"
 
 RSpec.describe "Authorizations", type: :request do
-  let(:user) { create(:user) }
+  context "not authenticated" do
+    context "when trying to access the Regions index" do
+      it "redirects to the login page" do
+        get "/regions"
+        expect(response).to redirect_to("/session/new")
+        expect(session[:return_to_after_authenticating]).to eq("/regions")
+      end
+    end
 
-  before { sign_in(user) }
+    context "when trying to access the Providers index" do
+      it "redirects to the login page" do
+        get "/providers"
+        expect(response).to redirect_to("/session/new")
+        expect(session[:return_to_after_authenticating]).to eq("/providers")
+      end
+    end
+
+    context "when trying to access the Languages index" do
+      it "redirects to the login page" do
+        get "/languages"
+        expect(response).to redirect_to("/session/new")
+        expect(session[:return_to_after_authenticating]).to eq("/languages")
+      end
+    end
+
+    context "when trying to access the Tags index" do
+      it "redirects to the login page" do
+        get "/tags"
+        expect(response).to redirect_to("/session/new")
+        expect(session[:return_to_after_authenticating]).to eq("/tags")
+      end
+    end
+
+    context "when trying to access the Users index" do
+      it "redirects to the login page" do
+        get "/users"
+        expect(response).to redirect_to("/session/new")
+        expect(session[:return_to_after_authenticating]).to eq("/users")
+      end
+    end
+
+    context "when trying to access the Import Reports index" do
+      it "redirects to the login page" do
+        get "/import_reports"
+        expect(response).to redirect_to("/session/new")
+        expect(session[:return_to_after_authenticating]).to eq("/import_reports")
+      end
+    end
+
+    context "when trying to access the Jobs interface" do
+      it "redirects to the login page" do
+        get "/jobs"
+        expect(response).to redirect_to("/session/new")
+        expect(session[:return_to_after_authenticating]).to eq("/jobs/")
+      end
+    end
+  end
 
   context "contributor" do
+    let(:user) { create(:user) }
+
+    before { sign_in(user) }
+
+    it "cannot access the Jobs interface" do
+      get "/jobs"
+      expect(response).to have_http_status(:forbidden)
+      expect(response.body).to include("Access denied")
+    end
+
     context "Region-related actions" do
       let!(:region) { create(:region) }
 
@@ -174,7 +238,9 @@ RSpec.describe "Authorizations", type: :request do
   end
 
   context "administrator" do
-    before { user.update(is_admin: true) }
+    let(:admin) { create(:user, :admin) }
+
+    before { sign_in(admin) }
 
     it "can access the Topics tab" do
       get "/topics"
@@ -198,6 +264,11 @@ RSpec.describe "Authorizations", type: :request do
 
     it "can access the Users tab" do
       get "/users"
+      expect(response).to be_successful
+    end
+
+    it "can access the Jobs interface" do
+      get "/jobs"
       expect(response).to be_successful
     end
   end
