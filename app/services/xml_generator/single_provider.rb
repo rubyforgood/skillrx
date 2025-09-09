@@ -63,7 +63,9 @@ class XmlGenerator::SingleProvider < XmlGenerator::Base
   end
 
   def topic_scope(prov)
-    scope = prov.topics
+  scope = prov.topics
+  # When invoked from AllProviders, restrict topics to that language
+  scope = scope.where(language_id: language.id) if respond_to?(:language) && language.present?
     scope = scope.where("published_at > ?", 1.month.ago) if args.fetch(:recent, false)
     scope
       .select(:id, :title, :published_at, :language_id, :provider_id)
