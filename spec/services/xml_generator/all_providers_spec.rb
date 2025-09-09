@@ -80,8 +80,8 @@ RSpec.describe XmlGenerator::AllProviders do
     # Stub batching to yield two slices, simulating multiple provider-id batches
     allow_any_instance_of(described_class)
       .to receive(:provider_ids_in_language_in_batches)
-      .and_yield([provider1.id, provider2.id])
-      .and_yield([provider3.id])
+      .and_yield([ provider1.id, provider2.id ])
+      .and_yield([ provider3.id ])
 
     xml = subject.perform
     doc = Nokogiri::XML(xml)
