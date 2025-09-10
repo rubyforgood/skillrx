@@ -7,14 +7,13 @@ class LanguageContentProcessor
   def perform
     process_language_content!
   end
-
   # Field 'content' is a lambda to allow lazy evaluation
   # this is needed to avoid loading all files into memory at once
   # Field 'name' is a lambda to allow dynamic naming based on the provider
   def provider_files
     [
       FileToUpload.new(
-        content: ->(provider) { XmlGenerator::SingleProvider.new(provider).perform },
+        content: ->(provider) { LanguageTopicsXmlGenerator.new(provider.language, provider: provider).perform },
         name: ->(provider) { "#{language.file_storage_prefix}#{provider.name.parameterize}.xml" },
         path: "#{language.file_storage_prefix}CMES-Pi/assets/XML",
       ),
@@ -25,16 +24,16 @@ class LanguageContentProcessor
   # this is needed to avoid loading all files into memory at once
   def language_files
     {
-      # all_providers: FileToUpload.new(
-      #   content: ->(language) { XmlGenerator::AllProviders.new(language).perform },
-      #   name: "#{language.file_storage_prefix}Server_XML.xml",
-      #   path: "#{language.file_storage_prefix}CMES-Pi/assets/XML",
-      # ),
-      # all_providers_recent: FileToUpload.new(
-      #   content: ->(language) { XmlGenerator::AllProviders.new(language, recent: true).perform },
-      #   name: "#{language.file_storage_prefix}New_Uploads_Server_XML.xml",
-      #   path: "#{language.file_storage_prefix}CMES-Pi/assets/XML",
-      # ),
+      all_providers: FileToUpload.new(
+        content: ->(language) { LanguageTopicsXmlGenerator.new(language).perform },
+        name: "#{language.file_storage_prefix}Server_XML.xml",
+        path: "#{language.file_storage_prefix}CMES-Pi/assets/XML",
+      ),
+      all_providers_recent: FileToUpload.new(
+        content: ->(language) { LanguageTopicsXmlGenerator.new(language, recent: true).perform },
+        name: "#{language.file_storage_prefix}New_Uploads_Server_XML.xml",
+        path: "#{language.file_storage_prefix}CMES-Pi/assets/XML",
+      ),
       tags: FileToUpload.new(
         content: ->(language) { TextGenerator::Tags.new(language).perform },
         name: "#{language.file_storage_prefix}tags.txt",
