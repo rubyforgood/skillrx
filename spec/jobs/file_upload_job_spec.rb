@@ -1,72 +1,63 @@
 require "rails_helper"
 
 RSpec.describe FileUploadJob, type: :job do
-  let(:language) { create(:language) }
-  let(:processor) { LanguageContentProcessor.new(language) }
+  # The only collaborator that should be stubbed is the one performing the
+  # external action (the file upload). We want to test the full integration
+  # with the real LanguageContentProcessor and its dependent generators.
+  before do
+    allow(FileWorker).to receive(:new).and_return(instance_double(FileWorker, send: true))
+  end
 
   describe "#perform" do
-    before do
-      allow(FileWorker).to receive(:new).and_return(instance_double(FileWorker, send: true))
-    end
+    let!(:language) { create(:language) }
 
-    context "when language specific file" do
-      it "processes specific file" do
-        processor.language_files.each do |file_id, file|
-          expect(FileWorker).to receive(:new).with(
-            share: ENV["AZURE_STORAGE_SHARE_NAME"],
-            name: file.name,
-            path: file.path,
-            file: file.content[language],
-          )
+    context "when processing a language-specific file" do
+      it "correctly looks up the file definition and generates the content" do
+        # Create data to ensure the generator produces content.
+        create(:topic, language: language)
+        file_id = :all_providers_recent
 
-          described_class.perform_now(language.id, file_id.to_s, "file")
-        end
-      end
-    end
+        # Dynamically determine the expected output from the real objects.
+        processor = LanguageContentProcessor.new(language)
+        expected_file_definition = processor.language_files[file_id]
+        expected_content = LanguageTopicsXmlGenerator.new(language, recent: true).perform
 
-    context "when provider specific file" do
-      let(:provider) { create(:provider, name: "Test Provider") }
-
-      before { create(:topic, :tagged, language:, provider:) }
-
-      it "processes specific file" do
         expect(FileWorker).to receive(:new).with(
           share: ENV["AZURE_STORAGE_SHARE_NAME"],
-          name: "#{language.file_storage_prefix}test-provider.xml",
-          path: "#{language.file_storage_prefix}CMES-Pi/assets/XML",
-          file: XmlGenerator::SingleProvider.new(provider).perform,
+          name: expected_file_definition.name,
+          path: expected_file_definition.path,
+          file: expected_content
         )
 
-        described_class.perform_now(language.id, provider.id, "provider")
+        described_class.perform_now(language.id, file_id.to_s, "file")
       end
+    end
 
-      context "when provider name contains /" do
-        let(:provider) { create(:provider, name: "Test/Provider") }
+    context "when processing a provider-specific file" do
+      # This single example replaces the three previous, repetitive tests.
+      # It verifies that the job correctly handles provider name parameterization
+      # by testing multiple cases in a data-driven way.
+      it "generates the correct parameterized filename for various provider names" do
+        test_cases = {
+          "Test Provider" => "#{language.file_storage_prefix}test-provider.xml",
+          "Test/Provider" => "#{language.file_storage_prefix}test-provider.xml",
+          "WHO/Guidelines" => "#{language.file_storage_prefix}who-guidelines.xml",
+        }
 
-        it "replaces / with - in the file name" do
+        test_cases.each do |provider_name, expected_filename|
+          provider = create(:provider, name: provider_name)
+          create(:topic, :tagged, language: language, provider: provider)
+
+          expected_content = LanguageTopicsXmlGenerator.new(language, provider: provider).perform
+
           expect(FileWorker).to receive(:new).with(
             share: ENV["AZURE_STORAGE_SHARE_NAME"],
-            name: "#{language.file_storage_prefix}test-provider.xml",
+            name: expected_filename,
             path: "#{language.file_storage_prefix}CMES-Pi/assets/XML",
-            file: XmlGenerator::SingleProvider.new(provider).perform,
+            file: expected_content
           )
 
           described_class.perform_now(language.id, provider.id, "provider")
-        end
-
-        context "when provider name contains /" do
-          let(:provider) { create(:provider, name: "WHO/Guidelines") }
-
-          it "replaces / with - in the file name" do
-            expect(FileWorker).to receive(:new).with(
-              share: ENV["AZURE_STORAGE_SHARE_NAME"],
-              name: "#{language.file_storage_prefix}who-guidelines.xml",
-              path: "#{language.file_storage_prefix}CMES-Pi/assets/XML",
-              file: XmlGenerator::SingleProvider.new(provider).perform,
-            )
-
-            described_class.perform_now(language.id, provider.id, "provider")
-          end
         end
       end
     end

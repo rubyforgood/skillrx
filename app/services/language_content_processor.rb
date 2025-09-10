@@ -13,7 +13,7 @@ class LanguageContentProcessor
   def provider_files
     [
       FileToUpload.new(
-        content: ->(provider) { LanguageTopicsXmlGenerator.new(provider.language, provider: provider).perform },
+        content: ->(provider) { LanguageTopicsXmlGenerator.new(@language, provider: provider).perform },
         name: ->(provider) { "#{language.file_storage_prefix}#{provider.name.parameterize}.xml" },
         path: "#{language.file_storage_prefix}CMES-Pi/assets/XML",
       ),
