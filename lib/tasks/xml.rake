@@ -6,7 +6,7 @@ namespace :xml do
     scope = ENV.fetch("SCOPE", "all_providers")
     lang_param = ENV["LANGUAGE"]
     provider_id = ENV["PROVIDER_ID"]
-  dest = ENV["DEST"] || "tmp/all_providers_test.xml"
+    dest = ENV["DEST"] || "all_providers_test.xml"
 
     language = if lang_param.present?
       Language.find_by(id: lang_param) || Language.find_by(code: lang_param) || Language.find_by(name: lang_param)
@@ -31,17 +31,12 @@ namespace :xml do
     if dest == "-"
       puts xml
     else
-      path = Rails.root.join(dest)
-      FileUtils.mkdir_p(File.dirname(path))
-  File.write(path, xml.encode("UTF-8", invalid: :replace, undef: :replace, replace: "�"), mode: "w:utf-8")
-      puts "Wrote XML to #{path} (#{xml.bytesize} bytes)"
-
-      # Upload to Azure using FileWorker
+      # Upload XML directly to Azure using FileWorker
       require_relative "../../app/services/file_worker"
       share = ENV["AZURE_STORAGE_SHARE_NAME"]
-      name = File.basename(path)
+      name = "all_providers_test.xml"
       azure_path = "" # root directory in Azure
-      file_content = File.binread(path)
+      file_content = xml.encode("UTF-8", invalid: :replace, undef: :replace, replace: "�")
 
       FileWorker.new(
         share: share,
