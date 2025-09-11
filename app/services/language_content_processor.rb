@@ -81,8 +81,8 @@ class LanguageContentProcessor
       FileUploadJob.perform_later(language.id, file_id.to_s, "file")
     end
 
-    language.providers.distinct.find_each do |provider|
-      FileUploadJob.perform_later(language.id, provider.id, "provider")
-    end
+    # language.providers.distinct.find_each do |provider|
+    #   FileUploadJob.perform_later(language.id, provider.id, "provider")
+    # end
   end
 end
