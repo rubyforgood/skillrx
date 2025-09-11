@@ -62,4 +62,67 @@ RSpec.describe XmlGenerator::AllProviders do
       expect(tnode.at_xpath("./topic_tags").text).to eq(topic.current_tags_list.join(", "))
     end
   end
+
+  it "does not duplicate topic_year per provider across batches" do
+    # Create providers and topics spanning multiple months/years for one provider
+    provider3 = create(:provider)
+
+    # Provider 1: multiple topics in same year and month + another month and another year
+    create(:topic, language:, provider: provider1, published_at: Time.zone.parse("2024-01-15"))
+    create(:topic, language:, provider: provider1, published_at: Time.zone.parse("2024-01-20"))
+    create(:topic, language:, provider: provider1, published_at: Time.zone.parse("2024-03-05"))
+    create(:topic, language:, provider: provider1, published_at: Time.zone.parse("2023-07-01"))
+
+    # Other providers to force multiple batches
+    create(:topic, language:, provider: provider2, published_at: Time.zone.parse("2023-01-01"))
+    create(:topic, language:, provider: provider3, published_at: Time.zone.parse("2024-02-01"))
+
+    # Stub batching to yield two slices, simulating multiple provider-id batches
+    allow_any_instance_of(described_class)
+      .to receive(:provider_ids_in_language_in_batches)
+      .and_yield([ provider1.id, provider2.id ])
+      .and_yield([ provider3.id ])
+
+    xml = subject.perform
+    doc = Nokogiri::XML(xml)
+
+    pnode = doc.at_xpath("//cmes/content_provider[@name='#{provider1.name}']")
+    expect(pnode).to be_present
+
+    years = pnode.xpath("./topic_year/@year").map(&:value)
+    # Expect no duplicate year nodes for the provider
+    expect(years.tally.values.max).to eq(1)
+
+    # Specifically ensure 2024 appears once with months Jan and Mar once each
+    y2024 = pnode.at_xpath("./topic_year[@year='2024']")
+    expect(y2024).to be_present
+
+    months_2024 = y2024.xpath("./topic_month/@month").map(&:value)
+    expect(months_2024).to include("01_January", "03_March")
+    expect(months_2024.tally["01_January"]).to eq(1)
+    expect(months_2024.tally["03_March"]).to eq(1)
+  end
+
+  it "does not duplicate topic_month within a year for a provider" do
+    # Create multiple topics for provider1 in the same month/year and another month in the same year
+    create(:topic, language:, provider: provider1, published_at: Time.zone.parse("2024-02-01"))
+    create(:topic, language:, provider: provider1, published_at: Time.zone.parse("2024-02-10"))
+    create(:topic, language:, provider: provider1, published_at: Time.zone.parse("2024-03-05"))
+
+    xml = subject.perform
+    doc = Nokogiri::XML(xml)
+
+    pnode = doc.at_xpath("//cmes/content_provider[@name='#{provider1.name}']")
+    expect(pnode).to be_present
+
+    y2024 = pnode.at_xpath("./topic_year[@year='2024']")
+    expect(y2024).to be_present
+
+    months = y2024.xpath("./topic_month/@month").map(&:value)
+    # months should be unique (no duplicate month nodes)
+    expect(months.uniq.size).to eq(months.size)
+    expect(months).to include("02_February", "03_March")
+    expect(months.tally["02_February"]).to eq(1)
+    expect(months.tally["03_March"]).to eq(1)
+  end
 end
