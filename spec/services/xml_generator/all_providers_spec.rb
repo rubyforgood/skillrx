@@ -62,4 +62,43 @@ RSpec.describe XmlGenerator::AllProviders do
       expect(tnode.at_xpath("./topic_tags").text).to eq(topic.current_tags_list.join(", "))
     end
   end
+
+  context "when a provider has topics in multiple languages" do
+    subject { described_class.new(Language.find_by(name: "en")) }
+
+    before do
+      create(:language, name: "es")
+
+      XmlTestDataBuilder.xml_scenario
+        .for_language(name: "en")
+        .for_provider(name: "Health Corp")
+        .with_topic(
+          title: "English Topic",
+          published_at: 2.weeks.ago
+        )
+        .build!
+
+      XmlTestDataBuilder.xml_scenario
+        .for_language(name: "es")
+        .for_provider(name: "Health Corp") # Same provider
+        .with_topic(
+          title: "Spanish Topic",
+          published_at: 3.weeks.ago
+        )
+        .build!
+    end
+
+    it "incorrectly includes topics from other languages in its output" do
+      doc = Nokogiri::XML(subject.perform)
+
+      english_topic_node = doc.at_xpath("//title[@name='English Topic']")
+      spanish_topic_node = doc.at_xpath("//title[@name='Spanish Topic']")
+
+      # It correctly finds the English topic.
+      expect(english_topic_node).not_to be_nil
+
+      # It incorrectly finds the Spanish topic, demonstrating the bug.
+      expect(spanish_topic_node).not_to be_nil
+    end
+  end
 end
