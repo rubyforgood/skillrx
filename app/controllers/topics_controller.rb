@@ -22,7 +22,7 @@ class TopicsController < ApplicationController
       redirect_to topics_path, notice: "Topic was successfully created."
     in [ :error, errors ]
       @errors = errors
-      render :new, status: :unprocessable_entity
+      render :new, status: :unprocessable_content
     end
   end
 
@@ -39,7 +39,7 @@ class TopicsController < ApplicationController
       redirect_to topics_path, notice: "Topic was successfully updated."
     in [ :error, errors ]
       @errors = errors
-      render :edit, status: :unprocessable_entity
+      render :edit, status: :unprocessable_content
     end
   end
 

@@ -28,7 +28,7 @@ class RegionsController < ApplicationController
       if @region.save
         format.html { redirect_to @region, notice: "Region was successfully created." }
       else
-        format.html { render :new, status: :unprocessable_entity }
+        format.html { render :new, status: :unprocessable_content }
       end
     end
   end
@@ -39,7 +39,7 @@ class RegionsController < ApplicationController
       if @region.update(region_params)
         format.html { redirect_to @region, notice: "Region was successfully updated." }
       else
-        format.html { render :edit, status: :unprocessable_entity }
+        format.html { render :edit, status: :unprocessable_content }
       end
     end
   end
