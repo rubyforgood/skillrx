@@ -23,7 +23,7 @@ class ProvidersController < ApplicationController
       if @provider.save
         format.html { redirect_to @provider, notice: "Provider was successfully created." }
       else
-        format.html { render :new, status: :unprocessable_entity }
+        format.html { render :new, status: :unprocessable_content }
       end
     end
   end
@@ -33,7 +33,7 @@ class ProvidersController < ApplicationController
       if @provider.update(provider_params)
         format.html { redirect_to @provider, notice: "Provider was successfully updated." }
       else
-        format.html { render :edit, status: :unprocessable_entity }
+        format.html { render :edit, status: :unprocessable_content }
       end
     end
   end

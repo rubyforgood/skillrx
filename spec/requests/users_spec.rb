@@ -69,7 +69,7 @@ RSpec.describe "/users", type: :request do
       it "renders a response with 422 status (i.e. to display the 'new' template)" do
         post users_url, params: { user: invalid_attributes }
 
-        expect(response).to have_http_status(:unprocessable_entity)
+        expect(response).to have_http_status(:unprocessable_content)
       end
     end
 
@@ -78,7 +78,7 @@ RSpec.describe "/users", type: :request do
         expect {
           post users_url, params: { user: valid_attributes.merge(provider_ids: []) }
         }.to change(User, :count).by(0)
-        expect(response).to have_http_status(:unprocessable_entity)
+        expect(response).to have_http_status(:unprocessable_content)
       end
 
       context "when user is admin" do
@@ -124,7 +124,7 @@ RSpec.describe "/users", type: :request do
       it "renders a response with 422 status (i.e. to display the 'edit' template)" do
         patch user_url(user), params: { user: invalid_attributes }
 
-        expect(response).to have_http_status(:unprocessable_entity)
+        expect(response).to have_http_status(:unprocessable_content)
         expect(page).to have_text("Email can't be blank")
       end
     end

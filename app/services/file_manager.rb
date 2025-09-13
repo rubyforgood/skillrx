@@ -77,9 +77,8 @@ class FileManager
     @file_content ||= document.download
   end
 
-  # naming convention now enforced on upload
   def file_name
-    document.filename.to_s
+    topic.custom_file_name(document)
   end
 
   def language

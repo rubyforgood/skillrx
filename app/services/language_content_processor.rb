@@ -15,7 +15,7 @@ class LanguageContentProcessor
     [
       FileToUpload.new(
         content: ->(provider) { XmlGenerator::SingleProvider.new(provider).perform },
-        name: ->(provider) { "#{language.file_storage_prefix}#{provider.name}.xml" },
+        name: ->(provider) { "#{language.file_storage_prefix}#{provider.name.parameterize}.xml" },
         path: "#{language.file_storage_prefix}CMES-Pi/assets/XML",
       ),
     ]
@@ -82,8 +82,8 @@ class LanguageContentProcessor
       FileUploadJob.perform_later(language.id, file_id.to_s, "file")
     end
 
-    language.providers.distinct.find_each do |provider|
-      FileUploadJob.perform_later(language.id, provider.id, "provider")
-    end
+    # language.providers.distinct.find_each do |provider|
+    #   FileUploadJob.perform_later(language.id, provider.id, "provider")
+    # end
   end
 end

@@ -14,9 +14,7 @@ class CsvGenerator::TagDetails < CsvGenerator::Base
 
   def scope
     language.topics.active.includes(:tags)
-      .flat_map do |topic|
-        topic.tags_on(language.code.to_sym)
-      end
+      .flat_map { |topic| topic.tags_on(language.code.to_sym) }
       .uniq
       .map do |tag|
         [

@@ -64,15 +64,22 @@
             <span>Import Reports</span>
           <% end %>
         </li>
+
+        <li style="margin-bottom: 0.5rem;">
+            <%= link_to "/jobs", style: nav_link_class("/jobs") do %>
+            <span style="font-size: 1.1rem;">⚙️</span>
+            <span>Jobs</span>
+          <% end %>
+          </li>
       <% end %>
     </ul>
   </nav>
-
   <div class="p-6" style="border-top: 1px solid #f3f4f6;">
     <%= button_to session_path, method: :delete, style: "width: 100%; background-color: #dc2626; color: white; font-weight: 500; padding: 0.75rem 1rem; border-radius: 0.5rem; border: none; cursor: pointer; transition: background-color 0.2s; display: flex; align-items: center; justify-content: center; gap: 0.5rem;" do %>
       <span style="font-size: 1.1rem;">↗</span>
       <span>Log out</span>
     <% end %>
+
   </div>
 </div>
 

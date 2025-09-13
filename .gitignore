@@ -18,6 +18,8 @@ db/structure.sql
 !/log/.keep
 !/tmp/.keep
 
+.trunk/
+
 # Ignore pidfiles, but keep the directory.
 /tmp/pids/*
 !/tmp/pids/
