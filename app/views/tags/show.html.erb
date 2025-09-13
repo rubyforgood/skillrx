@@ -2,13 +2,12 @@
 
 <%= render @tag %>
 
-<div id="<%= "delete_tag_#{@tag.id}" %>">
-  <%= link_to "Back to tags", tags_path, class: "mt-4" %>
+<%= link_to "Back to tags", tags_path, class: "mt-4" %>
 
 <div>
   <%= link_to "Edit this tag", edit_tag_path(@tag), class: "btn btn-primary mt-4" %>
 </div>
 
-<div>
+<div id="<%= "delete_tag_#{@tag.id}" %>">
   <%= button_to "Delete this tag", @tag, method: :delete, class: "btn btn-danger mt-4" %>
 </div>
