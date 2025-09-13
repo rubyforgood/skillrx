@@ -18,7 +18,7 @@ class UploadsController < ApplicationController
 
   def destroy
     blob = ActiveStorage::Blob.find_signed(params[:id])
-    return head :unprocessable_entity unless blob
+    return head :unprocessable_content unless blob
 
     blob.purge if blob.attachments.empty?
 

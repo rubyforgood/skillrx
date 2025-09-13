@@ -81,7 +81,7 @@ RSpec.describe "/providers", type: :request do
       it "renders a response with 422 status (i.e. to display the 'new' template)" do
         post providers_url, params: { provider: invalid_attributes }
 
-        expect(response).to have_http_status(:unprocessable_entity)
+        expect(response).to have_http_status(:unprocessable_content)
       end
     end
   end
@@ -119,7 +119,7 @@ RSpec.describe "/providers", type: :request do
 
         patch provider_url(provider), params: { provider: invalid_attributes }
 
-        expect(response).to have_http_status(:unprocessable_entity)
+        expect(response).to have_http_status(:unprocessable_content)
       end
     end
   end
