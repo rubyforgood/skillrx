@@ -30,6 +30,7 @@ gem "solid_cache"
 gem "solid_queue"
 gem "solid_queue_monitor", "~> 0.3.2"
 gem "stimulus-rails"
+gem "tailwindcss-rails"
 gem "thruster", require: false
 gem "turbo-rails"
 
