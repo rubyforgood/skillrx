@@ -65,7 +65,7 @@ RSpec.describe "Topics search", type: :system do
     it "shows all topics from first provider" do
       expect(page).to have_text(english_active_topic.title)
       expect(page).to have_text(spanish_active_topic.title)
-      expect(page).to have_text(english_archived_topic.title)
+      expect(page).not_to have_text(english_archived_topic.title)
     end
 
     context "when searching by title" do
@@ -99,7 +99,7 @@ RSpec.describe "Topics search", type: :system do
         select "English", from: "search_language_id"
 
         expect(page).to have_text(english_active_topic.title)
-        expect(page).to have_text(english_archived_topic.title)
+        expect(page).not_to have_text(english_archived_topic.title)
         expect(page).not_to have_text(spanish_active_topic.title)
       end
     end
@@ -114,7 +114,7 @@ RSpec.describe "Topics search", type: :system do
 
         select "2023", from: "search_year"
 
-        expect(page).to have_text(english_archived_topic.title)
+        expect(page).not_to have_text(english_archived_topic.title)
         expect(page).not_to have_text(spanish_active_topic.title)
         expect(page).not_to have_text(english_active_topic.title)
       end
@@ -125,7 +125,7 @@ RSpec.describe "Topics search", type: :system do
         select "2", from: "search_month"
 
         expect(page).to have_text(spanish_active_topic.title)
-        expect(page).to have_text(english_archived_topic.title)
+        expect(page).not_to have_text(english_archived_topic.title)
         expect(page).not_to have_text(english_active_topic.title)
 
         select "3", from: "search_month"
@@ -165,13 +165,15 @@ RSpec.describe "Topics search", type: :system do
     context "when sorting" do
       it "displays users in the selected order" do
         select "asc", from: "search_order"
-        expect(page).to have_text(/#{english_archived_topic.title}.+#{spanish_active_topic.title}.+#{english_active_topic.title}/m)
+
+        expect(page).to have_text(/#{spanish_active_topic.title}.+#{english_active_topic.title}/m)
       end
     end
 
     context "when switching to another provider" do
       it "only shows topics from the selected provider" do
         select provider_2.name, from: "provider_id"
+
         expect(page).to have_text(other_provider_topic.title)
         expect(page).not_to have_text(english_active_topic.title)
         expect(page).not_to have_text(spanish_active_topic.title)
@@ -196,7 +198,7 @@ RSpec.describe "Topics search", type: :system do
       it "only shows topics from its first associated provider" do
         expect(page).to have_text(english_active_topic.title)
         expect(page).to have_text(spanish_active_topic.title)
-        expect(page).to have_text(english_archived_topic.title)
+        expect(page).not_to have_text(english_archived_topic.title)
         expect(page).not_to have_text(other_provider_topic.title)
       end
 
@@ -231,7 +233,7 @@ RSpec.describe "Topics search", type: :system do
           select "English", from: "search_language_id"
 
           expect(page).to have_text(english_active_topic.title)
-          expect(page).to have_text(english_archived_topic.title)
+          expect(page).not_to have_text(english_archived_topic.title)
           expect(page).not_to have_text(spanish_active_topic.title)
         end
       end
@@ -246,7 +248,7 @@ RSpec.describe "Topics search", type: :system do
 
           select "2023", from: "search_year"
 
-          expect(page).to have_text(english_archived_topic.title)
+          expect(page).not_to have_text(english_archived_topic.title)
           expect(page).not_to have_text(spanish_active_topic.title)
           expect(page).not_to have_text(english_active_topic.title)
         end
@@ -257,7 +259,7 @@ RSpec.describe "Topics search", type: :system do
           select "2", from: "search_month"
 
           expect(page).to have_text(spanish_active_topic.title)
-          expect(page).to have_text(english_archived_topic.title)
+          expect(page).not_to have_text(english_archived_topic.title)
           expect(page).not_to have_text(english_active_topic.title)
 
           select "3", from: "search_month"
@@ -297,7 +299,7 @@ RSpec.describe "Topics search", type: :system do
       context "when sorting" do
         it "displays users in the selected order" do
           select "asc", from: "search_order"
-          expect(page).to have_text(/#{english_archived_topic.title}.+#{spanish_active_topic.title}.+#{english_active_topic.title}/m)
+          expect(page).to have_text(/#{spanish_active_topic.title}.+#{english_active_topic.title}/m)
         end
       end
     end
@@ -311,7 +313,7 @@ RSpec.describe "Topics search", type: :system do
       it "only shows topics from its first associated provider" do
         expect(page).to have_text(english_active_topic.title)
         expect(page).to have_text(spanish_active_topic.title)
-        expect(page).to have_text(english_archived_topic.title)
+        expect(page).not_to have_text(english_archived_topic.title)
         expect(page).not_to have_text(other_provider_topic.title)
       end
 
