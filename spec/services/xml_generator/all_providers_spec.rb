@@ -23,12 +23,12 @@ RSpec.describe XmlGenerator::AllProviders do
     doc = Nokogiri::XML(xml)
 
     [ provider1, provider2 ].each do |prov|
-      pnode = doc.at_xpath("//cmes/content_provider[@name='#{prov.name}']")
+      pnode = doc.at_xpath("//CMES/Content_Provider[@name='#{prov.name}']")
       expect(pnode).to be_present
     end
 
     [ [ provider1, topic1 ], [ provider2, topic2 ] ].each do |prov, topic|
-      pnode = doc.at_xpath("//cmes/content_provider[@name='#{prov.name}']")
+      pnode = doc.at_xpath("//CMES/Content_Provider[@name='#{prov.name}']")
       year = topic.published_at.year
       ynode = pnode.at_xpath("./topic_year[@year='#{year}']")
       expect(ynode).to be_present
@@ -86,7 +86,7 @@ RSpec.describe XmlGenerator::AllProviders do
     xml = subject.perform
     doc = Nokogiri::XML(xml)
 
-    pnode = doc.at_xpath("//cmes/content_provider[@name='#{provider1.name}']")
+    pnode = doc.at_xpath("//CMES/Content_Provider[@name='#{provider1.name}']")
     expect(pnode).to be_present
 
     years = pnode.xpath("./topic_year/@year").map(&:value)
@@ -112,7 +112,7 @@ RSpec.describe XmlGenerator::AllProviders do
     xml = subject.perform
     doc = Nokogiri::XML(xml)
 
-    pnode = doc.at_xpath("//cmes/content_provider[@name='#{provider1.name}']")
+    pnode = doc.at_xpath("//CMES/Content_Provider[@name='#{provider1.name}']")
     expect(pnode).to be_present
 
     y2024 = pnode.at_xpath("./topic_year[@year='2024']")
