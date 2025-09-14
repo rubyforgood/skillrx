@@ -13,7 +13,7 @@ class XmlGenerator::SingleProvider < XmlGenerator::Base
   end
 
   def provider_xml(provider)
-  Ox::Element.new("Content_Provider").tap do |xml|
+    Ox::Element.new("Content_Provider").tap do |xml|
       xml[:name] = provider.name
 
       grouped_topics(provider).sort_by { |year, _| -year.to_i }.each do |(year, months)|

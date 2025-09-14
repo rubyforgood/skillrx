@@ -8,7 +8,7 @@ RSpec.describe XmlGenerator::SingleProvider do
   it "generates the xml" do
   xml = subject.perform
   doc = Nokogiri::XML(xml)
-  provider_nodes = doc.xpath("//cmes/content_provider[@name='#{provider.name}']")
+  provider_nodes = doc.xpath("//CMES/Content_Provider[@name='#{provider.name}']")
   expect(provider_nodes.size).to eq(1)
   # No topics → self-closing provider node (no children)
   expect(provider_nodes.first.element_children).to be_empty
@@ -36,34 +36,34 @@ RSpec.describe XmlGenerator::SingleProvider do
       xml = subject.perform
       doc = Nokogiri::XML(xml)
 
-  provider_node = doc.at_xpath("//cmes/content_provider[@name='#{provider.name}']")
+      provider_node = doc.at_xpath("//CMES/Content_Provider[@name='#{provider.name}']")
       expect(provider_node).to be_present
 
-  year_node = provider_node.at_xpath("./topic_year[@year='#{topic.published_at.year}']")
+      year_node = provider_node.at_xpath("./topic_year[@year='#{topic.published_at.year}']")
       expect(year_node).to be_present
 
-  month_label = topic.published_at.strftime("%m_%B")
-  month_node = year_node.at_xpath("./topic_month[@month='#{month_label}']")
+      month_label = topic.published_at.strftime("%m_%B")
+      month_node = year_node.at_xpath("./topic_month[@month='#{month_label}']")
       expect(month_node).to be_present
 
-  title_node = month_node.at_xpath("./title[@name='#{topic.title}']")
+      title_node = month_node.at_xpath("./title[@name='#{topic.title}']")
       expect(title_node).to be_present
 
-  expect(title_node.at_xpath("./topic_id").text).to eq(topic.id.to_s)
-  expect(title_node.at_xpath("./counter").text).to eq("0")
-  expect(title_node.at_xpath("./topic_volume").text).to eq(topic.published_at.year.to_s)
-  expect(title_node.at_xpath("./topic_issue").text).to eq(topic.published_at.month.to_s)
+      expect(title_node.at_xpath("./topic_id").text).to eq(topic.id.to_s)
+      expect(title_node.at_xpath("./counter").text).to eq("0")
+      expect(title_node.at_xpath("./topic_volume").text).to eq(topic.published_at.year.to_s)
+      expect(title_node.at_xpath("./topic_issue").text).to eq(topic.published_at.month.to_s)
 
-  files_node = title_node.at_xpath("./topic_files[@files='Files']")
+      files_node = title_node.at_xpath("./topic_files[@files='Files']")
       expect(files_node).to be_present
-  file1 = files_node.at_xpath("./file_name_1")
-  expect(file1.text).to eq("test_image.png")
-  expect(file1["file_size"]).to be_present
+      file1 = files_node.at_xpath("./file_name_1")
+      expect(file1.text).to eq("test_image.png")
+      expect(file1["file_size"]).to be_present
 
-  author_node = title_node.at_xpath("./topic_author/topic_author_1")
-  expect(author_node.text).to eq(" ")
+      author_node = title_node.at_xpath("./topic_author/topic_author_1")
+      expect(author_node.text).to eq(" ")
 
-  expect(title_node.at_xpath("./topic_tags").text).to eq(topic.current_tags_list.join(", "))
+      expect(title_node.at_xpath("./topic_tags").text).to eq(topic.current_tags_list.join(", "))
     end
   end
 end
