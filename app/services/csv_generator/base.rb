@@ -23,7 +23,7 @@ class CsvGenerator::Base
     source.topics
   end
 
-  def language = args.fetch(:language)
+  def language = language? ? source : args.fetch(:language)
   def language? = source.is_a?(Language)
   def provider? = source.is_a?(Provider)
 end
