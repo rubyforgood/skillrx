@@ -1,7 +1,7 @@
 class FileUploadJob < ApplicationJob
   # Consider removing concurrency limits due to SolidQueue blocking issues
   # or use a more specific key to avoid blocking all jobs for a language
-  limits_concurrency to: 3, key: ->(_language_id, content_id, _content_type) { "hard-limit" }
+  limits_concurrency to: 3, key: ->(_language_id, _content_id, _content_type) { "hard-limit" }
 
   retry_on AzureFileShares::Errors::ApiError, wait: :exponentially_longer, attempts: 3
   retry_on Timeout::Error, wait: :exponentially_longer, attempts: 2
@@ -12,34 +12,34 @@ class FileUploadJob < ApplicationJob
     Rails.logger.error "Suggestion: Check provider names for invalid characters if Azure API errors"
   end
 
-  def perform(language_id, content_id, content_type, share = ENV["AZURE_STORAGE_SHARE_NAME"])
+  def perform(language_id, file_id, provider_id = nil, share = ENV["AZURE_STORAGE_SHARE_NAME"])
     @language = Language.find(language_id)
-    @processor = LanguageContentProcessor.new(language)
     @share = share
+    @file_id = file_id.to_sym
+    @processor = LanguageContentProcessor.new(language)
 
-    send_provider_content(content_id) if content_type == "provider"
-    send_language_content(content_id.to_sym) if content_type == "file"
+    send_provider_content(provider_id) if provider_id.present?
+    send_language_content if provider_id.blank?
   end
 
   private
 
-  attr_reader :language, :processor, :share
+  attr_reader :language, :file_id, :share, :processor
 
   def send_provider_content(provider_id)
     provider = language.providers.find(provider_id)
-    return unless provider
+    file = processor.provider_files[file_id]
+    return unless provider && file
 
-    processor.provider_files.each do |file|
-      FileWorker.new(
-        share:,
-        name: file.name[provider],
-        path: file.path,
-        file: file.content[provider],
-      ).send
-    end
+    FileWorker.new(
+      share:,
+      name: file.name[provider],
+      path: file.path,
+      file: file.content[provider],
+    ).send
   end
 
-  def send_language_content(file_id)
+  def send_language_content
     file = processor.language_files[file_id]
     return unless file
 
