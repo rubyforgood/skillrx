@@ -32,7 +32,7 @@ class LanguageContentProcessor
       ),
       all_providers_recent: FileToUpload.new(
         content: ->(language) { XmlGenerator::AllProviders.new(language, recent: true).perform },
-        name: "#{language.file_storage_prefix}New_Uploads_Server_XML.xml",
+        name: "#{language.file_storage_prefix}New_Uploads.xml",
         path: "#{language.file_storage_prefix}CMES-Pi/assets/XML",
       ),
       tags: FileToUpload.new(
