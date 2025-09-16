@@ -20,27 +20,27 @@ class LanguageContentProcessor
       ),
       files: FileToUpload.new(
         content: ->(provider) { CsvGenerator::Files.new(provider).perform },
-        name: ->(provider) { "#{language.file_storage_prefix}#{provider.name.parameterize}File.csv" },
+        name: ->(provider) { "#{language.file_storage_prefix}#{provider.name.parameterize}-file.csv" },
         path: "#{language.file_storage_prefix}CMES-v2/assets/csv",
       ),
       topics: FileToUpload.new(
         content: ->(provider) { CsvGenerator::Topics.new(provider).perform },
-        name: ->(provider) { "#{language.file_storage_prefix}#{provider.name.parameterize}Topic.csv" },
+        name: ->(provider) { "#{language.file_storage_prefix}#{provider.name.parameterize}-topic.csv" },
         path: "#{language.file_storage_prefix}CMES-v2/assets/csv",
       ),
       tag_details: FileToUpload.new(
         content: ->(provider) { CsvGenerator::TagDetails.new(provider, language:).perform },
-        name: ->(provider) { "#{language.file_storage_prefix}#{provider.name.parameterize}Tag.csv" },
+        name: ->(provider) { "#{language.file_storage_prefix}#{provider.name.parameterize}-tag.csv" },
         path: "#{language.file_storage_prefix}CMES-v2/assets/csv",
       ),
       topic_tags: FileToUpload.new(
         content: ->(provider) { CsvGenerator::TopicTags.new(provider, language:).perform },
-        name: ->(provider) { "#{language.file_storage_prefix}#{provider.name.parameterize}TopicTag.csv" },
+        name: ->(provider) { "#{language.file_storage_prefix}#{provider.name.parameterize}-topic-tag.csv" },
         path: "#{language.file_storage_prefix}CMES-v2/assets/csv",
       ),
       topic_authors: FileToUpload.new(
         content: ->(provider) { CsvGenerator::TopicAuthors.new(provider).perform },
-        name: ->(provider) { "#{language.file_storage_prefix}#{provider.name.parameterize}TopicAuthor.csv" },
+        name: ->(provider) { "#{language.file_storage_prefix}#{provider.name.parameterize}-topic-author.csv" },
         path: "#{language.file_storage_prefix}CMES-v2/assets/csv",
       ),
     }
