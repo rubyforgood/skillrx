@@ -49,11 +49,6 @@ module Taggable
     tags_on(language.code.to_sym)
   end
 
-
-  def language_code
-    language.code.to_sym
-  end
-
   # Updates the list of tags for a specific record
   # @param attrs [Array<String>] the list of tags
   # @return [Boolean] true if tags are processed successfully, false otherwise

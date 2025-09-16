@@ -32,12 +32,6 @@ RSpec.shared_examples "taggable" do
     end
   end
 
-  describe "#language_code" do
-    it "returns the instance's language code as a symbol" do
-      expect(instance.language_code).to eq(:en)
-    end
-  end
-
   describe "#save_with_tags" do
     let(:tag_list) { [ "malaria", "fever" ] }
     let(:attrs) { { title: "New Title", tag_list: tag_list } }
