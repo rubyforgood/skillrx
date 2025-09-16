@@ -13,14 +13,14 @@ module Taggable
     end
   end
 
-  # Retrieves all available tags for the current language context
+  # Retrieves all available tags
   #
   # @return [ActiveRecord::Relation] collection of ActsAsTaggableOn::Tag
   def available_tags
     ActsAsTaggableOn::Tag.excluding(base_tags)&.order(name: :asc)
   end
 
-  # Retrieves associated tags for the current language context
+  # Retrieves associated tags
   #
   # @return [Array<Tag>] list of tags
 
@@ -29,24 +29,13 @@ module Taggable
     base_tags
   end
 
-  # Retrieves associated tags for the current language context
+  # Retrieves associated tags
   #
   # @return [Array<String>] list of tag names
 
   # Issue 400: Can be changed to all_tags_list once we've changed all context attributes to "tags"
   def current_tags_list
     base_tags.pluck(:name)
-  end
-
-  # Retrieves associated tags for a specific language
-  # @param language_id [Integer] the ID of the language
-  # @return [ActiveRecord::Relation] collection of ActsAsTaggableOn::Tag
-  def current_tags_for_language(language_id)
-    return [] if language_id.nil?
-
-    language = Language.find(language_id)
-
-    tags_on(language.code.to_sym)
   end
 
   # Updates the list of tags for a specific record
