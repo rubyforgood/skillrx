@@ -1,9 +1,11 @@
 require "rails_helper"
 
 RSpec.describe CsvGenerator::Files do
-  subject { described_class.new(language) }
+  subject { described_class.new(source, **args) }
 
   let(:language) { create(:language) }
+  let(:source) { language }
+  let(:args) { {} }
   let(:header) { "FileID,TopicID,FileName,FileType,FileSize\n" }
 
   it "generates empty csv" do
@@ -38,6 +40,15 @@ RSpec.describe CsvGenerator::Files do
       end
 
       it "uses custom file name in csv" do
+        expect(subject.perform).to eq(data)
+      end
+    end
+
+    context "when generated for provider" do
+      let(:source) { topic.provider }
+      let(:args) { { language: } }
+
+      it "generates csv with documents info" do
         expect(subject.perform).to eq(data)
       end
     end
