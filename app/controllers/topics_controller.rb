@@ -105,7 +105,7 @@ class TopicsController < ApplicationController
   end
 
   def search_params
-    return {} unless params[:search].present?
+    return { state: :active } unless params[:search].present?
 
     params.require(:search).permit(:query, :state, :language_id, :year, :month, :order, tag_list: [])
   end

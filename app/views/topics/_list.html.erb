@@ -9,7 +9,7 @@
       <td class="text-bold-500"><%= topic.documents.size %></td>
       <td class="text-bold-500"><span class="badge <%= topic.state == "active" ? "bg-success" : "bg-light-danger" %>"><%= topic.state %></span></td>
       <td class="text-end">
-        <%= link_to topic_path(topic, search: search_params), class: "btn btn-primary btn-sm", data: { turbo: false } do %>
+        <%= link_to topic_path(topic, search: search_params), class: "btn btn-primary btn-sm", data: { testid: topic.id, turbo: false } do %>
           <i class="bi bi-search"></i> View
         <% end %>
         <%= link_to edit_topic_path(topic), class: "btn btn-secondary btn-sm", data: { turbo: false } do %>
