@@ -4,8 +4,8 @@ RSpec.describe "Upload Management", type: :system do
   let(:admin) { create(:user, :admin, email: "admin@mail.com") }
 
   before do
-    login_as(admin)
     create(:language)
+    login_as(admin)
   end
 
   context "when creating a new topic" do
@@ -49,7 +49,7 @@ RSpec.describe "Upload Management", type: :system do
         expect(page).to have_text("logo_ruby_for_good.png")
         expect(page).to have_text("skillrx_sidebar.png")
         click_button("Update Topic")
-        click_link("View", href: topic_path(topic))
+        find_link { |l| l["data-testid"] == "#{topic.id}" }.click
         expect(page).to have_text("skillrx_sidebar.png")
       end
 
@@ -62,7 +62,7 @@ RSpec.describe "Upload Management", type: :system do
           expect(page).to have_text("logo_ruby_for_good.png")
           expect(page).to have_text("skillrx_sidebar.png")
           click_link("Cancel")
-          click_link("View", href: topic_path(topic))
+          find_link { |l| l["data-testid"] == "#{topic.id}" }.click
           expect(page).to have_text("logo_ruby_for_good.png")
           expect(page).not_to have_text("skillrx_sidebar.png")
         end
@@ -78,7 +78,7 @@ RSpec.describe "Upload Management", type: :system do
           expect(page).to have_text("file_text_test.txt")
           click_button("Update Topic")
           expect(page).to have_text("View")
-          click_link("View", href: topic_path(topic))
+          find_link { |l| l["data-testid"] == "#{topic.id}" }.click
           expect(page).not_to have_text("file_text_test.txt")
         end
       end
@@ -91,7 +91,7 @@ RSpec.describe "Upload Management", type: :system do
         expect(page).not_to have_text("logo_ruby_for_good.png")
         click_button("Update Topic")
         expect(page).to have_text("View")
-        click_link("View", href: topic_path(topic))
+        find_link { |l| l["data-testid"] == "#{topic.id}" }.click
         expect(page).not_to have_text("logo_ruby_for_good.png")
       end
 
@@ -101,7 +101,7 @@ RSpec.describe "Upload Management", type: :system do
         expect(page).not_to have_text("logo_ruby_for_good.png")
         click_link("Cancel")
         expect(page).to have_text("View")
-        click_link("View", href: topic_path(topic))
+        find_link { |l| l["data-testid"] == "#{topic.id}" }.click
         expect(page).to have_text("logo_ruby_for_good.png")
       end
     end
