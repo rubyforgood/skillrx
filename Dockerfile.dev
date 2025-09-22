@@ -1,5 +1,5 @@
 # Use Ruby 3.x with Alpine as base image for smaller size
-FROM ruby:3.4.1-alpine
+FROM ruby:3.4.6-alpine
 
 # Set environment variables for Rails
 ENV RAILS_ENV=development \
