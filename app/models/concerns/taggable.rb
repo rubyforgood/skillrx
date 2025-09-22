@@ -13,44 +13,29 @@ module Taggable
     end
   end
 
-  # Returns the language-specific tag context based on code
-  #
-  # @return [Symbol] the language context for tagging
-  # @raise [LanguageContextError] if language or code is not present
-  def language_tag_context
-    return nil if new_record?
-
-    raise LanguageContextError, "Language must be present" if language.nil?
-    raise LanguageContextError, "Language code must be present" if language.code.blank?
-
-    language_code
-  end
-
   # Retrieves all available tags for the current language context
   #
   # @return [ActiveRecord::Relation] collection of ActsAsTaggableOn::Tag
   def available_tags
-    return [] if language_tag_context.nil?
-
-    ActsAsTaggableOn::Tag.for_context(language_tag_context)&.order(name: :asc)
+    ActsAsTaggableOn::Tag.excluding(base_tags)&.order(name: :asc)
   end
 
   # Retrieves associated tags for the current language context
   #
   # @return [Array<Tag>] list of tags
-  def current_tags
-    return [] if language_tag_context.nil?
 
-    tags_on(language_tag_context)
+  # Issue 400: Can be changed to tags once we've changed all context attributes to "tags"
+  def current_tags
+    base_tags
   end
 
   # Retrieves associated tags for the current language context
   #
   # @return [Array<String>] list of tag names
-  def current_tags_list
-    return [] if language_tag_context.nil?
 
-    tag_list_on(language_tag_context)
+  # Issue 400: Can be changed to all_tags_list once we've changed all context attributes to "tags"
+  def current_tags_list
+    base_tags.pluck(:name)
   end
 
   # Retrieves associated tags for a specific language
@@ -63,6 +48,7 @@ module Taggable
 
     tags_on(language.code.to_sym)
   end
+
 
   def language_code
     language.code.to_sym
@@ -86,22 +72,26 @@ module Taggable
 
   private
 
-  def process_tags(tag_list)
-    return unless tag_list.present?
+  def process_tags(tag_names)
+    return unless tag_names.present?
 
-    Rails.logger.info "Processing tags: #{tag_list} for record: #{id}"
-    removed_tags = current_tags_list - tag_list
-    @full_list_of_tags = tag_list + removed_tags
-    tag_list_without_redundant_cognates = tag_list - tags_with_cognates(removed_tags)
-    tag_list_with_cognates_to_add = tag_list_without_redundant_cognates + tags_with_cognates(tag_list_without_redundant_cognates)
-    final_tag_list = tag_list_with_cognates_to_add.uniq.compact_blank.join(",")
-    set_tag_list_on(language_code, final_tag_list)
+    Rails.logger.info "Processing tags: #{tag_names} for record: #{id}"
+    removed_tags = current_tags_list - tag_names
+    @full_list_of_tags = tag_names + removed_tags
+    removed_tags_with_cognates = tags_with_cognates(removed_tags)
+    tag_names_without_redundant_cognates = tag_names - removed_tags_with_cognates
+    tag_names_with_cognates_to_add = tag_names_without_redundant_cognates + tags_with_cognates(tag_names_without_redundant_cognates)
+    final_tag_names = tag_names_with_cognates_to_add.uniq.compact_blank
+
+    # Once we have changed all context attributes to "tags", we can change this to tag_list = final_tag_names
+    tag_list.add(final_tag_names)
     save!
+    taggings.where(tag_id: Tag.where(name: removed_tags_with_cognates)).destroy_all
   end
 
   def cognates_names_for(tags_to_keep_add_or_remove)
     Tag.where(name: tags_to_keep_add_or_remove).each_with_object({}) do |tag, hash|
-      hash[tag.name] = tag.cognates_tags.for_context(language_code).uniq.pluck(:name).push(tag.name)
+      hash[tag.name] = tag.cognates_tags.uniq.pluck(:name).push(tag.name)
     end
   end
 

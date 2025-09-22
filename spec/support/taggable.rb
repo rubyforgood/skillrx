@@ -9,36 +9,26 @@ RSpec.shared_examples "taggable" do
     end
   end
 
-  describe "#language_tag_context" do
-    context "when language is present" do
-      it "returns language iso code as symbol" do
-        expect(instance.language_tag_context).to eq(:en)
-      end
-    end
-
-    context "when language is nil" do
-      before { instance.language = nil }
-
-      it "raises LanguageContextError" do
-        expect { instance.language_tag_context }
-          .to raise_error(Taggable::LanguageContextError, "Language must be present")
-      end
-    end
-  end
-
   describe "#available_tags" do
-    it "delegates to ActsAsTaggableOn::Tag with correct context" do
-      tag_collection = double("tag_collection")
-      expect(ActsAsTaggableOn::Tag).to receive(:for_context).with(:en).and_return(tag_collection)
-      expect(tag_collection).to receive(:order).with(name: :asc)
-      instance.available_tags
+    before do
+      instance.set_tag_list_on(language.code.to_sym, "hiv")
+      instance.save
+    end
+
+    it "returns all tags not associated with the instance" do
+      other_tag = create(:tag, name: "other")
+      expect(instance.available_tags).to eq([other_tag])
     end
   end
 
   describe "#current_tags_list" do
-    it "returns tags for the language context" do
-      expect(instance).to receive(:tag_list_on).with(:en)
-      instance.current_tags_list
+    before do
+      instance.set_tag_list_on(language.code.to_sym, "hiv")
+      instance.save
+    end
+
+    it "returns tags associated to the instance" do
+      expect(instance.current_tags_list).to eq(["hiv"])
     end
   end
 
@@ -55,7 +45,7 @@ RSpec.shared_examples "taggable" do
     it "processes tags correctly" do
       instance.save_with_tags(attrs)
       expect(instance.reload.title).to eq("New Title")
-      expect(instance.current_tags_list).to eq(tag_list)
+      expect(instance.current_tags_list).to match_array(tag_list)
     end
 
     context "when adding tags that have cognates or reverse cognates" do
@@ -78,10 +68,10 @@ RSpec.shared_examples "taggable" do
         spanish_instance.save
       end
 
-      it "adds the cognates of the same language as well" do
+      it "adds the cognates of both languages as well" do
         instance.save_with_tags(attrs)
         expect(instance.reload.title).to eq("New Title")
-        expect(instance.current_tags_list).to match_array(tag_list.push(english_cognate.name, english_reverse_cognate.name))
+        expect(instance.current_tags_list).to match_array(tag_list.push(english_cognate.name, english_reverse_cognate.name, spanish_cognate.name, spanish_reverse_cognate.name))
       end
     end
 
@@ -103,7 +93,7 @@ RSpec.shared_examples "taggable" do
       it "removes the cognates as well" do
         instance.save_with_tags(attrs)
         expect(instance.reload.title).to eq("New Title")
-        expect(instance.current_tags_list).to eq([ "tags" ])
+        expect(instance.reload.current_tags_list).to eq([ "tags" ])
       end
     end
   end
