@@ -31,7 +31,7 @@ RSpec.describe "Topics", type: :request do
       let!(:tag) { create(:tag, name: "Tag to remove") }
 
       before do
-        topic.set_tag_list_on(topic.language_code, tag.name)
+        topic.tag_list.add([tag.name])
         topic.save
       end
 
@@ -52,7 +52,7 @@ RSpec.describe "Topics", type: :request do
         let(:topic_params) {  { tag_list: [ "" ] } }
 
         before do
-          topic_2.set_tag_list_on(topic.language_code, tag.name)
+          topic_2.tag_list.add([tag.name])
           topic_2.save
         end
 
@@ -72,7 +72,7 @@ RSpec.describe "Topics", type: :request do
 
       before do
         tag.cognates << cognate
-        topic.set_tag_list_on(topic.language_code, "tag,cognate")
+        topic.tag_list.add(["tag", "cognate"])
         topic.save
       end
 

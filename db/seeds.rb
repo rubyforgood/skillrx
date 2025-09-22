@@ -65,11 +65,8 @@ puts "Topics created!"
 
 puts "Tagging topics.."
 Topic.all.each do |topic|
-  language_code = topic.language.code
-  3.times do
-    topic.tag_list_on(language_code.to_sym).add(Faker::ProgrammingLanguage.name)
-    topic.save
-  end
+  topic.tag_list.add([Faker::ProgrammingLanguage.name, Faker::ProgrammingLanguage.name, Faker::ProgrammingLanguage.name])
+  topic.save
 end
 
 puts "Topics tagged!"

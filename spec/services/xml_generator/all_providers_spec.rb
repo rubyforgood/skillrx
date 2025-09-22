@@ -12,9 +12,9 @@ RSpec.describe XmlGenerator::AllProviders do
   let(:tag_topic2) { create(:tag, name: "diabetes") }
 
   before do
-    topic1.set_tag_list_on(topic1.language_code, tag_topic1.name)
+    topic1.tag_list.add([tag_topic1.name])
     topic1.save
-    topic2.set_tag_list_on(topic2.language_code, tag_topic1.name)
+    topic2.tag_list.add([tag_topic1.name])
     topic2.save
   end
 

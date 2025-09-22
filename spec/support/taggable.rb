@@ -80,7 +80,7 @@ RSpec.shared_examples "taggable" do
         create(:tag_cognate, tag: reverse_cognate, cognate: tag1)
         create(:tag_cognate, tag: reverse_cognate, cognate: cognate)
         tags_and_their_cognates = tag_list.push(cognate.name, reverse_cognate.name)
-        instance.set_tag_list_on(instance.language_code, tags_and_their_cognates)
+        instance.tag_list.add(tags_and_their_cognates)
         instance.save
       end
 

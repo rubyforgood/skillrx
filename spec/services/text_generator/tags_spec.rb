@@ -10,10 +10,18 @@ RSpec.describe TextGenerator::Tags do
   end
 
   context "when tagged topics exist" do
-    let!(:topic) { create(:topic, :tagged, language:) }
+    let!(:topic) { create(:topic, language:) }
+
+    before do
+      ["cold", "flu", "cough"].each do |tag_name|
+        tag = create(:tag, name: tag_name)
+        topic.tag_list.add([tag_name])
+        topic.save
+      end
+    end
 
     it "generates text with tags for topics" do
-      expect(subject.perform).to eq(topic.tags_on(topic.language.code.to_sym).map(&:name).uniq.sort.join("\n"))
+      expect(subject.perform).to eq("cold\ncough\nflu")
     end
   end
 
