@@ -9,18 +9,6 @@ RSpec.shared_examples "taggable" do
     end
   end
 
-  describe "#available_tags" do
-    before do
-      instance.set_tag_list_on(language.code.to_sym, "hiv")
-      instance.save
-    end
-
-    it "returns all tags not associated with the instance" do
-      other_tag = create(:tag, name: "other")
-      expect(instance.available_tags).to eq([other_tag])
-    end
-  end
-
   describe "#current_tags_list" do
     before do
       instance.set_tag_list_on(language.code.to_sym, "hiv")

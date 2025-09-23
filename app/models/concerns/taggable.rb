@@ -13,13 +13,6 @@ module Taggable
     end
   end
 
-  # Retrieves all available tags
-  #
-  # @return [ActiveRecord::Relation] collection of ActsAsTaggableOn::Tag
-  def available_tags
-    ActsAsTaggableOn::Tag.excluding(base_tags)&.order(name: :asc)
-  end
-
   # Retrieves associated tags
   #
   # @return [Array<Tag>] list of tags
