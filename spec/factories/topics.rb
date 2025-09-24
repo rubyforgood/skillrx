@@ -39,7 +39,7 @@ FactoryBot.define do
     trait :tagged do
       after(:create) do |topic|
         tag = build(:tag)
-        topic.tag_list.add([tag.name])
+        topic.tag_list.add([ tag.name ])
         topic.save
       end
     end

@@ -13,15 +13,15 @@ RSpec.describe SynchronizeCognatesOnTopicsJob, type: :job do
   let!(:spanish_reverse_cognate) { create(:tag, name: "spanish reverse cognate") }
 
   before do
-    spanish_topic_1.tag_list.add(["spanish cognate", "spanish reverse cognate"])
+    spanish_topic_1.tag_list.add([ "spanish cognate", "spanish reverse cognate" ])
     spanish_topic_1.save
-    english_topic_2.tag_list.add(["english cognate", "english reverse cognate"])
+    english_topic_2.tag_list.add([ "english cognate", "english reverse cognate" ])
     english_topic_2.save
   end
 
   context "when adding cognates to a tag" do
     before do
-      english_topic_1.tag_list.add(["tag"])
+      english_topic_1.tag_list.add([ "tag" ])
       english_topic_1.save
       create(:tag_cognate, tag: tag, cognate: english_cognate)
       create(:tag_cognate, tag: english_reverse_cognate, cognate: tag)

@@ -13,9 +13,9 @@ RSpec.describe TextGenerator::Tags do
     let!(:topic) { create(:topic, language:) }
 
     before do
-      ["cold", "flu", "cough"].each do |tag_name|
+      [ "cold", "flu", "cough" ].each do |tag_name|
         tag = create(:tag, name: tag_name)
-        topic.tag_list.add([tag_name])
+        topic.tag_list.add([ tag_name ])
         topic.save
       end
     end

@@ -16,7 +16,7 @@ RSpec.shared_examples "taggable" do
     end
 
     it "returns tags associated to the instance" do
-      expect(instance.current_tags_list).to eq(["hiv"])
+      expect(instance.current_tags_list).to eq([ "hiv" ])
     end
   end
 
