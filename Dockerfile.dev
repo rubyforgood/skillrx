@@ -12,6 +12,7 @@ ENV RAILS_ENV=development \
 RUN apk add --no-cache \
     build-base \
     postgresql-dev \
+    yaml-dev \
     git \
     tzdata \
     bash \
