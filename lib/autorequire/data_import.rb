@@ -198,10 +198,10 @@ class DataImport
       # Build a string with the tag names
       tag_names_str = tag_ids.filter_map do |tag_id|
         Tag.find_by(id: tag_id)&.name&.strip || find_by_name.(tags_data, tag_id)&.name&.strip
-      end.join(",")
+      end
 
-      # Set the topic tags in the pertinent context (language comes from the topic's language)
-      topic.set_tag_list_on(topic.language_code, tag_names_str)
+      # Set the topic tags
+      topic.tag_list.add(tag_names_str)
       topic.save!
 
       puts "#{topic.title} - #{topic.id} / Tags: #{topic.current_tags_list}"
