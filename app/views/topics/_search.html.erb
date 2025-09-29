@@ -24,67 +24,35 @@
                 onblur:  "this.style.borderColor='#d1d5db'; this.style.boxShadow='none';" %>
         </div>
 
-        <!-- Tags -->
-        <div style="min-width:0; position:relative;">
-          <%= f.label :tag_list, "Tags", style: "display:block; font-size:0.875rem; font-weight:600; color:#374151; margin-bottom:0.5rem;" %>
-
-          <!-- Custom Tag Input Container -->
-          <div id="tag-input-container" style="width:100%; min-height:2.5rem; padding:0.375rem 2.5rem 0.375rem 0.5rem; border:1px solid #d1d5db; border-radius:0.5rem; background:white; transition:all 0.2s; box-sizing:border-box; cursor:text; display:flex; flex-wrap:wrap; gap:0.25rem; align-items:center;" onclick="focusTagInput()">
-
-            <!-- Selected Tags Display -->
-            <div id="selected-tags" style="display:flex; flex-wrap:wrap; gap:0.25rem; align-items:center;">
-              <% if params.dig(:search, :tag_list).present? %>
-                <% Array(params.dig(:search, :tag_list)).each do |tag_name| %>
-                  <span class="tag-badge" style="background:#3b82f6; color:white; padding:0.125rem 0.375rem; border-radius:0.25rem; font-size:0.75rem; font-weight:500; display:inline-flex; align-items:center; gap:0.25rem; white-space:nowrap;">
-                    <%= tag_name %>
-                    <button type="button" onclick="removeTag('<%= tag_name %>')" style="background:none; border:none; color:rgba(255,255,255,0.8); cursor:pointer; font-size:0.75rem; line-height:1; padding:0; margin-left:0.125rem;">×</button>
-                  </span>
-                  <%= hidden_field_tag "search[tag_list][]", tag_name %>
-                <% end %>
-              <% end %>
+        <!-- Language & Tags -->
+        <div style="min-width:0; grid-column: 1 / -1;">
+          <div data-controller="select-tags" style="display:grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap:1rem; align-items:start;">
+            <div style="position:relative;">
+              <%= f.label :language_id, "Language", style: "display:block; font-size:0.875rem; font-weight:600; color:#374151; margin-bottom:0.5rem;" %>
+              <div style="position:relative;">
+                <%= f.select :language_id,
+                             options_from_collection_for_select(languages, :id, :name, params.dig(:search, :language_id)),
+                             { prompt: "Select language" },
+                             style: "width:100%; padding:0.625rem 2.5rem 0.625rem 0.875rem; border:1px solid #d1d5db; border-radius:0.5rem; font-size:0.875rem; background:white; transition:all 0.2s; box-sizing:border-box; appearance:none; cursor:pointer;",
+                             data: { action: "change->topics#searchTopics" },
+                             onfocus: "this.style.borderColor='#3b82f6'; this.style.boxShadow='0 0 0 4px rgba(59,130,246,0.1)'; this.style.outline='none';",
+                             onblur:  "this.style.borderColor='#d1d5db'; this.style.boxShadow='none';" %>
+                <svg style="position:absolute; right:0.75rem; top:50%; transform:translateY(-50%); width:1.25rem; height:1.25rem; pointer-events:none; color:#6b7280;" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
+                </svg>
+              </div>
             </div>
 
-            <!-- Hidden Select for Tag Options -->
-            <select id="tag-selector" style="position:absolute; left:-9999px; opacity:0;">
-              <option value="">Select a tag...</option>
-              <% Tag.order(:name).each do |tag| %>
-                <option value="<%= tag.name %>"><%= tag.name %></option>
-              <% end %>
-            </select>
-
-            <!-- Visible Input Field -->
-            <input type="text" id="tag-input" placeholder="<%= params.dig(:search, :tag_list).present? ? 'Add another tag...' : 'Select tags...' %>" style="border:none; outline:none; background:none; font-size:0.875rem; flex:1; min-width:120px; padding:0.25rem;" autocomplete="off" />
-
-          </div>
-
-          <!-- Dropdown Menu -->
-          <div id="tag-dropdown" style="position:absolute; top:100%; left:0; right:0; background:white; border:1px solid #d1d5db; border-radius:0.5rem; box-shadow: 0 4px 6px -1px rgba(0,0,0,0.1), 0 2px 4px -1px rgba(0,0,0,0.06); max-height:200px; overflow-y:auto; z-index:1000; display:none;">
-            <% Tag.order(:name).each do |tag| %>
-              <div class="tag-option" data-value="<%= tag.name %>" style="padding:0.5rem 0.75rem; cursor:pointer; font-size:0.875rem; border-bottom:1px solid #f1f5f9;" onmouseover="this.style.background='#f0f9ff'" onmouseout="this.style.background='white'" onclick="selectTag('<%= tag.name %>')">
-                <%= tag.name %>
-              </div>
-            <% end %>
-          </div>
-
-          <svg style="position:absolute; right:0.75rem; top:70%; transform:translateY(-50%); width:1.25rem; height:1.25rem; pointer-events:none; color:#6b7280;" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
-          </svg>
-        </div>
-
-        <!-- Language -->
-        <div style="min-width:0; position:relative;">
-          <%= f.label :language_id, "Language", style: "display:block; font-size:0.875rem; font-weight:600; color:#374151; margin-bottom:0.5rem;" %>
-          <div style="position:relative;">
-            <%= f.select :language_id,
-                         options_from_collection_for_select(languages, :id, :name, params.dig(:search, :language_id)),
-                         { prompt: "Select language" },
-                         style: "width:100%; padding:0.625rem 2.5rem 0.625rem 0.875rem; border:1px solid #d1d5db; border-radius:0.5rem; font-size:0.875rem; background:white; transition:all 0.2s; box-sizing:border-box; appearance:none; cursor:pointer;",
-                         data: { action: "change->topics#searchTopics" },
-                         onfocus: "this.style.borderColor='#3b82f6'; this.style.boxShadow='0 0 0 4px rgba(59,130,246,0.1)'; this.style.outline='none';",
-                         onblur:  "this.style.borderColor='#d1d5db'; this.style.boxShadow='none';" %>
-            <svg style="position:absolute; right:0.75rem; top:50%; transform:translateY(-50%); width:1.25rem; height:1.25rem; pointer-events:none; color:#6b7280;" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
-            </svg>
+            <div style="position:relative;">
+              <%= f.label :tag_list, "Tags", style: "display:block; font-size:0.875rem; font-weight:600; color:#374151; margin-bottom:0.5rem;" %>
+              <%= f.select :tag_list,
+                           options_for_select(Tag.order(:name).pluck(:name), Array(params.dig(:search, :tag_list))),
+                           { include_hidden: false },
+                           multiple: true,
+                           id: "search_tag_list",
+                           class: "form-select",
+                           data: { "select-tags-target": "tagList", "allow-clear": "true", "allow-new": "false", action: "change->topics#searchTopics" } %>
+            </div>
           </div>
         </div>
 
@@ -144,7 +112,7 @@
           <%= f.label :order, style: "display:block; font-size:0.875rem; font-weight:600; color:#374151; margin-bottom:0.5rem;" %>
           <div style="position:relative;">
             <%= f.select :order,
-                         options_for_select(Topic::SORTS.reverse.index_with(&:itself), params.dig(:search, :order)),
+                         options_for_select(%w[desc asc].map { |o| [o, o] }, params.dig(:search, :order)),
                          {},
                          style: "width:100%; padding:0.625rem 2.5rem 0.625rem 0.875rem; border:1px solid #d1d5db; border-radius:0.5rem; font-size:0.875rem; background:white; transition:all 0.2s; box-sizing:border-box; appearance:none; cursor:pointer;",
                          data: { action: "change->topics#searchTopics" },
@@ -186,62 +154,6 @@
     background: #fafafa !important;
   }
 
-  /* Tag input container styling */
-  #tag-input-container:focus-within {
-    border-color: #3b82f6 !important;
-    box-shadow: 0 0 0 4px rgba(59, 130, 246, 0.1) !important;
-  }
-
-  #tag-input-container:hover {
-    border-color: #9ca3af !important;
-  }
-
-  /* Tag badges styling */
-  .tag-badge {
-    background: #3b82f6 !important;
-    color: white !important;
-    padding: 0.125rem 0.375rem !important;
-    border-radius: 0.25rem !important;
-    font-size: 0.75rem !important;
-    font-weight: 500 !important;
-    display: inline-flex !important;
-    align-items: center !important;
-    gap: 0.25rem !important;
-    white-space: nowrap !important;
-    transition: all 0.2s !important;
-  }
-
-  .tag-badge:hover {
-    background: #2563eb !important;
-  }
-
-  .tag-badge button {
-    background: none !important;
-    border: none !important;
-    color: rgba(255,255,255,0.8) !important;
-    cursor: pointer !important;
-    font-size: 0.75rem !important;
-    line-height: 1 !important;
-    padding: 0 !important;
-    margin-left: 0.125rem !important;
-    transition: color 0.2s !important;
-  }
-
-  .tag-badge button:hover {
-    color: white !important;
-  }
-
-  /* Dropdown styling */
-  #tag-dropdown .tag-option:hover {
-    background: #f0f9ff !important;
-    color: #0c4a6e !important;
-  }
-
-  #tag-dropdown .tag-option.selected {
-    background: #e0f2fe !important;
-    color: #0c4a6e !important;
-  }
-
   /* Clear button hover */
   a[href*="topics"]:hover {
     background: #4b5563 !important;
@@ -261,171 +173,3 @@
   /* Ensure the grid itself can shrink */
   #topics-search-grid { min-width: 0; }
 </style>
-
-<script>
-  let availableTags = [];
-  let selectedTags = [];
-
-  // Initialize when page loads
-  document.addEventListener('DOMContentLoaded', function() {
-    initializeTagInput();
-  });
-
-  function initializeTagInput() {
-    const tagInput = document.getElementById('tag-input');
-    const tagDropdown = document.getElementById('tag-dropdown');
-    const container = document.getElementById('tag-input-container');
-
-    // Get available tags
-    availableTags = Array.from(document.querySelectorAll('.tag-option')).map(option => option.dataset.value);
-
-    // Get currently selected tags
-    selectedTags = Array.from(document.querySelectorAll('#selected-tags input[type="hidden"]')).map(input => input.value);
-
-    // Input events
-    tagInput.addEventListener('input', function() {
-      filterTags(this.value);
-    });
-
-    tagInput.addEventListener('focus', function() {
-      showDropdown();
-    });
-
-    tagInput.addEventListener('keydown', function(e) {
-      if (e.key === 'Enter') {
-        e.preventDefault();
-        const firstOption = document.querySelector('.tag-option:not([style*="display: none"])');
-        if (firstOption) {
-          selectTag(firstOption.dataset.value);
-        }
-      } else if (e.key === 'Backspace' && this.value === '' && selectedTags.length > 0) {
-        // Remove last tag if input is empty and backspace is pressed
-        removeTag(selectedTags[selectedTags.length - 1]);
-      }
-    });
-
-    // Hide dropdown when clicking outside
-    document.addEventListener('click', function(e) {
-      if (!container.contains(e.target)) {
-        hideDropdown();
-      }
-    });
-  }
-
-  function focusTagInput() {
-    document.getElementById('tag-input').focus();
-  }
-
-  function filterTags(query) {
-    const options = document.querySelectorAll('.tag-option');
-    const dropdown = document.getElementById('tag-dropdown');
-    let hasVisibleOptions = false;
-
-    options.forEach(option => {
-      const tagName = option.dataset.value;
-      const isSelected = selectedTags.includes(tagName);
-      const matchesQuery = tagName.toLowerCase().includes(query.toLowerCase());
-
-      if (isSelected || (!matchesQuery && query !== '')) {
-        option.style.display = 'none';
-      } else {
-        option.style.display = 'block';
-        hasVisibleOptions = true;
-      }
-    });
-
-    if (hasVisibleOptions || query === '') {
-      showDropdown();
-    } else {
-      hideDropdown();
-    }
-  }
-
-  function showDropdown() {
-    const dropdown = document.getElementById('tag-dropdown');
-    dropdown.style.display = 'block';
-    filterTags(document.getElementById('tag-input').value);
-  }
-
-  function hideDropdown() {
-    document.getElementById('tag-dropdown').style.display = 'none';
-  }
-
-  function selectTag(tagName) {
-    if (selectedTags.includes(tagName)) return;
-
-    // Add to selected tags array
-    selectedTags.push(tagName);
-
-    // Create tag badge
-    const tagContainer = document.getElementById('selected-tags');
-    const tagBadge = document.createElement('span');
-    tagBadge.className = 'tag-badge';
-    tagBadge.style.cssText = 'background:#3b82f6; color:white; padding:0.125rem 0.375rem; border-radius:0.25rem; font-size:0.75rem; font-weight:500; display:inline-flex; align-items:center; gap:0.25rem; white-space:nowrap;';
-
-    tagBadge.innerHTML = `
-      ${tagName}
-      <button type="button" onclick="removeTag('${tagName}')" style="background:none; border:none; color:rgba(255,255,255,0.8); cursor:pointer; font-size:0.75rem; line-height:1; padding:0; margin-left:0.125rem;">×</button>
-    `;
-
-    // Create hidden input
-    const hiddenInput = document.createElement('input');
-    hiddenInput.type = 'hidden';
-    hiddenInput.name = 'search[tag_list][]';
-    hiddenInput.value = tagName;
-    hiddenInput.dataset.tagName = tagName;
-
-    tagContainer.appendChild(tagBadge);
-    tagContainer.appendChild(hiddenInput);
-
-    // Clear input and update placeholder
-    const tagInput = document.getElementById('tag-input');
-    tagInput.value = '';
-    tagInput.placeholder = 'Add another tag...';
-
-    // Hide dropdown and filter
-    hideDropdown();
-    filterTags('');
-
-    // Trigger search
-    triggerSearch();
-  }
-
-  function removeTag(tagName) {
-    // Remove from selected tags array
-    selectedTags = selectedTags.filter(tag => tag !== tagName);
-
-    // Remove badge
-    const badges = document.querySelectorAll('#selected-tags .tag-badge');
-    badges.forEach(badge => {
-      if (badge.textContent.trim().startsWith(tagName)) {
-        badge.remove();
-      }
-    });
-
-    // Remove hidden input
-    const hiddenInput = document.querySelector(`input[data-tag-name="${tagName}"]`);
-    if (hiddenInput) {
-      hiddenInput.remove();
-    }
-
-    // Update placeholder
-    const tagInput = document.getElementById('tag-input');
-    if (selectedTags.length === 0) {
-      tagInput.placeholder = 'Select tags...';
-    }
-
-    // Refresh dropdown options
-    filterTags(tagInput.value);
-
-    // Trigger search
-    triggerSearch();
-  }
-
-  function triggerSearch() {
-    const form = document.querySelector('[data-controller="topics"] form');
-    if (form) {
-      form.dispatchEvent(new Event('change', { bubbles: true }));
-    }
-  }
-</script>
