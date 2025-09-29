@@ -6,8 +6,8 @@
           <%= image_tag("skill.svg", alt: "SkillRx", class: "h-16 w-auto mx-auto") %>
         <% end %>
         
-        <h2 class="mt-6 text-3xl font-bold text-gray-900">Reset Your Password</h2>
-        <p class="mt-2 text-gray-600">Enter your email address and we'll send you a link to reset your password</p>
+  <h2 class="mt-6 text-3xl font-bold text-gray-900">Reset Your Password</h2>
+  <p class="mt-2 text-gray-600">Input your email and we will send you reset password link</p>
       </div>
       
       <% if flash[:alert] %>
@@ -48,7 +48,7 @@
         </div>
         
         <div class="mt-6 space-y-2">
-          <%= link_to "Back to Sign In", new_session_path, 
+          <%= link_to "Login", new_session_path, 
               class: "font-medium text-indigo-600 hover:text-indigo-500" %>
           <p class="text-sm text-gray-600">
             Need help? 
