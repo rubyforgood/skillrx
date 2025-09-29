@@ -48,7 +48,10 @@ module Searcheable
         .then { |scope| params[:month].present? ? scope.by_month(params[:month]) : scope }
         .then { |scope| params[:query].present? ? scope.search(params[:query]) : scope }
         .then { |scope| params[:tag_list].present? ? scope.by_tag_list(params[:tag_list]) : scope }
-        .then { |scope| scope.order(published_at: sort_order(params[:order].present? ? params[:order].to_sym : :desc)) }
+        .then do |scope|
+          order_column = scope.klass.column_names.include?("published_at") ? :published_at : :created_at
+          scope.order(order_column => sort_order(params[:order].present? ? params[:order].to_sym : :desc))
+        end
     end
   end
 end
