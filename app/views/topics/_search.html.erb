@@ -82,6 +82,7 @@
                          { prompt: "Select month" },
                          style: "width:100%; padding:0.625rem 2.5rem 0.625rem 0.875rem; border:1px solid #d1d5db; border-radius:0.5rem; font-size:0.875rem; background:white; transition:all 0.2s; box-sizing:border-box; appearance:none; cursor:pointer;",
                          data: { action: "change->topics#searchTopics" },
+                         onchange: "this.form.requestSubmit()",
                          onfocus: "this.style.borderColor='#3b82f6'; this.style.boxShadow='0 0 0 4px rgba(59,130,246,0.1)'; this.style.outline='none';",
                          onblur:  "this.style.borderColor='#d1d5db'; this.style.boxShadow='none';" %>
             <svg style="position:absolute; right:0.75rem; top:50%; transform:translateY(-50%); width:1.25rem; height:1.25rem; pointer-events:none; color:#6b7280;" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -99,6 +100,7 @@
                          { prompt: "Select state" },
                          style: "width:100%; padding:0.625rem 2.5rem 0.625rem 0.875rem; border:1px solid #d1d5db; border-radius:0.5rem; font-size:0.875rem; background:white; transition:all 0.2s; box-sizing:border-box; appearance:none; cursor:pointer;",
                          data: { action: "change->topics#searchTopics" },
+                         onchange: "this.form.requestSubmit()",
                          onfocus: "this.style.borderColor='#3b82f6'; this.style.boxShadow='0 0 0 4px rgba(59,130,246,0.1)'; this.style.outline='none';",
                          onblur:  "this.style.borderColor='#d1d5db'; this.style.boxShadow='none';" %>
             <svg style="position:absolute; right:0.75rem; top:50%; transform:translateY(-50%); width:1.25rem; height:1.25rem; pointer-events:none; color:#6b7280;" fill="none" stroke="currentColor" viewBox="0 0 24 24">

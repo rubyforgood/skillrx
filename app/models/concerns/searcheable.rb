@@ -25,7 +25,13 @@ module Searcheable
     end
 
     def by_state(state)
-      where(state: state)
+      return all if state.blank?
+
+      if respond_to?(:states) && states.key?(state.to_s)
+        where(state: states[state.to_s])
+      else
+        where(state: state)
+      end
     end
 
     def by_tag_list(tag_list)
