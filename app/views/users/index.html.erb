@@ -101,7 +101,7 @@
                     Sort Order
                   </div>
                 </label>
-                <%= f.select :order, options_for_select([["Most recently added", :desc], ["Least recently added", :asc]], params.dig(:search, :order)), 
+                <%= f.select :order, options_for_select([["By most recently added", :desc], ["By least recently added", :asc]], params.dig(:search, :order)), 
                     {}, 
                     style: "width: 100%; padding: 0.75rem; border: 2px solid #e5e7eb; border-radius: 0.5rem; font-size: 0.875rem; background: white; transition: all 0.2s;", 
                     data: { action: "change->search#submit" },

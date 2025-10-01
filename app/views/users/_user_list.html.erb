@@ -142,22 +142,23 @@
                   </td>
                 </tr>
               <% end %>
-            <% else %>
-              <tr>
-                <td colspan="5" style="padding: 3rem 1.5rem; text-align: center;">
-                  <div style="color: #9ca3af;">
-                    <svg style="width: 3rem; height: 3rem; margin: 0 auto 1rem; color: #d1d5db;" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"></path>
-                    </svg>
-                    <p style="font-size: 1rem; font-weight: 500; color: #6b7280; margin: 0;">No users found</p>
-                    <p style="font-size: 0.875rem; color: #9ca3af; margin: 0.5rem 0 0 0;">Try adjusting your search filters.</p>
-                  </div>
-                </td>
-              </tr>
             <% end %>
           </tbody>
         </table>
       </div>
+      
+      <% unless @users.any? %>
+        <!-- Empty state displayed outside the table -->
+        <div style="padding: 3rem 1.5rem; text-align: center;">
+          <div style="color: #9ca3af;">
+            <svg style="width: 3rem; height: 3rem; margin: 0 auto 1rem; color: #d1d5db;" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"></path>
+            </svg>
+            <p style="font-size: 1rem; font-weight: 500; color: #6b7280; margin: 0;">No users found</p>
+            <p style="font-size: 0.875rem; color: #9ca3af; margin: 0.5rem 0 0 0;">Try adjusting your search filters.</p>
+          </div>
+        </div>
+      <% end %>
       
       <!-- Pagination -->
       <div style="background: #f8fafc; padding: 1.5rem; border-top: 1px solid #e2e8f0; display: flex; justify-content: space-between; align-items: center;">
@@ -165,9 +166,7 @@
           Showing <%= @users.count %> of <%= @pagy.count %> users
         </div>
         <div>
-          <% if @pagy.pages > 1 %>
-            <%= render "shared/pagination", pagy: @pagy %>
-          <% end %>
+          <%= render "shared/pagination", pagy: @pagy %>
         </div>
       </div>
     </div>

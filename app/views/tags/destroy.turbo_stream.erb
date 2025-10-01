@@ -1,14 +1,12 @@
 <%= turbo_stream.update "delete_tag_#{@tag.id}" do %>
-  <div class="confirmation-dialog mt-4">
-    <h5>Are you sure you want to delete this tag?</h5>
+  <div class="confirmation-dialog" style="background: white; border: 1px solid #fca5a5; border-radius: 0.75rem; padding: 1.5rem; box-shadow: 0 10px 25px -10px rgba(220, 38, 38, 0.35);">
+    <h5 style="font-size: 1.125rem; font-weight: 600; color: #991b1b; margin: 0 0 1rem 0;">Are you sure you want to delete this tag?</h5>
 
-    <div class="mt-4 hstack gap-3">
-      <div>
-        <%= button_to "Confirm Delete", tag_path(@tag, confirmed: true),  method: :delete, class: "btn btn-danger" %>
-      </div>
-      <div>
-        <%= link_to "Cancel", tag_path(@tag), class: "btn btn-secondary" %>
-      </div>
+    <p style="color: #b91c1c; margin-bottom: 1.5rem; font-size: 0.95rem;">This action cannot be undone and will remove the tag from all associated topics.</p>
+
+    <div style="display: flex; gap: 0.75rem; flex-wrap: wrap;">
+      <%= button_to "Delete", tag_path(@tag, confirmed: true), method: :delete, class: "delete-tag-button" %>
+      <%= link_to "Cancel", tag_path(@tag), data: { turbo_frame: "_top" }, class: "cancel-delete-link" %>
     </div>
   </div>
 <% end %>
