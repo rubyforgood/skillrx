@@ -21,7 +21,7 @@
 
       <% if Current.user.is_admin? %>
         <li style="margin: 1.5rem 0 1rem 0;">
-          <div style="padding: 0.5rem 1rem; font-size: 0.75rem; font-weight: 600; color: #6b7280; text-transform: uppercase; letter-spacing: 0.05em; border-bottom: 1px solid #f3f4f6; margin-bottom: 0.75rem;">Administration</div>
+          <div style="padding: 0.5rem 1rem; font-size: 0.75rem; font-weight: 600; color: #6b7280; letter-spacing: 0.05em; border-bottom: 1px solid #f3f4f6; margin-bottom: 0.75rem;">Administration</div>
         </li>
         <li style="margin-bottom: 0.5rem;">
           <%= link_to regions_path, style: nav_link_class(regions_path) do %>

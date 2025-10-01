@@ -77,20 +77,21 @@
         </td>
       </tr>
     <% end %>
-  <% else %>
-    <tr>
-      <td colspan="8" style="padding: 3rem 1.5rem; text-align: center;">
-        <div style="color: #9ca3af;">
-          <svg style="width: 3rem; height: 3rem; margin: 0 auto 1rem; color: #d1d5db;" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1" d="M7 7h.01M7 3h5c.512 0 1.024.195 1.414.586l7 7a2 2 0 010 2.828l-7 7a2 2 0 01-2.828 0l-7-7A1.994 1.994 0 013 12V7a4 4 0 014-4z"/>
-          </svg>
-          <p style="font-size: 1rem; font-weight: 500; color: #6b7280; margin: 0;">No topics found</p>
-          <p style="font-size: 0.875rem; color: #9ca3af; margin: 0.5rem 0 0 0;">Try adjusting your search filters or create a new topic.</p>
-        </div>
-      </td>
-    </tr>
   <% end %>
 </tbody>
+
+<% unless @topics.any? %>
+  <!-- Empty state displayed outside the table -->
+  <div style="padding: 3rem 1.5rem; text-align: center;">
+    <div style="color: #9ca3af;">
+      <svg style="width: 3rem; height: 3rem; margin: 0 auto 1rem; color: #d1d5db;" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1" d="M7 7h.01M7 3h5c.512 0 1.024.195 1.414.586l7 7a2 2 0 010 2.828l-7 7a2 2 0 01-2.828 0l-7-7A1.994 1.994 0 013 12V7a4 4 0 014-4z"/>
+      </svg>
+      <p style="font-size: 1rem; font-weight: 500; color: #6b7280; margin: 0;">No topics found</p>
+      <p style="font-size: 0.875rem; color: #9ca3af; margin: 0.5rem 0 0 0;">Try adjusting your search filters or create a new topic.</p>
+    </div>
+  </div>
+<% end %>
 
 <style>
   /* Action button hover effects */

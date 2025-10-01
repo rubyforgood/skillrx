@@ -103,9 +103,7 @@
               Showing <%= @topics.size %> of <%= @pagy.count %> topics
             </div>
             <div>
-              <% if @pagy.pages > 1 %>
-                <%= render "shared/pagination", pagy: @pagy %>
-              <% end %>
+              <%= render "shared/pagination", pagy: @pagy %>
             </div>
           </div>
         <% end %>

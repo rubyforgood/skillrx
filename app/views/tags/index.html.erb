@@ -182,9 +182,7 @@
               Showing <%= @tags.count %> of <%= @pagy.count %> tags
             </div>
             <div>
-              <% if @pagy.pages > 1 %>
-                <%= render "shared/pagination", pagy: @pagy %>
-              <% end %>
+              <%= render "shared/pagination", pagy: @pagy %>
             </div>
           </div>
         </div>
