@@ -16,19 +16,15 @@ module Taggable
   # Retrieves associated tags
   #
   # @return [Array<Tag>] list of tags
-
-  # Issue 400: Can be changed to tags once we've changed all context attributes to "tags"
   def current_tags
-    base_tags
+    tags
   end
 
   # Retrieves associated tags
   #
   # @return [Array<String>] list of tag names
-
-  # Issue 400: Can be changed to all_tags_list once we've changed all context attributes to "tags"
   def current_tags_list
-    base_tags.pluck(:name)
+    all_tags_list
   end
 
   # Updates the list of tags for a specific record
