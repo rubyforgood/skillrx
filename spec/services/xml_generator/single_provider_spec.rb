@@ -27,7 +27,8 @@ RSpec.describe XmlGenerator::SingleProvider do
     end
 
     before do
-      topic.set_tag_list_on(topic.language.code.to_sym, "#{tag_1.name},#{tag_2.name}")
+      topic.current_tags << tag_1
+      topic.current_tags << tag_2
       topic.save
       topic.documents.attach(document.signed_id) # we need only to attach video file to topic, saving here is redundant
     end

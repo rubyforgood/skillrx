@@ -23,6 +23,7 @@ RSpec.describe SynchronizeCognatesOnTopicsJob, type: :job do
     before do
       english_topic_1.tag_list.add([ "tag" ])
       english_topic_1.save
+
       create(:tag_cognate, tag: tag, cognate: english_cognate)
       create(:tag_cognate, tag: english_reverse_cognate, cognate: tag)
       create(:tag_cognate, tag: english_reverse_cognate, cognate: english_cognate)

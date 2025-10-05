@@ -24,7 +24,7 @@ module Taggable
   #
   # @return [Array<String>] list of tag names
   def current_tags_list
-    all_tags_list
+    tag_list
   end
 
   # Updates the list of tags for a specific record
@@ -56,8 +56,7 @@ module Taggable
     tag_names_with_cognates_to_add = tag_names_without_redundant_cognates + tags_with_cognates(tag_names_without_redundant_cognates)
     final_tag_names = tag_names_with_cognates_to_add.uniq.compact_blank
 
-    # Once we have changed all context attributes to "tags", we can change this to tag_list = final_tag_names
-    tag_list.add(final_tag_names)
+    self.tag_list = final_tag_names
     save!
     taggings.where(tag_id: Tag.where(name: removed_tags_with_cognates)).destroy_all
   end

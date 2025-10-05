@@ -11,7 +11,7 @@ RSpec.shared_examples "taggable" do
 
   describe "#current_tags_list" do
     before do
-      instance.set_tag_list_on(language.code.to_sym, "hiv")
+      instance.current_tags_list << "hiv"
       instance.save
     end
 

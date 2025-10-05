@@ -19,12 +19,7 @@ RSpec.describe "Topics", type: :request do
        topic.reload
        expect(topic.title).to eq("new topic")
        expect(topic.description).to eq("updated")
-    end
-
-    it "displays a success message" do
-      put topics_url, params: { topic: topic_params }
-
-      expect(flash[:notice]).to eq("Topic was successfully updated.")
+       expect(flash[:notice]).to eq("Topic was successfully updated.")
     end
 
     context "when removing a tag" do
