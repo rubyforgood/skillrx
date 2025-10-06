@@ -44,9 +44,9 @@ RSpec.shared_examples "taggable" do
         create(:tag_cognate, tag: spanish_reverse_cognate, cognate: tag1)
         english_instance = create(described_class.to_s.underscore.to_sym, language: language)
         spanish_instance = create(described_class.to_s.underscore.to_sym, language: create(:language, name: "Spanish"))
-        english_instance.set_tag_list_on(:en, "paludism,jungle fever")
+        english_instance.current_tags_list << [ "paludism", "jungle fever" ]
         english_instance.save
-        spanish_instance.set_tag_list_on(:sp, "paludismo,fiebre de la jungla")
+        spanish_instance.current_tags_list << [ "paludismo", "fiebre de la jungla" ]
         spanish_instance.save
       end
 
