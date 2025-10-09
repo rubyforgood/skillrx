@@ -47,7 +47,7 @@
                            ActsAsTaggableOn::Tag.all&.order(name: :asc),
                            :name,
                            :name,
-                           topic.current_tags_list
+                           topic.tag_list
                          ),
                          { prompt: "Select tags", include_blank: true },
                          multiple: true,

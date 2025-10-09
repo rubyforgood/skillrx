@@ -37,7 +37,7 @@ RSpec.describe "Topics", type: :request do
           put topic_url(topic), params: { topic: topic_params }
 
           expect(response).to redirect_to(topics_url)
-          expect(topic.reload.current_tags).to be_empty
+          expect(topic.reload.tags).to be_empty
           expect(Tag.find_by(name: tag.name)).to be_nil
         end
       end
@@ -54,7 +54,7 @@ RSpec.describe "Topics", type: :request do
         it "removes the tag from the topic but does not destroy the tag" do
           put topic_url(topic), params: { topic: topic_params }
           expect(response).to redirect_to(topics_url)
-          expect(topic.reload.current_tags).to be_empty
+          expect(topic.reload.tags).to be_empty
           expect(Tag.find_by(name: tag.name)).to be_present
         end
       end
@@ -75,7 +75,7 @@ RSpec.describe "Topics", type: :request do
         put topic_url(topic), params: { topic: topic_params }
 
         expect(response).to redirect_to(topics_url)
-        expect(topic.reload.current_tags).to eq([])
+        expect(topic.reload.tags).to eq([])
         expect(Tag.find_by(name: "tag")).to be_nil
         expect(Tag.find_by(name: "cognate")).to be_nil
       end

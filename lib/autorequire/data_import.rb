@@ -204,7 +204,7 @@ class DataImport
       topic.tag_list.add(tag_names_str)
       topic.save!
 
-      puts "#{topic.title} - #{topic.id} / Tags: #{topic.current_tags_list}"
+      puts "#{topic.title} - #{topic.id} / Tags: #{topic.tag_list}"
     end
     puts "Topic tags import completed"
   end

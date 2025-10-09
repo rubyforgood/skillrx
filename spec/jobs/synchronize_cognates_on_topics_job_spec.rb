@@ -34,7 +34,7 @@ RSpec.describe SynchronizeCognatesOnTopicsJob, type: :job do
 
     it "adds new cognates to topics tagged with the original tag" do
       SynchronizeCognatesOnTopicsJob.perform_now(tag)
-      expect(Topic.find_by(id: english_topic_1.id).current_tags_list)
+      expect(Topic.find_by(id: english_topic_1.id).tag_list)
         .to match_array([ "tag", "english cognate", "english reverse cognate", "spanish cognate", "spanish reverse cognate" ])
     end
   end

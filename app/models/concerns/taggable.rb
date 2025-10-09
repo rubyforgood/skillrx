@@ -13,20 +13,6 @@ module Taggable
     end
   end
 
-  # Retrieves associated tags
-  #
-  # @return [Array<Tag>] list of tags
-  def current_tags
-    tags
-  end
-
-  # Retrieves associated tags
-  #
-  # @return [Array<String>] list of tag names
-  def current_tags_list
-    tag_list
-  end
-
   # Updates the list of tags for a specific record
   # @param attrs [Array<String>] the list of tags
   # @return [Boolean] true if tags are processed successfully, false otherwise
@@ -49,7 +35,7 @@ module Taggable
     return unless tag_names.present?
 
     Rails.logger.info "Processing tags: #{tag_names} for record: #{id}"
-    removed_tags = current_tags_list - tag_names
+    removed_tags = tag_list - tag_names
     @full_list_of_tags = tag_names + removed_tags
     removed_tags_with_cognates = tags_with_cognates(removed_tags)
     tag_names_without_redundant_cognates = tag_names - removed_tags_with_cognates

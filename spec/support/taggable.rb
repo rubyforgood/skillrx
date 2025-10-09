@@ -9,17 +9,6 @@ RSpec.shared_examples "taggable" do
     end
   end
 
-  describe "#current_tags_list" do
-    before do
-      instance.current_tags_list << "hiv"
-      instance.save
-    end
-
-    it "returns tags associated to the instance" do
-      expect(instance.current_tags_list).to eq([ "hiv" ])
-    end
-  end
-
   describe "#save_with_tags" do
     let(:tag_list) { [ "malaria", "fever" ] }
     let(:attrs) { { title: "New Title", tag_list: tag_list } }
@@ -27,7 +16,7 @@ RSpec.shared_examples "taggable" do
     it "processes tags correctly" do
       instance.save_with_tags(attrs)
       expect(instance.reload.title).to eq("New Title")
-      expect(instance.current_tags_list).to match_array(tag_list)
+      expect(instance.tag_list).to match_array(tag_list)
     end
 
     context "when adding tags that have cognates or reverse cognates" do
@@ -44,16 +33,16 @@ RSpec.shared_examples "taggable" do
         create(:tag_cognate, tag: spanish_reverse_cognate, cognate: tag1)
         english_instance = create(described_class.to_s.underscore.to_sym, language: language)
         spanish_instance = create(described_class.to_s.underscore.to_sym, language: create(:language, name: "Spanish"))
-        english_instance.current_tags_list << [ "paludism", "jungle fever" ]
+        english_instance.tag_list << [ "paludism", "jungle fever" ]
         english_instance.save
-        spanish_instance.current_tags_list << [ "paludismo", "fiebre de la jungla" ]
+        spanish_instance.tag_list << [ "paludismo", "fiebre de la jungla" ]
         spanish_instance.save
       end
 
       it "adds the cognates of both languages as well" do
         instance.save_with_tags(attrs)
         expect(instance.reload.title).to eq("New Title")
-        expect(instance.current_tags_list).to match_array(tag_list.push(english_cognate.name, english_reverse_cognate.name, spanish_cognate.name, spanish_reverse_cognate.name))
+        expect(instance.tag_list).to match_array(tag_list.push(english_cognate.name, english_reverse_cognate.name, spanish_cognate.name, spanish_reverse_cognate.name))
       end
     end
 
@@ -75,7 +64,7 @@ RSpec.shared_examples "taggable" do
       it "removes the cognates as well" do
         instance.save_with_tags(attrs)
         expect(instance.reload.title).to eq("New Title")
-        expect(instance.reload.current_tags_list).to eq([ "tags" ])
+        expect(instance.reload.tag_list).to eq([ "tags" ])
       end
     end
   end

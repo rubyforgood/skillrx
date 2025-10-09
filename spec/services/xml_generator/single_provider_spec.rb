@@ -27,8 +27,8 @@ RSpec.describe XmlGenerator::SingleProvider do
     end
 
     before do
-      topic.current_tags << tag_1
-      topic.current_tags << tag_2
+      topic.tags << tag_1
+      topic.tags << tag_2
       topic.save
       topic.documents.attach(document.signed_id) # we need only to attach video file to topic, saving here is redundant
     end
@@ -64,7 +64,7 @@ RSpec.describe XmlGenerator::SingleProvider do
       author_node = title_node.at_xpath("./topic_author/topic_author_1")
       expect(author_node.text).to eq(" ")
 
-      expect(title_node.at_xpath("./topic_tags").text).to eq(topic.current_tags_list.join(", "))
+      expect(title_node.at_xpath("./topic_tags").text).to eq(topic.tag_list.join(", "))
     end
   end
 end

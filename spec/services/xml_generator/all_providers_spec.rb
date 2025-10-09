@@ -59,7 +59,7 @@ RSpec.describe XmlGenerator::AllProviders do
       author1 = tnode.at_xpath("./topic_author/topic_author_1")
       expect(author1.text).to eq(" ")
 
-      expect(tnode.at_xpath("./topic_tags").text).to eq(topic.current_tags_list.join(", "))
+      expect(tnode.at_xpath("./topic_tags").text).to eq(topic.tag_list.join(", "))
     end
   end
 
