@@ -3,7 +3,7 @@ class ProvidersController < ApplicationController
   before_action :redirect_contributors
 
   def index
-    @providers = Provider.all
+    @providers = Provider.includes(:regions).order(:name)
   end
 
   def show
