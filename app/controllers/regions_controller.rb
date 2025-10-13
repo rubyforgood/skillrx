@@ -4,7 +4,11 @@ class RegionsController < ApplicationController
 
   # GET /regions
   def index
-    @regions = Region.all
+    @regions = Region
+      .left_joins(:providers)
+      .select("regions.*, COUNT(providers.id) AS providers_count")
+      .group("regions.id")
+      .order(:name)
   end
 
   # GET /regions/1
