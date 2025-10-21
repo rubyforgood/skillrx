@@ -237,7 +237,7 @@ GEM
     json (2.15.0)
     jwt (2.10.2)
       base64
-    kamal (2.8.0)
+    kamal (2.8.1)
       activesupport (>= 7.0)
       base64 (~> 0.2)
       bcrypt_pbkdf (~> 1.0)
