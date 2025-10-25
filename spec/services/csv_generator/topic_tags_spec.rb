@@ -1,11 +1,9 @@
 require "rails_helper"
 
 RSpec.describe CsvGenerator::TopicTags do
-  subject { described_class.new(source, **args) }
+  subject { described_class.new(language) }
 
   let(:language) { create(:language) }
-  let(:source) { language }
-  let(:args) { {} }
   let(:header) { "TopicID,TagID\n" }
 
   it "generates empty csv" do
@@ -24,15 +22,6 @@ RSpec.describe CsvGenerator::TopicTags do
 
     it "generates csv with topic tag info" do
       expect(subject.perform).to eq(data)
-    end
-
-    context "when generated for provider" do
-      let(:source) { topic.provider }
-      let(:args) { { language: } }
-
-      it "generates csv with documents info" do
-        expect(subject.perform).to eq(data)
-      end
     end
   end
 

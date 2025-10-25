@@ -1,11 +1,9 @@
 require "rails_helper"
 
 RSpec.describe CsvGenerator::TagDetails do
-  subject { described_class.new(source, **args) }
+  subject { described_class.new(language) }
 
   let(:language) { create(:language) }
-  let(:source) { language }
-  let(:args) { {} }
   let(:header) { "TagID,Tag\n" }
 
   it "generates empty csv" do
@@ -38,15 +36,6 @@ RSpec.describe CsvGenerator::TagDetails do
       end
 
       it "generates csv with unique tags" do
-        expect(subject.perform).to eq(data)
-      end
-    end
-
-    context "when generated for provider" do
-      let(:source) { topic.provider }
-      let(:args) { { language: } }
-
-      it "generates csv with documents info" do
         expect(subject.perform).to eq(data)
       end
     end

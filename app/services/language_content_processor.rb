@@ -12,38 +12,13 @@ class LanguageContentProcessor
   # this is needed to avoid loading all files into memory at once
   # Field 'name' is a lambda to allow dynamic naming based on the provider
   def provider_files
-    {
-      single_provider: FileToUpload.new(
+    [
+      FileToUpload.new(
         content: ->(provider) { XmlGenerator::SingleProvider.new(provider).perform },
         name: ->(provider) { "#{language.file_storage_prefix}#{provider.name.parameterize}.xml" },
         path: "#{language.file_storage_prefix}CMES-Pi/assets/XML",
       ),
-      files: FileToUpload.new(
-        content: ->(provider) { CsvGenerator::Files.new(provider).perform },
-        name: ->(provider) { "#{language.file_storage_prefix}#{provider.name.parameterize}-file.csv" },
-        path: "#{language.file_storage_prefix}CMES-v2/assets/csv",
-      ),
-      topics: FileToUpload.new(
-        content: ->(provider) { CsvGenerator::Topics.new(provider).perform },
-        name: ->(provider) { "#{language.file_storage_prefix}#{provider.name.parameterize}-topic.csv" },
-        path: "#{language.file_storage_prefix}CMES-v2/assets/csv",
-      ),
-      tag_details: FileToUpload.new(
-        content: ->(provider) { CsvGenerator::TagDetails.new(provider, language:).perform },
-        name: ->(provider) { "#{language.file_storage_prefix}#{provider.name.parameterize}-tag.csv" },
-        path: "#{language.file_storage_prefix}CMES-v2/assets/csv",
-      ),
-      topic_tags: FileToUpload.new(
-        content: ->(provider) { CsvGenerator::TopicTags.new(provider, language:).perform },
-        name: ->(provider) { "#{language.file_storage_prefix}#{provider.name.parameterize}-topic-tag.csv" },
-        path: "#{language.file_storage_prefix}CMES-v2/assets/csv",
-      ),
-      topic_authors: FileToUpload.new(
-        content: ->(provider) { CsvGenerator::TopicAuthors.new(provider).perform },
-        name: ->(provider) { "#{language.file_storage_prefix}#{provider.name.parameterize}-topic-author.csv" },
-        path: "#{language.file_storage_prefix}CMES-v2/assets/csv",
-      ),
-    }
+    ]
   end
 
   # Field 'content' is a lambda to allow lazy evaluation
@@ -90,7 +65,7 @@ class LanguageContentProcessor
         name: "#{language.file_storage_prefix}TopicTag.csv",
         path: "#{language.file_storage_prefix}CMES-v2/assets/csv",
       ),
-      topic_authors: FileToUpload.new(
+        topic_authors: FileToUpload.new(
         content: ->(language) { CsvGenerator::TopicAuthors.new(language).perform },
         name: "#{language.file_storage_prefix}TopicAuthor.csv",
         path: "#{language.file_storage_prefix}CMES-v2/assets/csv",
@@ -104,13 +79,11 @@ class LanguageContentProcessor
 
   def process_language_content!
     language_files.keys.each do |file_id|
-      FileUploadJob.perform_later(language.id, file_id.to_s)
+      FileUploadJob.perform_later(language.id, file_id.to_s, "file")
     end
 
     language.providers.distinct.find_each do |provider|
-      provider_files.keys.each do |file_id|
-        FileUploadJob.perform_later(language.id, file_id.to_s, provider.id)
-      end
+      FileUploadJob.perform_later(language.id, provider.id, "provider")
     end
   end
 end

@@ -19,7 +19,7 @@ RSpec.describe FileUploadJob, type: :job do
             file: file.content[language],
           )
 
-          described_class.perform_now(language.id, file_id.to_s)
+          described_class.perform_now(language.id, file_id.to_s, "file")
         end
       end
     end
@@ -30,31 +30,42 @@ RSpec.describe FileUploadJob, type: :job do
       before { create(:topic, :tagged, language:, provider:) }
 
       it "processes specific file" do
-        processor.provider_files.each do |file_id, file|
-          expect(FileWorker).to receive(:new).with(
-            share: ENV["AZURE_STORAGE_SHARE_NAME"],
-            name: file.name[provider],
-            path: file.path,
-            file: file.content[provider],
-          )
+        expect(FileWorker).to receive(:new).with(
+          share: ENV["AZURE_STORAGE_SHARE_NAME"],
+          name: "#{language.file_storage_prefix}test-provider.xml",
+          path: "#{language.file_storage_prefix}CMES-Pi/assets/XML",
+          file: XmlGenerator::SingleProvider.new(provider).perform,
+        )
 
-          described_class.perform_now(language.id, file_id.to_s, provider.id)
-        end
+        described_class.perform_now(language.id, provider.id, "provider")
       end
 
       context "when provider name contains /" do
         let(:provider) { create(:provider, name: "Test/Provider") }
 
         it "replaces / with - in the file name" do
-          processor.provider_files.each do |file_id, file|
+          expect(FileWorker).to receive(:new).with(
+            share: ENV["AZURE_STORAGE_SHARE_NAME"],
+            name: "#{language.file_storage_prefix}test-provider.xml",
+            path: "#{language.file_storage_prefix}CMES-Pi/assets/XML",
+            file: XmlGenerator::SingleProvider.new(provider).perform,
+          )
+
+          described_class.perform_now(language.id, provider.id, "provider")
+        end
+
+        context "when provider name contains /" do
+          let(:provider) { create(:provider, name: "WHO/Guidelines") }
+
+          it "replaces / with - in the file name" do
             expect(FileWorker).to receive(:new).with(
               share: ENV["AZURE_STORAGE_SHARE_NAME"],
-              name: file.name[provider],
-              path: file.path,
-              file: file.content[provider],
+              name: "#{language.file_storage_prefix}who-guidelines.xml",
+              path: "#{language.file_storage_prefix}CMES-Pi/assets/XML",
+              file: XmlGenerator::SingleProvider.new(provider).perform,
             )
 
-            described_class.perform_now(language.id, file_id.to_s, provider.id)
+            described_class.perform_now(language.id, provider.id, "provider")
           end
         end
       end
