@@ -48,7 +48,7 @@ RSpec.describe "Topics search", type: :system do
   end
 
   let!(:english_topic_tagged) do
-    english_active_topic.set_tag_list_on(english.code.to_sym, tag_name)
+    english_active_topic.tag_list << tag_name
     english_active_topic.save
     english_active_topic.reload
   end

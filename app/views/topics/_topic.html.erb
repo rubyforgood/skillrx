@@ -31,7 +31,7 @@
       </div>
       <div class="card-footer">
         <strong>Tags:</strong>
-        <% topic.current_tags.each do |tag| %>
+        <% topic.tags.each do |tag| %>
           <%= link_to tag.name, tag_path(tag), class: "badge bg-success text-decoration-none me-1", target: "_blank" %>
         <% end %>
       </div>

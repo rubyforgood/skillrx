@@ -12,9 +12,9 @@ RSpec.describe XmlGenerator::AllProviders do
   let(:tag_topic2) { create(:tag, name: "diabetes") }
 
   before do
-    topic1.set_tag_list_on(topic1.language_code, tag_topic1.name)
+    topic1.tag_list.add([ tag_topic1.name ])
     topic1.save
-    topic2.set_tag_list_on(topic2.language_code, tag_topic1.name)
+    topic2.tag_list.add([ tag_topic1.name ])
     topic2.save
   end
 
@@ -59,7 +59,7 @@ RSpec.describe XmlGenerator::AllProviders do
       author1 = tnode.at_xpath("./topic_author/topic_author_1")
       expect(author1.text).to eq(" ")
 
-      expect(tnode.at_xpath("./topic_tags").text).to eq(topic.current_tags_list.join(", "))
+      expect(tnode.at_xpath("./topic_tags").text).to eq(topic.tag_list.join(", "))
     end
   end
 

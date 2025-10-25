@@ -21,7 +21,8 @@ FactoryBot.define do
     trait :english do
       after(:build) do |tag|
         topic = create(:topic)
-        topic.set_tag_list_on(:en, tag.name)
+        topic.tags << tag
+        topic.save
       end
     end
   end

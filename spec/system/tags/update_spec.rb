@@ -14,7 +14,7 @@ RSpec.describe "Updating a Tag", type: :system do
     let(:topic) { create(:topic, :tagged) }
 
     before do
-      topic.current_tags.first.update(name: "Rhinopharyngitis")
+      topic.tags.first.update(name: "Rhinopharyngitis")
     end
 
     it "updates the tag" do

@@ -19,19 +19,14 @@ RSpec.describe "Topics", type: :request do
        topic.reload
        expect(topic.title).to eq("new topic")
        expect(topic.description).to eq("updated")
-    end
-
-    it "displays a success message" do
-      put topics_url, params: { topic: topic_params }
-
-      expect(flash[:notice]).to eq("Topic was successfully updated.")
+       expect(flash[:notice]).to eq("Topic was successfully updated.")
     end
 
     context "when removing a tag" do
       let!(:tag) { create(:tag, name: "Tag to remove") }
 
       before do
-        topic.set_tag_list_on(topic.language_code, tag.name)
+        topic.tag_list.add([ tag.name ])
         topic.save
       end
 
@@ -42,7 +37,7 @@ RSpec.describe "Topics", type: :request do
           put topic_url(topic), params: { topic: topic_params }
 
           expect(response).to redirect_to(topics_url)
-          expect(topic.reload.current_tags).to be_empty
+          expect(topic.reload.tags).to be_empty
           expect(Tag.find_by(name: tag.name)).to be_nil
         end
       end
@@ -52,14 +47,14 @@ RSpec.describe "Topics", type: :request do
         let(:topic_params) {  { tag_list: [ "" ] } }
 
         before do
-          topic_2.set_tag_list_on(topic.language_code, tag.name)
+          topic_2.tag_list.add([ tag.name ])
           topic_2.save
         end
 
         it "removes the tag from the topic but does not destroy the tag" do
           put topic_url(topic), params: { topic: topic_params }
           expect(response).to redirect_to(topics_url)
-          expect(topic.reload.current_tags).to be_empty
+          expect(topic.reload.tags).to be_empty
           expect(Tag.find_by(name: tag.name)).to be_present
         end
       end
@@ -72,7 +67,7 @@ RSpec.describe "Topics", type: :request do
 
       before do
         tag.cognates << cognate
-        topic.set_tag_list_on(topic.language_code, "tag,cognate")
+        topic.tag_list.add([ "tag", "cognate" ])
         topic.save
       end
 
@@ -80,7 +75,7 @@ RSpec.describe "Topics", type: :request do
         put topic_url(topic), params: { topic: topic_params }
 
         expect(response).to redirect_to(topics_url)
-        expect(topic.reload.current_tags).to eq([])
+        expect(topic.reload.tags).to eq([])
         expect(Tag.find_by(name: "tag")).to be_nil
         expect(Tag.find_by(name: "cognate")).to be_nil
       end
