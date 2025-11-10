@@ -22,22 +22,14 @@
               </svg>
             </div>
             <div style="flex: 1;">
-<<<<<<< HEAD
               <%= link_to document.filename, rails_blob_path(document, disposition: "inline"),
-=======
-              <%= link_to document.filename, rails_blob_path(document, disposition: "inline"), 
->>>>>>> Wip
                   style: "color: #2563eb; text-decoration: none; font-weight: 500; hover:text-decoration: underline;" %>
               <div style="font-size: 0.875rem; color: #6b7280; margin-top: 0.25rem;">
                 <%= number_to_human_size(document.byte_size) %>
               </div>
             </div>
             <div>
-<<<<<<< HEAD
               <%= link_to rails_blob_path(document, disposition: "attachment"),
-=======
-              <%= link_to rails_blob_path(document, disposition: "attachment"), 
->>>>>>> Wip
                   style: "background: #10b981; color: white; padding: 0.5rem 1rem; border-radius: 0.375rem; text-decoration: none; font-size: 0.875rem; font-weight: 500; hover:background: #059669; transition: background-color 0.2s;" do %>
                 Download
               <% end %>
@@ -51,11 +43,7 @@
   <!-- Topic Details -->
   <div style="border-top: 1px solid #e5e7eb; padding-top: 2rem;">
     <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 1.5rem;">
-<<<<<<< HEAD
 
-=======
-      
->>>>>>> Wip
       <!-- Language -->
       <% if @topic.language.present? %>
         <div>
