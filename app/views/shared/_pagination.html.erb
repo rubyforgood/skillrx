@@ -1,0 +1,5 @@
+<%# Use Pagy's built-in Bootstrap pagination helper.
+# Preserve current search params (nested under :search) when navigating pages so filters persist.
+%>
+<% search_params = params[:search].present? ? { search: params[:search].to_unsafe_h } : {} %>
+<%== pagy_bootstrap_nav(pagy, params: search_params) %>

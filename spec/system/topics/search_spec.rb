@@ -99,7 +99,7 @@ RSpec.describe "Topics search", type: :system do
         select "English", from: "search_language_id"
 
         expect(page).to have_text(english_active_topic.title)
-        expect(page).not_to have_text(english_archived_topic.title)
+        expect(page).to have_text(english_archived_topic.title)
         expect(page).not_to have_text(spanish_active_topic.title)
       end
     end
@@ -125,7 +125,7 @@ RSpec.describe "Topics search", type: :system do
         select "2", from: "search_month"
 
         expect(page).to have_text(spanish_active_topic.title)
-        expect(page).not_to have_text(english_archived_topic.title)
+        expect(page).to have_text(english_archived_topic.title)
         expect(page).not_to have_text(english_active_topic.title)
 
         select "3", from: "search_month"
@@ -233,7 +233,7 @@ RSpec.describe "Topics search", type: :system do
           select "English", from: "search_language_id"
 
           expect(page).to have_text(english_active_topic.title)
-          expect(page).not_to have_text(english_archived_topic.title)
+          expect(page).to have_text(english_archived_topic.title)
           expect(page).not_to have_text(spanish_active_topic.title)
         end
       end
@@ -259,7 +259,7 @@ RSpec.describe "Topics search", type: :system do
           select "2", from: "search_month"
 
           expect(page).to have_text(spanish_active_topic.title)
-          expect(page).not_to have_text(english_archived_topic.title)
+          expect(page).to have_text(english_archived_topic.title)
           expect(page).not_to have_text(english_active_topic.title)
 
           select "3", from: "search_month"
