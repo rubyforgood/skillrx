@@ -130,6 +130,7 @@
       <!-- Clear Button -->
       <div style="margin-top: 1.25rem; display: flex; justify-content: flex-end;">
         <%= link_to topics_path,
+            class: "clear-filters-btn",
             style: "background:#6b7280; color:white; padding:0.625rem 1.25rem; border-radius:0.5rem; text-decoration:none; font-weight:600; font-size:0.875rem; display:inline-flex; align-items:center; gap:0.5rem; transition:all 0.2s; box-shadow: 0 1px 2px 0 rgba(0,0,0,0.05);" do %>
           <svg style="width: 1rem; height: 1rem;" fill="none" stroke="currentColor" viewBox="0 0 24 24">
             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
@@ -156,8 +157,8 @@
     background: #fafafa !important;
   }
 
-  /* Clear button hover */
-  a[href*="topics"]:hover {
+  /* Clear Filters button hover - specific to search form only */
+  .clear-filters-btn:hover {
     background: #4b5563 !important;
     transform: translateY(-1px);
     box-shadow: 0 4px 6px -1px rgba(0,0,0,0.1), 0 2px 4px -1px rgba(0,0,0,0.06) !important;

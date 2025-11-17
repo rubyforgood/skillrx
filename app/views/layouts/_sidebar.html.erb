@@ -10,7 +10,7 @@
     </div>
   </div>
 
-  <nav class="px-4 py-2" style="flex: 1;">
+  <nav class="sidebar-nav px-4 py-2" style="flex: 1;">
     <ul style="list-style: none; padding: 0; margin: 0;">
       <li style="margin-bottom: 0.5rem;">
         <%= link_to topics_path, style: nav_link_class(topics_path) do %>
@@ -84,14 +84,14 @@
 </div>
 
 <style>
-  /* Sidebar hover effects */
-  nav a:hover {
+  /* Sidebar hover effects - scoped to sidebar only */
+  .sidebar-nav a:hover {
     background-color: #f3f4f6 !important;
     color: #2563eb !important;
   }
 
   /* Active link styling - you can add logic to detect current page */
-  nav a[href*="languages"]:hover {
+  .sidebar-nav a[href*="languages"]:hover {
     background-color: #dbeafe !important;
     color: #1d4ed8 !important;
   }

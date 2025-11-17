@@ -7,6 +7,6 @@
  * depending on specificity.
  *
  * Consider organizing styles into separate files for maintainability.
+ *
+ * Note: Tailwind CSS is loaded separately via stylesheet_link_tag in the layout.
  */
-
-@import "../builds/tailwind.css";

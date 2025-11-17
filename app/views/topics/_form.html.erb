@@ -121,6 +121,7 @@
     <%= f.submit "Save Topic",
       style: "background: linear-gradient(135deg, #10b981 0%, #059669 100%); color: white; font-weight: 600; padding: 0.75rem 2rem; border-radius: 0.5rem; border: none; cursor: pointer; font-size: 0.875rem; box-shadow: 0 4px 6px -1px rgba(16, 185, 129, 0.3); transition: all 0.2s;" %>
     <%= link_to "Back to Topics", topics_path,
+      class: "topic-form-cancel-btn",
       style: "background: #f3f4f6; color: #6b7280; font-weight: 600; padding: 0.75rem 2rem; border-radius: 0.5rem; text-decoration: none; font-size: 0.875rem; transition: all 0.2s; display: inline-block;" %>
       </div>
 
@@ -146,13 +147,6 @@
   input[type="submit"]:hover {
     transform: translateY(-2px) !important;
     box-shadow: 0 10px 25px -5px rgba(16, 185, 129, 0.4) !important;
-  }
-
-  /* Cancel link hover */
-  a[href*="topics"]:hover {
-    background: #e5e7eb !important;
-    color: #374151 !important;
-    transform: translateY(-1px);
   }
 
   /* File input styling */
