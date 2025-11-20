@@ -101,34 +101,23 @@
 
         <%= f.file_field :documents, multiple: true, class: "form-control mt-4", id: "documents", data: { upload_target: "filesInput", action: "change->upload#uploadFile" } %>
 
-        <div class="d-none" data-upload-target="spinner">
-          <div class="spinner-border spinner-border-sm mt-4" role="status">
-            <span class="visually-hidden">Uploading in progress...</span>
+        <div style="display: flex; justify-content: space-between; align-items: center; padding-top: 2rem; border-top: 1px solid #f3f4f6; margin-top: 2rem;">
+          <div style="display: flex; gap: 1rem;">
+            <%= f.submit "Save Topic", data: { upload_target: "submitButton" }, style: "background: linear-gradient(135deg, #10b981 0%, #059669 100%); color: white; font-weight: 600; padding: 0.75rem 2rem; border-radius: 0.5rem; border: none; cursor: pointer; font-size: 0.875rem; box-shadow: 0 4px 6px -1px rgba(16, 185, 129, 0.3); transition: all 0.2s;" %>
+            <%= link_to "Back to Topics", topics_path,
+              class: "topic-form-cancel-btn",
+              style: "background: #f3f4f6; color: #6b7280; font-weight: 600; padding: 0.75rem 2rem; border-radius: 0.5rem; text-decoration: none; font-size: 0.875rem; transition: all 0.2s; display: inline-block;" %>
           </div>
-          <span>Uploading in progress...</span>
-        </div>
 
-        <div class="col-12 d-flex justify-content-end mt-4">
-          <%= f.submit class: "btn btn-primary me-1 mb-1", data: { upload_target: "submitButton" } %>
-          <%= link_to "Cancel Editing", topics_path, class: "btn btn-light-secondary me-1 mb-1" %>
+          <% if topic.persisted? %>
+            <div style="color: #6b7280; font-size: 0.75rem;">
+              Last updated: <%= topic.updated_at.strftime("%B %d, %Y at %I:%M %p") %>
+            </div>
+          <% end %>
         </div>
       </div>
     </div>
 
-    <div style="display: flex; justify-content: space-between; align-items: center; padding-top: 2rem; border-top: 1px solid #f3f4f6; margin-top: 2rem;">
-      <div style="display: flex; gap: 1rem;">
-        <%= f.submit "Save Topic", style: "background: linear-gradient(135deg, #10b981 0%, #059669 100%); color: white; font-weight: 600; padding: 0.75rem 2rem; border-radius: 0.5rem; border: none; cursor: pointer; font-size: 0.875rem; box-shadow: 0 4px 6px -1px rgba(16, 185, 129, 0.3); transition: all 0.2s;" %>
-        <%= link_to "Back to Topics", topics_path,
-          class: "topic-form-cancel-btn",
-          style: "background: #f3f4f6; color: #6b7280; font-weight: 600; padding: 0.75rem 2rem; border-radius: 0.5rem; text-decoration: none; font-size: 0.875rem; transition: all 0.2s; display: inline-block;" %>
-      </div>
-
-      <% if topic.persisted? %>
-        <div style="color: #6b7280; font-size: 0.75rem;">
-          Last updated: <%= topic.updated_at.strftime("%B %d, %Y at %I:%M %p") %>
-        </div>
-      <% end %>
-    </div>
   </div>
 <% end %>
 
