@@ -1,0 +1,5 @@
+<%# Use custom Tailwind pagination helper (defined in app/helpers/pagy_helper.rb).
+# Search params are automatically preserved in the custom pagy_nav implementation.
+%>
+<% search_params = params[:search].present? ? { search: params[:search].to_unsafe_h } : {} %>
+<%== custom_pagy_nav(pagy, params: search_params) %>
