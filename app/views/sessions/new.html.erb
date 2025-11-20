@@ -45,29 +45,29 @@
           Sign in to continue your medical education journey
         </p>
       </div>
-      
+
       <%= form_with url: session_path, local: true, class: "mt-8 space-y-6", html: { novalidate: true } do |form| %>
         <div class="space-y-4">
           <!-- Email Field -->
           <div>
             <%= form.label :email, "Email address", class: "block text-sm font-medium text-gray-700 mb-1" %>
-            <%= form.email_field :email, 
-                required: true, 
-                class: "appearance-none relative block w-full px-4 py-3 border border-gray-300 rounded-lg placeholder-gray-400 text-gray-900 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent transition-all duration-200", 
-                autofocus: true, 
-                autocomplete: "username", 
-                placeholder: "Enter your email address", 
+            <%= form.email_field :email,
+                required: true,
+                class: "appearance-none relative block w-full px-4 py-3 border border-gray-300 rounded-lg placeholder-gray-400 text-gray-900 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent transition-all duration-200",
+                autofocus: true,
+                autocomplete: "username",
+                placeholder: "Enter your email address",
                 value: params[:email] %>
           </div>
-          
+
           <!-- Password Field -->
           <div>
             <%= form.label :password, "Password", class: "block text-sm font-medium text-gray-700 mb-1" %>
-            <%= form.password_field :password, 
-                required: true, 
-                class: "appearance-none relative block w-full px-4 py-3 border border-gray-300 rounded-lg placeholder-gray-400 text-gray-900 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent transition-all duration-200", 
-                autocomplete: "current-password", 
-                placeholder: "Enter your password", 
+            <%= form.password_field :password,
+                required: true,
+                class: "appearance-none relative block w-full px-4 py-3 border border-gray-300 rounded-lg placeholder-gray-400 text-gray-900 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent transition-all duration-200",
+                autocomplete: "current-password",
+                placeholder: "Enter your password",
                 maxlength: 72 %>
           </div>
         </div>
@@ -82,18 +82,18 @@
           </div>
 
           <div class="text-sm">
-            <%= link_to "Forgot password?", new_password_path, 
+            <%= link_to "Forgot password?", new_password_path,
                 class: "font-medium text-indigo-600 hover:text-indigo-500 transition-colors" %>
           </div>
         </div>
-        
+
         <!-- Submit Button -->
         <div>
-          <%= form.submit "Sign in", 
+          <%= form.submit "Sign in",
               class: "group relative w-full flex justify-center py-4 px-6 border border-transparent text-base font-medium rounded-lg text-white bg-gradient-to-r from-indigo-500 to-purple-600 hover:from-indigo-600 hover:to-purple-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 transition-all duration-200 shadow-lg hover:shadow-xl" %>
         </div>
       <% end %>
-      
+
       <!-- Sign up link -->
       <div class="text-center">
         <span class="text-sm text-gray-600">
@@ -105,14 +105,14 @@
       </div>
     </div>
   </div>
-  
+
   <!-- Right side - Visual/Branding -->
   <div class="hidden lg:block relative w-0 flex-1 overflow-hidden">
     <div class="absolute inset-0 bg-gradient-to-br from-indigo-500 via-purple-600 to-pink-500">
       <!-- Overlay pattern -->
       <div class="absolute inset-0 bg-black/20"></div>
       <div class="absolute inset-0" style="background-image: url('data:image/svg+xml,%3Csvg width="60" height="60" viewBox="0 0 60 60" xmlns="http://www.w3.org/2000/svg"%3E%3Cg fill="none" fill-rule="evenodd"%3E%3Cg fill="%23ffffff" fill-opacity="0.05"%3E%3Cpath d="M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z"/%3E%3C/g%3E%3C/g%3E%3C/svg%3E'); background-size: 60px 60px;"></div>
-      
+
       <!-- Content -->
       <div class="absolute inset-0 flex items-center justify-center p-12">
         <div class="max-w-lg text-center text-white relative z-10">
@@ -120,7 +120,7 @@
           <p class="text-xl mb-12 text-white/90">
             Empowering healthcare professionals with accessible medical education worldwide
           </p>
-          
+
           <!-- Feature grid -->
           <div class="grid grid-cols-3 gap-8 mb-12">
             <div class="text-center">
@@ -151,7 +151,7 @@
               <p class="text-xs text-white/70 mt-1">Open education</p>
             </div>
           </div>
-          
+
           <!-- Back to home -->
           <%= link_to root_path, class: "inline-flex items-center px-6 py-3 border-2 border-white/30 backdrop-blur-sm text-base font-medium rounded-lg text-white hover:bg-white/10 transition-all duration-200" do %>
             <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -176,7 +176,7 @@
       transform: translateY(0);
     }
   }
-  
+
   .animate-fade-in {
     animation: fade-in 0.3s ease-out;
   }

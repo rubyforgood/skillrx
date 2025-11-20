@@ -8,7 +8,7 @@
 
 <div style="min-height: 100vh; background: linear-gradient(135deg, #f8fafc 0%, #e2e8f0 100%); padding: 2rem 0;">
   <div style="max-width: 1000px; margin: 0 auto; padding: 0 1rem;">
-    
+
     <!-- Header Section -->
     <div style="margin-bottom: 2rem;">
       <div style="display: flex; align-items: center; justify-content: between; gap: 1rem; margin-bottom: 1.5rem; flex-wrap: wrap;">
@@ -36,7 +36,7 @@
           <% end %>
         </div>
       </div>
-      
+
       <!-- Breadcrumb -->
       <nav style="font-size: 0.875rem; color: #6b7280;">
         <ol style="display: flex; gap: 0.5rem; list-style: none; padding: 0; margin: 0;">
@@ -51,11 +51,11 @@
 
     <!-- Main Content -->
     <div id="<%= dom_id @import_report %>">
-      
+
       <!-- Import Details Section -->
       <div style="margin-bottom: 2rem;">
         <div style="background: white; border-radius: 1rem; box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.1), 0 8px 10px -6px rgba(0, 0, 0, 0.1); overflow: hidden; border: 1px solid #e5e7eb;">
-          
+
           <!-- Card Header -->
           <div style="background: linear-gradient(135deg, #3b82f6 0%, #1d4ed8 100%); padding: 2rem; color: white;">
             <div style="display: flex; align-items: center; gap: 1rem; margin-bottom: 0.5rem;">
@@ -66,11 +66,11 @@
             </div>
             <p style="margin: 0; opacity: 0.9; font-size: 0.875rem;">Import operation information and statistics</p>
           </div>
-          
+
           <!-- Card Body -->
           <div style="padding: 2rem;">
             <div style="display: grid; gap: 1.5rem;">
-              
+
               <!-- Status -->
               <div style="display: grid; grid-template-columns: 1fr 2fr; gap: 1rem; padding: 1rem; background: #f8fafc; border-radius: 0.5rem; border-left: 4px solid #3b82f6;">
                 <div style="font-weight: 600; color: #374151; display: flex; align-items: center; gap: 0.5rem;">
@@ -104,7 +104,7 @@
                   <% end %>
                 </div>
               </div>
-              
+
               <!-- Import Type -->
               <div style="display: grid; grid-template-columns: 1fr 2fr; gap: 1rem; padding: 1rem; background: #f8fafc; border-radius: 0.5rem; border-left: 4px solid #3b82f6;">
                 <div style="font-weight: 600; color: #374151; display: flex; align-items: center; gap: 0.5rem;">
@@ -117,7 +117,7 @@
                   <%= @import_report.import_type.humanize %>
                 </div>
               </div>
-              
+
               <!-- Started At -->
               <div style="display: grid; grid-template-columns: 1fr 2fr; gap: 1rem; padding: 1rem; background: #f8fafc; border-radius: 0.5rem; border-left: 4px solid #3b82f6;">
                 <div style="font-weight: 600; color: #374151; display: flex; align-items: center; gap: 0.5rem;">
@@ -130,7 +130,7 @@
                   <%= @import_report.started_at&.strftime('%B %d, %Y at %I:%M %p') || "Not started" %>
                 </div>
               </div>
-              
+
               <!-- Completed At -->
               <div style="display: grid; grid-template-columns: 1fr 2fr; gap: 1rem; padding: 1rem; background: #f8fafc; border-radius: 0.5rem; border-left: 4px solid #3b82f6;">
                 <div style="font-weight: 600; color: #374151; display: flex; align-items: center; gap: 0.5rem;">
@@ -143,7 +143,7 @@
                   <%= @import_report.completed_at&.strftime('%B %d, %Y at %I:%M %p') || "Not completed" %>
                 </div>
               </div>
-              
+
               <!-- Created -->
               <div style="display: grid; grid-template-columns: 1fr 2fr; gap: 1rem; padding: 1rem; background: #f8fafc; border-radius: 0.5rem; border-left: 4px solid #3b82f6;">
                 <div style="font-weight: 600; color: #374151; display: flex; align-items: center; gap: 0.5rem;">
@@ -156,7 +156,7 @@
                   <%= @import_report.created_at.strftime('%B %d, %Y at %I:%M %p') %>
                 </div>
               </div>
-              
+
               <!-- Summary Stats -->
               <% if @import_report.summary_stats.present? %>
                 <div style="display: grid; grid-template-columns: 1fr 2fr; gap: 1rem; padding: 1rem; background: #f8fafc; border-radius: 0.5rem; border-left: 4px solid #3b82f6;">
@@ -171,7 +171,7 @@
                   </div>
                 </div>
               <% end %>
-              
+
             </div>
           </div>
         </div>
@@ -180,7 +180,7 @@
       <!-- Import Errors Section -->
       <div style="margin-bottom: 2rem;">
         <div style="background: white; border-radius: 1rem; box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.1), 0 8px 10px -6px rgba(0, 0, 0, 0.1); overflow: hidden; border: 1px solid #e5e7eb;">
-          
+
           <!-- Card Header -->
           <div style="background: linear-gradient(135deg, <%= @import_errors.any? ? '#dc2626 0%, #b91c1c 100%' : '#10b981 0%, #059669 100%' %>); padding: 2rem; color: white;">
             <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 1rem;">
@@ -203,7 +203,7 @@
                   </p>
                 </div>
               </div>
-              
+
               <div style="display: flex; gap: 0.75rem; align-items: center;">
                 <div style="background: rgba(255, 255, 255, 0.1); padding: 0.5rem 1rem; border-radius: 9999px; font-size: 0.75rem; font-weight: 500;">
                   Total: <%= @import_errors.count %>
@@ -211,7 +211,7 @@
               </div>
             </div>
           </div>
-          
+
           <!-- Table Content -->
           <div style="padding: 0;">
             <% if @import_errors.any? %>
@@ -311,7 +311,7 @@
     transform: translateY(-2px) !important;
     box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.25) !important;
   }
-  
+
   /* Responsive design */
   @media (max-width: 768px) {
     /* Container adjustments */
@@ -319,24 +319,24 @@
       padding: 0 1rem !important;
       margin: 0 auto !important;
     }
-    
+
     /* Page padding adjustments */
     div[style*="min-height: 100vh"] {
       padding: 1rem 0 !important;
     }
-    
+
     /* Header adjustments */
     div[style*="justify-content: between"] {
       flex-direction: column !important;
       align-items: flex-start !important;
       gap: 1rem !important;
     }
-    
+
     /* Title adjustments */
     h1 {
       font-size: 1.75rem !important;
     }
-    
+
     /* Card adjustments - prevent overflow */
     div[style*="border-radius: 1rem"] {
       border-radius: 0.5rem !important;
@@ -344,64 +344,64 @@
       max-width: 100% !important;
       box-sizing: border-box !important;
     }
-    
+
     /* Grid adjustments */
     div[style*="grid-template-columns: 1fr 2fr"] {
       grid-template-columns: 1fr !important;
       gap: 0.5rem !important;
     }
-    
+
     /* Card padding adjustments */
     div[style*="padding: 2rem"] {
       padding: 1.5rem 1rem !important;
     }
-    
+
     /* Table adjustments */
     th, td {
       padding: 0.75rem 0.5rem !important;
       font-size: 0.875rem !important;
     }
-    
+
     /* Make tables more responsive */
     .table-container {
       margin: 0 !important;
       padding: 0 !important;
     }
-    
+
     /* Ensure table fits */
     table {
       min-width: 100% !important;
       width: 100% !important;
     }
   }
-  
+
   @media (max-width: 640px) {
     /* Very small screen adjustments */
     div[style*="max-width: 1000px"] {
       padding: 0 0.5rem !important;
     }
-    
+
     /* Ensure no overflow */
     * {
       max-width: 100% !important;
       box-sizing: border-box !important;
     }
-    
+
     /* Remove border radius on very small screens */
     div[style*="border-radius: 1rem"] {
       border-radius: 0.25rem !important;
       margin: 0 !important;
     }
-    
+
     /* More compact padding */
     div[style*="padding: 2rem"] {
       padding: 1rem 0.75rem !important;
     }
-    
+
     div[style*="padding: 1.5rem"] {
       padding: 1rem !important;
     }
-    
+
     /* More compact table */
     th, td {
       padding: 0.5rem 0.25rem !important;
@@ -409,18 +409,18 @@
       word-wrap: break-word !important;
       word-break: break-word !important;
     }
-    
+
     /* Prevent horizontal scroll */
     body, html {
       overflow-x: hidden !important;
     }
-    
+
     /* Ensure cards don't exceed viewport */
     div[style*="background: white"] {
       max-width: calc(100vw - 1rem) !important;
       overflow: hidden !important;
     }
-    
+
     /* Better pre formatting for small screens */
     pre {
       font-size: 0.625rem !important;
