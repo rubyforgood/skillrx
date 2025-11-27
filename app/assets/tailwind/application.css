@@ -1,1 +1,133 @@
 @import "tailwindcss";
+
+/* Tom Select Tailwind Styles */
+
+/* Hide the original select element */
+.ts-wrapper .ts-control + select,
+.ts-wrapper + select {
+  @apply hidden;
+}
+
+select[data-select-tags-target="tagList"] {
+  @apply hidden;
+}
+
+.ts-wrapper {
+  @apply relative;
+}
+
+.ts-wrapper.single .ts-control,
+.ts-wrapper.multi .ts-control {
+  @apply w-full px-3.5 py-2.5 border border-gray-300 rounded-lg text-sm bg-white transition-all duration-200;
+  min-height: 42px;
+}
+
+.ts-wrapper.multi .ts-control {
+  @apply flex flex-wrap items-center gap-1.5;
+  padding: 0.375rem 0.625rem;
+}
+
+.ts-wrapper .ts-control:focus-within {
+  @apply border-blue-500 outline-none ring-4 ring-blue-500/10;
+}
+
+.ts-wrapper.single .ts-control:hover:not(:focus-within),
+.ts-wrapper.multi .ts-control:hover:not(:focus-within) {
+  @apply border-gray-400 bg-gray-50;
+}
+
+.ts-wrapper .ts-control > input {
+  @apply flex-grow outline-none bg-transparent text-sm;
+  min-width: 60px;
+  padding: 0.25rem;
+}
+
+.ts-wrapper .ts-control > input::placeholder {
+  @apply text-gray-400;
+}
+
+/* Selected items (tags/badges) */
+.ts-wrapper.multi .ts-control > div {
+  @apply inline-flex items-center gap-1.5 px-2.5 py-1 bg-blue-500 text-white text-sm rounded-md;
+  max-width: 100%;
+}
+
+.ts-wrapper.multi .ts-control > div.active {
+  @apply bg-blue-600;
+}
+
+/* Remove button */
+.ts-wrapper .ts-control .remove {
+  @apply inline-flex items-center justify-center ml-1 text-white/80 hover:text-white cursor-pointer;
+  font-size: 1.125rem;
+  line-height: 1;
+  padding: 0;
+  border: none;
+  background: none;
+}
+
+.ts-wrapper .ts-control .remove:hover {
+  @apply text-white;
+}
+
+/* Dropdown */
+.ts-dropdown {
+  @apply absolute z-50 w-full mt-1 bg-white border border-gray-200 rounded-lg shadow-lg overflow-hidden;
+  max-height: 280px;
+  overflow-y: auto;
+}
+
+.ts-dropdown .ts-dropdown-content {
+  @apply py-1;
+}
+
+/* Dropdown options */
+.ts-dropdown .option {
+  @apply px-3.5 py-2 text-sm text-gray-700 cursor-pointer transition-colors duration-150;
+}
+
+.ts-dropdown .option:hover,
+.ts-dropdown .option.active {
+  @apply bg-blue-500 text-white;
+}
+
+.ts-dropdown .option.selected {
+  @apply hidden;
+}
+
+/* No results message */
+.ts-dropdown .no-results {
+  @apply px-3.5 py-2 text-sm text-gray-500 italic;
+}
+
+/* Loading state */
+.ts-wrapper.loading::after {
+  content: '';
+  @apply absolute right-3 top-1/2 w-4 h-4 border-2 border-gray-300 border-t-blue-500 rounded-full animate-spin;
+  margin-top: -0.5rem;
+}
+
+/* Disabled state */
+.ts-wrapper.disabled .ts-control {
+  @apply bg-gray-100 text-gray-500 cursor-not-allowed border-gray-200;
+}
+
+/* Single select caret */
+.ts-wrapper.single .ts-control::after {
+  content: '';
+  @apply absolute right-3 top-1/2 w-0 h-0;
+  border-left: 5px solid transparent;
+  border-right: 5px solid transparent;
+  border-top: 5px solid #6b7280;
+  margin-top: -2.5px;
+  pointer-events: none;
+}
+
+.ts-wrapper.single.input-active .ts-control::after {
+  border-top-color: #3b82f6;
+}
+
+/* Focus visible for accessibility */
+.ts-wrapper .ts-control:focus-visible {
+  @apply outline-none ring-4 ring-blue-500/10;
+}
