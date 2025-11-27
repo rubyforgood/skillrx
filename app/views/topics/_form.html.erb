@@ -33,9 +33,12 @@
             Provider
             <span class="form-required">*</span>
           <% end %>
-          <%= f.collection_select :provider_id, Provider.all, :id, :name,
-              { prompt: "Select Provider" },
-              class: "form-select" %>
+          <div style="position:relative;">
+            <%= f.collection_select :provider_id, Provider.all, :id, :name,
+                { prompt: "Select Provider" },
+                class: "form-select" %>
+            <%= render "shared/dropdown_arrow" %>
+          </div>
           <p class="form-help-text">Choose the healthcare provider associated with this content.</p>
         </div>
       <% end %>
@@ -46,9 +49,12 @@
           Publishing Year
           <span class="form-required">*</span>
         <% end %>
-        <%= f.select :published_at_year, options_for_select((2016..Date.today.year).to_a.reverse, topic.published_at_year || Date.today.year),
-          { prompt: "Select year of publishing" },
-          class: "form-select" %>
+        <div style="position:relative;">
+          <%= f.select :published_at_year, options_for_select((2016..Date.today.year).to_a.reverse, topic.published_at_year || Date.today.year),
+            { prompt: "Select year of publishing" },
+            class: "form-select" %>
+          <%= render "shared/dropdown_arrow" %>
+        </div>
       </div>
       <!-- Publishing Month -->
       <div>
@@ -56,9 +62,12 @@
           Publishing Month
           <span class="form-required">*</span>
         <% end %>
-        <%= f.select :published_at_month, options_for_select((1..12).to_a, topic.published_at_month || Date.today.month),
-          { prompt: "Select month of publishing" },
-          class: "form-select" %>
+        <div style="position:relative;">
+          <%= f.select :published_at_month, options_for_select((1..12).to_a, topic.published_at_month || Date.today.month),
+            { prompt: "Select month of publishing" },
+            class: "form-select" %>
+          <%= render "shared/dropdown_arrow" %>
+        </div>
       </div>
 
       <!-- Language -->
@@ -67,12 +76,15 @@
           Language
           <span class="form-required">*</span>
         <% end %>
-        <%= f.collection_select :language_id,
-                                Language.all,
-                                :id,
-                                :name,
-                                { prompt: "Select language", selected: topic.language&.id || Language.first.id },
-                                class: "form-select" %>
+        <div style="position:relative;">
+          <%= f.collection_select :language_id,
+                                  Language.all,
+                                  :id,
+                                  :name,
+                                  { prompt: "Select language", selected: topic.language&.id || Language.first.id },
+                                  class: "form-select" %>
+          <%= render "shared/dropdown_arrow" %>
+        </div>
       </div>
       <div data-controller="select-tags">
         <%= f.label :tag_list, class: "form-label" %>
@@ -97,9 +109,6 @@
 
       <!-- Documents Upload -->
       <div class="form-grid-full" data-controller="upload" <% if topic.persisted? %> data-upload-topic-id-value="<%= topic.id %>" <% end %>>
-        <%#= f.label :documents, style: "display: block; font-size: 0.875rem; font-weight: 600; color: #374151; margin-bottom: 0.5rem;" do %>
-<!--          Supporting Documents-->
-        <%# end %>
 
         <div data-upload-target="filesContainer" style="margin-bottom: 1rem;">
           <% if topic.documents_blobs.present? %>

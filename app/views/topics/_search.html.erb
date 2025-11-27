@@ -14,37 +14,31 @@
       <div id="topics-search-grid" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 1.25rem; align-items: start;">
         <!-- Query -->
         <div style="min-width:0;">
-          <%= f.label :query, style: "display:block; font-size:0.875rem; font-weight:600; color:#374151; margin-bottom:0.5rem;" %>
+          <%= f.label :query, class: "input-label" %>
           <%= f.text_field :query,
                 value: params.dig(:search, :query),
                 placeholder: "Search by title, description or UID…",
-                style: "width:100%; padding:0.625rem 0.875rem; border:1px solid #d1d5db; border-radius:0.5rem; font-size:0.875rem; transition:all 0.2s; background:white; box-sizing:border-box;",
-                data: { action: "input->topics#searchTopics" },
-                onfocus: "this.style.borderColor='#3b82f6'; this.style.boxShadow='0 0 0 4px rgba(59,130,246,0.1)'; this.style.outline='none';",
-                onblur:  "this.style.borderColor='#d1d5db'; this.style.boxShadow='none';" %>
+                class: "input-field",
+                data: { action: "input->topics#searchTopics" } %>
         </div>
 
         <!-- Language & Tags -->
         <div style="min-width:0; grid-column: 1 / -1;">
           <div data-controller="select-tags" style="display:grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap:1rem; align-items:start;">
             <div style="position:relative;">
-              <%= f.label :language_id, "Language", style: "display:block; font-size:0.875rem; font-weight:600; color:#374151; margin-bottom:0.5rem;" %>
+              <%= f.label :language_id, "Language", class: "input-label" %>
               <div style="position:relative;">
                 <%= f.select :language_id,
                              options_from_collection_for_select(languages, :id, :name, params.dig(:search, :language_id)),
                              { prompt: "Select language" },
-                             style: "width:100%; padding:0.625rem 2.5rem 0.625rem 0.875rem; border:1px solid #d1d5db; border-radius:0.5rem; font-size:0.875rem; background:white; transition:all 0.2s; box-sizing:border-box; appearance:none; cursor:pointer;",
-                             data: { action: "change->topics#searchTopics" },
-                             onfocus: "this.style.borderColor='#3b82f6'; this.style.boxShadow='0 0 0 4px rgba(59,130,246,0.1)'; this.style.outline='none';",
-                             onblur:  "this.style.borderColor='#d1d5db'; this.style.boxShadow='none';" %>
-                <svg style="position:absolute; right:0.75rem; top:50%; transform:translateY(-50%); width:1.25rem; height:1.25rem; pointer-events:none; color:#6b7280;" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
-                </svg>
+                             class: "select-field",
+                             data: { action: "change->topics#searchTopics" } %>
+                <%= render "shared/dropdown_arrow" %>
               </div>
             </div>
 
             <div style="position:relative;">
-              <%= f.label :tag_list, "Tags", style: "display:block; font-size:0.875rem; font-weight:600; color:#374151; margin-bottom:0.5rem;" %>
+              <%= f.label :tag_list, "Tags", class: "input-label" %>
               <%= f.select :tag_list,
                            options_for_select(Tag.order(:name).pluck(:name), Array(params.dig(:search, :tag_list))),
                            { include_hidden: false },
@@ -58,71 +52,55 @@
 
         <!-- Year -->
         <div style="min-width:0; position:relative;">
-          <%= f.label :year, style: "display:block; font-size:0.875rem; font-weight:600; color:#374151; margin-bottom:0.5rem;" %>
+          <%= f.label :year, class: "input-label" %>
           <div style="position:relative;">
             <%= f.select :year,
                          options_for_select((Date.today.year-10..Date.today.year).to_a, params.dig(:search, :year)),
                          { prompt: "Select year" },
-                         style: "width:100%; padding:0.625rem 2.5rem 0.625rem 0.875rem; border:1px solid #d1d5db; border-radius:0.5rem; font-size:0.875rem; background:white; transition:all 0.2s; box-sizing:border-box; appearance:none; cursor:pointer;",
-                         data: { action: "change->topics#searchTopics" },
-                         onfocus: "this.style.borderColor='#3b82f6'; this.style.boxShadow='0 0 0 4px rgba(59,130,246,0.1)'; this.style.outline='none';",
-                         onblur:  "this.style.borderColor='#d1d5db'; this.style.boxShadow='none';" %>
-            <svg style="position:absolute; right:0.75rem; top:50%; transform:translateY(-50%); width:1.25rem; height:1.25rem; pointer-events:none; color:#6b7280;" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
-            </svg>
+                         class: "select-field",
+                         data: { action: "change->topics#searchTopics" } %>
+            <%= render "shared/dropdown_arrow" %>
           </div>
         </div>
 
         <!-- Month -->
         <div style="min-width:0; position:relative;">
-          <%= f.label :month, style: "display:block; font-size:0.875rem; font-weight:600; color:#374151; margin-bottom:0.5rem;" %>
+          <%= f.label :month, class: "input-label" %>
           <div style="position:relative;">
             <%= f.select :month,
                          options_for_select((1..12).to_a, params.dig(:search, :month)),
                          { prompt: "Select month" },
-                         style: "width:100%; padding:0.625rem 2.5rem 0.625rem 0.875rem; border:1px solid #d1d5db; border-radius:0.5rem; font-size:0.875rem; background:white; transition:all 0.2s; box-sizing:border-box; appearance:none; cursor:pointer;",
+                         class: "select-field",
                          data: { action: "change->topics#searchTopics" },
-                         onchange: "this.form.requestSubmit()",
-                         onfocus: "this.style.borderColor='#3b82f6'; this.style.boxShadow='0 0 0 4px rgba(59,130,246,0.1)'; this.style.outline='none';",
-                         onblur:  "this.style.borderColor='#d1d5db'; this.style.boxShadow='none';" %>
-            <svg style="position:absolute; right:0.75rem; top:50%; transform:translateY(-50%); width:1.25rem; height:1.25rem; pointer-events:none; color:#6b7280;" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
-            </svg>
+                         onchange: "this.form.requestSubmit()" %>
+            <%= render "shared/dropdown_arrow" %>
           </div>
         </div>
 
         <!-- State -->
         <div style="min-width:0; position:relative;">
-          <%= f.label :state, style: "display:block; font-size:0.875rem; font-weight:600; color:#374151; margin-bottom:0.5rem;" %>
+          <%= f.label :state, class: "input-label" %>
           <div style="position:relative;">
             <%= f.select :state,
                          options_for_select(Topic::STATES.index_with(&:itself), params.dig(:search, :state)),
                          { prompt: "Select state" },
-                         style: "width:100%; padding:0.625rem 2.5rem 0.625rem 0.875rem; border:1px solid #d1d5db; border-radius:0.5rem; font-size:0.875rem; background:white; transition:all 0.2s; box-sizing:border-box; appearance:none; cursor:pointer;",
+                         class: "select-field",
                          data: { action: "change->topics#searchTopics" },
-                         onchange: "this.form.requestSubmit()",
-                         onfocus: "this.style.borderColor='#3b82f6'; this.style.boxShadow='0 0 0 4px rgba(59,130,246,0.1)'; this.style.outline='none';",
-                         onblur:  "this.style.borderColor='#d1d5db'; this.style.boxShadow='none';" %>
-            <svg style="position:absolute; right:0.75rem; top:50%; transform:translateY(-50%); width:1.25rem; height:1.25rem; pointer-events:none; color:#6b7280;" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
-            </svg>
+                         onchange: "this.form.requestSubmit()" %>
+            <%= render "shared/dropdown_arrow" %>
           </div>
         </div>
 
         <!-- Order -->
         <div style="min-width:0; position:relative;">
-          <%= f.label :order, style: "display:block; font-size:0.875rem; font-weight:600; color:#374151; margin-bottom:0.5rem;" %>
+          <%= f.label :order, class: "input-label" %>
           <div style="position:relative;">
             <%= f.select :order,
                          options_for_select(%w[desc asc].map { |o| [o, o] }, params.dig(:search, :order)),
                          {},
-                         style: "width:100%; padding:0.625rem 2.5rem 0.625rem 0.875rem; border:1px solid #d1d5db; border-radius:0.5rem; font-size:0.875rem; background:white; transition:all 0.2s; box-sizing:border-box; appearance:none; cursor:pointer;",
-                         data: { action: "change->topics#searchTopics" },
-                         onfocus: "this.style.borderColor='#3b82f6'; this.style.boxShadow='0 0 0 4px rgba(59,130,246,0.1)'; this.style.outline='none';",
-                         onblur:  "this.style.borderColor='#d1d5db'; this.style.boxShadow='none';" %>
-            <svg style="position:absolute; right:0.75rem; top:50%; transform:translateY(-50%); width:1.25rem; height:1.25rem; pointer-events:none; color:#6b7280;" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
-            </svg>
+                         class: "select-field",
+                         data: { action: "change->topics#searchTopics" } %>
+            <%= render "shared/dropdown_arrow" %>
           </div>
         </div>
       </div>

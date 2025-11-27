@@ -143,6 +143,11 @@ select[data-select-tags-target="tagList"] {
   @apply w-full px-4 py-3 border-2 border-gray-200 rounded-lg text-sm transition-all duration-200 bg-gray-50;
 }
 
+.form-select {
+  appearance: none;
+  padding-right: 2.5rem;
+}
+
 .form-textarea {
   @apply resize-y;
 }
@@ -174,4 +179,38 @@ select[data-select-tags-target="tagList"] {
 
 .form-grid-full {
   grid-column: 1 / -1;
+}
+
+/* Alternative Input Styles (lighter borders, less padding) */
+.input-label {
+  @apply block text-sm font-semibold text-gray-700 mb-2;
+}
+
+.input-field {
+  @apply w-full border border-gray-300 rounded-lg text-sm transition-all duration-200 bg-white;
+  padding: 0.625rem 0.875rem;
+}
+
+.input-field:focus {
+  @apply outline-none border-blue-500 bg-white;
+  box-shadow: 0 0 0 4px rgba(59, 130, 246, 0.1);
+}
+
+.input-field:hover:not(:focus) {
+  @apply border-gray-400;
+}
+
+.select-field {
+  @apply w-full border border-gray-300 rounded-lg text-sm bg-white transition-all duration-200 cursor-pointer;
+  padding: 0.625rem 2.5rem 0.625rem 0.875rem;
+  appearance: none;
+}
+
+.select-field:focus {
+  @apply outline-none border-blue-500;
+  box-shadow: 0 0 0 4px rgba(59, 130, 246, 0.1);
+}
+
+.select-field:hover:not(:focus) {
+  @apply border-gray-400;
 }
