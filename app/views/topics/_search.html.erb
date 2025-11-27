@@ -13,7 +13,7 @@
     <%= form_for :search, url: topics_path, method: :get, data: { controller: "topics", topics_target: "searchForm", turbo_frame: "topic-list", turbo_action: "advance" } do |f| %>
       <div id="topics-search-grid" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 1.25rem; align-items: start;">
         <!-- Query -->
-        <div style="min-width:0;">
+        <div class="form-grid-full">
           <%= f.label :query, class: "input-label" %>
           <%= f.text_field :query,
                 value: params.dig(:search, :query),
