@@ -131,3 +131,47 @@ select[data-select-tags-target="tagList"] {
 .ts-wrapper .ts-control:focus-visible {
   @apply outline-none ring-4 ring-blue-500/10;
 }
+
+/* Form Styles */
+.form-label {
+  @apply block text-sm font-semibold text-gray-700 mb-2;
+}
+
+.form-input,
+.form-select,
+.form-textarea {
+  @apply w-full px-4 py-3 border-2 border-gray-200 rounded-lg text-sm transition-all duration-200 bg-gray-50;
+}
+
+.form-textarea {
+  @apply resize-y;
+}
+
+.form-input:focus,
+.form-select:focus,
+.form-textarea:focus {
+  @apply outline-none border-blue-500 ring-4 ring-blue-500/10 bg-white;
+}
+
+.form-input:hover:not(:focus),
+.form-select:hover:not(:focus),
+.form-textarea:hover:not(:focus) {
+  @apply border-gray-300;
+}
+
+.form-required {
+  @apply text-red-500;
+}
+
+.form-help-text {
+  @apply mt-2 text-xs text-gray-500;
+}
+
+.form-grid {
+  @apply grid gap-6;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+}
+
+.form-grid-full {
+  grid-column: 1 / -1;
+}

@@ -1,90 +1,102 @@
 <%= form_for topic do |f| %>
-  <div style="space-y: 1.5rem;">
+  <div>
     <%= render "shared/errors", errors: errors.presence || [], resource_name: topic.class.name %>
 
-    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 1.5rem;">
+    <div class="form-grid">
 
       <!-- Topic Title -->
-      <div style="grid-column: 1 / -1;">
-        <%= f.label :title, style: "display: block; font-size: 0.875rem; font-weight: 600; color: #374151; margin-bottom: 0.5rem;" do %>
+      <div class="form-grid-full">
+        <%= f.label :title, class: "form-label" do %>
           Topic Title
-          <span style="color: #ef4444;">*</span>
+          <span class="form-required">*</span>
         <% end %>
         <%= f.text_field :title,
             placeholder: "Enter a clear, descriptive title",
-            style: "width: 100%; padding: 0.75rem 1rem; border: 2px solid #e5e7eb; border-radius: 0.5rem; font-size: 0.875rem; transition: all 0.2s; background: #f9fafb;" %>
-        <p style="margin-top: 0.5rem; font-size: 0.75rem; color: #6b7280;">Choose a title that clearly describes the educational content.</p>
+            class: "form-input" %>
+        <p class="form-help-text">Choose a title that clearly describes the educational content.</p>
       </div>
 
       <!-- Description -->
-      <div style="grid-column: 1 / -1;">
-        <%= f.label :description, style: "display: block; font-size: 0.875rem; font-weight: 600; color: #374151; margin-bottom: 0.5rem;" %>
+      <div class="form-grid-full">
+        <%= f.label :description, class: "form-label" %>
         <%= f.text_area :description,
             placeholder: "Provide a detailed description of this educational topic...",
             rows: 4,
-            style: "width: 100%; padding: 0.75rem 1rem; border: 2px solid #e5e7eb; border-radius: 0.5rem; font-size: 0.875rem; transition: all 0.2s; background: #f9fafb; resize: vertical;" %>
-        <p style="margin-top: 0.5rem; font-size: 0.75rem; color: #6b7280;">Describe the learning objectives and content covered in this topic.</p>
+            class: "form-textarea" %>
+        <p class="form-help-text">Describe the learning objectives and content covered in this topic.</p>
       </div>
 
       <!-- Provider (Admin Only) -->
       <% if Current.user.is_admin? %>
         <div>
-          <%= f.label :provider, style: "display: block; font-size: 0.875rem; font-weight: 600; color: #374151; margin-bottom: 0.5rem;" %>
+          <%= f.label :provider, class: "form-label" do %>
+            Provider
+            <span class="form-required">*</span>
+          <% end %>
           <%= f.collection_select :provider_id, Provider.all, :id, :name,
               { prompt: "Select Provider" },
-              style: "width: 100%; padding: 0.75rem 1rem; border: 2px solid #e5e7eb; border-radius: 0.5rem; font-size: 0.875rem; transition: all 0.2s; background: #f9fafb;" %>
-          <p style="margin-top: 0.5rem; font-size: 0.75rem; color: #6b7280;">Choose the healthcare provider associated with this content.</p>
+              class: "form-select" %>
+          <p class="form-help-text">Choose the healthcare provider associated with this content.</p>
         </div>
       <% end %>
 
-      <!-- Language -->
-      <div data-controller="select-tags">
-        <%= f.label :language, style: "display: block; font-size: 0.875rem; font-weight: 600; color: #374151; margin-bottom: 0.5rem;" do %>
-          Language
-          <span style="color: #ef4444;">*</span>
+      <!-- Publishing Year -->
+      <div>
+        <%= f.label :publishing_year, class: "form-label" do %>
+          Publishing Year
+          <span class="form-required">*</span>
         <% end %>
-        <div class="form-group">
-          <%= f.label :language %>
-          <%= f.collection_select :language_id,
-                                  Language.all,
-                                  :id,
-                                  :name,
-                                  { prompt: "Select language", selected: topic.language&.id || Language.first.id },
-                                  class: "form-select"
-          %>
-        </div>
-        <div class="form-group">
-          <%= f.label :publishing_year %>
-          <%= f.select :published_at_year, options_for_select((2016..Date.today.year).to_a, topic.published_at_year || Date.today.year), { prompt: "Select year of publishing" }, class: "form-select" %>
-        </div>
-        <div class="form-group">
-          <%= f.label :publishing_month %>
-          <%= f.select :published_at_month, options_for_select((1..12).to_a, topic.published_at_month || Date.today.month), { prompt: "Select month of publishing" }, class: "form-select" %>
-        </div>
-        <div class="form-group">
-          <div class="d-flex">
-            <%= f.label :tag_list, class: "flex-fill" %>
-            <small class="flex-fill text-end fw-light text-muted text-uppercase">Press enter to add a new tag</small>
-          </div>
-          <p>Please note: For any tag you add or remove, its cognates are also added or removed.</p>
-          <%= f.select :tag_list,
-                      options_from_collection_for_select(
-                        ActsAsTaggableOn::Tag.all&.order(name: :asc),
-                        :name,
-                        :name,
-                        topic.tag_list
-                      ),
-                      { prompt: "Select tags", include_blank: true },
-                      multiple: true,
-                      style: "width: 100%; min-height: 120px; padding: 0.75rem 1rem; border: 2px solid #e5e7eb; border-radius: 0.5rem; font-size: 0.875rem; transition: all 0.2s; background: #f9fafb;",
-                      data: { "allow-new": "true", "allow-clear": "true", "select-tags-target": "tagList" }
-          %>
-        </div>
-        <p style="margin-top: 0.5rem; font-size: 0.75rem; color: #6b7280;">Add relevant tags to help users discover this content. You can select existing tags or create new ones.</p>
+        <%= f.select :published_at_year, options_for_select((2016..Date.today.year).to_a.reverse, topic.published_at_year || Date.today.year),
+          { prompt: "Select year of publishing" },
+          class: "form-select" %>
+      </div>
+      <!-- Publishing Month -->
+      <div>
+        <%= f.label :publishing_month, class: "form-label" do %>
+          Publishing Month
+          <span class="form-required">*</span>
+        <% end %>
+        <%= f.select :published_at_month, options_for_select((1..12).to_a, topic.published_at_month || Date.today.month),
+          { prompt: "Select month of publishing" },
+          class: "form-select" %>
+      </div>
+
+      <!-- Language -->
+      <div>
+        <%= f.label :language, class: "form-label" do %>
+          Language
+          <span class="form-required">*</span>
+        <% end %>
+        <%= f.collection_select :language_id,
+                                Language.all,
+                                :id,
+                                :name,
+                                { prompt: "Select language", selected: topic.language&.id || Language.first.id },
+                                class: "form-select" %>
+      </div>
+      <div data-controller="select-tags">
+        <%= f.label :tag_list, class: "form-label" %>
+        <%= f.select :tag_list,
+                    options_from_collection_for_select(
+                      ActsAsTaggableOn::Tag.all&.order(name: :asc),
+                      :name,
+                      :name,
+                      topic.tag_list
+                    ),
+                    { prompt: "Start typing and press Enter to add a new tag", include_blank: true },
+                    multiple: true,
+                    data: { "allow-new": "true", "allow-clear": "true", "select-tags-target": "tagList" }
+        %>
+        <p class="form-help-text">
+          Add relevant tags to help users discover this content. You can select existing tags or create new ones.
+          <% if topic.persisted? %>
+            For any tag you add or remove, its cognates are also added or removed.
+          <% end %>
+        </p>
       </div>
 
       <!-- Documents Upload -->
-      <div style="grid-column: 1 / -1;" data-controller="upload" <% if topic.persisted? %> data-upload-topic-id-value="<%= topic.id %>" <% end %>>
+      <div class="form-grid-full" data-controller="upload" <% if topic.persisted? %> data-upload-topic-id-value="<%= topic.id %>" <% end %>>
         <%#= f.label :documents, style: "display: block; font-size: 0.875rem; font-weight: 600; color: #374151; margin-bottom: 0.5rem;" do %>
 <!--          Supporting Documents-->
         <%# end %>
@@ -132,35 +144,3 @@
 
   </div>
 <% end %>
-
-<style>
-  /* Form input focus states */
-  input[type="text"]:focus, textarea:focus, select:focus {
-    outline: none !important;
-    border-color: #3b82f6 !important;
-    box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1) !important;
-    background: white !important;
-  }
-
-  /* Submit button hover */
-  input[type="submit"]:hover {
-    transform: translateY(-2px) !important;
-    box-shadow: 0 10px 25px -5px rgba(16, 185, 129, 0.4) !important;
-  }
-
-  /* File input styling */
-  input[type="file"] {
-    cursor: pointer !important;
-  }
-
-  /* Multi-select styling */
-  select[multiple] {
-    min-height: 120px !important;
-  }
-
-  /* Upload area hover */
-  div[style*="border: 2px dashed"]:hover {
-    border-color: #3b82f6 !important;
-    background: #f0f9ff !important;
-  }
-</style>
