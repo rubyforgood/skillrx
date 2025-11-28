@@ -2,7 +2,7 @@
 
 <div style="min-height: 100vh; background: linear-gradient(135deg, #f8fafc 0%, #e2e8f0 100%); padding: 2rem 0;">
   <div style="max-width: 1200px; margin: 0 auto; padding: 0 1rem; overflow-x: hidden;">
-    
+
     <!-- Header Section -->
     <div style="margin-bottom: 2rem;">
       <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.5rem; flex-wrap: wrap; gap: 1rem;">
@@ -17,7 +17,7 @@
           </div>
           <p style="color: #6b7280; margin: 0; font-size: 1rem;">Manage content tags and classification systems</p>
         </div>
-        
+
         <%= link_to new_tag_path, style: "background: linear-gradient(135deg, #8b5cf6 0%, #7c3aed 100%); color: white; padding: 0.875rem 1.75rem; border-radius: 0.75rem; text-decoration: none; font-weight: 600; font-size: 0.875rem; display: inline-flex; align-items: center; gap: 0.5rem; box-shadow: 0 10px 15px -3px rgba(139, 92, 246, 0.4), 0 4px 6px -2px rgba(139, 92, 246, 0.05); transition: all 0.2s;", data: {turbo: false } do %>
           <svg style="width: 1.125rem; height: 1.125rem;" fill="none" stroke="currentColor" viewBox="0 0 24 24">
             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"></path>
@@ -25,7 +25,7 @@
           <span>Add New Tag</span>
         <% end %>
       </div>
-      
+
       <!-- Breadcrumb -->
       <nav style="font-size: 0.875rem; color: #6b7280;">
         <ol style="display: flex; gap: 0.5rem; list-style: none; padding: 0; margin: 0;">
@@ -47,13 +47,13 @@
           </div>
           <h3 style="font-size: 1.125rem; font-weight: 600; color: #374151; margin: 0;">Search & Filter Tags</h3>
         </div>
-        
+
         <%= form_for :search, url: tags_path, method: :get, data: { controller: "search", search_target: "search", turbo_frame: "tag-list", turbo_action: "advance" } do |f| %>
           <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 1.5rem;">
-            
+
             <!-- Name Search -->
             <div>
-              <%= f.label :name, style: "display: block; font-size: 0.875rem; font-weight: 600; color: #374151; margin-bottom: 0.5rem;" do %>
+              <%= f.label :name, class: "input-label" do %>
                 <div style="display: flex; align-items: center; gap: 0.5rem;">
                   <svg style="width: 1rem; height: 1rem;" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 7h.01M7 3h5c.512 0 1.024.195 1.414.586l7 7a2 2 0 010 2.828l-7 7a2 2 0 01-2.828 0l-7-7A1.994 1.994 0 013 12V7a4 4 0 014-4z"/>
@@ -61,18 +61,16 @@
                   Tag Name
                 </div>
               <% end %>
-              <%= f.text_field :name, 
-                  value: params.dig(:search, :name), 
+              <%= f.text_field :name,
+                  value: params.dig(:search, :name),
                   placeholder: "Search by tag name...",
-                  style: "width: 100%; padding: 0.75rem 1rem; border: 2px solid #e5e7eb; border-radius: 0.5rem; font-size: 0.875rem; transition: all 0.2s; background: white;",
-                  data: { action: "input->search#submit" },
-                  onfocus: "this.style.borderColor='#8b5cf6'; this.style.boxShadow='0 0 0 3px rgba(139, 92, 246, 0.1)';",
-                  onblur: "this.style.borderColor='#e5e7eb'; this.style.boxShadow='none';" %>
+                  class: "input-field",
+                  data: { action: "input->search#submit" } %>
             </div>
-            
+
             <!-- Order Selection -->
             <div>
-              <%= f.label :order, style: "display: block; font-size: 0.875rem; font-weight: 600; color: #374151; margin-bottom: 0.5rem;" do %>
+              <%= f.label :order, class: "input-label" do %>
                 <div style="display: flex; align-items: center; gap: 0.5rem;">
                   <svg style="width: 1rem; height: 1rem;" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 7v10a2 2 0 002 2h14a2 2 0 002-2V9a2 2 0 00-2-2H5a2 2 0 00-2 2v0"/>
@@ -80,23 +78,24 @@
                   Order By
                 </div>
               <% end %>
-              <%= f.select :order, 
-                  options_for_select([
-                    ["Name", :name],
-                    ["Most recently added", :desc], 
-                    ["Least recently added", :asc], 
-                    ["Highest number of taggings", :most_tagged], 
-                    ["Lowest number of taggings", :least_tagged]
-                  ], params.dig(:search, :order)), 
-                  {},
-                  style: "width: 100%; padding: 0.75rem 1rem; border: 2px solid #e5e7eb; border-radius: 0.5rem; font-size: 0.875rem; background: white; transition: all 0.2s;",
-                  data: { action: "change->search#submit" },
-                  onfocus: "this.style.borderColor='#8b5cf6'; this.style.boxShadow='0 0 0 3px rgba(139, 92, 246, 0.1)';",
-                  onblur: "this.style.borderColor='#e5e7eb'; this.style.boxShadow='none';" %>
+              <div style="position:relative;">
+                <%= f.select :order,
+                    options_for_select([
+                      ["Name", :name],
+                      ["Most recently added", :desc],
+                      ["Least recently added", :asc],
+                      ["Highest number of taggings", :most_tagged],
+                      ["Lowest number of taggings", :least_tagged]
+                    ], params.dig(:search, :order)),
+                    {},
+                    class: "select-field",
+                    data: { action: "change->search#submit" } %>
+                <%= render "shared/dropdown_arrow" %>
+              </div>
             </div>
-            
+
           </div>
-          
+
           <!-- Clear Button -->
           <div style="margin-top: 1.5rem; display: flex; justify-content: flex-end;">
             <%= link_to tags_path, style: "background: #6b7280; color: white; padding: 0.75rem 1.5rem; border-radius: 0.5rem; text-decoration: none; font-weight: 600; font-size: 0.875rem; display: inline-flex; align-items: center; gap: 0.5rem; transition: all 0.2s;" do %>
@@ -113,7 +112,7 @@
     <!-- Tags Table Card -->
     <%= turbo_frame_tag "tag-list" do %>
       <div style="background: white; border-radius: 1rem; box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04); overflow: hidden;">
-        
+
         <!-- Card Header -->
         <div style="background: linear-gradient(135deg, #8b5cf6 0%, #7c3aed 100%); padding: 2rem; color: white;">
           <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 1rem;">
@@ -130,7 +129,7 @@
                 </p>
               </div>
             </div>
-            
+
             <div style="display: flex; gap: 0.75rem; align-items: center;">
               <div style="background: rgba(255, 255, 255, 0.1); padding: 0.5rem 1rem; border-radius: 9999px; font-size: 0.75rem; font-weight: 500;">
                 Total: <%= @tags.count %>
@@ -138,7 +137,7 @@
             </div>
           </div>
         </div>
-        
+
         <!-- Table Content -->
         <div style="padding: 0;">
           <div class="table-container" style="overflow-x: auto;">
@@ -175,7 +174,7 @@
               <%= render "list", topics: @tags %>
             </table>
           </div>
-          
+
           <!-- Pagination -->
           <div style="background: #f8fafc; padding: 1.5rem 2rem; border-top: 1px solid #e2e8f0; display: flex; justify-content: space-between; align-items: center;">
             <div style="color: #6b7280; font-size: 0.875rem;">
@@ -197,115 +196,115 @@
     transform: translateY(-3px);
     box-shadow: 0 20px 25px -5px rgba(139, 92, 246, 0.4), 0 10px 10px -5px rgba(139, 92, 246, 0.1) !important;
   }
-  
+
   /* Search form hover effects */
   a[style*="background: #6b7280"]:hover {
     background: #4b5563 !important;
     transform: translateY(-1px);
   }
-  
+
   /* Form input focus effects */
   form input[type="text"]:focus, form select:focus {
     outline: none;
   }
-  
+
   /* Table hover effects */
   tbody tr:hover {
     background-color: #f8fafc !important;
   }
-  
+
   /* Responsive design */
   @media (max-width: 768px) {
     /* Container adjustments */
     div[style*="max-width: 1200px"] {
       padding: 0 0.5rem !important;
     }
-    
+
     /* Page padding adjustments */
     div[style*="min-height: 100vh"] {
       padding: 1rem 0 !important;
     }
-    
+
     /* Header adjustments */
     div[style*="justify-content: space-between"] {
       flex-direction: column !important;
       align-items: flex-start !important;
       gap: 1rem !important;
     }
-    
+
     /* Title adjustments */
     h1 {
       font-size: 2rem !important;
     }
-    
+
     /* Hide less important columns on mobile */
     .hide-mobile {
       display: none !important;
     }
-    
+
     /* Make remaining columns more compact */
     th, td {
       padding: 0.75rem 0.5rem !important;
       font-size: 0.875rem !important;
     }
-    
+
     /* Card adjustments */
     div[style*="border-radius: 1rem"] {
       border-radius: 0.5rem !important;
       margin: 0 -0.5rem !important;
     }
-    
+
     /* Card header adjustments */
     div[style*="background: linear-gradient(135deg, #8b5cf6"] {
       padding: 1.5rem 1rem !important;
     }
-    
+
     /* Search grid adjustments */
     div[style*="grid-template-columns: repeat(auto-fit, minmax(250px, 1fr))"] {
       grid-template-columns: 1fr !important;
     }
-    
+
     /* Table container */
     .table-container {
       overflow-x: auto !important;
       -webkit-overflow-scrolling: touch !important;
     }
   }
-  
+
   @media (max-width: 640px) {
     /* Further mobile adjustments */
     div[style*="padding: 0 1rem"] {
       padding: 0 0.25rem !important;
     }
-    
+
     /* Extend cards to screen edge on very small screens */
     div[style*="border-radius: 1rem"] {
       border-radius: 0 !important;
       margin: 0 -0.25rem !important;
     }
-    
+
     /* Reduce padding on cards */
     div[style*="padding: 2rem"] {
       padding: 1rem 0.75rem !important;
     }
-    
+
     /* Smaller text on very small screens */
     h1 {
       font-size: 1.75rem !important;
     }
-    
+
     /* Even more compact table */
     th, td {
       padding: 0.5rem 0.25rem !important;
       font-size: 0.75rem !important;
     }
-    
+
     /* Ensure no horizontal overflow */
     * {
       max-width: 100% !important;
       box-sizing: border-box !important;
     }
-    
+
     /* Force word wrapping */
     th, td {
       word-wrap: break-word !important;
