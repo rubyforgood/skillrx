@@ -26,8 +26,118 @@
     <%= javascript_importmap_tags %>
   </head>
 
-  <body>
+  <body style="background: #f8f9fa;">
     <script src="https://cdn.jsdelivr.net/gh/zuramai/mazer@docs/demo/assets/static/js/initTheme.js"></script>
+
+    <style>
+      /* Modern form styling */
+      .form-control:focus {
+        border-color: #667eea;
+        box-shadow: 0 0 0 0.25rem rgba(102, 126, 234, 0.25);
+      }
+      
+      .form-floating > .form-control:focus ~ label,
+      .form-floating > .form-control:not(:placeholder-shown) ~ label {
+        opacity: 0.65;
+        transform: scale(0.85) translateY(-0.5rem) translateX(0.15rem);
+        color: #667eea;
+      }
+      
+      /* Button animations */
+      .btn {
+        transition: all 0.3s ease;
+        transform: translateY(0);
+      }
+      
+      .btn:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
+      }
+      
+      .btn:active {
+        transform: translateY(0);
+      }
+      
+      /* Card animations */
+      .auth-card {
+        animation: fadeInUp 0.6s ease-out;
+      }
+      
+      @keyframes fadeInUp {
+        from {
+          opacity: 0;
+          transform: translateY(30px);
+        }
+        to {
+          opacity: 1;
+          transform: translateY(0);
+        }
+      }
+      
+      /* Background patterns */
+      .pattern-bg {
+        background-image: 
+          radial-gradient(circle at 25% 25%, rgba(255, 255, 255, 0.1) 0%, transparent 50%),
+          radial-gradient(circle at 75% 75%, rgba(255, 255, 255, 0.1) 0%, transparent 50%);
+      }
+      
+      /* Loading states */
+      .btn.loading {
+        pointer-events: none;
+        opacity: 0.7;
+      }
+      
+      .btn.loading::after {
+        content: "";
+        display: inline-block;
+        width: 16px;
+        height: 16px;
+        margin-left: 10px;
+        border: 2px solid transparent;
+        border-top-color: currentColor;
+        border-radius: 50%;
+        animation: spin 1s linear infinite;
+      }
+      
+      @keyframes spin {
+        0% { transform: rotate(0deg); }
+        100% { transform: rotate(360deg); }
+      }
+      
+      /* Alert animations */
+      .alert {
+        animation: slideInRight 0.5s ease-out;
+      }
+      
+      @keyframes slideInRight {
+        from {
+          opacity: 0;
+          transform: translateX(100%);
+        }
+        to {
+          opacity: 1;
+          transform: translateX(0);
+        }
+      }
+      
+      /* Form validation styling */
+      .form-control.is-invalid {
+        border-color: #dc3545;
+        box-shadow: 0 0 0 0.25rem rgba(220, 53, 69, 0.25);
+      }
+      
+      .form-control.is-valid {
+        border-color: #198754;
+        box-shadow: 0 0 0 0.25rem rgba(25, 135, 84, 0.25);
+      }
+      
+      /* Responsive adjustments */
+      @media (max-width: 991.98px) {
+        .auth-card {
+          margin: 2rem 1rem;
+        }
+      }
+    </style>
 
     <!-- Start content here -->
     <%= yield %>
@@ -41,5 +151,76 @@
     <!-- Need: Apexcharts -->
     <script src="https://cdn.jsdelivr.net/gh/zuramai/mazer@docs/demo/assets/extensions/apexcharts/apexcharts.min.js"></script>
     <script src="https://cdn.jsdelivr.net/gh/zuramai/mazer@docs/demo/assets/static/js/pages/dashboard.js"></script>
+    
+    <script>
+      // Form validation
+      (function() {
+        'use strict';
+        window.addEventListener('load', function() {
+          var forms = document.getElementsByClassName('needs-validation');
+          var validation = Array.prototype.filter.call(forms, function(form) {
+            form.addEventListener('submit', function(event) {
+              if (form.checkValidity() === false) {
+                event.preventDefault();
+                event.stopPropagation();
+              } else {
+                // Add loading state to submit button
+                const submitBtn = form.querySelector('input[type="submit"], button[type="submit"]');
+                if (submitBtn) {
+                  submitBtn.classList.add('loading');
+                  submitBtn.disabled = true;
+                }
+              }
+              form.classList.add('was-validated');
+            }, false);
+          });
+        }, false);
+      })();
+      
+      // Auto-dismiss alerts after 5 seconds
+      setTimeout(function() {
+        const alerts = document.querySelectorAll('.alert');
+        alerts.forEach(alert => {
+          const bsAlert = new bootstrap.Alert(alert);
+          bsAlert.close();
+        });
+      }, 5000);
+      
+      // Enhanced form interactions
+      document.addEventListener('DOMContentLoaded', function() {
+        // Add focus effects to form controls
+        const formControls = document.querySelectorAll('.form-control');
+        formControls.forEach(control => {
+          control.addEventListener('focus', function() {
+            this.parentElement.classList.add('focused');
+          });
+          
+          control.addEventListener('blur', function() {
+            this.parentElement.classList.remove('focused');
+          });
+        });
+        
+        // Password visibility toggle (if needed)
+        const passwordFields = document.querySelectorAll('input[type="password"]');
+        passwordFields.forEach(field => {
+          const toggleBtn = document.createElement('button');
+          toggleBtn.type = 'button';
+          toggleBtn.className = 'btn btn-link position-absolute end-0 top-50 translate-middle-y me-3';
+          toggleBtn.innerHTML = '<i class="bi bi-eye"></i>';
+          toggleBtn.style.zIndex = '10';
+          toggleBtn.style.border = 'none';
+          toggleBtn.style.background = 'none';
+          
+          field.parentElement.style.position = 'relative';
+          field.parentElement.appendChild(toggleBtn);
+          
+          toggleBtn.addEventListener('click', function() {
+            const type = field.getAttribute('type') === 'password' ? 'text' : 'password';
+            field.setAttribute('type', type);
+            this.innerHTML = type === 'password' ? '<i class="bi bi-eye"></i>' : '<i class="bi bi-eye-slash"></i>';
+          });
+        });
+      });
+    </script>
   </body>
 </html>

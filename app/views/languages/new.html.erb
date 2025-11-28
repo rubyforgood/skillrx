@@ -1,18 +1,52 @@
 <% content_for :title, "New language" %>
 
-<section id="basic-vertical-layouts">
-  <div class="row match-height">
-    <div class="col-md-6 col-12">
-      <div class="card">
-        <div class="card-header">
-          <h2 class="card-title">New language</h2>
-        </div>
-        <div class="card-content">
-          <div class="card-body">
-            <%= render "form", language: @language %>
+<div style="padding: 2rem;">
+  <div style="max-width: 600px; margin: 0 auto;">
+    <!-- Breadcrumb -->
+    <nav style="margin-bottom: 2rem;">
+      <div style="display: flex; align-items: center; gap: 0.5rem; font-size: 0.875rem; color: #6b7280;">
+        <%= link_to "Languages", languages_path, style: "color: #3b82f6; text-decoration: none; hover: text-decoration: underline;" %>
+        <svg style="width: 1rem; height: 1rem;" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path>
+        </svg>
+        <span>New Language</span>
+      </div>
+    </nav>
+
+    <!-- Main Card -->
+    <div style="background: white; border-radius: 1rem; box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06); overflow: hidden;">
+      <!-- Header -->
+      <div style="background: linear-gradient(135deg, #f8fafc 0%, #f1f5f9 100%); padding: 2rem; border-bottom: 1px solid #e2e8f0;">
+        <div style="display: flex; align-items: center; gap: 1rem;">
+          <div style="width: 3rem; height: 3rem; background: linear-gradient(135deg, #10b981 0%, #059669 100%); border-radius: 0.75rem; display: flex; align-items: center; justify-content: center; color: white;">
+            <svg style="width: 1.5rem; height: 1.5rem;" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"></path>
+            </svg>
           </div>
+          <div>
+            <h1 style="font-size: 1.5rem; font-weight: 700; color: #111827; margin: 0;">Add New Language</h1>
+            <p style="color: #6b7280; margin: 0.25rem 0 0 0; font-size: 0.875rem;">Configure a new language for the system</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- Form Content -->
+      <div style="padding: 2rem;">
+        <%= render "form", language: @language %>
+      </div>
+    </div>
+
+    <!-- Help Text -->
+    <div style="margin-top: 1.5rem; padding: 1rem; background: #f0f9ff; border: 1px solid #bae6fd; border-radius: 0.5rem;">
+      <div style="display: flex; gap: 0.75rem;">
+        <svg style="width: 1.25rem; height: 1.25rem; color: #0ea5e9; flex-shrink: 0; margin-top: 0.125rem;" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+        </svg>
+        <div>
+          <h3 style="font-weight: 600; color: #0c4a6e; margin: 0 0 0.25rem 0; font-size: 0.875rem;">About Languages</h3>
+          <p style="color: #075985; font-size: 0.75rem; margin: 0; line-height: 1.5;">Languages help organize content and file storage. Each language can have its own file storage prefix for better organization.</p>
         </div>
       </div>
     </div>
   </div>
-</section>
+</div>
