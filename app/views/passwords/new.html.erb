@@ -1,15 +1,17 @@
-<div class="min-h-screen flex items-center justify-center px-4 sm:px-6 lg:px-8 bg-gradient-to-br from-gray-50 to-gray-100">
-  <div class="max-w-md w-full">
-    <div class="bg-white py-8 px-6 shadow-xl rounded-lg sm:px-10">
+<div class="min-h-screen flex">
+  <!-- Left side - Reset Form -->
+  <div class="flex-1 flex items-center justify-center px-4 sm:px-6 lg:px-8 bg-gradient-to-br from-gray-50 to-gray-100">
+    <div class="max-w-md w-full">
+      <div class="bg-white py-8 px-6 shadow-xl rounded-lg sm:px-10">
       <div class="text-center mb-8">
         <%= link_to root_path, class: "inline-block" do %>
           <%= image_tag("skill.svg", alt: "SkillRx", class: "h-16 w-auto mx-auto") %>
         <% end %>
-        
-  <h2 class="mt-6 text-3xl font-bold text-gray-900">Reset Your Password</h2>
-  <p class="mt-2 text-gray-600">Input your email and we will send you reset password link</p>
+
+        <h2 class="mt-6 text-3xl font-bold text-gray-900">Reset Your Password</h2>
+        <p class="mt-2 text-gray-600">Input your email and we will send you reset password link</p>
       </div>
-      
+
       <% if flash[:alert] %>
         <div class="mb-6 bg-red-50 border border-red-200 text-red-700 px-4 py-3 rounded-lg flex items-start">
           <svg class="w-5 h-5 mr-2 flex-shrink-0 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -18,25 +20,25 @@
           <span><%= flash[:alert] %></span>
         </div>
       <% end %>
-      
+
       <%= form_with url: passwords_path, local: true, class: "space-y-6" do |form| %>
         <div>
           <%= form.label :email, "Email address", class: "block text-sm font-medium text-gray-700 mb-2" %>
-          <%= form.email_field :email, 
-              required: true, 
-              class: "appearance-none block w-full px-4 py-3 border border-gray-300 rounded-lg text-gray-900 placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent", 
-              autofocus: true, 
-              autocomplete: "email", 
-              placeholder: "you@example.com", 
+          <%= form.email_field :email,
+              required: true,
+              class: "appearance-none block w-full px-4 py-3 border border-gray-300 rounded-lg text-gray-900 placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent",
+              autofocus: true,
+              autocomplete: "email",
+              placeholder: "you@example.com",
               value: params[:email] %>
         </div>
-        
+
         <div>
-          <%= form.submit "Send Reset Instructions", 
+          <%= form.submit "Send Reset Instructions",
               class: "w-full flex justify-center items-center px-6 py-3 border border-transparent text-base font-medium rounded-lg text-white bg-gradient-to-r from-indigo-500 to-purple-600 hover:from-indigo-600 hover:to-purple-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 transition-all cursor-pointer" %>
         </div>
       <% end %>
-      
+
       <div class="mt-8 text-center">
         <div class="relative">
           <div class="absolute inset-0 flex items-center">
@@ -46,12 +48,12 @@
             <span class="px-4 bg-white text-gray-500">Remember your password?</span>
           </div>
         </div>
-        
+
         <div class="mt-6 space-y-2">
-          <%= link_to "Login", new_session_path, 
+          <%= link_to "Login", new_session_path,
               class: "font-medium text-indigo-600 hover:text-indigo-500" %>
           <p class="text-sm text-gray-600">
-            Need help? 
+            Need help?
             <a href="mailto:contact@skillrx.org" class="font-medium text-indigo-600 hover:text-indigo-500">
               Contact Support
             </a>
@@ -59,24 +61,23 @@
         </div>
       </div>
     </div>
+    </div>
   </div>
-</div>
-  </div>
-  
+
   <!-- Right side - Visual/Information -->
-  <div class="hidden lg:block relative w-0 flex-1">
+  <div class="hidden lg:block relative w-0 flex-1 overflow-hidden">
     <div class="absolute inset-0 bg-gradient-to-br from-amber-400 to-orange-500">
       <div class="absolute inset-0 bg-black/10"></div>
-      <div class="absolute inset-0" style="background-image: url('data:image/svg+xml,%3Csvg width="60" height="60" viewBox="0 0 60 60" xmlns="http://www.w3.org/2000/svg"%3E%3Cg fill="none" fill-rule="evenodd"%3E%3Cg fill="%23ffffff" fill-opacity="0.05"%3E%3Cpath d="M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z"/%3E%3C/g%3E%3C/g%3E%3C/svg%3E'); background-size: 60px 60px;"></div>
+      <div class="absolute inset-0" style="background-image: url(&quot;data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23ffffff' fill-opacity='0.05'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E&quot;); background-size: 60px 60px;"></div>
     </div>
-    
+
     <div class="absolute inset-0 flex items-center justify-center p-12">
       <div class="max-w-lg">
         <h1 class="text-4xl font-bold text-white mb-6">Secure & Simple</h1>
         <p class="text-xl text-white/90 mb-12">
-          Your account security is our priority. We'll help you get back to learning quickly and safely.
+          Your account security is our priority.
         </p>
-        
+
         <div class="space-y-8">
           <div class="flex items-start">
             <div class="flex-shrink-0">
@@ -91,7 +92,7 @@
               <p class="text-white/80">Encrypted email verification</p>
             </div>
           </div>
-          
+
           <div class="flex items-start">
             <div class="flex-shrink-0">
               <div class="w-12 h-12 bg-white/20 rounded-full flex items-center justify-center">
@@ -106,16 +107,16 @@
             </div>
           </div>
         </div>
-        
+
         <div class="mt-12 p-6 bg-white/10 backdrop-blur-sm rounded-xl">
           <h4 class="font-semibold text-white mb-2 flex items-center">
             <span class="text-2xl mr-2">💡</span> Security Tip
           </h4>
           <p class="text-white/90 text-sm">
-            Use a strong, unique password and consider enabling two-factor authentication for enhanced security.
+            Use a strong, unique password
           </p>
         </div>
-        
+
         <div class="mt-8">
           <%= link_to root_path, class: "inline-flex items-center text-white hover:text-white/90 transition-colors" do %>
             <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
