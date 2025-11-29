@@ -23,10 +23,12 @@ module TaggingHelpers
   #   enter_and_choose_tag("ruby") # Enters the tag "ruby" in the form
   #
   # @note This helper assumes the presence of a Stimulus controller 'select-tags'
-  #       which renders a specific DOM structure
+  #       which renders a specific DOM structure using TomSelect
   def enter_and_choose_tag(tag_name)
     within "div[data-controller='select-tags']" do
-      tag_input = find("div.form-control.dropdown.form-select>div>input")
+      # TomSelect creates a .ts-wrapper with a .ts-control input
+      tag_input = find(".ts-control input")
+      tag_input.click
       tag_input.fill_in(with: tag_name)
       tag_input.send_keys(:enter)
     end
