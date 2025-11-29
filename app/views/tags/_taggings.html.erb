@@ -16,7 +16,7 @@
       <ul style="margin: 0; padding: 0; list-style: none; display: flex; flex-direction: column; gap: 0.5rem;">
         <% @tag.taggings.each do |tagging| %>
           <li>
-            <%= link_to tagging.taggable.title, url_for(tagging.taggable), 
+            <%= link_to tagging.taggable.title, url_for(tagging.taggable),
                 target: "_blank",
                 style: "color: #8b5cf6; text-decoration: none; font-weight: 500; font-size: 0.875rem; display: inline-flex; align-items: center; gap: 0.5rem; transition: color 0.2s;",
                 onmouseover: "this.style.color='#7c3aed'",
@@ -24,7 +24,6 @@
               <svg style="width: 0.75rem; height: 0.75rem;" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"/>
               </svg>
-            </a>
           </li>
         <% end %>
       </ul>
