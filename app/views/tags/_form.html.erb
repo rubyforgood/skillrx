@@ -18,7 +18,7 @@
   <% end %>
 
   <div style="space-y: 1.5rem;">
-    
+
     <!-- Tag Name Field -->
     <div style="margin-bottom: 1.5rem;">
       <%= form.label :name, style: "display: block; font-size: 0.875rem; font-weight: 600; color: #374151; margin-bottom: 0.5rem;" do %>
@@ -29,7 +29,7 @@
           Tag Name
         </div>
       <% end %>
-      <%= form.text_field :name, 
+      <%= form.text_field :name,
           placeholder: "Enter tag name (e.g., healthcare, technology, education)",
           style: "width: 100%; padding: 0.875rem 1rem; border: 2px solid #e5e7eb; border-radius: 0.5rem; font-size: 0.875rem; transition: all 0.2s; background: white;",
           onfocus: "this.style.borderColor='#8b5cf6'; this.style.boxShadow='0 0 0 3px rgba(139, 92, 246, 0.1)';",
@@ -54,7 +54,7 @@
           Press enter to add a new tag
         </small>
       </div>
-      
+
       <%= form.select :cognates_list,
           options_from_collection_for_select(
             tag.all_available_tags,
@@ -64,11 +64,8 @@
           ),
           { prompt: "Select related tags", include_blank: true },
           multiple: true,
-          style: "width: 100%; padding: 0.875rem 1rem; border: 2px solid #e5e7eb; border-radius: 0.5rem; font-size: 0.875rem; background: white; transition: all 0.2s; min-height: 3rem;",
-          data: { "allow-clear": "true", "not-found-message": "Please select a tag from the list", "select-tags-target": "tagList" },
-          onfocus: "this.style.borderColor='#8b5cf6'; this.style.boxShadow='0 0 0 3px rgba(139, 92, 246, 0.1)';",
-          onblur: "this.style.borderColor='#e5e7eb'; this.style.boxShadow='none';" %>
-      
+          data: { "allow-clear": "true", "select-tags-target": "tagList" } %>
+
       <p style="margin: 0.5rem 0 0 0; font-size: 0.75rem; color: #6b7280;">
         Select related tags that share similar meanings or contexts. These help with content discovery and organization.
       </p>
@@ -84,8 +81,8 @@
       </svg>
       <span>Cancel</span>
     <% end %>
-    
-    <%= form.submit (tag.persisted? ? "Update Tag" : "Create Tag"), 
+
+    <%= form.submit (tag.persisted? ? "Update Tag" : "Create Tag"),
         style: "background: linear-gradient(135deg, #8b5cf6 0%, #7c3aed 100%); color: white; padding: 0.875rem 1.75rem; border-radius: 0.5rem; border: none; font-weight: 600; font-size: 0.875rem; display: inline-flex; align-items: center; gap: 0.5rem; cursor: pointer; transition: all 0.2s;" %>
   </div>
 <% end %>
@@ -95,18 +92,18 @@
   form input[type="text"]:focus, form select:focus {
     outline: none;
   }
-  
+
   /* Button hover effects */
   a[style*="background: #6b7280"]:hover {
     background: #4b5563 !important;
     transform: translateY(-1px);
   }
-  
+
   input[type="submit"]:hover {
     box-shadow: 0 10px 15px -3px rgba(139, 92, 246, 0.4), 0 4px 6px -2px rgba(139, 92, 246, 0.05) !important;
     transform: translateY(-1px);
   }
-  
+
   /* Multi-select styling */
   select[multiple] {
     appearance: none;
@@ -116,19 +113,19 @@
     background-size: 1.5em 1.5em;
     padding-right: 2.5rem;
   }
-  
+
   /* Responsive design */
   @media (max-width: 640px) {
     div[style*="justify-content: flex-end"] {
       flex-direction: column !important;
       align-items: stretch !important;
     }
-    
+
     a, input[type="submit"] {
       text-align: center !important;
       justify-content: center !important;
     }
-    
+
     div[style*="display: flex; justify-content: space-between"] {
       flex-direction: column !important;
       align-items: flex-start !important;
