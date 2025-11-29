@@ -49,13 +49,15 @@
             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"/>
           </svg>
           Password
-          <span style="color: #dc2626;">*</span>
+          <% if !user.persisted? %>
+            <span style="color: #dc2626;">*</span>
+          <% end %>
         </div>
       </label>
       <%= form.password_field :password,
           style: "width: 100%; padding: 0.875rem 1rem; border: 2px solid #e5e7eb; border-radius: 0.75rem; font-size: 0.875rem; transition: all 0.2s; background: white;",
           placeholder: "Enter password...",
-          required: true,
+          required: !user.persisted?,
           onfocus: "this.style.borderColor='#6366f1'; this.style.boxShadow='0 0 0 3px rgba(99, 102, 241, 0.1)'",
           onblur: "this.style.borderColor='#e5e7eb'; this.style.boxShadow='none'" %>
       <p style="margin: 0.5rem 0 0 0; color: #6b7280; font-size: 0.75rem;">
