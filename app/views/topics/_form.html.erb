@@ -127,7 +127,14 @@
             </svg>
             <div class="mt-4 flex justify-center text-sm/6 text-gray-600">
               <span class="font-semibold text-indigo-600 hover:text-indigo-500">Upload a file</span>
-              <%= f.file_field :documents, multiple: true, class: "sr-only", id: "documents", data: { upload_target: "filesInput", action: "change->upload#uploadFile" } %>
+              <%= f.file_field :documents,
+                multiple: true,
+                class: "sr-only",
+                id: "documents",
+                accept: Topic::CONTENT_TYPES.join(","),
+                data: { upload_target: "filesInput",
+                action: "change->upload#uploadFile" }
+              %>
             </div>
             <p class="text-xs/5 text-gray-600">Images, PDFs or audio files</p>
           </div>
