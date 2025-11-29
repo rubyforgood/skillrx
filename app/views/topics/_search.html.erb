@@ -24,7 +24,7 @@
 
         <!-- Language & Tags -->
         <div style="min-width:0; grid-column: 1 / -1;">
-          <div data-controller="select-tags" style="display:grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap:1rem; align-items:start;">
+          <div style="display:grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap:1rem; align-items:start;">
             <div style="position:relative;">
               <%= f.label :language_id, "Language", class: "input-label" %>
               <div style="position:relative;">
@@ -37,7 +37,7 @@
               </div>
             </div>
 
-            <div style="position:relative;">
+            <div data-controller="select-tags" style="position:relative;">
               <%= f.label :tag_list, "Tags", class: "input-label" %>
               <%= f.select :tag_list,
                            options_for_select(Tag.order(:name).pluck(:name), Array(params.dig(:search, :tag_list))),

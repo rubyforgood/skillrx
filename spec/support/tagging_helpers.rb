@@ -1,20 +1,4 @@
 module TaggingHelpers
-  # Selects a tag in a form using the select-tags Stimulus controller
-  #
-  # @param tag_name [String] the name of the tag to be selected
-  #
-  # @example
-  #   choose_tag("ruby") # Enters the tag "ruby" in the form
-  #
-  # @note This helper assumes the presence of a Stimulus controller 'select-tags'
-  #       which renders a specific DOM structure
-  def choose_tag(tag_name)
-    within "div[data-controller='select-tags']" do
-      select_input = find("select#search_tag_list", visible: :all)
-      select_input.select(tag_name)
-    end
-  end
-
   # Enter and selects a tag in a form using the select-tags Stimulus controller
   #
   # @param tag_name [String] the name of the tag to be selected

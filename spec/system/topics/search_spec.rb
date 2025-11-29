@@ -154,7 +154,7 @@ RSpec.describe "Topics search", type: :system do
 
     context "when searching by tags" do
       it "only displays topics matching the search" do
-        choose_tag(tag_name)
+        enter_and_choose_tag(tag_name)
 
         expect(page).to have_text(english_topic_tagged.title)
         expect(page).not_to have_text(spanish_active_topic.title)
@@ -288,7 +288,7 @@ RSpec.describe "Topics search", type: :system do
 
       context "when searching by tags" do
         it "only displays topics matching the search" do
-          choose_tag(tag_name)
+          enter_and_choose_tag(tag_name)
 
           expect(page).to have_text(english_topic_tagged.title)
           expect(page).not_to have_text(spanish_active_topic.title)
