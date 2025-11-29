@@ -20,7 +20,7 @@
 
   <!-- Form Fields -->
   <div style="display: grid; gap: 2rem;">
-    
+
     <!-- Email Field -->
     <div>
       <label style="display: block; font-weight: 600; color: #374151; margin-bottom: 0.75rem; font-size: 0.875rem;">
@@ -32,7 +32,7 @@
           <span style="color: #dc2626;">*</span>
         </div>
       </label>
-      <%= form.email_field :email, 
+      <%= form.email_field :email,
           style: "width: 100%; padding: 0.875rem 1rem; border: 2px solid #e5e7eb; border-radius: 0.75rem; font-size: 0.875rem; transition: all 0.2s; background: white;",
           placeholder: "Enter email address...",
           autofocus: true,
@@ -52,7 +52,7 @@
           <span style="color: #dc2626;">*</span>
         </div>
       </label>
-      <%= form.password_field :password, 
+      <%= form.password_field :password,
           style: "width: 100%; padding: 0.875rem 1rem; border: 2px solid #e5e7eb; border-radius: 0.75rem; font-size: 0.875rem; transition: all 0.2s; background: white;",
           placeholder: "Enter password...",
           required: true,
@@ -71,7 +71,7 @@
     <div style="background: #f8fafc; border: 2px solid #e2e8f0; border-radius: 0.75rem; padding: 1.5rem;">
       <div style="display: flex; align-items: start; gap: 1rem;">
         <div style="display: flex; align-items: center; margin-top: 0.125rem;">
-          <%= form.check_box :is_admin, 
+          <%= form.check_box :is_admin,
               style: "width: 1.25rem; height: 1.25rem; accent-color: #dc2626; cursor: pointer;" %>
         </div>
         <div style="flex: 1;">
@@ -91,41 +91,39 @@
     </div>
 
     <!-- Providers Selection -->
-    <div data-controller="selectable">
+    <div>
       <label style="display: block; font-weight: 600; color: #374151; margin-bottom: 0.75rem; font-size: 0.875rem;">
         <div style="display: flex; align-items: center; gap: 0.5rem;">
           <svg style="width: 1rem; height: 1rem; color: #6366f1;" fill="none" stroke="currentColor" viewBox="0 0 24 24">
             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4"/>
           </svg>
           Associated Providers
+          <span style="color: #dc2626;">*</span>
         </div>
       </label>
-      <%= form.collection_select :provider_ids,
-          Provider.order(:name),
-          :id,
-          :name,
-          { prompt: "Select providers", include_blank: false },
-          {
-            class: "form-select",
-            multiple: true,
-            style: "width: 100%; padding: 0.875rem 1rem; border: 2px solid #e5e7eb; border-radius: 0.75rem; font-size: 0.875rem; background: white; transition: all 0.2s; min-height: 3rem;",
-            data: { 
-              "allow-clear": "true", 
-              "not-found-message": "Please select a provider from the list", 
-              "selectable-target": "selectableList" 
-            },
-            onfocus: "this.style.borderColor='#6366f1'; this.style.boxShadow='0 0 0 3px rgba(99, 102, 241, 0.1)'",
-            onblur: "this.style.borderColor='#e5e7eb'; this.style.boxShadow='none'"
-          } %>
+      <div  data-controller="select-tags">
+        <%= form.select :provider_ids,
+                        options_from_collection_for_select(
+                          Provider.order(:name),
+                          :id,
+                          :name,
+                          user.providers.ids
+            ),
+            { prompt: "Select providers", include_blank: false },
+            {
+              multiple: true,
+              data: { "allow-new": "true", "allow-clear": "true", "select-tags-target": "tagList" }
+            } %>
+        </div>
       <p style="margin: 0.5rem 0 0 0; color: #6b7280; font-size: 0.75rem;">
-        Select which providers this user can access and manage content for. Hold Ctrl/Cmd to select multiple providers.
+        Select which providers this user can access and manage content for.
       </p>
     </div>
   </div>
 
   <!-- Form Actions -->
   <div style="margin-top: 3rem; display: flex; gap: 1rem; justify-content: flex-end; flex-wrap: wrap;">
-    <%= link_to users_path, 
+    <%= link_to users_path,
         style: "background: #f3f4f6; color: #374151; padding: 0.875rem 1.75rem; border-radius: 0.75rem; text-decoration: none; font-weight: 600; font-size: 0.875rem; display: inline-flex; align-items: center; gap: 0.5rem; transition: all 0.2s; border: 1px solid #d1d5db;",
         onmouseover: "this.style.background='#e5e7eb'; this.style.transform='translateY(-1px)'",
         onmouseout: "this.style.background='#f3f4f6'; this.style.transform='translateY(0)'" do %>
@@ -134,8 +132,8 @@
       </svg>
       Cancel
     <% end %>
-    
-    <%= form.submit user.persisted? ? "Update User" : "Create User", 
+
+    <%= form.submit user.persisted? ? "Update User" : "Create User",
         style: "background: linear-gradient(135deg, #10b981 0%, #059669 100%); color: white; padding: 0.875rem 1.75rem; border-radius: 0.75rem; border: none; cursor: pointer; font-weight: 600; font-size: 0.875rem; display: inline-flex; align-items: center; gap: 0.5rem; box-shadow: 0 4px 6px -1px rgba(16, 185, 129, 0.3); transition: all 0.2s;",
         onmouseover: "this.style.transform='translateY(-2px)'; this.style.boxShadow='0 10px 25px -5px rgba(16, 185, 129, 0.4)'",
         onmouseout: "this.style.transform='translateY(0)'; this.style.boxShadow='0 4px 6px -1px rgba(16, 185, 129, 0.3)'" %>
@@ -147,24 +145,24 @@
   input:focus, select:focus, textarea:focus {
     outline: none !important;
   }
-  
+
   /* Checkbox styling */
   input[type="checkbox"] {
     border-radius: 0.25rem !important;
   }
-  
+
   /* Responsive adjustments */
   @media (max-width: 640px) {
     div[style*="justify-content: flex-end"] {
       flex-direction: column !important;
       align-items: stretch !important;
     }
-    
+
     div[style*="display: flex; align-items: start"] {
       flex-direction: column !important;
       gap: 0.75rem !important;
     }
-    
+
     div[style*="display: flex; align-items: center; margin-top: 0.125rem"] {
       margin-top: 0 !important;
     }
