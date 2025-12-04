@@ -82,6 +82,9 @@ jobs:
           ruby-version: .ruby-version
           bundler-cache: true
 
+      - name: Build Tailwind CSS
+        run: bin/rails tailwindcss:build
+
       - name: Run tests
         run: bin/rails db:test:prepare && bin/rspec
 

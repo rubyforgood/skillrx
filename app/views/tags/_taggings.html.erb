@@ -1,11 +1,38 @@
-<p>
-  <strong>This tag is associated with <%= @tag.taggings_count %> resource(s).</strong>
-</p>
+<div style="background: linear-gradient(135deg, #f3f4f6 0%, #e5e7eb 100%); border: 1px solid #d1d5db; border-radius: 0.75rem; padding: 1.5rem; margin-bottom: 1.5rem;">
+  <div style="display: flex; align-items: center; gap: 0.75rem; margin-bottom: 1rem;">
+    <svg style="width: 1.25rem; height: 1.25rem; color: #8b5cf6;" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13.828 10.172a4 4 0 00-5.656 0l-4 4a4 4 0 105.656 5.656l1.102-1.101m-.758-4.899a4 4 0 005.656 0l4-4a4 4 0 00-5.656-5.656l-1.1 1.1"/>
+    </svg>
+    <p style="margin: 0; font-weight: 600; color: #374151; font-size: 0.875rem;">
+      This tag is associated with <span style="color: #8b5cf6; font-weight: 700;"><%= @tag.taggings_count %></span> resource(s).
+    </p>
+  </div>
 
-<ul>
-  <% tag.taggings.each do |tagging| %>
-    <li>
-      <%= link_to tagging.taggable.title, url_for(tagging.taggable), target: "_blank" %>
-    </li>
+  <% if @tag.taggings.any? %>
+    <div style="background: white; border-radius: 0.5rem; padding: 1rem; border: 1px solid #e5e7eb;">
+      <h4 style="margin: 0 0 0.75rem 0; font-size: 0.875rem; font-weight: 600; color: #6b7280; text-transform: uppercase; letter-spacing: 0.05em;">
+        Associated Resources
+      </h4>
+      <ul style="margin: 0; padding: 0; list-style: none; display: flex; flex-direction: column; gap: 0.5rem;">
+        <% @tag.taggings.each do |tagging| %>
+          <li>
+            <%= link_to tagging.taggable.title, url_for(tagging.taggable),
+                target: "_blank",
+                style: "color: #8b5cf6; text-decoration: none; font-weight: 500; font-size: 0.875rem; display: inline-flex; align-items: center; gap: 0.5rem; transition: color 0.2s;",
+                onmouseover: "this.style.color='#7c3aed'",
+                onmouseout: "this.style.color='#8b5cf6'" %>
+              <svg style="width: 0.75rem; height: 0.75rem;" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"/>
+              </svg>
+          </li>
+        <% end %>
+      </ul>
+    </div>
+  <% else %>
+    <div style="background: white; border-radius: 0.5rem; padding: 1rem; border: 1px solid #e5e7eb; text-align: center;">
+      <p style="margin: 0; color: #6b7280; font-style: italic; font-size: 0.875rem;">
+        No resources are currently using this tag.
+      </p>
+    </div>
   <% end %>
-</ul>
+</div>

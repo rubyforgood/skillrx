@@ -1,6 +1,8 @@
 require "rails_helper"
 
 RSpec.describe "topics/index", type: :view do
+  include Pagy::Frontend
+
   before(:each) do
     def view.search_params = {}
     def view.topics_title = "Topics"
@@ -36,16 +38,16 @@ RSpec.describe "topics/index", type: :view do
       assert_select "table>tbody>tr", count: 1
     end
 
-    it "renders pagination nav with unique item" do
+    it "does not render pagination when only one page present" do
       render
-      assert_dom "nav.pagy-bootstrap .page-item", text: "1", count: 1
+      assert_select "nav[aria-label='Page navigation']", count: 0
     end
   end
 
   context "when there are multiple pages of topics" do
     before(:each) do
       # Simulate being on page 2 with 10 items per page and 25 total items
-      pagy = Pagy.new(count: 25, page: 2, items: 10)
+      pagy = Pagy.new(count: 25, page: 2, limit: 10)
       assign(:pagy, pagy)
       assign(:topics, create_list(:topic, 10))
     end
@@ -57,8 +59,8 @@ RSpec.describe "topics/index", type: :view do
 
     it "renders pagination with multiple pages" do
       render
-      assert_select "nav.pagy-bootstrap .page-item", minimum: 2
-      assert_dom "nav.pagy-bootstrap .page-item.active", text: "2", count: 1
+      assert_select "nav[aria-label='Page navigation'] ul li", count: 5 # Previous, 1, 2, 3, Next
+      assert_select "nav[aria-label='Page navigation'] ul li span[aria-current='page']", text: "2", count: 1
     end
   end
 end

@@ -20,7 +20,7 @@ RSpec.describe "Creating a Topic", type: :system do
           select "English", from: "topic_language_id"
           select provider.name, from: "topic_provider_id"
           enter_and_choose_tag(tag_name)
-          click_button("Create Topic")
+          click_button("Save Topic")
           expect(page).to have_text("Search")
           expect(page).to have_text("My Topic")
 
@@ -30,7 +30,7 @@ RSpec.describe "Creating a Topic", type: :system do
 
       context "when failed" do
         it "renders the form with errors" do
-          click_button("Create Topic")
+          click_button("Save Topic")
           expect(page).to have_text("Title can't be blank")
         end
       end
@@ -46,7 +46,7 @@ RSpec.describe "Creating a Topic", type: :system do
           fill_in "Title", with: "My Topic"
           select "English", from: "topic_language_id"
           enter_and_choose_tag(tag_name)
-          click_button("Create Topic")
+          click_button("Save Topic")
           expect(page).to have_text("Search")
           expect(page).to have_text("My Topic")
 
@@ -56,7 +56,7 @@ RSpec.describe "Creating a Topic", type: :system do
 
       context "when failed" do
         it "renders the form with errors" do
-          click_button("Create Topic")
+          click_button("Save Topic")
           expect(page).to have_text("Title can't be blank")
         end
       end

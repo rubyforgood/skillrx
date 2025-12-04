@@ -46,11 +46,15 @@ class Topic < ApplicationRecord
 
   class << self
     def by_year(year)
-      where("extract(year from published_at) = ?", year)
+      return all if year.blank?
+
+      where("extract(year from published_at) = ?", year.to_i)
     end
 
     def by_month(month)
-      where("extract(month from published_at) = ?", month)
+      return all if month.blank?
+
+      where("extract(month from published_at) = ?", month.to_i)
     end
   end
 
