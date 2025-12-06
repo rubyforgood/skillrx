@@ -12,21 +12,6 @@ class TagsController < ApplicationController
   def show
   end
 
-  def new
-    @tag = Tag.new
-  end
-
-  def create
-    @tag = Tag.new(tag_params)
-
-    if @tag.save
-      SynchronizeCognatesOnTopicsJob.perform_later(@tag) if tag_params[:cognates_list].reject(&:empty?).any?
-      redirect_to tags_path, notice: "Tag was successfully created."
-    else
-      render :new, status: :unprocessable_entity
-    end
-  end
-
   def edit
   end
 
