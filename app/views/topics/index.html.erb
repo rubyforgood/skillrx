@@ -1,25 +1,25 @@
 <% content_for :title, "Topics" %>
 
-<div style="min-height: 100vh; background: linear-gradient(135deg, #f8fafc 0%, #e2e8f0 100%); padding: 2rem 0;">
-  <div style="max-width: 1200px; margin: 0 auto; padding: 0 1rem; overflow-x: hidden;">
+<div class="min-h-screen py-8" style="background: linear-gradient(135deg, #f8fafc 0%, #e2e8f0 100%);">
+  <div class="max-w-7xl mx-auto px-4 overflow-x-hidden">
 
     <!-- Header Section -->
-    <div style="margin-bottom: 2rem;">
-      <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.5rem; flex-wrap: wrap; gap: 1rem;">
-        <div style="min-width: 0; flex: 1;">
-          <div style="display: flex; align-items: center; gap: 1rem; margin-bottom: 0.5rem;">
-            <div style="background: linear-gradient(135deg, #7c3aed 0%, #5b21b6 100%); color: white; padding: 0.75rem; border-radius: 0.75rem; flex-shrink: 0;">
-              <svg style="width: 1.5rem; height: 1.5rem;" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+    <div class="mb-8">
+      <div class="flex justify-between items-center mb-6 flex-wrap gap-4">
+        <div class="min-w-0 flex-1">
+          <div class="flex items-center gap-4 mb-2">
+            <div class="bg-gradient-to-br from-purple-600 to-purple-800 text-white p-3 rounded-xl flex-shrink-0">
+              <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 7h.01M7 3h5c.512 0 1.024.195 1.414.586l7 7a2 2 0 010 2.828l-7 7a2 2 0 01-2.828 0l-7-7A1.994 1.994 0 013 12V7a4 4 0 014-4z"/>
               </svg>
             </div>
-            <h1 style="font-size: 2.5rem; font-weight: 700; color: #1f2937; margin: 0; min-width: 0;">Topics</h1>
+            <h1 class="text-4xl font-bold text-gray-900 m-0 min-w-0">Topics</h1>
           </div>
-          <p style="color: #6b7280; margin: 0; font-size: 1rem;">Manage educational topics and their associated content</p>
+          <p class="text-gray-500 m-0 text-base">Manage educational topics and their associated content</p>
         </div>
 
-        <%= link_to new_topic_path, style: "background: linear-gradient(135deg, #3b82f6 0%, #1d4ed8 100%); color: white; padding: 0.875rem 1.75rem; border-radius: 0.75rem; text-decoration: none; font-weight: 600; font-size: 0.875rem; display: inline-flex; align-items: center; gap: 0.5rem; box-shadow: 0 10px 15px -3px rgba(59, 130, 246, 0.4), 0 4px 6px -2px rgba(59, 130, 246, 0.05); transition: all 0.2s;", data: {turbo: false } do %>
-          <svg style="width: 1.125rem; height: 1.125rem;" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <%= link_to new_topic_path, class: "text-white px-7 py-3.5 rounded-xl no-underline font-semibold text-sm inline-flex items-center gap-2 transition-all duration-200 hover:-translate-y-1 hover:shadow-xl", style: "background: linear-gradient(135deg, #3b82f6 0%, #1d4ed8 100%); box-shadow: 0 10px 15px -3px rgba(59, 130, 246, 0.4), 0 4px 6px -2px rgba(59, 130, 246, 0.05);", data: {turbo: false } do %>
+          <svg class="w-4.5 h-4.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"></path>
           </svg>
           <span>Add New Topic</span>
@@ -27,43 +27,43 @@
       </div>
 
       <!-- Breadcrumb -->
-      <nav style="font-size: 0.875rem; color: #6b7280;">
-        <ol style="display: flex; gap: 0.5rem; list-style: none; padding: 0; margin: 0;">
-          <li><%= link_to "Dashboard", root_path, style: "color: #6b7280; text-decoration: none; hover:color: #374151;" %></li>
-          <li style="color: #d1d5db;">/</li>
-          <li style="color: #374151; font-weight: 500;">Topics</li>
+      <nav class="text-sm text-gray-500">
+        <ol class="flex gap-2 list-none p-0 m-0">
+          <li><%= link_to "Dashboard", root_path, class: "text-gray-500 no-underline hover:text-gray-700" %></li>
+          <li class="text-gray-300">/</li>
+          <li class="text-gray-700 font-medium">Topics</li>
         </ol>
       </nav>
     </div>
 
     <!-- Search Card -->
-    <div style="margin-bottom: 2rem;">
+    <div class="mb-8">
       <%= render "search", providers: @providers, languages: @languages, params: search_params  %>
     </div>
 
   <!-- Topics Table Card -->
   <%= turbo_frame_tag "topics" do %>
-  <div style="background: white; border-radius: 1rem; box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04); overflow: hidden;">
+  <div class="bg-white rounded-2xl shadow-xl overflow-hidden">
 
       <!-- Card Header -->
-      <div style="background: linear-gradient(135deg, #7c3aed 0%, #5b21b6 100%); padding: 2rem; color: white;">
-        <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 1rem;">
-          <div style="display: flex; align-items: center; gap: 1rem;">
-            <div style="background: rgba(255, 255, 255, 0.2); padding: 0.75rem; border-radius: 0.75rem;">
-              <svg style="width: 1.5rem; height: 1.5rem;" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+      <div class="bg-gradient-to-br from-purple-600 to-purple-800 p-8 text-white">
+        <div class="flex justify-between items-center flex-wrap gap-4">
+          <div class="flex items-center gap-4">
+            <div class="bg-white/20 p-3 rounded-xl">
+              <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10"/>
               </svg>
             </div>
             <div>
-              <h2 style="font-size: 1.5rem; font-weight: 700; margin: 0;"><%= topics_title %></h2>
-              <p style="margin: 0.25rem 0 0 0; color: rgba(255, 255, 255, 0.8); font-size: 0.875rem;">
+              <h2 class="text-2xl font-bold m-0"><%= topics_title %></h2>
+              <p class="mt-1 mb-0 text-white/80 text-sm">
                 <%= pluralize(@pagy.count, 'topic') %> found
               </p>
             </div>
           </div>
 
-          <div style="display: flex; gap: 0.75rem; align-items: center;">
-            <div style="background: rgba(255, 255, 255, 0.1); padding: 0.5rem 1rem; border-radius: 9999px; font-size: 0.75rem; font-weight: 500;">
+          <div class="flex gap-3 items-center">
+            <div class="bg-white/10 px-4 py-2 rounded-full text-xs font-medium">
               Total: <%= @pagy.count %>
             </div>
           </div>
@@ -71,26 +71,26 @@
       </div>
 
       <!-- Card Content -->
-      <div style="padding: 0;">
+      <div class="p-0">
         <% if @available_providers.any? %>
-          <div style="padding: 1rem 1.25rem; border-bottom: 1px solid #e2e8f0; background: linear-gradient(135deg, #f8fafc 0%, #f1f5f9 100%);">
+          <div class="px-5 py-4 border-b border-gray-200" style="background: linear-gradient(135deg, #f8fafc 0%, #f1f5f9 100%);">
             <%= render "choose_provider", providers: @available_providers %>
           </div>
         <% end %>
 
         <%= turbo_frame_tag "topic-list" do %>
-          <div class="table-container" style="overflow-x: auto;">
-            <table style="width: 100%; border-collapse: collapse; table-layout: fixed;">
+          <div class="table-container overflow-x-auto">
+            <table class="w-full border-collapse table-fixed">
               <thead>
-                <tr style="background: linear-gradient(135deg, #f8fafc 0%, #f1f5f9 100%); border-bottom: 2px solid #e2e8f0;">
-                  <th style="padding: 1.25rem 1.5rem; text-align: left; font-size: 0.75rem; font-weight: 700; color: #475569; text-transform: uppercase; letter-spacing: 0.1em; overflow: hidden; text-overflow: ellipsis;">Title</th>
-                  <th class="hide-mobile" style="padding: 1.25rem 1.5rem; text-align: left; font-size: 0.75rem; font-weight: 700; color: #475569; text-transform: uppercase; letter-spacing: 0.1em; overflow: hidden; text-overflow: ellipsis;">Description</th>
-                  <th class="hide-mobile" style="padding: 1.25rem 1.5rem; text-align: left; font-size: 0.75rem; font-weight: 700; color: #475569; text-transform: uppercase; letter-spacing: 0.1em; overflow: hidden; text-overflow: ellipsis;">UID</th>
-                  <th style="padding: 1.25rem 1.5rem; text-align: left; font-size: 0.75rem; font-weight: 700; color: #475569; text-transform: uppercase; letter-spacing: 0.1em; overflow: hidden; text-overflow: ellipsis;">Language</th>
-                  <th class="hide-mobile" style="padding: 1.25rem 1.5rem; text-align: left; font-size: 0.75rem; font-weight: 700; color: #475569; text-transform: uppercase; letter-spacing: 0.1em; overflow: hidden; text-overflow: ellipsis;">Provider</th>
-                  <th style="padding: 1.25rem 1.5rem; text-align: left; font-size: 0.75rem; font-weight: 700; color: #475569; text-transform: uppercase; letter-spacing: 0.1em; overflow: hidden; text-overflow: ellipsis;"># of Documents</th>
-                  <th style="padding: 1.25rem 1.5rem; text-align: left; font-size: 0.75rem; font-weight: 700; color: #475569; text-transform: uppercase; letter-spacing: 0.1em; overflow: hidden; text-overflow: ellipsis;">State</th>
-                  <th class="actions-col" style="padding: 1.25rem 1.5rem; text-align: right; font-size: 0.75rem; font-weight: 700; color: #475569; text-transform: uppercase; letter-spacing: 0.1em; width: 160px;">Actions</th>
+                <tr class="border-b-2 border-gray-200" style="background: linear-gradient(135deg, #f8fafc 0%, #f1f5f9 100%);">
+                  <th class="px-6 py-5 text-left text-xs font-bold text-gray-600 uppercase tracking-wider overflow-hidden text-ellipsis">Title</th>
+                  <th class="hide-mobile px-6 py-5 text-left text-xs font-bold text-gray-600 uppercase tracking-wider overflow-hidden text-ellipsis">Description</th>
+                  <th class="hide-mobile px-6 py-5 text-left text-xs font-bold text-gray-600 uppercase tracking-wider overflow-hidden text-ellipsis">UID</th>
+                  <th class="px-6 py-5 text-left text-xs font-bold text-gray-600 uppercase tracking-wider overflow-hidden text-ellipsis">Language</th>
+                  <th class="hide-mobile px-6 py-5 text-left text-xs font-bold text-gray-600 uppercase tracking-wider overflow-hidden text-ellipsis">Provider</th>
+                  <th class="px-6 py-5 text-left text-xs font-bold text-gray-600 uppercase tracking-wider overflow-hidden text-ellipsis"># of Documents</th>
+                  <th class="px-6 py-5 text-left text-xs font-bold text-gray-600 uppercase tracking-wider overflow-hidden text-ellipsis">State</th>
+                  <th class="actions-col px-6 py-5 text-right text-xs font-bold text-gray-600 uppercase tracking-wider w-40">Actions</th>
                 </tr>
               </thead>
               <%= render "list", topics: @topics, params: search_params %>
@@ -98,8 +98,8 @@
           </div>
 
           <!-- Pagination -->
-          <div style="background: #f8fafc; padding: 1.5rem 2rem; border-top: 1px solid #e2e8f0; display: flex; justify-content: space-between; align-items: center;">
-            <div style="color: #6b7280; font-size: 0.875rem;">
+          <div class="bg-gray-50 px-8 py-6 border-t border-gray-200 flex justify-between items-center">
+            <div class="text-gray-500 text-sm">
               Showing <%= @topics.size %> of <%= @pagy.count %> topics
             </div>
             <div>
@@ -114,31 +114,10 @@
 </div>
 
 <style>
-  a[href*="new_topic"]:hover {
-    transform: translateY(-3px);
-    box-shadow: 0 20px 25px -5px rgba(59, 130, 246, 0.4), 0 10px 10px -5px rgba(59, 130, 246, 0.1) !important;
-  }
-
   @media (max-width: 768px) {
     .hide-mobile { display: none !important; }
-    div[style*="max-width: 1200px"] { padding: 0 0.5rem !important; }
-    div[style*="min-height: 100vh"] { padding: 1rem 0 !important; }
-    div[style*="justify-content: space-between"] { flex-direction: column !important; align-items: flex-start !important; gap: 1rem !important; }
-    h1 { font-size: 2rem !important; }
-    th, td { padding: 0.75rem 0.5rem !important; font-size: 0.875rem !important; }
-    .table-container { overflow-x: auto !important; -webkit-overflow-scrolling: touch !important; }
   }
 
-  @media (max-width: 640px) {
-    div[style*="padding: 0 1rem"] { padding: 0 0.25rem !important; }
-    div[style*="border-radius: 1rem"] { border-radius: 0 !important; margin: 0 -0.25rem !important; }
-    div[style*="padding: 2rem"] { padding: 1rem 0.75rem !important; }
-    h1 { font-size: 1.75rem !important; }
-    th, td { padding: 0.5rem 0.25rem !important; font-size: 0.75rem !important; word-wrap: break-word !important; word-break: break-word !important; }
-  }
-</style>
-
-<style>
   .table-container table td:not(.actions-col), .table-container table th:not(.actions-col) {
     word-wrap: break-word; word-break: break-word; overflow-wrap: anywhere;
   }
