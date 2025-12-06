@@ -76,34 +76,5 @@
         Back to All Providers
       <% end %>
     </div>
-
-    <!-- Provider Statistics -->
-    <div style="margin-top: 2rem; background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 0.75rem; padding: 1.5rem;">
-      <div style="display: flex; align-items: start; gap: 1rem;">
-        <div style="background: #dcfce7; color: #16a34a; padding: 0.5rem; border-radius: 0.5rem; margin-top: 0.25rem;">
-          <svg style="width: 1.25rem; height: 1.25rem;" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"/>
-          </svg>
-        </div>
-        <div>
-          <h3 style="font-size: 1rem; font-weight: 600; color: #374151; margin: 0 0 0.75rem 0;">Provider Statistics</h3>
-          <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 1rem; color: #6b7280; font-size: 0.875rem;">
-            <div>
-              <span style="font-weight: 500; color: #374151;">Provider Type:</span> <%= @provider.provider_type || "Not specified" %>
-            </div>
-            <div>
-              <span style="font-weight: 500; color: #374151;">File Prefix:</span> 
-              <code style="background: #f3f4f6; padding: 0.25rem 0.5rem; border-radius: 0.25rem; font-size: 0.75rem;"><%= @provider.file_name_prefix || "None" %></code>
-            </div>
-            <div>
-              <span style="font-weight: 500; color: #374151;">Regions:</span> <%= @provider.regions.count %> assigned
-            </div>
-            <div>
-              <span style="font-weight: 500; color: #374151;">Created:</span> <%= @provider.created_at.strftime("%B %d, %Y") %>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
   </div>
 </div>
