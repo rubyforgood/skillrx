@@ -1,6 +1,6 @@
 <% content_for :title, @region.name %>
 
-<div style="min-height: 100vh; background: linear-gradient(135deg, #f8fafc 0%, #e2e8f0 100%); padding: 2rem 0;">
+<div class="bg-gradient-page" style="min-height: 100vh; padding: 2rem 0;">
   <div style="max-width: 800px; margin: 0 auto; padding: 0 1rem;">
     
     <!-- Header Section -->
@@ -20,7 +20,7 @@
         </div>
         
         <div style="display: flex; gap: 0.75rem; flex-wrap: wrap;">
-          <%= link_to edit_region_path(@region), style: "background: linear-gradient(135deg, #3b82f6 0%, #1d4ed8 100%); color: white; padding: 0.875rem 1.75rem; border-radius: 0.75rem; text-decoration: none; font-weight: 600; font-size: 0.875rem; display: inline-flex; align-items: center; gap: 0.5rem; box-shadow: 0 10px 15px -3px rgba(59, 130, 246, 0.4), 0 4px 6px -2px rgba(59, 130, 246, 0.05); transition: all 0.2s;", data: {turbo: false } do %>
+          <%= link_to edit_region_path(@region), class: "bg-gradient-blue", style: "color: white; padding: 0.875rem 1.75rem; border-radius: 0.75rem; text-decoration: none; font-weight: 600; font-size: 0.875rem; display: inline-flex; align-items: center; gap: 0.5rem; box-shadow: 0 10px 15px -3px rgba(59, 130, 246, 0.4), 0 4px 6px -2px rgba(59, 130, 246, 0.05); transition: all 0.2s;", data: {turbo: false } do %>
             <svg style="width: 1.125rem; height: 1.125rem;" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"></path>
             </svg>
@@ -76,7 +76,7 @@
         <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 2rem;">
           
           <!-- Region Name -->
-          <div style="background: linear-gradient(135deg, #f8fafc 0%, #f1f5f9 100%); padding: 1.5rem; border-radius: 0.75rem; border: 1px solid #e2e8f0;">
+          <div class="bg-gradient-gray" style="padding: 1.5rem; border-radius: 0.75rem; border: 1px solid #e2e8f0;">
             <div style="display: flex; align-items: center; gap: 0.75rem; margin-bottom: 1rem;">
               <div style="background: linear-gradient(135deg, #059669 0%, #047857 100%); color: white; padding: 0.5rem; border-radius: 0.5rem;">
                 <svg style="width: 1.25rem; height: 1.25rem;" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -91,9 +91,9 @@
           </div>
           
           <!-- Provider Count -->
-          <div style="background: linear-gradient(135deg, #f8fafc 0%, #f1f5f9 100%); padding: 1.5rem; border-radius: 0.75rem; border: 1px solid #e2e8f0;">
+          <div class="bg-gradient-gray" style="padding: 1.5rem; border-radius: 0.75rem; border: 1px solid #e2e8f0;">
             <div style="display: flex; align-items: center; gap: 0.75rem; margin-bottom: 1rem;">
-              <div style="background: linear-gradient(135deg, #3b82f6 0%, #2563eb 100%); color: white; padding: 0.5rem; border-radius: 0.5rem;">
+              <div class="bg-gradient-blue" style="color: white; padding: 0.5rem; border-radius: 0.5rem;">
                 <svg style="width: 1.25rem; height: 1.25rem;" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4"/>
                 </svg>
@@ -136,7 +136,7 @@
       <% end %>
       
       <div style="display: flex; gap: 0.75rem;">
-        <%= link_to edit_region_path(@region), style: "background: linear-gradient(135deg, #3b82f6 0%, #1d4ed8 100%); color: white; padding: 0.875rem 1.75rem; border-radius: 0.75rem; text-decoration: none; font-weight: 600; font-size: 0.875rem; display: inline-flex; align-items: center; gap: 0.5rem; transition: all 0.2s;", data: { turbo: false } do %>
+        <%= link_to edit_region_path(@region), class: "bg-gradient-blue", style: "color: white; padding: 0.875rem 1.75rem; border-radius: 0.75rem; text-decoration: none; font-weight: 600; font-size: 0.875rem; display: inline-flex; align-items: center; gap: 0.5rem; transition: all 0.2s;", data: { turbo: false } do %>
           <svg style="width: 1.125rem; height: 1.125rem;" fill="none" stroke="currentColor" viewBox="0 0 24 24">
             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"></path>
           </svg>

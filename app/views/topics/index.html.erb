@@ -1,6 +1,6 @@
 <% content_for :title, "Topics" %>
 
-<div class="min-h-screen py-8" style="background: linear-gradient(135deg, #f8fafc 0%, #e2e8f0 100%);">
+<div class="min-h-screen py-8 bg-gradient-page">
   <div class="max-w-7xl mx-auto px-4 overflow-x-hidden">
 
     <!-- Header Section -->
@@ -8,7 +8,7 @@
       <div class="flex justify-between items-center mb-6 flex-wrap gap-4">
         <div class="min-w-0 flex-1">
           <div class="flex items-center gap-4 mb-2">
-            <div class="bg-gradient-to-br from-purple-600 to-purple-800 text-white p-3 rounded-xl flex-shrink-0">
+            <div class="bg-gradient-purple text-white p-3 rounded-xl flex-shrink-0">
               <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 7h.01M7 3h5c.512 0 1.024.195 1.414.586l7 7a2 2 0 010 2.828l-7 7a2 2 0 01-2.828 0l-7-7A1.994 1.994 0 013 12V7a4 4 0 014-4z"/>
               </svg>
@@ -18,7 +18,7 @@
           <p class="text-gray-500 m-0 text-base">Manage educational topics and their associated content</p>
         </div>
 
-        <%= link_to new_topic_path, class: "text-white px-7 py-3.5 rounded-xl no-underline font-semibold text-sm inline-flex items-center gap-2 transition-all duration-200 hover:-translate-y-1 hover:shadow-xl", style: "background: linear-gradient(135deg, #3b82f6 0%, #1d4ed8 100%); box-shadow: 0 10px 15px -3px rgba(59, 130, 246, 0.4), 0 4px 6px -2px rgba(59, 130, 246, 0.05);", data: {turbo: false } do %>
+        <%= link_to new_topic_path, class: "bg-gradient-blue shadow-blue text-white px-7 py-3.5 rounded-xl no-underline font-semibold text-sm inline-flex items-center gap-2 transition-all duration-200 hover:-translate-y-1 hover:shadow-blue-lg", data: {turbo: false } do %>
           <svg class="w-4.5 h-4.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"></path>
           </svg>
@@ -46,7 +46,7 @@
   <div class="bg-white rounded-2xl shadow-xl overflow-hidden">
 
       <!-- Card Header -->
-      <div class="bg-gradient-to-br from-purple-600 to-purple-800 p-8 text-white">
+      <div class="bg-gradient-purple p-8 text-white">
         <div class="flex justify-between items-center flex-wrap gap-4">
           <div class="flex items-center gap-4">
             <div class="bg-white/20 p-3 rounded-xl">
@@ -73,7 +73,7 @@
       <!-- Card Content -->
       <div class="p-0">
         <% if @available_providers.any? %>
-          <div class="px-5 py-4 border-b border-gray-200" style="background: linear-gradient(135deg, #f8fafc 0%, #f1f5f9 100%);">
+          <div class="bg-gradient-gray px-5 py-4 border-b border-gray-200">
             <%= render "choose_provider", providers: @available_providers %>
           </div>
         <% end %>
@@ -82,7 +82,7 @@
           <div class="table-container overflow-x-auto">
             <table class="w-full border-collapse table-fixed">
               <thead>
-                <tr class="border-b-2 border-gray-200" style="background: linear-gradient(135deg, #f8fafc 0%, #f1f5f9 100%);">
+                <tr class="bg-gradient-gray border-b-2 border-gray-200">
                   <th class="px-6 py-5 text-left text-xs font-bold text-gray-600 uppercase tracking-wider overflow-hidden text-ellipsis">Title</th>
                   <th class="hide-mobile px-6 py-5 text-left text-xs font-bold text-gray-600 uppercase tracking-wider overflow-hidden text-ellipsis">Description</th>
                   <th class="hide-mobile px-6 py-5 text-left text-xs font-bold text-gray-600 uppercase tracking-wider overflow-hidden text-ellipsis">UID</th>

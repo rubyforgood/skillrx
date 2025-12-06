@@ -16,8 +16,8 @@
     
     <div style="display: flex; justify-content: space-between; align-items: center; padding-top: 2rem; border-top: 1px solid #f3f4f6;">
       <div style="display: flex; gap: 1rem;">
-        <%= f.submit (language.persisted? ? "Update Language" : "Create Language"), 
-            style: "background: linear-gradient(135deg, #10b981 0%, #059669 100%); color: white; font-weight: 600; padding: 0.75rem 2rem; border-radius: 0.5rem; border: none; cursor: pointer; font-size: 0.875rem; box-shadow: 0 4px 6px -1px rgba(16, 185, 129, 0.3); transition: all 0.2s;" %>
+        <%= f.submit (language.persisted? ? "Update Language" : "Create Language"),
+            class: "bg-gradient-green", style: "color: white; font-weight: 600; padding: 0.75rem 2rem; border-radius: 0.5rem; border: none; cursor: pointer; font-size: 0.875rem; box-shadow: 0 4px 6px -1px rgba(16, 185, 129, 0.3); transition: all 0.2s;" %>
         <%= link_to "Cancel", languages_path, 
             style: "background: #f3f4f6; color: #6b7280; font-weight: 600; padding: 0.75rem 2rem; border-radius: 0.5rem; text-decoration: none; font-size: 0.875rem; transition: all 0.2s; display: inline-block;" %>
       </div>

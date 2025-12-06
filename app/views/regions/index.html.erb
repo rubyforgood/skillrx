@@ -1,6 +1,6 @@
 <% content_for :title, "Regions" %>
 
-<div style="min-height: 100vh; background: linear-gradient(135deg, #f8fafc 0%, #e2e8f0 100%); padding: 2rem 0;">
+<div class="bg-gradient-page" style="min-height: 100vh; padding: 2rem 0;">
   <div style="max-width: 1200px; margin: 0 auto; padding: 0 1rem; overflow-x: hidden;">
 
     <!-- Header Section -->
@@ -19,7 +19,7 @@
           <p style="color: #6b7280; margin: 0; font-size: 1rem;">Manage geographical regions and service areas</p>
         </div>
 
-        <%= link_to new_region_path, style: "background: linear-gradient(135deg, #10b981 0%, #059669 100%); color: white; padding: 0.875rem 1.75rem; border-radius: 0.75rem; text-decoration: none; font-weight: 600; font-size: 0.875rem; display: inline-flex; align-items: center; gap: 0.5rem; box-shadow: 0 10px 15px -3px rgba(16, 185, 129, 0.4), 0 4px 6px -2px rgba(16, 185, 129, 0.05); transition: all 0.2s;", data: {turbo: false } do %>
+        <%= link_to new_region_path, class: "bg-gradient-green", style: "color: white; padding: 0.875rem 1.75rem; border-radius: 0.75rem; text-decoration: none; font-weight: 600; font-size: 0.875rem; display: inline-flex; align-items: center; gap: 0.5rem; box-shadow: 0 10px 15px -3px rgba(16, 185, 129, 0.4), 0 4px 6px -2px rgba(16, 185, 129, 0.05); transition: all 0.2s;", data: {turbo: false } do %>
           <svg style="width: 1.125rem; height: 1.125rem;" fill="none" stroke="currentColor" viewBox="0 0 24 24">
             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"></path>
           </svg>
@@ -58,7 +58,7 @@
         <div class="table-container" style="overflow-x: auto;">
           <table style="width: 100%; border-collapse: collapse;">
             <thead>
-              <tr style="background: linear-gradient(135deg, #f8fafc 0%, #f1f5f9 100%); border-bottom: 2px solid #e2e8f0;">
+              <tr class="bg-gradient-gray" style="border-bottom: 2px solid #e2e8f0;">
                 <th style="padding: 1.25rem 1.5rem; text-align: left; font-size: 0.75rem; font-weight: 700; color: #475569; text-transform: uppercase; letter-spacing: 0.1em;">
                   <div style="display: flex; align-items: center; gap: 0.5rem;">
                     <svg style="width: 1rem; height: 1rem;" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -95,7 +95,7 @@
                       </div>
                     </td>
                     <td class="hide-mobile" style="padding: 1.5rem;">
-                      <span style="display: inline-flex; align-items: center; padding: 0.375rem 0.75rem; background: linear-gradient(135deg, #3b82f6 0%, #2563eb 100%); color: white; border-radius: 9999px; font-size: 0.75rem; font-weight: 500;">
+                      <span class="bg-gradient-blue" style="display: inline-flex; align-items: center; padding: 0.375rem 0.75rem; color: white; border-radius: 9999px; font-size: 0.75rem; font-weight: 500;">
                         1 provider
                       </span>
                     </td>

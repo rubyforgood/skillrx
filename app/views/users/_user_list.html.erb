@@ -2,7 +2,7 @@
   <div style="background: white; border-radius: 1rem; box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04); overflow: hidden;">
     
     <!-- Card Header -->
-    <div style="background: linear-gradient(135deg, #10b981 0%, #059669 100%); padding: 2rem; color: white;">
+    <div class="bg-gradient-green" style="padding: 2rem; color: white;">
       <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 1rem;">
         <div style="display: flex; align-items: center; gap: 1rem;">
           <div style="background: rgba(255, 255, 255, 0.2); padding: 0.75rem; border-radius: 0.75rem;">
@@ -31,7 +31,7 @@
       <div class="table-container" style="overflow-x: auto;">
         <table style="width: 100%; border-collapse: collapse;">
           <thead>
-            <tr style="background: linear-gradient(135deg, #f8fafc 0%, #f1f5f9 100%); border-bottom: 2px solid #e2e8f0;">
+            <tr class="bg-gradient-gray" style="border-bottom: 2px solid #e2e8f0;">
               <th style="padding: 1.25rem 1.5rem; text-align: left; font-size: 0.75rem; font-weight: 700; color: #475569; text-transform: uppercase; letter-spacing: 0.1em;">
                 <div style="display: flex; align-items: center; gap: 0.5rem;">
                   <svg style="width: 1rem; height: 1rem;" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -95,7 +95,7 @@
                         Administrator
                       </div>
                     <% else %>
-                      <div style="display: inline-flex; align-items: center; gap: 0.375rem; background: linear-gradient(135deg, #10b981 0%, #059669 100%); color: white; padding: 0.375rem 0.75rem; border-radius: 9999px; font-size: 0.75rem; font-weight: 600;">
+                      <div class="bg-gradient-green" style="display: inline-flex; align-items: center; gap: 0.375rem; color: white; padding: 0.375rem 0.75rem; border-radius: 9999px; font-size: 0.75rem; font-weight: 600;">
                         <svg style="width: 0.75rem; height: 0.75rem;" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                           <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"/>
                         </svg>
@@ -107,7 +107,7 @@
                     <div style="display: flex; gap: 0.375rem; flex-wrap: wrap;">
                       <% if user.providers.any? %>
                         <% user.providers.each do |provider| %>
-                          <div style="background: linear-gradient(135deg, #8b5cf6 0%, #7c3aed 100%); color: white; padding: 0.25rem 0.5rem; border-radius: 9999px; font-size: 0.625rem; font-weight: 600;">
+                          <div class="bg-gradient-purple" style="color: white; padding: 0.25rem 0.5rem; border-radius: 9999px; font-size: 0.625rem; font-weight: 600;">
                             <%= provider.name %>
                           </div>
                         <% end %>

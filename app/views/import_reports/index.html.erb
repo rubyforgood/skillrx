@@ -1,6 +1,6 @@
 <% content_for :title, "Import Reports" %>
 
-<div style="min-height: 100vh; background: linear-gradient(135deg, #f8fafc 0%, #e2e8f0 100%); padding: 2rem 0;">
+<div class="bg-gradient-page" style="min-height: 100vh; padding: 2rem 0;">
   <div style="max-width: 1200px; margin: 0 auto; padding: 0 1rem; overflow-x: hidden;">
     
     <!-- Header Section -->
@@ -8,7 +8,7 @@
       <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.5rem; flex-wrap: wrap; gap: 1rem;">
         <div style="min-width: 0; flex: 1;">
           <div style="display: flex; align-items: center; gap: 1rem; margin-bottom: 0.5rem;">
-            <div style="background: linear-gradient(135deg, #3b82f6 0%, #1d4ed8 100%); color: white; padding: 0.75rem; border-radius: 0.75rem; flex-shrink: 0;">
+            <div class="bg-gradient-blue" style="color: white; padding: 0.75rem; border-radius: 0.75rem; flex-shrink: 0;">
               <svg style="width: 1.5rem; height: 1.5rem;" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/>
               </svg>
@@ -86,7 +86,7 @@
       <div style="background: white; border-radius: 1rem; box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04); overflow: hidden;">
         
         <!-- Card Header -->
-        <div style="background: linear-gradient(135deg, #10b981 0%, #059669 100%); padding: 2rem; color: white;">
+        <div class="bg-gradient-green" style="padding: 2rem; color: white;">
           <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 1rem;">
             <div style="display: flex; align-items: center; gap: 1rem;">
               <div style="background: rgba(255, 255, 255, 0.2); padding: 0.75rem; border-radius: 0.75rem;">
@@ -115,7 +115,7 @@
           <div class="table-container" style="overflow-x: auto;">
             <table style="width: 100%; border-collapse: collapse;">
               <thead>
-                <tr style="background: linear-gradient(135deg, #f8fafc 0%, #f1f5f9 100%); border-bottom: 2px solid #e2e8f0;">
+                <tr class="bg-gradient-gray" style="border-bottom: 2px solid #e2e8f0;">
                   <th style="padding: 1.25rem 1.5rem; text-align: left; font-size: 0.75rem; font-weight: 700; color: #475569; text-transform: uppercase; letter-spacing: 0.1em;">
                     <div style="display: flex; align-items: center; gap: 0.5rem;">
                       <svg style="width: 1rem; height: 1rem;" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -181,7 +181,7 @@
                       </td>
                       <td style="padding: 1.25rem 1.5rem;">
                         <% if import_report.status == "completed" %>
-                          <div style="display: inline-flex; align-items: center; gap: 0.375rem; background: linear-gradient(135deg, #10b981 0%, #059669 100%); color: white; padding: 0.375rem 0.75rem; border-radius: 9999px; font-size: 0.75rem; font-weight: 600;">
+                          <div class="bg-gradient-green" style="display: inline-flex; align-items: center; gap: 0.375rem; color: white; padding: 0.375rem 0.75rem; border-radius: 9999px; font-size: 0.75rem; font-weight: 600;">
                             <svg style="width: 0.75rem; height: 0.75rem;" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                               <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/>
                             </svg>
@@ -195,7 +195,7 @@
                             <%= import_report.status.humanize %>
                           </div>
                         <% else %>
-                          <div style="display: inline-flex; align-items: center; gap: 0.375rem; background: linear-gradient(135deg, #3b82f6 0%, #1d4ed8 100%); color: white; padding: 0.375rem 0.75rem; border-radius: 9999px; font-size: 0.75rem; font-weight: 600;">
+                          <div class="bg-gradient-blue" style="display: inline-flex; align-items: center; gap: 0.375rem; color: white; padding: 0.375rem 0.75rem; border-radius: 9999px; font-size: 0.75rem; font-weight: 600;">
                             <svg style="width: 0.75rem; height: 0.75rem;" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                               <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"/>
                             </svg>
@@ -222,7 +222,7 @@
                             <%= import_report.import_errors.count %>
                           </div>
                         <% else %>
-                          <div style="display: inline-flex; align-items: center; gap: 0.375rem; background: linear-gradient(135deg, #10b981 0%, #059669 100%); color: white; padding: 0.375rem 0.75rem; border-radius: 9999px; font-size: 0.75rem; font-weight: 600;">
+                          <div class="bg-gradient-green" style="display: inline-flex; align-items: center; gap: 0.375rem; color: white; padding: 0.375rem 0.75rem; border-radius: 9999px; font-size: 0.75rem; font-weight: 600;">
                             <svg style="width: 0.75rem; height: 0.75rem;" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                               <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/>
                             </svg>

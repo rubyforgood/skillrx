@@ -6,7 +6,7 @@
   </div>
 <% end %>
 
-<div style="min-height: 100vh; background: linear-gradient(135deg, #f8fafc 0%, #e2e8f0 100%); padding: 2rem 0;">
+<div class="bg-gradient-page" style="min-height: 100vh; padding: 2rem 0;">
   <div style="max-width: 800px; margin: 0 auto; padding: 0 1rem;">
     
     <!-- Header Section -->
@@ -21,7 +21,7 @@
           <h1 style="font-size: 2rem; font-weight: 700; color: #1f2937; margin: 0;">
             Edit User
           </h1>
-          <div style="background: linear-gradient(135deg, #f59e0b 0%, #d97706 100%); color: white; padding: 0.375rem 0.75rem; border-radius: 9999px; font-size: 0.75rem; font-weight: 500;">
+          <div class="bg-gradient-amber" style="color: white; padding: 0.375rem 0.75rem; border-radius: 9999px; font-size: 0.75rem; font-weight: 500;">
             <%= @user.is_admin? ? "Administrator" : "Contributor" %>
           </div>
         </div>
@@ -43,7 +43,7 @@
     <div style="background: white; border-radius: 1rem; box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.1), 0 8px 10px -6px rgba(0, 0, 0, 0.1); overflow: hidden; border: 1px solid #e5e7eb;">
       
       <!-- Card Header -->
-      <div style="background: linear-gradient(135deg, #f59e0b 0%, #d97706 100%); padding: 2rem; color: white;">
+      <div class="bg-gradient-amber" style="padding: 2rem; color: white;">
         <div style="display: flex; align-items: center; gap: 1rem; margin-bottom: 0.5rem;">
           <svg style="width: 2rem; height: 2rem;" fill="none" stroke="currentColor" viewBox="0 0 24 24">
             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"/>

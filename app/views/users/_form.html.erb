@@ -136,7 +136,7 @@
     <% end %>
 
     <%= form.submit user.persisted? ? "Update User" : "Create User",
-        style: "background: linear-gradient(135deg, #10b981 0%, #059669 100%); color: white; padding: 0.875rem 1.75rem; border-radius: 0.75rem; border: none; cursor: pointer; font-weight: 600; font-size: 0.875rem; display: inline-flex; align-items: center; gap: 0.5rem; box-shadow: 0 4px 6px -1px rgba(16, 185, 129, 0.3); transition: all 0.2s;",
+        class: "bg-gradient-green", style: "color: white; padding: 0.875rem 1.75rem; border-radius: 0.75rem; border: none; cursor: pointer; font-weight: 600; font-size: 0.875rem; display: inline-flex; align-items: center; gap: 0.5rem; box-shadow: 0 4px 6px -1px rgba(16, 185, 129, 0.3); transition: all 0.2s;",
         onmouseover: "this.style.transform='translateY(-2px)'; this.style.boxShadow='0 10px 25px -5px rgba(16, 185, 129, 0.4)'",
         onmouseout: "this.style.transform='translateY(0)'; this.style.boxShadow='0 4px 6px -1px rgba(16, 185, 129, 0.3)'" %>
   </div>
