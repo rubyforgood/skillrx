@@ -1,12 +1,12 @@
 <% content_for :title, "Editing language" %>
 
-<div style="padding: 2rem;">
-  <div style="max-width: 600px; margin: 0 auto;">
+<div class="p-8">
+  <div class="max-w-2xl mx-auto">
     <!-- Breadcrumb -->
-    <nav style="margin-bottom: 2rem;">
-      <div style="display: flex; align-items: center; gap: 0.5rem; font-size: 0.875rem; color: #6b7280;">
-        <%= link_to "Languages", languages_path, style: "color: #3b82f6; text-decoration: none;" %>
-        <svg style="width: 1rem; height: 1rem;" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+    <nav class="mb-8">
+      <div class="flex items-center gap-2 text-sm text-gray-500">
+        <%= link_to "Languages", languages_path, class: "text-blue-500 no-underline hover:text-blue-600" %>
+        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
           <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path>
         </svg>
         <span>Edit <%= @language.name %></span>
@@ -14,41 +14,24 @@
     </nav>
 
     <!-- Main Card -->
-    <div style="background: white; border-radius: 1rem; box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06); overflow: hidden;">
+    <div class="bg-white rounded-2xl shadow-md overflow-hidden">
       <!-- Header -->
-      <div style="background: linear-gradient(135deg, #f8fafc 0%, #f1f5f9 100%); padding: 2rem; border-bottom: 1px solid #e2e8f0;">
-        <div style="display: flex; align-items: center; gap: 1rem;">
-          <div style="width: 3rem; height: 3rem; background: linear-gradient(135deg, #f59e0b 0%, #d97706 100%); border-radius: 0.75rem; display: flex; align-items: center; justify-content: center; color: white; font-weight: 600; font-size: 1.125rem;">
+      <div class="p-8 border-b border-gray-200" style="background: linear-gradient(135deg, #f8fafc 0%, #f1f5f9 100%);">
+        <div class="flex items-center gap-4">
+          <div class="w-12 h-12 bg-gradient-to-br from-amber-500 to-amber-600 rounded-xl flex items-center justify-center text-white font-semibold text-lg">
             <%= @language.name.first.upcase %>
           </div>
           <div>
-            <h1 style="font-size: 1.5rem; font-weight: 700; color: #111827; margin: 0;">Edit Language</h1>
-            <p style="color: #6b7280; margin: 0.25rem 0 0 0; font-size: 0.875rem;">Update settings for "<%= @language.name %>"</p>
+            <h1 class="text-2xl font-bold text-gray-900 m-0">Edit Language</h1>
+            <p class="text-gray-500 mt-1 mb-0 text-sm">Update settings for "<%= @language.name %>"</p>
           </div>
         </div>
       </div>
 
       <!-- Form Content -->
-      <div style="padding: 2rem;">
+      <div class="p-8">
         <%= render "form", language: @language %>
-      </div>
-    </div>
-
-    <!-- Danger Zone (if needed for delete functionality later) -->
-    <div style="margin-top: 2rem; padding: 1.5rem; background: #fef2f2; border: 1px solid #fecaca; border-radius: 0.5rem;">
-      <div style="display: flex; gap: 0.75rem;">
-        <svg style="width: 1.25rem; height: 1.25rem; color: #ef4444; flex-shrink: 0; margin-top: 0.125rem;" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-2.5L13.732 4c-.77-.833-1.964-.833-2.732 0L4.082 16.5c-.77.833.192 2.5 1.732 2.5z"></path>
-        </svg>
-        <div>
-          <h3 style="font-weight: 600; color: #991b1b; margin: 0 0 0.25rem 0; font-size: 0.875rem;">Danger Zone</h3>
-          <p style="color: #7f1d1d; font-size: 0.75rem; margin: 0; line-height: 1.5;">
-            Deleting a language will remove all associated data. This action cannot be undone.
-            <br><em>Delete functionality can be implemented here if needed.</em>
-          </p>
-        </div>
       </div>
     </div>
   </div>
 </div>
-
