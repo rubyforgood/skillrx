@@ -19,6 +19,8 @@
                 <tr>
                   <th>Provider</th>
                   <th>Type</th>
+                  <th>Prefix</th>
+                  <th>Regions</th>
                   <th class="text-end">Provider Actions</th>
                 </tr>
                 </thead>
@@ -27,6 +29,8 @@
                   <tr>
                     <td class="text-bold-500"><%= provider.name %></td>
                     <td><%= provider.provider_type %></td>
+                    <td><%= provider.file_name_prefix %></td>
+                    <td><%= provider.regions.pluck(:name).join(", ") %></td>
                     <td class="text-end">
                       <%= link_to provider, class: "btn btn-primary btn-sm" do %>
                         <i class="bi bi-search"></i> View

@@ -11,7 +11,7 @@ class TextGenerator::TitleAndTags < TextGenerator::Base
   def text_content
     scope
       .flat_map do |topic|
-        [ topic.title ] + topic.current_tags_list
+        [ topic.title ] + topic.tag_list
       end
       .join("\n")
   end
