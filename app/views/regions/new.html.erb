@@ -1,67 +1,67 @@
 <% content_for :title, "New Region" %>
 
-<div style="min-height: 100vh; background: linear-gradient(135deg, #f8fafc 0%, #e2e8f0 100%); padding: 2rem 0;">
-  <div style="max-width: 800px; margin: 0 auto; padding: 0 1rem;">
-    
+<div class="bg-gradient-page page-container">
+  <div class="form-container">
+
     <!-- Header Section -->
-    <div style="margin-bottom: 2rem;">
-      <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.5rem; flex-wrap: wrap; gap: 1rem;">
-        <div style="min-width: 0; flex: 1;">
-          <div style="display: flex; align-items: center; gap: 1rem; margin-bottom: 0.5rem;">
-            <div style="background: linear-gradient(135deg, #059669 0%, #047857 100%); color: white; padding: 0.75rem; border-radius: 0.75rem; flex-shrink: 0;">
-              <svg style="width: 1.5rem; height: 1.5rem;" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+    <div class="section-spacing">
+      <div class="flex-between-wrap mb-6">
+        <div class="min-w-0 flex-1">
+          <div class="flex items-center gap-4 mb-2">
+            <div class="bg-gradient-green text-white p-3 rounded-xl flex-shrink-0">
+              <svg class="icon-size-md" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"></path>
               </svg>
             </div>
-            <h1 style="font-size: 2.5rem; font-weight: 700; color: #1f2937; margin: 0; min-width: 0;">New Region</h1>
+            <h1 class="text-4xl font-bold text-gray-800 m-0 min-w-0">New Region</h1>
           </div>
-          <p style="color: #6b7280; margin: 0; font-size: 1rem;">Create a new geographical service region</p>
+          <p class="text-gray-500 m-0 text-base">Create a new geographical service region</p>
         </div>
       </div>
-      
+
       <!-- Breadcrumb -->
-      <nav style="font-size: 0.875rem; color: #6b7280;">
-        <ol style="display: flex; gap: 0.5rem; list-style: none; padding: 0; margin: 0;">
-          <li><%= link_to "Dashboard", root_path, style: "color: #6b7280; text-decoration: none; hover:color: #374151;" %></li>
-          <li style="color: #d1d5db;">/</li>
-          <li><%= link_to "Regions", regions_path, style: "color: #6b7280; text-decoration: none; hover:color: #374151;" %></li>
-          <li style="color: #d1d5db;">/</li>
-          <li style="color: #374151; font-weight: 500;">New</li>
+      <nav class="breadcrumb-nav">
+        <ol class="breadcrumb-list">
+          <li><%= link_to "Dashboard", root_path, class: "text-gray-500 no-underline hover:text-gray-700" %></li>
+          <li class="breadcrumb-separator">/</li>
+          <li><%= link_to "Regions", regions_path, class: "text-gray-500 no-underline hover:text-gray-700" %></li>
+          <li class="breadcrumb-separator">/</li>
+          <li class="breadcrumb-current">New</li>
         </ol>
       </nav>
     </div>
 
     <!-- Form Card -->
-    <div style="background: white; border-radius: 1rem; box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04); overflow: hidden;">
-      
+    <div class="card-elevated overflow-hidden">
+
       <!-- Card Header -->
-      <div style="background: linear-gradient(135deg, #059669 0%, #047857 100%); padding: 2rem; color: white;">
-        <div style="display: flex; align-items: center; gap: 1rem;">
-          <div style="background: rgba(255, 255, 255, 0.2); padding: 0.75rem; border-radius: 0.75rem;">
-            <svg style="width: 1.5rem; height: 1.5rem;" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+      <div class="bg-gradient-green p-8 text-white">
+        <div class="flex-center">
+          <div class="icon-wrapper-translucent">
+            <svg class="icon-size-md" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"/>
               <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"/>
             </svg>
           </div>
           <div>
-            <h2 style="font-size: 1.5rem; font-weight: 700; margin: 0;">Create Region</h2>
-            <p style="margin: 0.25rem 0 0 0; color: rgba(255, 255, 255, 0.8); font-size: 0.875rem;">
+            <h2 class="text-2xl font-bold m-0">Create Region</h2>
+            <p class="mt-1 m-0 text-white/80 text-sm">
               Add a new geographical service region
             </p>
           </div>
         </div>
       </div>
-      
+
       <!-- Form Content -->
-      <div style="padding: 2rem;">
+      <div class="card-body">
         <%= render "form", region: @region %>
       </div>
     </div>
 
     <!-- Back Button -->
-    <div style="margin-top: 2rem;">
-      <%= link_to regions_path, style: "background: #6b7280; color: white; padding: 0.875rem 1.75rem; border-radius: 0.75rem; text-decoration: none; font-weight: 600; font-size: 0.875rem; display: inline-flex; align-items: center; gap: 0.5rem; transition: all 0.2s;" do %>
-        <svg style="width: 1.125rem; height: 1.125rem;" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+    <div class="mt-8">
+      <%= link_to regions_path, class: "bg-gray-500 text-white py-3.5 px-7 rounded-xl no-underline font-semibold text-sm inline-flex items-center gap-2 transition-all hover:bg-gray-600 hover:-translate-y-0.5" do %>
+        <svg class="icon-size" fill="none" stroke="currentColor" viewBox="0 0 24 24">
           <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18"></path>
         </svg>
         <span>Back to Regions</span>
@@ -69,53 +69,3 @@
     </div>
   </div>
 </div>
-
-<style>
-  /* Button hover effects */
-  a:hover {
-    transform: translateY(-2px);
-  }
-  
-  a[style*="background: #6b7280"]:hover {
-    background: #4b5563 !important;
-  }
-  
-  /* Responsive design */
-  @media (max-width: 768px) {
-    div[style*="max-width: 800px"] {
-      padding: 0 0.5rem !important;
-    }
-    
-    div[style*="min-height: 100vh"] {
-      padding: 1rem 0 !important;
-    }
-    
-    div[style*="justify-content: space-between"] {
-      flex-direction: column !important;
-      align-items: flex-start !important;
-      gap: 1rem !important;
-    }
-    
-    h1 {
-      font-size: 2rem !important;
-    }
-    
-    div[style*="padding: 2rem"] {
-      padding: 1.5rem !important;
-    }
-  }
-  
-  @media (max-width: 640px) {
-    div[style*="padding: 0 1rem"] {
-      padding: 0 0.5rem !important;
-    }
-    
-    div[style*="padding: 2rem"] {
-      padding: 1rem !important;
-    }
-    
-    h1 {
-      font-size: 1.75rem !important;
-    }
-  }
-</style>
