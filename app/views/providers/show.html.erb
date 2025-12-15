@@ -6,7 +6,7 @@
 
 <div class="bg-gradient-page" style="min-height: 100vh; padding: 2rem 0;">
   <div style="max-width: 1200px; margin: 0 auto; padding: 0 1rem;">
-    
+
     <!-- Header Section -->
     <div style="margin-bottom: 2rem;">
       <div style="display: flex; align-items: center; justify-content: between; gap: 1rem; margin-bottom: 1.5rem; flex-wrap: wrap;">
@@ -23,7 +23,7 @@
             <%= @provider.provider_type || "Provider" %>
           </div>
         </div>
-        
+
         <!-- Action Buttons -->
         <div style="display: flex; gap: 0.75rem; flex-wrap: wrap;">
           <%= link_to edit_provider_path(@provider), style: "background: linear-gradient(135deg, #dc2626 0%, #b91c1c 100%); color: white; font-weight: 600; padding: 0.75rem 1.5rem; border-radius: 0.5rem; text-decoration: none; font-size: 0.875rem; box-shadow: 0 4px 6px -1px rgba(220, 38, 38, 0.3); transition: all 0.2s; display: inline-flex; align-items: center; gap: 0.5rem;" do %>
@@ -32,8 +32,8 @@
             </svg>
             Edit Provider
           <% end %>
-          
-          <%= button_to @provider, method: :delete, 
+
+          <%= button_to @provider, method: :delete,
               data: { confirm: "Are you sure you want to delete #{@provider.name}? This action cannot be undone." },
               style: "background: linear-gradient(135deg, #7f1d1d 0%, #991b1b 100%); color: white; font-weight: 600; padding: 0.75rem 1.5rem; border-radius: 0.5rem; border: none; cursor: pointer; font-size: 0.875rem; box-shadow: 0 4px 6px -1px rgba(127, 29, 29, 0.3); transition: all 0.2s; display: inline-flex; align-items: center; gap: 0.5rem;" do %>
             <svg style="width: 1rem; height: 1rem;" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -43,7 +43,7 @@
           <% end %>
         </div>
       </div>
-      
+
       <!-- Breadcrumb -->
       <nav style="font-size: 0.875rem; color: #6b7280;">
         <ol style="display: flex; gap: 0.5rem; list-style: none; padding: 0; margin: 0;">
@@ -58,12 +58,12 @@
 
     <!-- Main Content Grid -->
     <div style="display: grid; grid-template-columns: 2fr 1fr; gap: 2rem;">
-      
+
       <!-- Left Column - Main Info -->
       <div style="space-y: 2rem;">
-        
+
         <!-- Provider Details Card -->
-        <div style="background: white; border-radius: 1rem; box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04); overflow: hidden;">
+        <div class="mb-6" style="background: white; border-radius: 1rem; box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04); overflow: hidden;">
           <div style="background: linear-gradient(135deg, #1e40af 0%, #3730a3 100%); padding: 2rem; color: white;">
             <div style="display: flex; align-items: center; gap: 1rem;">
               <div style="background: rgba(255, 255, 255, 0.2); padding: 0.75rem; border-radius: 0.75rem;">
@@ -79,24 +79,24 @@
               </div>
             </div>
           </div>
-          
+
           <div style="padding: 2rem;">
             <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 2rem;">
-              
+
               <div>
                 <label style="display: block; font-size: 0.875rem; font-weight: 600; color: #6b7280; margin-bottom: 0.5rem;">Provider Name</label>
                 <div style="background: #f8fafc; padding: 1rem; border-radius: 0.5rem; border: 1px solid #e2e8f0;">
                   <span style="font-size: 1rem; font-weight: 600; color: #1f2937;"><%= @provider.name %></span>
                 </div>
               </div>
-              
+
               <div>
                 <label style="display: block; font-size: 0.875rem; font-weight: 600; color: #6b7280; margin-bottom: 0.5rem;">Provider Type</label>
                 <div style="background: #f8fafc; padding: 1rem; border-radius: 0.5rem; border: 1px solid #e2e8f0;">
                   <span style="font-size: 1rem; color: #1f2937;"><%= @provider.provider_type || "Not specified" %></span>
                 </div>
               </div>
-              
+
               <div>
                 <label style="display: block; font-size: 0.875rem; font-weight: 600; color: #6b7280; margin-bottom: 0.5rem;">File Name Prefix</label>
                 <div style="background: #f8fafc; padding: 1rem; border-radius: 0.5rem; border: 1px solid #e2e8f0;">
@@ -107,13 +107,13 @@
                   <% end %>
                 </div>
               </div>
-              
+
             </div>
           </div>
         </div>
 
         <!-- Regions Card -->
-        <div style="background: white; border-radius: 1rem; box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04); overflow: hidden;">
+        <div class="mb-6" style="background: white; border-radius: 1rem; box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04); overflow: hidden;">
           <div class="bg-gradient-green" style="padding: 1.5rem; color: white;">
             <div style="display: flex; align-items: center; gap: 1rem;">
               <div style="background: rgba(255, 255, 255, 0.2); padding: 0.5rem; border-radius: 0.5rem;">
@@ -130,7 +130,7 @@
               </div>
             </div>
           </div>
-          
+
           <div style="padding: 1.5rem;">
             <% if @provider.regions.any? %>
               <div style="display: flex; flex-wrap: wrap; gap: 0.75rem;">
@@ -173,7 +173,7 @@
               </div>
             </div>
           </div>
-          
+
           <div style="padding: 1.5rem;">
             <% if @provider.users.any? %>
               <div style="space-y: 0.75rem;">
@@ -219,20 +219,20 @@
               </div>
             </div>
           </div>
-          
+
           <div style="padding: 1.5rem; space-y: 1.5rem;">
             <div>
               <label style="display: block; font-size: 0.75rem; font-weight: 600; color: #6b7280; margin-bottom: 0.5rem; text-transform: uppercase; letter-spacing: 0.05em;">Created</label>
               <div style="color: #1f2937; font-weight: 500;"><%= @provider.created_at.strftime("%B %d, %Y") %></div>
               <div style="color: #6b7280; font-size: 0.875rem;"><%= @provider.created_at.strftime("%I:%M %p") %></div>
             </div>
-            
+
             <div>
               <label style="display: block; font-size: 0.75rem; font-weight: 600; color: #6b7280; margin-bottom: 0.5rem; text-transform: uppercase; letter-spacing: 0.05em;">Last Updated</label>
               <div style="color: #1f2937; font-weight: 500;"><%= @provider.updated_at.strftime("%B %d, %Y") %></div>
               <div style="color: #6b7280; font-size: 0.875rem;"><%= @provider.updated_at.strftime("%I:%M %p") %></div>
             </div>
-            
+
             <div>
               <label style="display: block; font-size: 0.75rem; font-weight: 600; color: #6b7280; margin-bottom: 0.5rem; text-transform: uppercase; letter-spacing: 0.05em;">Provider ID</label>
               <div style="font-family: 'SF Mono', Monaco, monospace; background: #f3f4f6; padding: 0.5rem; border-radius: 0.25rem; font-size: 0.875rem; color: #374151;">#<%= @provider.id %></div>
@@ -250,27 +250,27 @@
     transform: translateY(-2px) !important;
     box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.25) !important;
   }
-  
+
   /* Region link hovers */
   a[href*="region"]:hover {
     background: linear-gradient(135deg, #dbeafe 0%, #bfdbfe 100%) !important;
     border-color: #93c5fd !important;
     transform: translateY(-1px);
   }
-  
+
   /* User link hovers */
   a[href*="user"]:hover {
     background: #f3f4f6 !important;
     border-color: #d1d5db !important;
     transform: translateY(-1px);
   }
-  
+
   /* Responsive grid */
   @media (max-width: 768px) {
     div[style*="grid-template-columns: 2fr 1fr"] {
       grid-template-columns: 1fr !important;
     }
-    
+
     div[style*="display: flex"][style*="justify-content: between"] {
       flex-direction: column !important;
       align-items: flex-start !important;
