@@ -1,36 +1,36 @@
 <% content_for :title, "Import Report ##{@import_report.id}" %>
 
 <% if notice %>
-  <div style="background: #dcfce7; border: 1px solid #bbf7d0; color: #166534; padding: 1rem; border-radius: 0.5rem; margin-bottom: 2rem;">
+  <div class="alert-success">
     <%= notice %>
   </div>
 <% end %>
 
-<div class="bg-gradient-page" style="min-height: 100vh; padding: 2rem 0;">
-  <div style="max-width: 1000px; margin: 0 auto; padding: 0 1rem;">
+<div class="bg-gradient-page page-container">
+  <div class="max-w-5xl mx-auto px-4">
 
     <!-- Header Section -->
-    <div style="margin-bottom: 2rem;">
-      <div style="display: flex; align-items: center; justify-content: between; gap: 1rem; margin-bottom: 1.5rem; flex-wrap: wrap;">
-        <div style="display: flex; align-items: center; gap: 1rem;">
-          <%= link_to import_reports_path, style: "color: #6b7280; hover:color: #374151; transition: colors 0.2s;" do %>
-            <svg style="width: 1.5rem; height: 1.5rem;" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+    <div class="section-spacing">
+      <div class="flex items-center justify-between gap-4 mb-6 flex-wrap">
+        <div class="flex items-center gap-4">
+          <%= link_to import_reports_path, class: "text-gray-500 hover:text-gray-700 transition-colors" do %>
+            <svg class="icon-size-lg" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18"/>
             </svg>
           <% end %>
-          <h1 style="font-size: 2rem; font-weight: 700; color: #1f2937; margin: 0;">
+          <h1 class="text-3xl font-bold text-gray-800 m-0">
             Import Report #<%= @import_report.id %>
           </h1>
           <% if @import_report.status == "completed" %>
-            <div class="bg-gradient-green" style="color: white; padding: 0.375rem 0.75rem; border-radius: 9999px; font-size: 0.75rem; font-weight: 500;">
+            <div class="bg-gradient-green text-white py-1.5 px-3 rounded-full text-xs font-medium">
               Completed
             </div>
           <% elsif @import_report.status == "failed" %>
-            <div style="background: linear-gradient(135deg, #dc2626 0%, #b91c1c 100%); color: white; padding: 0.375rem 0.75rem; border-radius: 9999px; font-size: 0.75rem; font-weight: 500;">
+            <div class="bg-gradient-to-br from-red-600 to-red-700 text-white py-1.5 px-3 rounded-full text-xs font-medium">
               Failed
             </div>
           <% else %>
-            <div class="bg-gradient-blue" style="color: white; padding: 0.375rem 0.75rem; border-radius: 9999px; font-size: 0.75rem; font-weight: 500;">
+            <div class="bg-gradient-blue text-white py-1.5 px-3 rounded-full text-xs font-medium">
               <%= @import_report.status.humanize %>
             </div>
           <% end %>
@@ -38,13 +38,13 @@
       </div>
 
       <!-- Breadcrumb -->
-      <nav style="font-size: 0.875rem; color: #6b7280;">
-        <ol style="display: flex; gap: 0.5rem; list-style: none; padding: 0; margin: 0;">
-          <li><%= link_to "Dashboard", root_path, style: "color: #6b7280; text-decoration: none; hover:color: #374151;" %></li>
-          <li style="color: #d1d5db;">/</li>
-          <li><%= link_to "Import Reports", import_reports_path, style: "color: #6b7280; text-decoration: none; hover:color: #374151;" %></li>
-          <li style="color: #d1d5db;">/</li>
-          <li style="color: #374151; font-weight: 500;">#<%= @import_report.id %></li>
+      <nav class="breadcrumb-nav">
+        <ol class="breadcrumb-list">
+          <li><%= link_to "Dashboard", root_path, class: "text-gray-500 no-underline hover:text-gray-700" %></li>
+          <li class="breadcrumb-separator">/</li>
+          <li><%= link_to "Import Reports", import_reports_path, class: "text-gray-500 no-underline hover:text-gray-700" %></li>
+          <li class="breadcrumb-separator">/</li>
+          <li class="breadcrumb-current">#<%= @import_report.id %></li>
         </ol>
       </nav>
     </div>
@@ -53,121 +53,121 @@
     <div id="<%= dom_id @import_report %>">
 
       <!-- Import Details Section -->
-      <div style="margin-bottom: 2rem;">
-        <div style="background: white; border-radius: 1rem; box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.1), 0 8px 10px -6px rgba(0, 0, 0, 0.1); overflow: hidden; border: 1px solid #e5e7eb;">
+      <div class="mb-8">
+        <div class="card-elevated overflow-hidden">
 
           <!-- Card Header -->
-          <div class="bg-gradient-blue" style="padding: 2rem; color: white;">
-            <div style="display: flex; align-items: center; gap: 1rem; margin-bottom: 0.5rem;">
-              <svg style="width: 2rem; height: 2rem;" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <div class="bg-gradient-blue p-8 text-white">
+            <div class="flex items-center gap-4 mb-2">
+              <svg class="icon-size-lg" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/>
               </svg>
-              <h2 style="font-size: 1.5rem; font-weight: 700; margin: 0;"><%= @import_report.import_type.humanize %> Import Details</h2>
+              <h2 class="text-2xl font-bold m-0"><%= @import_report.import_type.humanize %> Import Details</h2>
             </div>
-            <p style="margin: 0; opacity: 0.9; font-size: 0.875rem;">Import operation information and statistics</p>
+            <p class="m-0 text-white/90 text-sm">Import operation information and statistics</p>
           </div>
 
           <!-- Card Body -->
-          <div style="padding: 2rem;">
-            <div style="display: grid; gap: 1.5rem;">
+          <div class="card-body">
+            <div class="space-y-6">
 
               <!-- Status -->
-              <div style="display: grid; grid-template-columns: 1fr 2fr; gap: 1rem; padding: 1rem; background: #f8fafc; border-radius: 0.5rem; border-left: 4px solid #3b82f6;">
-                <div style="font-weight: 600; color: #374151; display: flex; align-items: center; gap: 0.5rem;">
-                  <svg style="width: 1rem; height: 1rem; color: #3b82f6;" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <div class="grid grid-cols-1 md:grid-cols-3 gap-4 p-4 bg-gray-50 rounded-lg border-l-4 border-blue-600">
+                <div class="font-semibold text-gray-700 flex items-center gap-2">
+                  <svg class="icon-size-sm text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/>
                   </svg>
                   Status:
                 </div>
-                <div style="color: #1f2937;">
+                <div class="md:col-span-2">
                   <% if @import_report.status == "completed" %>
-                    <div class="bg-gradient-green" style="color: white; padding: 0.375rem 0.75rem; border-radius: 9999px; font-size: 0.75rem; font-weight: 600; display: inline-flex; align-items: center; gap: 0.375rem;">
-                      <svg style="width: 0.75rem; height: 0.75rem;" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <span class="bg-gradient-green text-white py-1.5 px-3 rounded-full text-xs font-semibold inline-flex items-center gap-1.5">
+                      <svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/>
                       </svg>
                       Completed
-                    </div>
+                    </span>
                   <% elsif @import_report.status == "failed" %>
-                    <div style="background: linear-gradient(135deg, #dc2626 0%, #b91c1c 100%); color: white; padding: 0.375rem 0.75rem; border-radius: 9999px; font-size: 0.75rem; font-weight: 600; display: inline-flex; align-items: center; gap: 0.375rem;">
-                      <svg style="width: 0.75rem; height: 0.75rem;" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <span class="bg-gradient-to-br from-red-600 to-red-700 text-white py-1.5 px-3 rounded-full text-xs font-semibold inline-flex items-center gap-1.5">
+                      <svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/>
                       </svg>
                       Failed
-                    </div>
+                    </span>
                   <% else %>
-                    <div class="bg-gradient-blue" style="color: white; padding: 0.375rem 0.75rem; border-radius: 9999px; font-size: 0.75rem; font-weight: 600; display: inline-flex; align-items: center; gap: 0.375rem;">
-                      <svg style="width: 0.75rem; height: 0.75rem;" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <span class="bg-gradient-blue text-white py-1.5 px-3 rounded-full text-xs font-semibold inline-flex items-center gap-1.5">
+                      <svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"/>
                       </svg>
                       <%= @import_report.status.humanize %>
-                    </div>
+                    </span>
                   <% end %>
                 </div>
               </div>
 
               <!-- Import Type -->
-              <div style="display: grid; grid-template-columns: 1fr 2fr; gap: 1rem; padding: 1rem; background: #f8fafc; border-radius: 0.5rem; border-left: 4px solid #3b82f6;">
-                <div style="font-weight: 600; color: #374151; display: flex; align-items: center; gap: 0.5rem;">
-                  <svg style="width: 1rem; height: 1rem; color: #3b82f6;" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <div class="grid grid-cols-1 md:grid-cols-3 gap-4 p-4 bg-gray-50 rounded-lg border-l-4 border-blue-600">
+                <div class="font-semibold text-gray-700 flex items-center gap-2">
+                  <svg class="icon-size-sm text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12"/>
                   </svg>
                   Import Type:
                 </div>
-                <div style="color: #1f2937; font-weight: 500;">
+                <div class="text-gray-900 font-medium md:col-span-2">
                   <%= @import_report.import_type.humanize %>
                 </div>
               </div>
 
               <!-- Started At -->
-              <div style="display: grid; grid-template-columns: 1fr 2fr; gap: 1rem; padding: 1rem; background: #f8fafc; border-radius: 0.5rem; border-left: 4px solid #3b82f6;">
-                <div style="font-weight: 600; color: #374151; display: flex; align-items: center; gap: 0.5rem;">
-                  <svg style="width: 1rem; height: 1rem; color: #3b82f6;" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <div class="grid grid-cols-1 md:grid-cols-3 gap-4 p-4 bg-gray-50 rounded-lg border-l-4 border-blue-600">
+                <div class="font-semibold text-gray-700 flex items-center gap-2">
+                  <svg class="icon-size-sm text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"/>
                   </svg>
                   Started At:
                 </div>
-                <div style="color: #1f2937; font-weight: 500;">
+                <div class="text-gray-900 font-medium md:col-span-2">
                   <%= @import_report.started_at&.strftime('%B %d, %Y at %I:%M %p') || "Not started" %>
                 </div>
               </div>
 
               <!-- Completed At -->
-              <div style="display: grid; grid-template-columns: 1fr 2fr; gap: 1rem; padding: 1rem; background: #f8fafc; border-radius: 0.5rem; border-left: 4px solid #3b82f6;">
-                <div style="font-weight: 600; color: #374151; display: flex; align-items: center; gap: 0.5rem;">
-                  <svg style="width: 1rem; height: 1rem; color: #3b82f6;" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <div class="grid grid-cols-1 md:grid-cols-3 gap-4 p-4 bg-gray-50 rounded-lg border-l-4 border-blue-600">
+                <div class="font-semibold text-gray-700 flex items-center gap-2">
+                  <svg class="icon-size-sm text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/>
                   </svg>
                   Completed At:
                 </div>
-                <div style="color: #1f2937; font-weight: 500;">
+                <div class="text-gray-900 font-medium md:col-span-2">
                   <%= @import_report.completed_at&.strftime('%B %d, %Y at %I:%M %p') || "Not completed" %>
                 </div>
               </div>
 
               <!-- Created -->
-              <div style="display: grid; grid-template-columns: 1fr 2fr; gap: 1rem; padding: 1rem; background: #f8fafc; border-radius: 0.5rem; border-left: 4px solid #3b82f6;">
-                <div style="font-weight: 600; color: #374151; display: flex; align-items: center; gap: 0.5rem;">
-                  <svg style="width: 1rem; height: 1rem; color: #3b82f6;" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <div class="grid grid-cols-1 md:grid-cols-3 gap-4 p-4 bg-gray-50 rounded-lg border-l-4 border-blue-600">
+                <div class="font-semibold text-gray-700 flex items-center gap-2">
+                  <svg class="icon-size-sm text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"/>
                   </svg>
                   Created:
                 </div>
-                <div style="color: #1f2937; font-weight: 500;">
+                <div class="text-gray-900 font-medium md:col-span-2">
                   <%= @import_report.created_at.strftime('%B %d, %Y at %I:%M %p') %>
                 </div>
               </div>
 
               <!-- Summary Stats -->
               <% if @import_report.summary_stats.present? %>
-                <div style="display: grid; grid-template-columns: 1fr 2fr; gap: 1rem; padding: 1rem; background: #f8fafc; border-radius: 0.5rem; border-left: 4px solid #3b82f6;">
-                  <div style="font-weight: 600; color: #374151; display: flex; align-items: center; gap: 0.5rem;">
-                    <svg style="width: 1rem; height: 1rem; color: #3b82f6;" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-4 p-4 bg-gray-50 rounded-lg border-l-4 border-blue-600">
+                  <div class="font-semibold text-gray-700 flex items-center gap-2">
+                    <svg class="icon-size-sm text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                       <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"/>
                     </svg>
                     Summary Stats:
                   </div>
-                  <div style="color: #1f2937;">
-                    <pre style="background: white; padding: 1rem; border-radius: 0.375rem; border: 1px solid #e5e7eb; font-size: 0.75rem; overflow-x: auto; margin: 0;"><%= JSON.pretty_generate(@import_report.summary_stats) %></pre>
+                  <div class="md:col-span-2">
+                    <pre class="bg-white p-4 rounded-lg border border-gray-200 text-xs overflow-x-auto m-0"><%= JSON.pretty_generate(@import_report.summary_stats) %></pre>
                   </div>
                 </div>
               <% end %>
@@ -178,34 +178,34 @@
       </div>
 
       <!-- Import Errors Section -->
-      <div style="margin-bottom: 2rem;">
-        <div style="background: white; border-radius: 1rem; box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.1), 0 8px 10px -6px rgba(0, 0, 0, 0.1); overflow: hidden; border: 1px solid #e5e7eb;">
+      <div class="mb-8">
+        <div class="card-elevated overflow-hidden">
 
           <!-- Card Header -->
-          <div style="background: linear-gradient(135deg, <%= @import_errors.any? ? '#dc2626 0%, #b91c1c 100%' : '#10b981 0%, #059669 100%' %>); padding: 2rem; color: white;">
-            <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 1rem;">
-              <div style="display: flex; align-items: center; gap: 1rem;">
-                <div style="background: rgba(255, 255, 255, 0.2); padding: 0.75rem; border-radius: 0.75rem;">
+          <div class="<%= @import_errors.any? ? 'bg-gradient-to-br from-red-600 to-red-700' : 'bg-gradient-green' %> p-8 text-white">
+            <div class="flex justify-between items-center flex-wrap gap-4">
+              <div class="flex items-center gap-4">
+                <div class="icon-wrapper-translucent">
                   <% if @import_errors.any? %>
-                    <svg style="width: 1.5rem; height: 1.5rem;" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <svg class="icon-size-lg" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                       <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-2.5L13.732 4c-.77-.833-1.964-.833-2.732 0L3.732 16.5c-.77.833.192 2.5 1.732 2.5z"/>
                     </svg>
                   <% else %>
-                    <svg style="width: 1.5rem; height: 1.5rem;" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <svg class="icon-size-lg" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                       <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/>
                     </svg>
                   <% end %>
                 </div>
                 <div>
-                  <h2 style="font-size: 1.5rem; font-weight: 700; margin: 0;">Import Errors</h2>
-                  <p style="margin: 0.25rem 0 0 0; color: rgba(255, 255, 255, 0.8); font-size: 0.875rem;">
+                  <h2 class="text-2xl font-bold m-0">Import Errors</h2>
+                  <p class="mt-1 m-0 text-white/80 text-sm">
                     <%= pluralize(@import_errors.count, 'error') %> found
                   </p>
                 </div>
               </div>
 
-              <div style="display: flex; gap: 0.75rem; align-items: center;">
-                <div style="background: rgba(255, 255, 255, 0.1); padding: 0.5rem 1rem; border-radius: 9999px; font-size: 0.75rem; font-weight: 500;">
+              <div class="flex gap-3 items-center">
+                <div class="bg-white/10 py-2 px-4 rounded-full text-xs font-medium">
                   Total: <%= @import_errors.count %>
                 </div>
               </div>
@@ -213,63 +213,55 @@
           </div>
 
           <!-- Table Content -->
-          <div style="padding: 0;">
+          <div>
             <% if @import_errors.any? %>
-              <div class="table-container" style="overflow-x: auto;">
-                <table style="width: 100%; border-collapse: collapse;">
+              <div class="table-container overflow-x-auto">
+                <table class="w-full border-collapse">
                   <thead>
-                    <tr class="bg-gradient-gray" style="border-bottom: 2px solid #e2e8f0;">
-                      <th style="padding: 1.25rem 1.5rem; text-align: left; font-size: 0.75rem; font-weight: 700; color: #475569; text-transform: uppercase; letter-spacing: 0.1em;">
-                        Error Type
-                      </th>
-                      <th style="padding: 1.25rem 1.5rem; text-align: left; font-size: 0.75rem; font-weight: 700; color: #475569; text-transform: uppercase; letter-spacing: 0.1em;">
-                        File Name
-                      </th>
-                      <th style="padding: 1.25rem 1.5rem; text-align: left; font-size: 0.75rem; font-weight: 700; color: #475569; text-transform: uppercase; letter-spacing: 0.1em;">
-                        Error Message
-                      </th>
-                      <th style="padding: 1.25rem 1.5rem; text-align: left; font-size: 0.75rem; font-weight: 700; color: #475569; text-transform: uppercase; letter-spacing: 0.1em;">
-                        Topic ID
-                      </th>
+                    <tr class="table-header">
+                      <th class="table-cell text-left">Error Type</th>
+                      <th class="table-cell text-left">File Name</th>
+                      <th class="table-cell text-left">Error Message</th>
+                      <th class="table-cell text-left">Topic ID</th>
                     </tr>
                   </thead>
                   <tbody>
                     <% @import_errors.each do |error| %>
-                      <tr style="border-bottom: 1px solid #f1f5f9;">
-                        <td style="padding: 1.25rem 1.5rem;">
-                          <div style="background: linear-gradient(135deg, #dc2626 0%, #b91c1c 100%); color: white; padding: 0.375rem 0.75rem; border-radius: 9999px; font-size: 0.75rem; font-weight: 600; display: inline-block;">
+                      <tr class="border-b border-gray-100">
+                        <td class="table-cell">
+                          <span class="bg-gradient-to-br from-red-600 to-red-700 text-white py-1.5 px-3 rounded-full text-xs font-semibold inline-block">
                             <%= error.error_type %>
-                          </div>
+                          </span>
                         </td>
-                        <td style="padding: 1.25rem 1.5rem;">
-                          <div style="font-weight: 600; color: #111827; font-size: 0.875rem; max-width: 200px; word-wrap: break-word;">
+                        <td class="table-cell">
+                          <div class="font-semibold text-gray-900 text-sm max-w-xs break-words">
                             <%= error.file_name || "N/A" %>
                           </div>
                         </td>
-                        <td style="padding: 1.25rem 1.5rem;">
+                        <td class="table-cell">
                           <% if error.error_message.present? %>
-                            <div style="color: #6b7280; font-size: 0.875rem; max-width: 300px; word-wrap: break-word;">
+                            <div class="text-gray-600 text-sm max-w-sm break-words">
                               <%= error.error_message %>
                             </div>
                           <% else %>
-                            <div style="color: #9ca3af; font-style: italic; font-size: 0.875rem;">
+                            <div class="text-gray-400 italic text-sm">
                               N/A
                             </div>
                           <% end %>
                         </td>
-                        <td style="padding: 1.25rem 1.5rem;">
-                          <div style="font-weight: 600; color: #111827; font-size: 0.875rem;">
+                        <td class="table-cell">
+                          <div class="font-semibold text-gray-900 text-sm">
                             <%= error.topic_id || "N/A" %>
                           </div>
                         </td>
                       </tr>
                       <% if error.metadata.present? %>
-                        <tr style="border-bottom: 1px solid #f1f5f9;">
-                          <td colspan="4" style="padding: 1rem 1.5rem; background: #f8fafc;">
-                            <div style="font-weight: 600; color: #374151; margin-bottom: 0.5rem; font-size: 0.75rem;">
+                        <tr class="border-b border-gray-100">
+                          <td colspan="4" class="px-6 py-4 bg-gray-50">
+                            <div class="font-semibold text-gray-700 mb-2 text-xs">
                               Metadata:
                             </div>
-                            <pre style="background: white; padding: 0.75rem; border-radius: 0.375rem; border: 1px solid #e5e7eb; font-size: 0.625rem; overflow-x: auto; margin: 0; color: #1f2937;"><%= JSON.pretty_generate(error.metadata) %></pre>
+                            <pre class="bg-white p-3 rounded-lg border border-gray-200 text-xs overflow-x-auto m-0 text-gray-900"><%= JSON.pretty_generate(error.metadata) %></pre>
                           </td>
                         </tr>
                       <% end %>
@@ -278,14 +270,14 @@
                 </table>
               </div>
             <% else %>
-              <div style="padding: 3rem 1.5rem; text-align: center;">
-                <div style="color: #10b981;">
-                  <svg style="width: 4rem; height: 4rem; margin: 0 auto 1.5rem;" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <div class="py-12 px-6 text-center">
+                <div class="text-green-600">
+                  <svg class="w-16 h-16 mx-auto mb-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/>
                   </svg>
                 </div>
-                <h3 style="font-size: 1.25rem; font-weight: 600; color: #1f2937; margin: 0 0 0.5rem 0;">No Errors Found</h3>
-                <p style="color: #6b7280; margin: 0; font-size: 0.875rem;">This import completed successfully without any errors.</p>
+                <h3 class="text-xl font-semibold text-gray-900 m-0 mb-2">No Errors Found</h3>
+                <p class="text-gray-600 m-0 text-sm">This import completed successfully without any errors.</p>
               </div>
             <% end %>
           </div>
@@ -293,9 +285,9 @@
       </div>
 
       <!-- Actions -->
-      <div style="display: flex; gap: 1rem; justify-content: flex-start;">
-        <%= link_to import_reports_path, style: "background: linear-gradient(135deg, #6b7280 0%, #4b5563 100%); color: white; font-weight: 600; padding: 0.75rem 1.5rem; border-radius: 0.5rem; text-decoration: none; font-size: 0.875rem; box-shadow: 0 4px 6px -1px rgba(107, 114, 128, 0.3); transition: all 0.2s; display: inline-flex; align-items: center; gap: 0.5rem;" do %>
-          <svg style="width: 1rem; height: 1rem;" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+      <div class="flex gap-4 justify-start">
+        <%= link_to import_reports_path, class: "bg-gradient-to-br from-gray-600 to-gray-700 text-white font-semibold py-3 px-6 rounded-lg no-underline text-sm shadow-md transition-all hover:-translate-y-0.5 inline-flex items-center gap-2" do %>
+          <svg class="icon-size" fill="none" stroke="currentColor" viewBox="0 0 24 24">
             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18"/>
           </svg>
           Back to Import Reports
@@ -304,128 +296,3 @@
     </div>
   </div>
 </div>
-
-<style>
-  /* Button hover effects */
-  a[href*="import_reports"]:hover {
-    transform: translateY(-2px) !important;
-    box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.25) !important;
-  }
-
-  /* Responsive design */
-  @media (max-width: 768px) {
-    /* Container adjustments */
-    div[style*="max-width: 1000px"] {
-      padding: 0 1rem !important;
-      margin: 0 auto !important;
-    }
-
-    /* Page padding adjustments */
-    div[style*="min-height: 100vh"] {
-      padding: 1rem 0 !important;
-    }
-
-    /* Header adjustments */
-    div[style*="justify-content: between"] {
-      flex-direction: column !important;
-      align-items: flex-start !important;
-      gap: 1rem !important;
-    }
-
-    /* Title adjustments */
-    h1 {
-      font-size: 1.75rem !important;
-    }
-
-    /* Card adjustments - prevent overflow */
-    div[style*="border-radius: 1rem"] {
-      border-radius: 0.5rem !important;
-      margin: 0 !important;
-      max-width: 100% !important;
-      box-sizing: border-box !important;
-    }
-
-    /* Grid adjustments */
-    div[style*="grid-template-columns: 1fr 2fr"] {
-      grid-template-columns: 1fr !important;
-      gap: 0.5rem !important;
-    }
-
-    /* Card padding adjustments */
-    div[style*="padding: 2rem"] {
-      padding: 1.5rem 1rem !important;
-    }
-
-    /* Table adjustments */
-    th, td {
-      padding: 0.75rem 0.5rem !important;
-      font-size: 0.875rem !important;
-    }
-
-    /* Make tables more responsive */
-    .table-container {
-      margin: 0 !important;
-      padding: 0 !important;
-    }
-
-    /* Ensure table fits */
-    table {
-      min-width: 100% !important;
-      width: 100% !important;
-    }
-  }
-
-  @media (max-width: 640px) {
-    /* Very small screen adjustments */
-    div[style*="max-width: 1000px"] {
-      padding: 0 0.5rem !important;
-    }
-
-    /* Ensure no overflow */
-    * {
-      max-width: 100% !important;
-      box-sizing: border-box !important;
-    }
-
-    /* Remove border radius on very small screens */
-    div[style*="border-radius: 1rem"] {
-      border-radius: 0.25rem !important;
-      margin: 0 !important;
-    }
-
-    /* More compact padding */
-    div[style*="padding: 2rem"] {
-      padding: 1rem 0.75rem !important;
-    }
-
-    div[style*="padding: 1.5rem"] {
-      padding: 1rem !important;
-    }
-
-    /* More compact table */
-    th, td {
-      padding: 0.5rem 0.25rem !important;
-      font-size: 0.75rem !important;
-      word-wrap: break-word !important;
-      word-break: break-word !important;
-    }
-
-    /* Prevent horizontal scroll */
-    body, html {
-      overflow-x: hidden !important;
-    }
-
-    /* Ensure cards don't exceed viewport */
-    div[style*="background: white"] {
-      max-width: calc(100vw - 1rem) !important;
-      overflow: hidden !important;
-    }
-
-    /* Better pre formatting for small screens */
-    pre {
-      font-size: 0.625rem !important;
-      white-space: pre-wrap !important;
-      word-wrap: break-word !important;
-    }
-  }
-</style>
