@@ -278,10 +278,242 @@ nav.pagy a.gap {
   @apply border-l-2 border-r-2 bg-white;
 }
 
+/* Layout Utilities */
+.page-container {
+  min-height: 100vh;
+  padding: 2rem 0;
+}
+
+.content-wrapper {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 1rem;
+  overflow-x: hidden;
+}
+
+.section-spacing {
+  margin-bottom: 2rem;
+}
+
+.section-spacing-lg {
+  margin-bottom: 2.5rem;
+}
+
+/* Flexbox Utilities */
+.flex-between {
+  @apply flex justify-between items-center;
+}
+
+.flex-between-wrap {
+  @apply flex justify-between items-center flex-wrap gap-4;
+}
+
+.flex-center {
+  @apply flex items-center gap-4;
+}
+
+.flex-center-sm {
+  @apply flex items-center gap-2;
+}
+
+/* Card Components */
+.card-elevated {
+  @apply bg-white rounded-2xl shadow-lg border border-gray-200;
+}
+
+.card-header-gradient {
+  background: linear-gradient(135deg, #6366f1 0%, #4f46e5 100%);
+  @apply p-6 text-white;
+}
+
+.card-body {
+  @apply p-8;
+}
+
+.card-body-sm {
+  @apply p-6;
+}
+
+/* Icon Containers */
+.icon-wrapper {
+  @apply p-3 rounded-xl flex-shrink-0;
+}
+
+.icon-wrapper-sm {
+  @apply p-2 rounded-lg;
+}
+
+.icon-wrapper-translucent {
+  background: rgba(255, 255, 255, 0.2);
+  @apply p-2 rounded-lg;
+}
+
+.icon-size {
+  @apply w-4 h-4;
+}
+
+.icon-size-md {
+  @apply w-5 h-5;
+}
+
+.icon-size-lg {
+  @apply w-6 h-6;
+}
+
+/* Typography */
+.page-title {
+  @apply text-4xl font-bold text-gray-800 m-0;
+}
+
+.page-subtitle {
+  @apply text-gray-500 m-0 text-base;
+}
+
+.section-title {
+  @apply text-xl font-semibold m-0;
+}
+
+.form-label-styled {
+  @apply block font-semibold text-gray-700 mb-3 text-sm;
+}
+
+.label-with-icon {
+  @apply flex items-center gap-2;
+}
+
+.text-required {
+  @apply text-red-600;
+}
+
+.text-muted {
+  @apply text-gray-500 text-xs mt-2;
+}
+
+/* Error/Alert Components */
+.alert-error {
+  @apply bg-red-50 border border-red-200 rounded-xl p-6 mb-8;
+}
+
+.alert-error-title {
+  @apply text-red-600 font-semibold m-0 text-base;
+}
+
+.alert-error-list {
+  @apply m-0 pl-6 text-red-600 text-sm;
+}
+
+/* Breadcrumb */
+.breadcrumb-nav {
+  @apply text-sm text-gray-500;
+}
+
+.breadcrumb-list {
+  @apply flex gap-2 list-none p-0 m-0;
+}
+
+.breadcrumb-separator {
+  @apply text-gray-300;
+}
+
+.breadcrumb-current {
+  @apply text-gray-700 font-medium;
+}
+
+/* Grid Layouts */
+.form-grid {
+  @apply grid gap-8;
+}
+
+.form-grid-auto {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  gap: 1.5rem;
+}
+
+/* Info Panel */
+.info-panel {
+  @apply bg-gray-50 border-2 border-gray-200 rounded-xl p-6;
+}
+
+/* Table Styles */
+.table-header {
+  @apply py-5 px-6 text-left text-xs font-bold text-slate-600 uppercase tracking-wider;
+}
+
+.table-cell {
+  @apply py-5 px-6;
+}
+
+.user-avatar {
+  @apply w-10 h-10 bg-gradient-to-br from-indigo-500 to-indigo-600 rounded-full flex items-center justify-center text-white font-semibold text-sm;
+}
+
+.badge-admin {
+  @apply inline-flex items-center gap-1.5 bg-gradient-to-br from-red-600 to-red-700 text-white py-1.5 px-3 rounded-full text-xs font-semibold;
+}
+
+.badge-contributor {
+  @apply inline-flex items-center gap-1.5 text-white py-1.5 px-3 rounded-full text-xs font-semibold;
+}
+
+.badge-provider {
+  @apply text-white py-1 px-2 rounded-full font-semibold;
+  font-size: 0.625rem;
+}
+
+.btn-view {
+  @apply bg-blue-500 text-white py-2 px-3 rounded-md no-underline text-xs font-semibold inline-flex items-center gap-1.5 transition-all hover:bg-blue-600;
+}
+
+.btn-edit {
+  @apply bg-gray-500 text-white py-2 px-3 rounded-md no-underline text-xs font-semibold inline-flex items-center gap-1.5 transition-all hover:bg-gray-600;
+}
+
+.empty-state {
+  @apply p-12 px-6 text-center;
+}
+
+.pagination-footer {
+  @apply bg-gray-50 p-6 border-t border-gray-200 flex justify-between items-center;
+}
+
+/* Form Container */
+.form-container {
+  max-width: 800px;
+  margin: 0 auto;
+  padding: 0 1rem;
+}
+
+/* Success Alert */
+.alert-success {
+  @apply bg-green-50 border border-green-200 text-green-700 p-4 rounded-lg mb-8;
+}
+
 nav.pagy a:hover:not(.current):not(.gap) {
   @apply bg-blue-800 text-white border-blue-800;
 }
 
 nav.pagy a.current {
   @apply bg-blue-600 text-white border-blue-600 font-semibold;
+}
+
+/* Responsive Table Styles */
+@media (max-width: 768px) {
+  .hide-mobile {
+    display: none !important;
+  }
+  .table-container table {
+    table-layout: auto !important;
+  }
+}
+
+.table-container table td:not(.actions-col),
+.table-container table th:not(.actions-col) {
+  word-wrap: break-word;
+  word-break: break-word;
+  overflow-wrap: anywhere;
+}
+
+.table-container table td.actions-col {
+  white-space: nowrap;
 }

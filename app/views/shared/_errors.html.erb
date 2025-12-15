@@ -1,17 +1,17 @@
 <% if errors.any? %>
-  <div style="background: #fef2f2; border: 1px solid #fecaca; color: #991b1b; padding: 1rem; border-radius: 0.5rem; margin-bottom: 1.5rem;">
-    <div style="display: flex; gap: 0.75rem;">
-      <svg style="width: 1.25rem; height: 1.25rem; color: #ef4444; flex-shrink: 0; margin-top: 0.125rem;" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+  <div class="bg-red-50 border border-red-200 text-red-900 p-4 rounded-lg mb-6">
+    <div class="flex gap-3">
+      <svg class="icon-size-md text-red-500 flex-shrink-0 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
       </svg>
-      <div style="flex: 1;">
-        <h4 style="font-weight: 600; color: #991b1b; margin: 0 0 0.5rem 0; font-size: 0.875rem;">
+      <div class="flex-1">
+        <h4 class="font-semibold text-red-900 m-0 mb-2 text-sm">
           <%= pluralize(errors.count, "error") %> prevented this <%= resource_name.downcase %> from being saved:
         </h4>
-        <ul style="list-style: none; padding: 0; margin: 0; space-y: 0.25rem;">
+        <ul class="list-none p-0 m-0 space-y-1">
           <% errors.each do |error| %>
-            <li style="font-size: 0.75rem; color: #7f1d1d; margin-bottom: 0.25rem; display: flex; align-items: flex-start; gap: 0.5rem;">
-              <span style="color: #ef4444; font-weight: bold; margin-top: 0.125rem;">•</span>
+            <li class="text-xs text-red-800 mb-1 flex items-start gap-2">
+              <span class="text-red-500 font-bold mt-0.5">•</span>
               <span><%= error %></span>
             </li>
           <% end %>

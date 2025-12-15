@@ -1,23 +1,23 @@
-<div class="bg-gradient-page" style="min-height: 100vh; padding: 2rem 0;">
-  <div style="max-width: 1200px; margin: 0 auto; padding: 0 1rem; overflow-x: hidden;">
+<div class="bg-gradient-page page-container">
+  <div class="content-wrapper">
 
     <!-- Header Section -->
-    <div style="margin-bottom: 2rem;">
-      <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.5rem; flex-wrap: wrap; gap: 1rem;">
-        <div style="min-width: 0; flex: 1;">
-          <div style="display: flex; align-items: center; gap: 1rem; margin-bottom: 0.5rem;">
-            <div class="bg-gradient-green" style="color: white; padding: 0.75rem; border-radius: 0.75rem; flex-shrink: 0;">
-              <svg style="width: 1.5rem; height: 1.5rem;" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+    <div class="section-spacing">
+      <div class="flex-between-wrap mb-6">
+        <div class="min-w-0 flex-1">
+          <div class="flex-center mb-2">
+            <div class="bg-gradient-green icon-wrapper text-white">
+              <svg class="icon-size-lg" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z"/>
               </svg>
             </div>
-            <h1 style="font-size: 2.5rem; font-weight: 700; color: #1f2937; margin: 0; min-width: 0;">Users</h1>
+            <h1 class="page-title">Users</h1>
           </div>
-          <p style="color: #6b7280; margin: 0; font-size: 1rem;">Manage user accounts and permissions</p>
+          <p class="page-subtitle">Manage user accounts and permissions</p>
         </div>
 
-        <%= link_to new_user_path, class: "bg-gradient-blue", style: "color: white; padding: 0.875rem 1.75rem; border-radius: 0.75rem; text-decoration: none; font-weight: 600; font-size: 0.875rem; display: inline-flex; align-items: center; gap: 0.5rem; box-shadow: 0 10px 15px -3px rgba(59, 130, 246, 0.4), 0 4px 6px -2px rgba(59, 130, 246, 0.05); transition: all 0.2s;" do %>
-          <svg style="width: 1.125rem; height: 1.125rem;" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <%= link_to new_user_path, class: "bg-gradient-blue text-white py-3.5 px-7 rounded-xl no-underline font-semibold text-sm inline-flex items-center gap-2 shadow-blue transition-all hover:shadow-blue-lg" do %>
+          <svg class="icon-size-md" fill="none" stroke="currentColor" viewBox="0 0 24 24">
             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"></path>
           </svg>
           <span>Add New User</span>
@@ -25,41 +25,41 @@
       </div>
 
       <!-- Breadcrumb -->
-      <nav style="font-size: 0.875rem; color: #6b7280;">
-        <ol style="display: flex; gap: 0.5rem; list-style: none; padding: 0; margin: 0;">
-          <li><%= link_to "Dashboard", root_path, style: "color: #6b7280; text-decoration: none; hover:color: #374151;" %></li>
-          <li style="color: #d1d5db;">/</li>
-          <li style="color: #374151; font-weight: 500;">Users</li>
+      <nav class="breadcrumb-nav">
+        <ol class="breadcrumb-list">
+          <li><%= link_to "Dashboard", root_path, class: "text-gray-500 no-underline hover:text-gray-700" %></li>
+          <li class="breadcrumb-separator">/</li>
+          <li class="breadcrumb-current">Users</li>
         </ol>
       </nav>
     </div>
 
     <!-- Search Card -->
-    <div style="margin-bottom: 2rem;">
-      <div style="background: white; border-radius: 1rem; box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.1), 0 8px 10px -6px rgba(0, 0, 0, 0.1); overflow: hidden; border: 1px solid #e5e7eb;">
+    <div class="section-spacing">
+      <div class="card-elevated overflow-hidden">
 
         <!-- Search Header -->
-        <div style="background: linear-gradient(135deg, #6366f1 0%, #4f46e5 100%); padding: 1.5rem; color: white;">
-          <div style="display: flex; align-items: center; gap: 1rem;">
-            <div style="background: rgba(255, 255, 255, 0.2); padding: 0.5rem; border-radius: 0.5rem;">
-              <svg style="width: 1.25rem; height: 1.25rem;" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <div class="card-header-gradient">
+          <div class="flex-center">
+            <div class="icon-wrapper-translucent">
+              <svg class="icon-size-md" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/>
               </svg>
             </div>
-            <h2 style="font-size: 1.25rem; font-weight: 600; margin: 0;">Search & Filter Users</h2>
+            <h2 class="section-title">Search & Filter Users</h2>
           </div>
         </div>
 
         <!-- Search Body -->
-        <div style="padding: 2rem;">
+        <div class="card-body">
           <%= form_for :search, url: users_path, method: :get, data: { controller: "search", search_target: "search", turbo_frame: "user-list", turbo_action: "advance" } do |f| %>
-            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 1.5rem;">
+            <div class="form-grid-auto">
 
               <!-- Email Search -->
               <div>
                 <label class="input-label">
-                  <div style="display: flex; align-items: center; gap: 0.5rem;">
-                    <svg style="width: 1rem; height: 1rem; color: #6366f1;" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <div class="label-with-icon">
+                    <svg class="icon-size text-indigo-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                       <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"/>
                     </svg>
                     Email
@@ -74,14 +74,14 @@
               <!-- Role Filter -->
               <div>
                 <label class="input-label">
-                  <div style="display: flex; align-items: center; gap: 0.5rem;">
-                    <svg style="width: 1rem; height: 1rem; color: #6366f1;" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <div class="label-with-icon">
+                    <svg class="icon-size text-indigo-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                       <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.031 9-11.622 0-1.042-.133-2.052-.382-3.016z"/>
                     </svg>
                     Role
                   </div>
                 </label>
-                <div style="position:relative;">
+                <div class="relative">
                   <%= f.select :is_admin, options_for_select([["Admin", "true"], ["Contributor", "false"]], params.dig(:search, :is_admin)),
                       { prompt: "All roles" },
                       class: "select-field",
@@ -93,14 +93,14 @@
               <!-- Order -->
               <div>
                 <label class="input-label">
-                  <div style="display: flex; align-items: center; gap: 0.5rem;">
-                    <svg style="width: 1rem; height: 1rem; color: #6366f1;" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <div class="label-with-icon">
+                    <svg class="icon-size text-indigo-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                       <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 4h13M3 8h9m-9 4h6m4 0l4-4m0 0l4 4m-4-4v12"/>
                     </svg>
                     Sort Order
                   </div>
                 </label>
-                <div style="position:relative;">
+                <div class="relative">
                   <%= f.select :order, options_for_select([["By most recently added", :desc], ["By least recently added", :asc]], params.dig(:search, :order)),
                       {},
                       class: "select-field",
@@ -111,11 +111,9 @@
             </div>
 
             <!-- Clear Button -->
-            <div style="margin-top: 1.5rem; display: flex; justify-content: end;">
+            <div class="mt-6 flex justify-end">
               <%= link_to "Clear Filters", users_path,
-                  style: "background: #f3f4f6; color: #374151; padding: 0.625rem 1.25rem; border-radius: 0.5rem; text-decoration: none; font-weight: 500; font-size: 0.875rem; display: inline-flex; align-items: center; gap: 0.5rem; transition: all 0.2s; border: 1px solid #d1d5db;",
-                  onmouseover: "this.style.background='#e5e7eb'",
-                  onmouseout: "this.style.background='#f3f4f6'" %>
+                  class: "bg-gray-100 text-gray-700 py-2.5 px-5 rounded-lg no-underline font-medium text-sm inline-flex items-center gap-2 transition-all border border-gray-300 hover:bg-gray-200" %>
             </div>
           <% end %>
         </div>
