@@ -1,42 +1,42 @@
 <% if notice %>
-  <div style="background: #dcfce7; border: 1px solid #bbf7d0; color: #166534; padding: 1rem; border-radius: 0.5rem; margin-bottom: 2rem;">
+  <div class="alert-success">
     <%= notice %>
   </div>
 <% end %>
 
-<div class="bg-gradient-page" style="min-height: 100vh; padding: 2rem 0;">
-  <div style="max-width: 1200px; margin: 0 auto; padding: 0 1rem;">
+<div class="bg-gradient-page page-container">
+  <div class="content-wrapper">
 
     <!-- Header Section -->
-    <div style="margin-bottom: 2rem;">
-      <div style="display: flex; align-items: center; justify-content: between; gap: 1rem; margin-bottom: 1.5rem; flex-wrap: wrap;">
-        <div style="display: flex; align-items: center; gap: 1rem;">
-          <%= link_to providers_path, style: "color: #6b7280; hover:color: #374151; transition: colors 0.2s;" do %>
-            <svg style="width: 1.5rem; height: 1.5rem;" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+    <div class="section-spacing">
+      <div class="flex items-center justify-between gap-4 mb-6 flex-wrap">
+        <div class="flex items-center gap-4">
+          <%= link_to providers_path, class: "text-gray-500 hover:text-gray-700 transition-colors" do %>
+            <svg class="icon-size-lg" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18"/>
             </svg>
           <% end %>
-          <h1 style="font-size: 2rem; font-weight: 700; color: #1f2937; margin: 0;">
+          <h1 class="text-3xl font-bold text-gray-800 m-0">
             <%= @provider.name %>
           </h1>
-          <div class="bg-gradient-blue" style="color: white; padding: 0.375rem 0.75rem; border-radius: 9999px; font-size: 0.75rem; font-weight: 500;">
+          <div class="bg-gradient-blue text-white py-1.5 px-3 rounded-full text-xs font-medium">
             <%= @provider.provider_type || "Provider" %>
           </div>
         </div>
 
         <!-- Action Buttons -->
-        <div style="display: flex; gap: 0.75rem; flex-wrap: wrap;">
-          <%= link_to edit_provider_path(@provider), style: "background: linear-gradient(135deg, #dc2626 0%, #b91c1c 100%); color: white; font-weight: 600; padding: 0.75rem 1.5rem; border-radius: 0.5rem; text-decoration: none; font-size: 0.875rem; box-shadow: 0 4px 6px -1px rgba(220, 38, 38, 0.3); transition: all 0.2s; display: inline-flex; align-items: center; gap: 0.5rem;" do %>
-            <svg style="width: 1rem; height: 1rem;" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <div class="flex gap-3 flex-wrap">
+          <%= link_to edit_provider_path(@provider), class: "bg-gradient-red text-white font-semibold py-3 px-6 rounded-lg no-underline text-sm inline-flex items-center gap-2 shadow-red transition-all hover:-translate-y-0.5" do %>
+            <svg class="icon-size" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"/>
             </svg>
             Edit Provider
           <% end %>
 
           <%= button_to @provider, method: :delete,
-              data: { confirm: "Are you sure you want to delete #{@provider.name}? This action cannot be undone." },
-              style: "background: linear-gradient(135deg, #7f1d1d 0%, #991b1b 100%); color: white; font-weight: 600; padding: 0.75rem 1.5rem; border-radius: 0.5rem; border: none; cursor: pointer; font-size: 0.875rem; box-shadow: 0 4px 6px -1px rgba(127, 29, 29, 0.3); transition: all 0.2s; display: inline-flex; align-items: center; gap: 0.5rem;" do %>
-            <svg style="width: 1rem; height: 1rem;" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              data: { turbo_confirm: "Are you sure you want to delete #{@provider.name}? This action cannot be undone." },
+              class: "bg-gradient-to-br from-red-900 to-red-800 text-white font-semibold py-3 px-6 rounded-lg border-0 cursor-pointer text-sm shadow-md transition-all hover:-translate-y-0.5 inline-flex items-center gap-2" do %>
+            <svg class="icon-size" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"/>
             </svg>
             Delete Provider
@@ -45,65 +45,65 @@
       </div>
 
       <!-- Breadcrumb -->
-      <nav style="font-size: 0.875rem; color: #6b7280;">
-        <ol style="display: flex; gap: 0.5rem; list-style: none; padding: 0; margin: 0;">
-          <li><%= link_to "Dashboard", root_path, style: "color: #6b7280; text-decoration: none; hover:color: #374151;" %></li>
-          <li style="color: #d1d5db;">/</li>
-          <li><%= link_to "Providers", providers_path, style: "color: #6b7280; text-decoration: none; hover:color: #374151;" %></li>
-          <li style="color: #d1d5db;">/</li>
-          <li style="color: #374151; font-weight: 500;"><%= @provider.name %></li>
+      <nav class="breadcrumb-nav">
+        <ol class="breadcrumb-list">
+          <li><%= link_to "Dashboard", root_path, class: "text-gray-500 no-underline hover:text-gray-700" %></li>
+          <li class="breadcrumb-separator">/</li>
+          <li><%= link_to "Providers", providers_path, class: "text-gray-500 no-underline hover:text-gray-700" %></li>
+          <li class="breadcrumb-separator">/</li>
+          <li class="breadcrumb-current"><%= @provider.name %></li>
         </ol>
       </nav>
     </div>
 
     <!-- Main Content Grid -->
-    <div style="display: grid; grid-template-columns: 2fr 1fr; gap: 2rem;">
+    <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
 
       <!-- Left Column - Main Info -->
-      <div style="space-y: 2rem;">
+      <div class="lg:col-span-2 space-y-8">
 
         <!-- Provider Details Card -->
-        <div class="mb-6" style="background: white; border-radius: 1rem; box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04); overflow: hidden;">
-          <div style="background: linear-gradient(135deg, #1e40af 0%, #3730a3 100%); padding: 2rem; color: white;">
-            <div style="display: flex; align-items: center; gap: 1rem;">
-              <div style="background: rgba(255, 255, 255, 0.2); padding: 0.75rem; border-radius: 0.75rem;">
-                <svg style="width: 2rem; height: 2rem;" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <div class="card-elevated overflow-hidden">
+          <div class="bg-gradient-to-br from-blue-700 to-indigo-800 p-8 text-white">
+            <div class="flex-center">
+              <div class="icon-wrapper-translucent">
+                <svg class="icon-size-lg" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4"/>
                 </svg>
               </div>
               <div>
-                <h2 style="font-size: 1.5rem; font-weight: 700; margin: 0;">Provider Information</h2>
-                <p style="margin: 0.5rem 0 0 0; color: rgba(255, 255, 255, 0.8);">
+                <h2 class="text-2xl font-bold m-0">Provider Information</h2>
+                <p class="mt-2 m-0 text-white/80">
                   Core details and configuration
                 </p>
               </div>
             </div>
           </div>
 
-          <div style="padding: 2rem;">
-            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 2rem;">
+          <div class="card-body">
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
 
               <div>
-                <label style="display: block; font-size: 0.875rem; font-weight: 600; color: #6b7280; margin-bottom: 0.5rem;">Provider Name</label>
-                <div style="background: #f8fafc; padding: 1rem; border-radius: 0.5rem; border: 1px solid #e2e8f0;">
-                  <span style="font-size: 1rem; font-weight: 600; color: #1f2937;"><%= @provider.name %></span>
+                <label class="input-label">Provider Name</label>
+                <div class="bg-gray-50 p-4 rounded-lg border border-gray-200">
+                  <span class="text-base font-semibold text-gray-800"><%= @provider.name %></span>
                 </div>
               </div>
 
               <div>
-                <label style="display: block; font-size: 0.875rem; font-weight: 600; color: #6b7280; margin-bottom: 0.5rem;">Provider Type</label>
-                <div style="background: #f8fafc; padding: 1rem; border-radius: 0.5rem; border: 1px solid #e2e8f0;">
-                  <span style="font-size: 1rem; color: #1f2937;"><%= @provider.provider_type || "Not specified" %></span>
+                <label class="input-label">Provider Type</label>
+                <div class="bg-gray-50 p-4 rounded-lg border border-gray-200">
+                  <span class="text-base text-gray-800"><%= @provider.provider_type || "Not specified" %></span>
                 </div>
               </div>
 
               <div>
-                <label style="display: block; font-size: 0.875rem; font-weight: 600; color: #6b7280; margin-bottom: 0.5rem;">File Name Prefix</label>
-                <div style="background: #f8fafc; padding: 1rem; border-radius: 0.5rem; border: 1px solid #e2e8f0;">
+                <label class="input-label">File Name Prefix</label>
+                <div class="bg-gray-50 p-4 rounded-lg border border-gray-200">
                   <% if @provider.file_name_prefix.present? %>
-                    <code style="background: #1f2937; color: #10b981; padding: 0.25rem 0.5rem; border-radius: 0.25rem; font-size: 0.875rem;"><%= @provider.file_name_prefix %></code>
+                    <code class="bg-gray-800 text-green-400 py-1 px-2 rounded text-sm"><%= @provider.file_name_prefix %></code>
                   <% else %>
-                    <span style="color: #9ca3af; font-style: italic;">No prefix assigned</span>
+                    <span class="text-gray-400 italic">No prefix assigned</span>
                   <% end %>
                 </div>
               </div>
@@ -113,30 +113,30 @@
         </div>
 
         <!-- Regions Card -->
-        <div class="mb-6" style="background: white; border-radius: 1rem; box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04); overflow: hidden;">
-          <div class="bg-gradient-green" style="padding: 1.5rem; color: white;">
-            <div style="display: flex; align-items: center; gap: 1rem;">
-              <div style="background: rgba(255, 255, 255, 0.2); padding: 0.5rem; border-radius: 0.5rem;">
-                <svg style="width: 1.5rem; height: 1.5rem;" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <div class="card-elevated overflow-hidden">
+          <div class="bg-gradient-green p-6 text-white">
+            <div class="flex items-center gap-4">
+              <div class="icon-wrapper-translucent">
+                <svg class="icon-size-md" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"/>
                   <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"/>
                 </svg>
               </div>
               <div>
-                <h3 style="font-size: 1.25rem; font-weight: 600; margin: 0;">Service Regions</h3>
-                <p style="margin: 0.25rem 0 0 0; color: rgba(255, 255, 255, 0.8); font-size: 0.875rem;">
+                <h3 class="text-xl font-semibold m-0">Service Regions</h3>
+                <p class="mt-1 m-0 text-white/80 text-sm">
                   <%= pluralize(@provider.regions.count, 'region') %> served
                 </p>
               </div>
             </div>
           </div>
 
-          <div style="padding: 1.5rem;">
+          <div class="p-6">
             <% if @provider.regions.any? %>
-              <div style="display: flex; flex-wrap: wrap; gap: 0.75rem;">
+              <div class="flex flex-wrap gap-3">
                 <% @provider.regions.each do |region| %>
-                  <%= link_to region_path(region), style: "background: linear-gradient(135deg, #f0f9ff 0%, #e0f2fe 100%); border: 1px solid #bae6fd; color: #0369a1; padding: 0.5rem 1rem; border-radius: 9999px; font-size: 0.875rem; font-weight: 500; text-decoration: none; transition: all 0.2s; display: inline-flex; align-items: center; gap: 0.5rem;" do %>
-                    <svg style="width: 0.875rem; height: 0.875rem;" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <%= link_to region_path(region), class: "bg-gradient-to-br from-sky-50 to-sky-100 border border-sky-200 text-sky-700 py-2 px-4 rounded-full text-sm font-medium no-underline transition-all hover:bg-sky-200 hover:border-sky-300 hover:-translate-y-0.5 inline-flex items-center gap-2" do %>
+                    <svg class="icon-size-sm" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                       <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"/>
                       <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"/>
                     </svg>
@@ -145,56 +145,56 @@
                 <% end %>
               </div>
             <% else %>
-              <div style="text-align: center; color: #6b7280; padding: 2rem;">
-                <svg style="width: 3rem; height: 3rem; margin: 0 auto 1rem; color: #d1d5db;" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <div class="text-center text-gray-500 py-8">
+                <svg class="w-12 h-12 mx-auto mb-4 text-gray-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"/>
                   <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"/>
                 </svg>
-                <p style="margin: 0; font-style: italic;">No regions assigned to this provider</p>
+                <p class="m-0 italic">No regions assigned to this provider</p>
               </div>
             <% end %>
           </div>
         </div>
 
         <!-- Contributors Card -->
-        <div style="background: white; border-radius: 1rem; box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04); overflow: hidden;">
-          <div class="bg-gradient-purple" style="padding: 1.5rem; color: white;">
-            <div style="display: flex; align-items: center; gap: 1rem;">
-              <div style="background: rgba(255, 255, 255, 0.2); padding: 0.5rem; border-radius: 0.5rem;">
-                <svg style="width: 1.5rem; height: 1.5rem;" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <div class="card-elevated overflow-hidden">
+          <div class="bg-gradient-purple p-6 text-white">
+            <div class="flex items-center gap-4">
+              <div class="icon-wrapper-translucent">
+                <svg class="icon-size-md" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197m13.5-9a2.5 2.5 0 11-5 0 2.5 2.5 0 015 0z"/>
                 </svg>
               </div>
               <div>
-                <h3 style="font-size: 1.25rem; font-weight: 600; margin: 0;">Contributors</h3>
-                <p style="margin: 0.25rem 0 0 0; color: rgba(255, 255, 255, 0.8); font-size: 0.875rem;">
+                <h3 class="text-xl font-semibold m-0">Contributors</h3>
+                <p class="mt-1 m-0 text-white/80 text-sm">
                   <%= pluralize(@provider.users.count, 'contributor') %>
                 </p>
               </div>
             </div>
           </div>
 
-          <div style="padding: 1.5rem;">
+          <div class="p-6">
             <% if @provider.users.any? %>
-              <div style="space-y: 0.75rem;">
+              <div class="space-y-3">
                 <% @provider.users.each do |user| %>
-                  <%= link_to user_path(user), style: "display: flex; align-items: center; gap: 1rem; padding: 1rem; background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 0.5rem; text-decoration: none; transition: all 0.2s;" do %>
-                    <div style="background: linear-gradient(135deg, #8b5cf6 0%, #7c3aed 100%); color: white; width: 2.5rem; height: 2.5rem; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-weight: 600; font-size: 0.875rem;">
+                  <%= link_to user_path(user), class: "flex items-center gap-4 p-4 bg-gray-50 border border-gray-200 rounded-lg no-underline transition-all hover:bg-gray-100 hover:border-gray-300 hover:-translate-y-0.5" do %>
+                    <div class="bg-gradient-purple text-white w-10 h-10 rounded-full flex items-center justify-center font-semibold text-sm">
                       <%= user.email.first.upcase %>
                     </div>
                     <div>
-                      <div style="font-weight: 600; color: #1f2937; font-size: 0.875rem;"><%= user.email %></div>
-                      <div style="color: #6b7280; font-size: 0.75rem;">Contributor</div>
+                      <div class="font-semibold text-gray-800 text-sm"><%= user.email %></div>
+                      <div class="text-gray-500 text-xs">Contributor</div>
                     </div>
                   <% end %>
                 <% end %>
               </div>
             <% else %>
-              <div style="text-align: center; color: #6b7280; padding: 2rem;">
-                <svg style="width: 3rem; height: 3rem; margin: 0 auto 1rem; color: #d1d5db;" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <div class="text-center text-gray-500 py-8">
+                <svg class="w-12 h-12 mx-auto mb-4 text-gray-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197m13.5-9a2.5 2.5 0 11-5 0 2.5 2.5 0 015 0z"/>
                 </svg>
-                <p style="margin: 0; font-style: italic;">No contributors assigned to this provider</p>
+                <p class="m-0 italic">No contributors assigned to this provider</p>
               </div>
             <% end %>
           </div>
@@ -203,39 +203,39 @@
 
       <!-- Right Column - Metadata -->
       <div>
-        <div style="background: white; border-radius: 1rem; box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04); overflow: hidden; position: sticky; top: 2rem;">
-          <div class="bg-gradient-amber" style="padding: 1.5rem; color: white;">
-            <div style="display: flex; align-items: center; gap: 1rem;">
-              <div style="background: rgba(255, 255, 255, 0.2); padding: 0.5rem; border-radius: 0.5rem;">
-                <svg style="width: 1.5rem; height: 1.5rem;" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <div class="card-elevated overflow-hidden sticky top-8">
+          <div class="bg-gradient-amber p-6 text-white">
+            <div class="flex items-center gap-4">
+              <div class="icon-wrapper-translucent">
+                <svg class="icon-size-md" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"/>
                 </svg>
               </div>
               <div>
-                <h3 style="font-size: 1.25rem; font-weight: 600; margin: 0;">Metadata</h3>
-                <p style="margin: 0.25rem 0 0 0; color: rgba(255, 255, 255, 0.8); font-size: 0.875rem;">
+                <h3 class="text-xl font-semibold m-0">Metadata</h3>
+                <p class="mt-1 m-0 text-white/80 text-sm">
                   System information
                 </p>
               </div>
             </div>
           </div>
 
-          <div style="padding: 1.5rem; space-y: 1.5rem;">
+          <div class="p-6 space-y-6">
             <div>
-              <label style="display: block; font-size: 0.75rem; font-weight: 600; color: #6b7280; margin-bottom: 0.5rem; text-transform: uppercase; letter-spacing: 0.05em;">Created</label>
-              <div style="color: #1f2937; font-weight: 500;"><%= @provider.created_at.strftime("%B %d, %Y") %></div>
-              <div style="color: #6b7280; font-size: 0.875rem;"><%= @provider.created_at.strftime("%I:%M %p") %></div>
+              <label class="block text-xs font-semibold text-gray-500 mb-2 uppercase tracking-wider">Created</label>
+              <div class="text-gray-800 font-medium"><%= @provider.created_at.strftime("%B %d, %Y") %></div>
+              <div class="text-gray-500 text-sm"><%= @provider.created_at.strftime("%I:%M %p") %></div>
             </div>
 
             <div>
-              <label style="display: block; font-size: 0.75rem; font-weight: 600; color: #6b7280; margin-bottom: 0.5rem; text-transform: uppercase; letter-spacing: 0.05em;">Last Updated</label>
-              <div style="color: #1f2937; font-weight: 500;"><%= @provider.updated_at.strftime("%B %d, %Y") %></div>
-              <div style="color: #6b7280; font-size: 0.875rem;"><%= @provider.updated_at.strftime("%I:%M %p") %></div>
+              <label class="block text-xs font-semibold text-gray-500 mb-2 uppercase tracking-wider">Last Updated</label>
+              <div class="text-gray-800 font-medium"><%= @provider.updated_at.strftime("%B %d, %Y") %></div>
+              <div class="text-gray-500 text-sm"><%= @provider.updated_at.strftime("%I:%M %p") %></div>
             </div>
 
             <div>
-              <label style="display: block; font-size: 0.75rem; font-weight: 600; color: #6b7280; margin-bottom: 0.5rem; text-transform: uppercase; letter-spacing: 0.05em;">Provider ID</label>
-              <div style="font-family: 'SF Mono', Monaco, monospace; background: #f3f4f6; padding: 0.5rem; border-radius: 0.25rem; font-size: 0.875rem; color: #374151;">#<%= @provider.id %></div>
+              <label class="block text-xs font-semibold text-gray-500 mb-2 uppercase tracking-wider">Provider ID</label>
+              <div class="font-mono bg-gray-100 p-2 rounded text-sm text-gray-700">#<%= @provider.id %></div>
             </div>
           </div>
         </div>
@@ -243,37 +243,3 @@
     </div>
   </div>
 </div>
-
-<style>
-  /* Hover effects for action buttons */
-  a[href*="edit"]:hover, button[data-method="delete"]:hover {
-    transform: translateY(-2px) !important;
-    box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.25) !important;
-  }
-
-  /* Region link hovers */
-  a[href*="region"]:hover {
-    background: linear-gradient(135deg, #dbeafe 0%, #bfdbfe 100%) !important;
-    border-color: #93c5fd !important;
-    transform: translateY(-1px);
-  }
-
-  /* User link hovers */
-  a[href*="user"]:hover {
-    background: #f3f4f6 !important;
-    border-color: #d1d5db !important;
-    transform: translateY(-1px);
-  }
-
-  /* Responsive grid */
-  @media (max-width: 768px) {
-    div[style*="grid-template-columns: 2fr 1fr"] {
-      grid-template-columns: 1fr !important;
-    }
-
-    div[style*="display: flex"][style*="justify-content: between"] {
-      flex-direction: column !important;
-      align-items: flex-start !important;
-    }
-  }
-</style>
