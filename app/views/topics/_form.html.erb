@@ -141,16 +141,15 @@
         </label>
 
 
-        <div style="display: flex; justify-content: space-between; align-items: center; padding-top: 2rem; border-top: 1px solid #f3f4f6; margin-top: 2rem;">
-          <div style="display: flex; gap: 1rem;">
-            <%= f.submit "Save Topic", data: { upload_target: "submitButton" }, class: "bg-gradient-green", style: "color: white; font-weight: 600; padding: 0.75rem 2rem; border-radius: 0.5rem; border: none; cursor: pointer; font-size: 0.875rem; box-shadow: 0 4px 6px -1px rgba(16, 185, 129, 0.3); transition: all 0.2s;" %>
+        <div class="flex justify-between items-center pt-8 border-t border-gray-100 mt-8">
+          <div class="flex gap-4">
+            <%= f.submit "Save Topic", data: { upload_target: "submitButton" }, class: "bg-gradient-green text-white font-semibold py-3 px-8 rounded-lg border-0 cursor-pointer text-sm shadow-md transition-all hover:-translate-y-0.5" %>
             <%= link_to "Back to Topics", topics_path,
-              class: "topic-form-cancel-btn",
-              style: "background: #f3f4f6; color: #6b7280; font-weight: 600; padding: 0.75rem 2rem; border-radius: 0.5rem; text-decoration: none; font-size: 0.875rem; transition: all 0.2s; display: inline-block;" %>
+              class: "bg-gray-100 text-gray-500 font-semibold py-3 px-8 rounded-lg no-underline text-sm transition-all hover:bg-gray-200" %>
           </div>
 
           <% if topic.persisted? %>
-            <div style="color: #6b7280; font-size: 0.75rem;">
+            <div class="text-gray-500 text-xs">
               Last updated: <%= topic.updated_at.strftime("%B %d, %Y at %I:%M %p") %>
             </div>
           <% end %>

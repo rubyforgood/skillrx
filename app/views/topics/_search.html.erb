@@ -1,17 +1,17 @@
-<div style="background: white; border-radius: 1rem; box-shadow: 0 10px 15px -3px rgba(0,0,0,0.1), 0 4px 6px -2px rgba(0,0,0,0.05); overflow: hidden;">
-  <div style="background: linear-gradient(135deg, #f0f9ff 0%, #e0f2fe 100%); padding: 1.5rem; border-bottom: 1px solid #bae6fd;">
-    <div style="display: flex; align-items: center; gap: 0.75rem;">
-      <div style="background: linear-gradient(135deg, #0ea5e9 0%, #0284c7 100%); color: white; padding: 0.5rem; border-radius: 0.5rem;">
-        <svg style="width: 1.25rem; height: 1.25rem;" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+<div class="card-elevated overflow-hidden">
+  <div class="bg-gradient-to-br from-sky-50 to-cyan-50 p-6 border-b border-sky-200">
+    <div class="flex-center-sm">
+      <div class="bg-gradient-to-br from-sky-500 to-sky-600 text-white p-2 rounded-lg">
+        <svg class="icon-size-md" fill="none" stroke="currentColor" viewBox="0 0 24 24">
           <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
         </svg>
       </div>
-      <h3 style="font-size: 1.125rem; font-weight: 600; color: #0c4a6e; margin: 0;">Search & Filter Topics</h3>
+      <h3 class="text-lg font-semibold text-sky-900 m-0">Search & Filter Topics</h3>
     </div>
   </div>
-  <div style="padding: 1.5rem;">
+  <div class="card-body-sm">
     <%= form_for :search, url: topics_path, method: :get, data: { controller: "topics", topics_target: "searchForm", turbo_frame: "topic-list", turbo_action: "advance" } do |f| %>
-      <div id="topics-search-grid" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 1.25rem; align-items: start;">
+      <div id="topics-search-grid" class="form-grid-auto items-start">
         <!-- Query -->
         <div class="form-grid-full">
           <%= f.label :query, class: "input-label" %>
@@ -23,11 +23,11 @@
         </div>
 
         <!-- Language & Tags -->
-        <div style="min-width:0; grid-column: 1 / -1;">
-          <div style="display:grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap:1rem; align-items:start;">
-            <div style="position:relative;">
+        <div class="min-w-0 col-span-full">
+          <div class="grid grid-cols-[repeat(auto-fit,minmax(220px,1fr))] gap-4 items-start">
+            <div class="relative">
               <%= f.label :language_id, "Language", class: "input-label" %>
-              <div style="position:relative;">
+              <div class="relative">
                 <%= f.select :language_id,
                              options_from_collection_for_select(languages, :id, :name, params.dig(:search, :language_id)),
                              { prompt: "Select language" },
@@ -37,7 +37,7 @@
               </div>
             </div>
 
-            <div data-controller="select-tags" style="position:relative;">
+            <div data-controller="select-tags" class="relative">
               <%= f.label :tag_list, "Tags", class: "input-label" %>
               <%= f.select :tag_list,
                            options_for_select(Tag.order(:name).pluck(:name), Array(params.dig(:search, :tag_list))),
@@ -51,9 +51,9 @@
         </div>
 
         <!-- Year -->
-        <div style="min-width:0; position:relative;">
+        <div class="min-w-0 relative">
           <%= f.label :year, class: "input-label" %>
-          <div style="position:relative;">
+          <div class="relative">
             <%= f.select :year,
                          options_for_select((Date.today.year-10..Date.today.year).to_a, params.dig(:search, :year)),
                          { prompt: "Select year" },
@@ -64,9 +64,9 @@
         </div>
 
         <!-- Month -->
-        <div style="min-width:0; position:relative;">
+        <div class="min-w-0 relative">
           <%= f.label :month, class: "input-label" %>
-          <div style="position:relative;">
+          <div class="relative">
             <%= f.select :month,
                          options_for_select((1..12).to_a, params.dig(:search, :month)),
                          { prompt: "Select month" },
@@ -78,9 +78,9 @@
         </div>
 
         <!-- State -->
-        <div style="min-width:0; position:relative;">
+        <div class="min-w-0 relative">
           <%= f.label :state, class: "input-label" %>
-          <div style="position:relative;">
+          <div class="relative">
             <%= f.select :state,
                          options_for_select(Topic::STATES.index_with(&:itself), params.dig(:search, :state)),
                          { prompt: "Select state" },
@@ -92,9 +92,9 @@
         </div>
 
         <!-- Order -->
-        <div style="min-width:0; position:relative;">
+        <div class="min-w-0 relative">
           <%= f.label :order, class: "input-label" %>
-          <div style="position:relative;">
+          <div class="relative">
             <%= f.select :order,
                          options_for_select(%w[desc asc].map { |o| [o, o] }, params.dig(:search, :order)),
                          {},
@@ -106,11 +106,10 @@
       </div>
 
       <!-- Clear Button -->
-      <div style="margin-top: 1.25rem; display: flex; justify-content: flex-end;">
+      <div class="mt-5 flex justify-end">
         <%= link_to topics_path,
-            class: "clear-filters-btn",
-            style: "background:#6b7280; color:white; padding:0.625rem 1.25rem; border-radius:0.5rem; text-decoration:none; font-weight:600; font-size:0.875rem; display:inline-flex; align-items:center; gap:0.5rem; transition:all 0.2s; box-shadow: 0 1px 2px 0 rgba(0,0,0,0.05);" do %>
-          <svg style="width: 1rem; height: 1rem;" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            class: "bg-gray-500 text-white py-2.5 px-5 rounded-lg no-underline font-semibold text-sm inline-flex items-center gap-2 transition-all shadow-sm hover:bg-gray-600 hover:-translate-y-0.5 hover:shadow-md" do %>
+          <svg class="icon-size" fill="none" stroke="currentColor" viewBox="0 0 24 24">
             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
           </svg>
           <span>Clear Filters</span>
@@ -119,38 +118,3 @@
     <% end %>
   </div>
 </div>
-
-<style>
-  /* Modern form input and select focus states */
-  input[type="text"]:focus, select:focus {
-    outline: none !important;
-    border-color: #3b82f6 !important;
-    box-shadow: 0 0 0 4px rgba(59, 130, 246, 0.1) !important;
-    background: white !important;
-  }
-
-  /* Select hover state */
-  select:hover:not(:focus) {
-    border-color: #9ca3af !important;
-    background: #fafafa !important;
-  }
-
-  /* Clear Filters button hover - specific to search form only */
-  .clear-filters-btn:hover {
-    background: #4b5563 !important;
-    transform: translateY(-1px);
-    box-shadow: 0 4px 6px -1px rgba(0,0,0,0.1), 0 2px 4px -1px rgba(0,0,0,0.06) !important;
-  }
-
-  /* Responsive grid collapse */
-  @media (max-width: 768px) {
-    div[style*="grid-template-columns: repeat(auto-fit, minmax(250px, 1fr))"] {
-      grid-template-columns: 1fr !important;
-    }
-  }
-
-  /* Prevent grid items from forcing overflow */
-  #topics-search-grid > div { min-width: 0 !important; }
-  /* Ensure the grid itself can shrink */
-  #topics-search-grid { min-width: 0; }
-</style>

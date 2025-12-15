@@ -1,7 +1,7 @@
 <%= form_for :provider, url: provider_settings_path, method: :put, data: { controller: "topics", topics_target: "chooseForm", turbo_frame: "topics", turbo_action: "advance" } do |f| %>
-  <div style="display:flex; flex-wrap:wrap; gap:0.75rem; align-items:center;">
-    <label for="provider_id" class="input-label" style="margin-bottom:0;">Provider</label>
-    <div style="position:relative; min-width: 220px; max-width: 100%; width: 320px;">
+  <div class="flex flex-wrap gap-3 items-center">
+    <label for="provider_id" class="input-label m-0">Provider</label>
+    <div class="relative min-w-[220px] max-w-full w-80">
       <%= f.select :id,
                    options_from_collection_for_select(providers, :id, :name),
                    { prompt: "Change provider" },
@@ -12,8 +12,3 @@
     </div>
   </div>
 <% end %>
-
-<style>
-  form[data-topics-target="chooseForm"] { max-width: 100%; }
-  form[data-topics-target="chooseForm"] select { max-width: 100%; }
-</style>
