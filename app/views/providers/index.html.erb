@@ -35,6 +35,8 @@
             <tr class="table-header">
               <th class="table-cell text-left">Provider</th>
               <th class="table-cell text-left">Type</th>
+              <th class="table-cell text-left">Prefix</th>
+              <th class="table-cell text-left">Region</th>
               <th class="table-cell text-right">Actions</th>
             </tr>
           </thead>
@@ -58,6 +60,20 @@
                     <span class="bg-sky-50 text-sky-900 py-1 px-3 rounded-full text-xs font-medium">
                       <%= provider.provider_type %>
                     </span>
+                  </td>
+                  <td class="table-cell">
+                    <% if provider.file_name_prefix %>
+                      <span class="bg-sky-50 text-sky-900 py-1 px-3 rounded-full text-xs font-medium">
+                        <%= provider.file_name_prefix %>
+                      </span>
+                    <% end %>
+                  </td>
+                  <td class="table-cell">
+                    <% provider.regions.each do |region| %>
+                      <span class="bg-sky-50 text-sky-900 py-1 px-3 rounded-full text-xs font-medium">
+                        <%= region.name %>
+                      </span>
+                    <% end %>
                   </td>
                   <td class="actions-col table-cell text-right">
                     <div class="flex gap-2 justify-end">
