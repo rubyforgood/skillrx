@@ -1,9 +1,1 @@
-<%# Use custom Tailwind pagination helper (defined in app/helpers/pagination_helper.rb) %>
-<%
-  search_params = if params[:search].present?
-    { search: params[:search].permit(:query, :name, :email, :order, :language_id, :tag_list, :year, :month, :state, :is_admin) }
-  else
-    {}
-  end
-%>
-<%= custom_pagy_nav(pagy, params: search_params) %>
+<%= pagy_nav(pagy).html_safe %>

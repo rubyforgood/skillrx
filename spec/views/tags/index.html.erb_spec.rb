@@ -28,7 +28,7 @@ RSpec.describe "tags/index", type: :view do
 
     it "does not render pagination when only one page present" do
       render
-      assert_select "nav[aria-label='Page navigation']", count: 0
+      assert_select "nav[aria-label='Pages']", count: 0
     end
   end
 
@@ -47,8 +47,8 @@ RSpec.describe "tags/index", type: :view do
 
     it "renders pagination with multiple pages" do
       render
-      assert_select "nav[aria-label='Page navigation'] ul li", count: 5 # Previous, 1, 2, 3, Next
-      assert_select "nav[aria-label='Page navigation'] ul li span[aria-current='page']", text: "2", count: 1
+      assert_select "nav[aria-label='Pages'] a", count: 5 # Previous, 1, 2, 3, Next
+      assert_select "nav[aria-label='Pages'] a[aria-current='page']", text: "2", count: 1
     end
   end
 end

@@ -254,3 +254,34 @@ select[data-select-tags-target="tagList"] {
   box-shadow: 0 20px 25px -5px rgba(59, 130, 246, 0.4),
     0 10px 10px -5px rgba(59, 130, 246, 0.1);
 }
+
+/* Pagy */
+nav.pagy {
+  @apply flex items-center justify-center my-4;
+}
+
+nav.pagy a {
+  @apply px-4 py-2 border border-gray-300 bg-gray-100 text-gray-700 font-medium text-sm transition-colors duration-200 rounded-none;
+  margin-left: -1px;
+}
+
+nav.pagy a:first-child {
+  @apply rounded-l-lg;
+  margin-left: 0;
+}
+
+nav.pagy a:last-child {
+  @apply rounded-r-lg;
+}
+
+nav.pagy a.gap {
+  @apply border-l-2 border-r-2 bg-white;
+}
+
+nav.pagy a:hover:not(.current):not(.gap) {
+  @apply bg-blue-800 text-white border-blue-800;
+}
+
+nav.pagy a.current {
+  @apply bg-blue-600 text-white border-blue-600 font-semibold;
+}
