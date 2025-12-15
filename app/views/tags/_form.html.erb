@@ -1,29 +1,29 @@
 <%= form_with(model: tag, local: true) do |form| %>
   <% if tag.errors.any? %>
-    <div style="background: linear-gradient(135deg, #fef2f2 0%, #fee2e2 100%); border: 1px solid #f87171; color: #dc2626; padding: 1.5rem; border-radius: 0.75rem; margin-bottom: 2rem;">
-      <div style="display: flex; align-items: center; gap: 0.75rem; margin-bottom: 1rem;">
-        <svg style="width: 1.25rem; height: 1.25rem; flex-shrink: 0;" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+    <div class="alert-error">
+      <div class="flex items-center gap-3 mb-4">
+        <svg class="icon-size-md text-red-600 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
           <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
         </svg>
-        <h3 style="font-size: 1.125rem; font-weight: 600; margin: 0;">
+        <h3 class="alert-error-title">
           <%= pluralize(tag.errors.count, "error") %> prohibited this tag from being saved:
         </h3>
       </div>
-      <ul style="margin: 0; padding-left: 1.5rem;">
+      <ul class="alert-error-list">
         <% tag.errors.each do |error| %>
-          <li style="margin-bottom: 0.5rem; font-weight: 500;"><%= error.full_message %></li>
+          <li class="mb-2 font-medium"><%= error.full_message %></li>
         <% end %>
       </ul>
     </div>
   <% end %>
 
-  <div style="space-y: 1.5rem;">
+  <div class="space-y-6">
 
     <!-- Tag Name Field -->
-    <div style="margin-bottom: 1.5rem;">
-      <%= form.label :name, style: "display: block; font-size: 0.875rem; font-weight: 600; color: #374151; margin-bottom: 0.5rem;" do %>
-        <div style="display: flex; align-items: center; gap: 0.5rem;">
-          <svg style="width: 1rem; height: 1rem;" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+    <div class="mb-6">
+      <%= form.label :name, class: "input-label" do %>
+        <div class="label-with-icon">
+          <svg class="icon-size" fill="none" stroke="currentColor" viewBox="0 0 24 24">
             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 7h.01M7 3h5c.512 0 1.024.195 1.414.586l7 7a2 2 0 010 2.828l-7 7a2 2 0 01-2.828 0l-7-7A1.994 1.994 0 013 12V7a4 4 0 014-4z"/>
           </svg>
           Tag Name
@@ -31,26 +31,24 @@
       <% end %>
       <%= form.text_field :name,
           placeholder: "Enter tag name (e.g., healthcare, technology, education)",
-          style: "width: 100%; padding: 0.875rem 1rem; border: 2px solid #e5e7eb; border-radius: 0.5rem; font-size: 0.875rem; transition: all 0.2s; background: white;",
-          onfocus: "this.style.borderColor='#8b5cf6'; this.style.boxShadow='0 0 0 3px rgba(139, 92, 246, 0.1)';",
-          onblur: "this.style.borderColor='#e5e7eb'; this.style.boxShadow='none';" %>
-      <p style="margin: 0.5rem 0 0 0; font-size: 0.75rem; color: #6b7280;">
+          class: "form-input" %>
+      <p class="text-muted">
         Provide a clear, descriptive name for this content classification tag.
       </p>
     </div>
 
     <!-- Cognates Field -->
-    <div data-controller="select-tags" style="margin-bottom: 1.5rem;">
-      <div style="display: flex; justify-content: space-between; align-items: end; margin-bottom: 0.5rem;">
-        <%= form.label :cognates_list, style: "font-size: 0.875rem; font-weight: 600; color: #374151;" do %>
-          <div style="display: flex; align-items: center; gap: 0.5rem;">
-            <svg style="width: 1rem; height: 1rem;" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+    <div data-controller="select-tags" class="mb-6">
+      <div class="flex justify-between items-end mb-2">
+        <%= form.label :cognates_list, class: "input-label" do %>
+          <div class="label-with-icon">
+            <svg class="icon-size" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13.828 10.172a4 4 0 00-5.656 0l-4 4a4 4 0 105.656 5.656l1.102-1.101m-.758-4.899a4 4 0 005.656 0l4-4a4 4 0 00-5.656-5.656l-1.1 1.1"/>
             </svg>
             Related Tags (Cognates)
           </div>
         <% end %>
-        <small style="font-size: 0.75rem; color: #6b7280; font-weight: 400; text-transform: uppercase; letter-spacing: 0.05em;">
+        <small class="text-xs text-gray-500 font-normal uppercase tracking-wider">
           Press enter to add a new tag
         </small>
       </div>
@@ -66,7 +64,7 @@
           multiple: true,
           data: { "allow-clear": "true", "select-tags-target": "tagList" } %>
 
-      <p style="margin: 0.5rem 0 0 0; font-size: 0.75rem; color: #6b7280;">
+      <p class="text-muted">
         Select related tags that share similar meanings or contexts. These help with content discovery and organization.
       </p>
     </div>
@@ -74,62 +72,15 @@
   </div>
 
   <!-- Form Actions -->
-  <div style="margin-top: 2rem; padding-top: 2rem; border-top: 1px solid #e5e7eb; display: flex; gap: 1rem; justify-content: flex-end; flex-wrap: wrap;">
-    <%= link_to tags_path, style: "background: #6b7280; color: white; padding: 0.875rem 1.75rem; border-radius: 0.5rem; text-decoration: none; font-weight: 600; font-size: 0.875rem; display: inline-flex; align-items: center; gap: 0.5rem; transition: all 0.2s;" do %>
-      <svg style="width: 1rem; height: 1rem;" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+  <div class="mt-8 pt-8 border-t border-gray-200 flex gap-4 justify-end flex-wrap">
+    <%= link_to tags_path, class: "bg-gray-500 text-white py-3.5 px-7 rounded-lg no-underline font-semibold text-sm inline-flex items-center gap-2 transition-all hover:bg-gray-600 hover:-translate-y-0.5" do %>
+      <svg class="icon-size" fill="none" stroke="currentColor" viewBox="0 0 24 24">
         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
       </svg>
       <span>Cancel</span>
     <% end %>
 
     <%= form.submit (tag.persisted? ? "Update Tag" : "Create Tag"),
-        style: "background: linear-gradient(135deg, #8b5cf6 0%, #7c3aed 100%); color: white; padding: 0.875rem 1.75rem; border-radius: 0.5rem; border: none; font-weight: 600; font-size: 0.875rem; display: inline-flex; align-items: center; gap: 0.5rem; cursor: pointer; transition: all 0.2s;" %>
+        class: "bg-gradient-purple text-white py-3.5 px-7 rounded-lg border-0 font-semibold text-sm inline-flex items-center gap-2 cursor-pointer transition-all shadow-blue hover:-translate-y-0.5" %>
   </div>
 <% end %>
-
-<style>
-  /* Form input focus effects */
-  form input[type="text"]:focus, form select:focus {
-    outline: none;
-  }
-
-  /* Button hover effects */
-  a[style*="background: #6b7280"]:hover {
-    background: #4b5563 !important;
-    transform: translateY(-1px);
-  }
-
-  input[type="submit"]:hover {
-    box-shadow: 0 10px 15px -3px rgba(139, 92, 246, 0.4), 0 4px 6px -2px rgba(139, 92, 246, 0.05) !important;
-    transform: translateY(-1px);
-  }
-
-  /* Multi-select styling */
-  select[multiple] {
-    appearance: none;
-    background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 20 20'%3e%3cpath stroke='%236b7280' stroke-linecap='round' stroke-linejoin='round' stroke-width='1.5' d='m6 8 4 4 4-4'/%3e%3c/svg%3e");
-    background-position: right 0.5rem center;
-    background-repeat: no-repeat;
-    background-size: 1.5em 1.5em;
-    padding-right: 2.5rem;
-  }
-
-  /* Responsive design */
-  @media (max-width: 640px) {
-    div[style*="justify-content: flex-end"] {
-      flex-direction: column !important;
-      align-items: stretch !important;
-    }
-
-    a, input[type="submit"] {
-      text-align: center !important;
-      justify-content: center !important;
-    }
-
-    div[style*="display: flex; justify-content: space-between"] {
-      flex-direction: column !important;
-      align-items: flex-start !important;
-      gap: 0.5rem !important;
-    }
-  }
-</style>
