@@ -48,6 +48,16 @@
         // Password visibility toggle (if needed)
         const passwordFields = document.querySelectorAll('input[type="password"]');
         passwordFields.forEach(field => {
+          // Create wrapper div for the input field
+          const wrapper = document.createElement('div');
+          wrapper.style.position = 'relative';
+          wrapper.style.display = 'block';
+
+          // Insert wrapper before the field and move field into wrapper
+          field.parentNode.insertBefore(wrapper, field);
+          wrapper.appendChild(field);
+
+          // Create toggle button
           const toggleBtn = document.createElement('button');
           toggleBtn.type = 'button';
           toggleBtn.className = 'btn btn-link position-absolute end-0 top-50 translate-middle-y me-3';
@@ -56,8 +66,8 @@
           toggleBtn.style.border = 'none';
           toggleBtn.style.background = 'none';
 
-          field.parentElement.style.position = 'relative';
-          field.parentElement.appendChild(toggleBtn);
+          // Append button to wrapper
+          wrapper.appendChild(toggleBtn);
 
           toggleBtn.addEventListener('click', function() {
             const type = field.getAttribute('type') === 'password' ? 'text' : 'password';
