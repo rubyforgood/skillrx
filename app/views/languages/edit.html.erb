@@ -1,19 +1,36 @@
 <% content_for :title, "Editing language" %>
 
-<section id="basic-vertical-layouts">
-  <div class="row match-height">
-    <div class="col-md-6 col-12">
-      <div class="card">
-        <div class="card-header">
-          <h2 class="card-title">Edit language</h2>
-        </div>
-        <div class="card-content">
-          <div class="card-body">
-            <%= render "form", language: @language %>
+<div class="bg-gradient-page page-container">
+  <div class="max-w-2xl mx-auto px-4">
+
+    <!-- Breadcrumb -->
+    <nav class="breadcrumb-nav">
+      <ol class="breadcrumb-list">
+        <li><%= link_to "Languages", languages_path, class: "text-gray-500 no-underline hover:text-gray-700" %></li>
+        <li class="breadcrumb-separator">/</li>
+        <li class="breadcrumb-current">Edit <%= @language.name %></li>
+      </ol>
+    </nav>
+
+    <!-- Main Card -->
+    <div class="card-elevated overflow-hidden">
+      <!-- Header -->
+      <div class="bg-gradient-amber p-8 text-white">
+        <div class="flex items-center gap-4">
+          <div class="w-12 h-12 bg-white/20 rounded-xl flex items-center justify-center font-semibold text-lg backdrop-blur-sm">
+            <%= @language.name.first.upcase %>
+          </div>
+          <div>
+            <h1 class="text-2xl font-bold m-0">Edit Language</h1>
+            <p class="text-white/80 mt-1 m-0 text-sm">Update settings for "<%= @language.name %>"</p>
           </div>
         </div>
       </div>
+
+      <!-- Form Content -->
+      <div class="card-body">
+        <%= render "form", language: @language %>
+      </div>
     </div>
   </div>
-</section>
-
+</div>

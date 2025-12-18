@@ -7,14 +7,14 @@ export default class extends Controller {
     "filesContainer",
     "hiddenField",
     "submitButton",
-    "spinner",
   ];
 
   uploadFile(event) {
     event.preventDefault();
 
-    this.submitButtonTarget.classList.add("disabled");
-    this.spinnerTarget.classList.remove("d-none");
+    this.submitButtonTarget.disabled = true;
+    this.submitButtonTarget.classList.add("disabled:opacity-75");
+    this.submitButtonTarget.value = "Uploading...";
 
     const filesInput = this.filesInputTarget;
     let files = Array.from(filesInput.files);
@@ -43,8 +43,9 @@ export default class extends Controller {
           filesInput.value = "";
         }
 
-        this.submitButtonTarget.classList.remove("disabled");
-        this.spinnerTarget.classList.add("d-none");
+        this.submitButtonTarget.disabled = false;
+        this.submitButtonTarget.classList.remove("disabled:opacity-75");
+        this.submitButtonTarget.value = "Save Topic";
       });
   }
 

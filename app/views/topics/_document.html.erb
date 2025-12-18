@@ -7,7 +7,7 @@
     <input type="hidden" name="topic[document_signed_ids][]" value="<%= signed_id %>">
   <% end %>
 
-  <button id="remove-button-<%= blob_counter %>" class="btn btn-primary py-1 px-2 ml-5" data-action="click->upload#removeFile" data-signed-id="<%= signed_id %>">
+  <button id="remove-button-<%= blob_counter %>" class="ml-2 rounded bg-indigo-700 text-white cursor-pointer" data-action="click->upload#removeFile" data-signed-id="<%= signed_id %>">
     <span class="button-span w-5 h-5 flex items-center justify-center">X</span>
   </button>
 </div>

@@ -1,18 +1,31 @@
+<%= form_for language, local: true do |f| %>
+  <div class="space-y-6">
+    <%= render "shared/errors", errors: language.errors.full_messages, resource_name: language.class.name %>
 
-<%= form_for language do |f| %>
-  <div class="form-body">
-    <div class="row">
-      <%= render "shared/errors", errors: language.errors.full_messages, resource_name: language.class.name %>
-      <div class="col-12">
-        <div class="form-group">
-          <%= f.label :name %>
-          <%= f.text_field :name, class: "form-control", placeholder: "Name" %>
-        </div>
-        <div class="col-12 d-flex justify-content-end">
-          <%= f.submit class: "btn btn-primary me-1 mb-1" %>
-          <%= link_to "Cancel", languages_path, class: "btn btn-light-secondary me-1 mb-1" %>
-        </div>
+    <div>
+      <%= f.label :name, class: "input-label" do %>
+        Language Name
+        <span class="text-red-500">*</span>
+      <% end %>
+      <%= f.text_field :name,
+          placeholder: "Enter language name (e.g., English, Spanish, French)",
+          class: "input-field bg-gray-50" %>
+      <p class="mt-2 text-xs text-gray-500 m-0">This will be used to identify the language throughout the system.</p>
+    </div>
+
+    <div class="flex justify-between items-center pt-8 border-t border-gray-100 mt-8">
+      <div class="flex gap-4">
+        <%= f.submit (language.persisted? ? "Update Language" : "Create Language"),
+            class: "bg-gradient-green text-white font-semibold py-3 px-8 rounded-lg border-0 cursor-pointer text-sm shadow-green transition-all hover:-translate-y-0.5" %>
+        <%= link_to "Cancel", languages_path,
+            class: "bg-gray-100 text-gray-500 font-semibold py-3 px-8 rounded-lg no-underline text-sm transition-all hover:bg-gray-200" %>
       </div>
+
+      <% if language.persisted? %>
+        <div class="text-gray-500 text-xs">
+          Last updated: <%= language.updated_at.strftime("%B %d, %Y at %I:%M %p") %>
+        </div>
+      <% end %>
     </div>
   </div>
 <% end %>

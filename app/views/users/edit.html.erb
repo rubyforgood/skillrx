@@ -1,10 +1,62 @@
 <% content_for :title, "Editing user" %>
 
-<h1>Editing user</h1>
+<% if notice %>
+  <div class="alert-success">
+    <%= notice %>
+  </div>
+<% end %>
 
-<%= render "form", user: @user %>
+<div class="bg-gradient-page page-container">
+  <div class="form-container">
 
-<div class="mt-4">
-  <%= link_to "Show this user", @user %> |
-  <%= link_to "Back to users", users_path %>
+    <!-- Header Section -->
+    <div class="section-spacing">
+      <div class="flex items-center justify-between gap-4 mb-6 flex-wrap">
+        <div class="flex-center">
+          <%= link_to users_path, class: "text-gray-500 hover:text-gray-700 transition-colors" do %>
+            <svg class="icon-size-lg" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18"/>
+            </svg>
+          <% end %>
+          <h1 class="text-3xl font-bold text-gray-800 m-0">
+            Edit User
+          </h1>
+          <div class="bg-gradient-amber text-white py-1.5 px-3 rounded-full text-xs font-medium">
+            <%= @user.is_admin? ? "Administrator" : "Contributor" %>
+          </div>
+        </div>
+      </div>
+
+      <!-- Breadcrumb -->
+      <nav class="breadcrumb-nav">
+        <ol class="breadcrumb-list">
+          <li><%= link_to "Dashboard", root_path, class: "text-gray-500 no-underline hover:text-gray-700" %></li>
+          <li class="breadcrumb-separator">/</li>
+          <li><%= link_to "Users", users_path, class: "text-gray-500 no-underline hover:text-gray-700" %></li>
+          <li class="breadcrumb-separator">/</li>
+          <li class="breadcrumb-current"><%= @user.email %></li>
+        </ol>
+      </nav>
+    </div>
+
+    <!-- Form Card -->
+    <div class="card-elevated overflow-hidden">
+
+      <!-- Card Header -->
+      <div class="bg-gradient-amber p-8 text-white">
+        <div class="flex-center mb-2">
+          <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"/>
+          </svg>
+          <h2 class="text-2xl font-bold m-0">Edit User Information</h2>
+        </div>
+        <p class="m-0 opacity-90 text-sm">Update user account details and permissions</p>
+      </div>
+
+      <!-- Card Body -->
+      <div class="card-body">
+        <%= render "form", user: @user %>
+      </div>
+    </div>
+  </div>
 </div>

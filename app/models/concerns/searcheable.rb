@@ -9,11 +9,15 @@ module Searcheable
     end
 
     def by_year(year)
-      where("extract(year from created_at) = ?", year)
+      return all if year.blank?
+
+      where("extract(year from created_at) = ?", year.to_i)
     end
 
     def by_month(month)
-      where("extract(month from created_at) = ?", month)
+      return all if month.blank?
+
+      where("extract(month from created_at) = ?", month.to_i)
     end
 
     def by_language(language_id)
@@ -21,7 +25,13 @@ module Searcheable
     end
 
     def by_state(state)
-      where(state: state)
+      return all if state.blank?
+
+      if respond_to?(:states) && states.key?(state.to_s)
+        where(state: states[state.to_s])
+      else
+        where(state: state)
+      end
     end
 
     def by_tag_list(tag_list)
@@ -44,7 +54,10 @@ module Searcheable
         .then { |scope| params[:month].present? ? scope.by_month(params[:month]) : scope }
         .then { |scope| params[:query].present? ? scope.search(params[:query]) : scope }
         .then { |scope| params[:tag_list].present? ? scope.by_tag_list(params[:tag_list]) : scope }
-        .then { |scope| scope.order(created_at: sort_order(params[:order].present? ? params[:order].to_sym : :desc)) }
+        .then do |scope|
+          order_column = scope.klass.column_names.include?("published_at") ? :published_at : :created_at
+          scope.order(order_column => sort_order(params[:order].present? ? params[:order].to_sym : :desc))
+        end
     end
   end
 end

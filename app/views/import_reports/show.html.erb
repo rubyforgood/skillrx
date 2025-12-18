@@ -1,132 +1,298 @@
 <% content_for :title, "Import Report ##{@import_report.id}" %>
 
-<div class="section">
-  <h3 class="mb-4">Import Report: #<%= @import_report.id %></h3>
-  <div class="card mb-6">
-    <div class="card-header">
-      <div class="card-title">
-        <h3><%= @import_report.import_type.humanize %> Import</h3>
-      </div>
-    </div>
-    <div class="card-body">
-      <div class="row mb-2">
-        <div class="col-md-3"><strong>Status:</strong></div>
-        <div class="col-md-9">
-          <span class="badge bg-alert %>">
-            <%= @import_report.status %>
-          </span>
-        </div>
-      </div>
-      <div class="row mb-2">
-        <div class="col-md-3"><strong>Import Type:</strong></div>
-        <div class="col-md-9"><%= @import_report.import_type.humanize %></div>
-      </div>
-      <div class="row mb-2">
-        <div class="col-md-3"><strong>Started At:</strong></div>
-        <div class="col-md-9">
-          <%= @import_report.started_at&.strftime('%m/%d/%Y %I:%M %p') || "Not started" %>
-        </div>
-      </div>
-      <div class="row mb-2">
-        <div class="col-md-3"><strong>Completed At:</strong></div>
-        <div class="col-md-9">
-          <%= @import_report.completed_at&.strftime('%m/%d/%Y %I:%M %p') || "Not completed" %>
-        </div>
-      </div>
-      <% if @import_report.summary_stats.present? %>
-        <div class="row mb-2">
-          <div class="col-md-3"><strong>Summary Stats:</strong></div>
-          <div class="col-md-9">
-            <pre class="bg-light p-2 rounded"><%= JSON.pretty_generate(@import_report.summary_stats) %></pre>
-          </div>
-        </div>
-      <% end %>
-    </div>
-    <div class="card-footer">
-      <div class="row">
-        <div class="col-md-3"><strong>Created:</strong></div>
-        <div class="col-md-9"><%= @import_report.created_at.strftime('%m/%d/%Y %I:%M %p') %></div>
-      </div>
-    </div>
+<% if notice %>
+  <div class="alert-success">
+    <%= notice %>
   </div>
-</div>
+<% end %>
 
-<div class="section">
-  <div class="col-12">
-    <h3 class="mb-4">
-      Import Errors 
-      <span class="badge bg-<%= @import_errors.any? ? 'danger' : 'success' %>">
-        <%= @import_errors.count %>
-      </span>
-    </h3>
-  </div>
-  
-  <% if @import_errors.any? %>
-    <div class="card">
-      <div class="card-content">
-        <div class="card-body">
-          <div class="table-responsive">
-            <table class="table table-lg table-striped mb-0">
-              <thead>
-                <tr>
-                  <th>Error Type</th>
-                  <th>File Name</th>
-                  <th>Error Message</th>
-                  <th>Topic ID</th>
-                </tr>
-              </thead>
-              <tbody>
-                <% @import_errors.each do |error| %>
-                  <tr>
-                    <td>
-                      <span class="badge bg-danger"><%= error.error_type %></span>
-                    </td>
-                    <td class="text-bold-500">
-                      <div class="text-truncate" title="<%= error.file_name %>">
-                        <%= error.file_name || "N/A" %>
-                      </div>
-                    </td>
-                    <td class="text-bold-500">
-                      <% if error.error_message.present? %>
-                        <div class="text-truncate" style="max-width: 300px;" title="<%= error.error_message %>">
-                          <%= error.error_message %>
-                        </div>
-                      <% else %>
-                        N/A
-                      <% end %>
-                    </td>
-                    <td class="text-bold-500">
-                      <%= error.topic_id || "N/A" %>
-                    </td>
-                  </tr>
-                  <% if error.metadata.present? %>
-                    <tr>
-                      <td colspan="5" class="bg-light">
-                        <small><strong>Metadata:</strong></small>
-                        <pre class="small mb-0"><%= JSON.pretty_generate(error.metadata) %></pre>
-                      </td>
-                    </tr>
+<div class="bg-gradient-page page-container">
+  <div class="max-w-5xl mx-auto px-4">
+
+    <!-- Header Section -->
+    <div class="section-spacing">
+      <div class="flex items-center justify-between gap-4 mb-6 flex-wrap">
+        <div class="flex items-center gap-4">
+          <%= link_to import_reports_path, class: "text-gray-500 hover:text-gray-700 transition-colors" do %>
+            <svg class="icon-size-lg" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18"/>
+            </svg>
+          <% end %>
+          <h1 class="text-3xl font-bold text-gray-800 m-0">
+            Import Report #<%= @import_report.id %>
+          </h1>
+          <% if @import_report.status == "completed" %>
+            <div class="bg-gradient-green text-white py-1.5 px-3 rounded-full text-xs font-medium">
+              Completed
+            </div>
+          <% elsif @import_report.status == "failed" %>
+            <div class="bg-gradient-to-br from-red-600 to-red-700 text-white py-1.5 px-3 rounded-full text-xs font-medium">
+              Failed
+            </div>
+          <% else %>
+            <div class="bg-gradient-blue text-white py-1.5 px-3 rounded-full text-xs font-medium">
+              <%= @import_report.status.humanize %>
+            </div>
+          <% end %>
+        </div>
+      </div>
+
+      <!-- Breadcrumb -->
+      <nav class="breadcrumb-nav">
+        <ol class="breadcrumb-list">
+          <li><%= link_to "Dashboard", root_path, class: "text-gray-500 no-underline hover:text-gray-700" %></li>
+          <li class="breadcrumb-separator">/</li>
+          <li><%= link_to "Import Reports", import_reports_path, class: "text-gray-500 no-underline hover:text-gray-700" %></li>
+          <li class="breadcrumb-separator">/</li>
+          <li class="breadcrumb-current">#<%= @import_report.id %></li>
+        </ol>
+      </nav>
+    </div>
+
+    <!-- Main Content -->
+    <div id="<%= dom_id @import_report %>">
+
+      <!-- Import Details Section -->
+      <div class="mb-8">
+        <div class="card-elevated overflow-hidden">
+
+          <!-- Card Header -->
+          <div class="bg-gradient-blue p-8 text-white">
+            <div class="flex items-center gap-4 mb-2">
+              <svg class="icon-size-lg" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/>
+              </svg>
+              <h2 class="text-2xl font-bold m-0"><%= @import_report.import_type.humanize %> Import Details</h2>
+            </div>
+            <p class="m-0 text-white/90 text-sm">Import operation information and statistics</p>
+          </div>
+
+          <!-- Card Body -->
+          <div class="card-body">
+            <div class="space-y-6">
+
+              <!-- Status -->
+              <div class="grid grid-cols-1 md:grid-cols-3 gap-4 p-4 bg-gray-50 rounded-lg border-l-4 border-blue-600">
+                <div class="font-semibold text-gray-700 flex items-center gap-2">
+                  <svg class="icon-size-sm text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/>
+                  </svg>
+                  Status:
+                </div>
+                <div class="md:col-span-2">
+                  <% if @import_report.status == "completed" %>
+                    <span class="bg-gradient-green text-white py-1.5 px-3 rounded-full text-xs font-semibold inline-flex items-center gap-1.5">
+                      <svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/>
+                      </svg>
+                      Completed
+                    </span>
+                  <% elsif @import_report.status == "failed" %>
+                    <span class="bg-gradient-to-br from-red-600 to-red-700 text-white py-1.5 px-3 rounded-full text-xs font-semibold inline-flex items-center gap-1.5">
+                      <svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/>
+                      </svg>
+                      Failed
+                    </span>
+                  <% else %>
+                    <span class="bg-gradient-blue text-white py-1.5 px-3 rounded-full text-xs font-semibold inline-flex items-center gap-1.5">
+                      <svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"/>
+                      </svg>
+                      <%= @import_report.status.humanize %>
+                    </span>
                   <% end %>
-                <% end %>
-              </tbody>
-            </table>
+                </div>
+              </div>
+
+              <!-- Import Type -->
+              <div class="grid grid-cols-1 md:grid-cols-3 gap-4 p-4 bg-gray-50 rounded-lg border-l-4 border-blue-600">
+                <div class="font-semibold text-gray-700 flex items-center gap-2">
+                  <svg class="icon-size-sm text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12"/>
+                  </svg>
+                  Import Type:
+                </div>
+                <div class="text-gray-900 font-medium md:col-span-2">
+                  <%= @import_report.import_type.humanize %>
+                </div>
+              </div>
+
+              <!-- Started At -->
+              <div class="grid grid-cols-1 md:grid-cols-3 gap-4 p-4 bg-gray-50 rounded-lg border-l-4 border-blue-600">
+                <div class="font-semibold text-gray-700 flex items-center gap-2">
+                  <svg class="icon-size-sm text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"/>
+                  </svg>
+                  Started At:
+                </div>
+                <div class="text-gray-900 font-medium md:col-span-2">
+                  <%= @import_report.started_at&.strftime('%B %d, %Y at %I:%M %p') || "Not started" %>
+                </div>
+              </div>
+
+              <!-- Completed At -->
+              <div class="grid grid-cols-1 md:grid-cols-3 gap-4 p-4 bg-gray-50 rounded-lg border-l-4 border-blue-600">
+                <div class="font-semibold text-gray-700 flex items-center gap-2">
+                  <svg class="icon-size-sm text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/>
+                  </svg>
+                  Completed At:
+                </div>
+                <div class="text-gray-900 font-medium md:col-span-2">
+                  <%= @import_report.completed_at&.strftime('%B %d, %Y at %I:%M %p') || "Not completed" %>
+                </div>
+              </div>
+
+              <!-- Created -->
+              <div class="grid grid-cols-1 md:grid-cols-3 gap-4 p-4 bg-gray-50 rounded-lg border-l-4 border-blue-600">
+                <div class="font-semibold text-gray-700 flex items-center gap-2">
+                  <svg class="icon-size-sm text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"/>
+                  </svg>
+                  Created:
+                </div>
+                <div class="text-gray-900 font-medium md:col-span-2">
+                  <%= @import_report.created_at.strftime('%B %d, %Y at %I:%M %p') %>
+                </div>
+              </div>
+
+              <!-- Summary Stats -->
+              <% if @import_report.summary_stats.present? %>
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-4 p-4 bg-gray-50 rounded-lg border-l-4 border-blue-600">
+                  <div class="font-semibold text-gray-700 flex items-center gap-2">
+                    <svg class="icon-size-sm text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"/>
+                    </svg>
+                    Summary Stats:
+                  </div>
+                  <div class="md:col-span-2">
+                    <pre class="bg-white p-4 rounded-lg border border-gray-200 text-xs overflow-x-auto m-0"><%= JSON.pretty_generate(@import_report.summary_stats) %></pre>
+                  </div>
+                </div>
+              <% end %>
+
+            </div>
           </div>
         </div>
       </div>
-    </div>
-  <% else %>
-    <div class="card">
-      <div class="card-body text-center">
-        <div class="text-success">
-          <i class="bi bi-check-circle-fill" style="font-size: 3rem;"></i>
+
+      <!-- Import Errors Section -->
+      <div class="mb-8">
+        <div class="card-elevated overflow-hidden">
+
+          <!-- Card Header -->
+          <div class="<%= @import_errors.any? ? 'bg-gradient-to-br from-red-600 to-red-700' : 'bg-gradient-green' %> p-8 text-white">
+            <div class="flex justify-between items-center flex-wrap gap-4">
+              <div class="flex items-center gap-4">
+                <div class="icon-wrapper-translucent">
+                  <% if @import_errors.any? %>
+                    <svg class="icon-size-lg" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-2.5L13.732 4c-.77-.833-1.964-.833-2.732 0L3.732 16.5c-.77.833.192 2.5 1.732 2.5z"/>
+                    </svg>
+                  <% else %>
+                    <svg class="icon-size-lg" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/>
+                    </svg>
+                  <% end %>
+                </div>
+                <div>
+                  <h2 class="text-2xl font-bold m-0">Import Errors</h2>
+                  <p class="mt-1 m-0 text-white/80 text-sm">
+                    <%= pluralize(@import_errors.count, 'error') %> found
+                  </p>
+                </div>
+              </div>
+
+              <div class="flex gap-3 items-center">
+                <div class="bg-white/10 py-2 px-4 rounded-full text-xs font-medium">
+                  Total: <%= @import_errors.count %>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Table Content -->
+          <div>
+            <% if @import_errors.any? %>
+              <div class="table-container overflow-x-auto">
+                <table class="w-full border-collapse">
+                  <thead>
+                    <tr class="table-header">
+                      <th class="table-cell text-left">Error Type</th>
+                      <th class="table-cell text-left">File Name</th>
+                      <th class="table-cell text-left">Error Message</th>
+                      <th class="table-cell text-left">Topic ID</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <% @import_errors.each do |error| %>
+                      <tr class="border-b border-gray-100">
+                        <td class="table-cell">
+                          <span class="bg-gradient-to-br from-red-600 to-red-700 text-white py-1.5 px-3 rounded-full text-xs font-semibold inline-block">
+                            <%= error.error_type %>
+                          </span>
+                        </td>
+                        <td class="table-cell">
+                          <div class="font-semibold text-gray-900 text-sm max-w-xs break-words">
+                            <%= error.file_name || "N/A" %>
+                          </div>
+                        </td>
+                        <td class="table-cell">
+                          <% if error.error_message.present? %>
+                            <div class="text-gray-600 text-sm max-w-sm break-words">
+                              <%= error.error_message %>
+                            </div>
+                          <% else %>
+                            <div class="text-gray-400 italic text-sm">
+                              N/A
+                            </div>
+                          <% end %>
+                        </td>
+                        <td class="table-cell">
+                          <div class="font-semibold text-gray-900 text-sm">
+                            <%= error.topic_id || "N/A" %>
+                          </div>
+                        </td>
+                      </tr>
+                      <% if error.metadata.present? %>
+                        <tr class="border-b border-gray-100">
+                          <td colspan="4" class="px-6 py-4 bg-gray-50">
+                            <div class="font-semibold text-gray-700 mb-2 text-xs">
+                              Metadata:
+                            </div>
+                            <pre class="bg-white p-3 rounded-lg border border-gray-200 text-xs overflow-x-auto m-0 text-gray-900"><%= JSON.pretty_generate(error.metadata) %></pre>
+                          </td>
+                        </tr>
+                      <% end %>
+                    <% end %>
+                  </tbody>
+                </table>
+              </div>
+            <% else %>
+              <div class="py-12 px-6 text-center">
+                <div class="text-green-600">
+                  <svg class="w-16 h-16 mx-auto mb-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/>
+                  </svg>
+                </div>
+                <h3 class="text-xl font-semibold text-gray-900 m-0 mb-2">No Errors Found</h3>
+                <p class="text-gray-600 m-0 text-sm">This import completed successfully without any errors.</p>
+              </div>
+            <% end %>
+          </div>
         </div>
-        <h4 class="mt-3">No Errors Found</h4>
-        <p class="text-muted">This import completed successfully without any errors.</p>
+      </div>
+
+      <!-- Actions -->
+      <div class="flex gap-4 justify-start">
+        <%= link_to import_reports_path, class: "bg-gradient-to-br from-gray-600 to-gray-700 text-white font-semibold py-3 px-6 rounded-lg no-underline text-sm shadow-md transition-all hover:-translate-y-0.5 inline-flex items-center gap-2" do %>
+          <svg class="icon-size" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18"/>
+          </svg>
+          Back to Import Reports
+        <% end %>
       </div>
     </div>
-  <% end %>
-</div>
-
-<div class="mt-4">
-  <%= link_to "Back to Import Reports", import_reports_path, class: "btn btn-secondary" %>
+  </div>
 </div>

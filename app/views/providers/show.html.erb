@@ -1,13 +1,245 @@
-<p style="color: green"><%= notice %></p>
+<% if notice %>
+  <div class="alert-success">
+    <%= notice %>
+  </div>
+<% end %>
 
-<%= render @provider %>
+<div class="bg-gradient-page page-container">
+  <div class="content-wrapper">
 
-<%= link_to "Back to providers", providers_path, class: "mt-4" %>
+    <!-- Header Section -->
+    <div class="section-spacing">
+      <div class="flex items-center justify-between gap-4 mb-6 flex-wrap">
+        <div class="flex items-center gap-4">
+          <%= link_to providers_path, class: "text-gray-500 hover:text-gray-700 transition-colors" do %>
+            <svg class="icon-size-lg" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18"/>
+            </svg>
+          <% end %>
+          <h1 class="text-3xl font-bold text-gray-800 m-0">
+            <%= @provider.name %>
+          </h1>
+          <div class="bg-gradient-blue text-white py-1.5 px-3 rounded-full text-xs font-medium">
+            <%= @provider.provider_type || "Provider" %>
+          </div>
+        </div>
 
-<div>
-  <%= link_to "Edit this provider", edit_provider_path(@provider), class: "btn btn-primary mt-4" %>
-</div>
+        <!-- Action Buttons -->
+        <div class="flex gap-3 flex-wrap">
+          <%= link_to edit_provider_path(@provider), class: "bg-gradient-red text-white font-semibold py-3 px-6 rounded-lg no-underline text-sm inline-flex items-center gap-2 shadow-red transition-all hover:-translate-y-0.5" do %>
+            <svg class="icon-size" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"/>
+            </svg>
+            Edit Provider
+          <% end %>
 
-<div>
-  <%= button_to "Destroy this provider", @provider, method: :delete, class: "btn btn-danger mt-4" %>
+          <%= button_to @provider, method: :delete,
+              data: { turbo_confirm: "Are you sure you want to delete #{@provider.name}? This action cannot be undone." },
+              class: "bg-gradient-to-br from-red-900 to-red-800 text-white font-semibold py-3 px-6 rounded-lg border-0 cursor-pointer text-sm shadow-md transition-all hover:-translate-y-0.5 inline-flex items-center gap-2" do %>
+            <svg class="icon-size" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"/>
+            </svg>
+            Delete Provider
+          <% end %>
+        </div>
+      </div>
+
+      <!-- Breadcrumb -->
+      <nav class="breadcrumb-nav">
+        <ol class="breadcrumb-list">
+          <li><%= link_to "Dashboard", root_path, class: "text-gray-500 no-underline hover:text-gray-700" %></li>
+          <li class="breadcrumb-separator">/</li>
+          <li><%= link_to "Providers", providers_path, class: "text-gray-500 no-underline hover:text-gray-700" %></li>
+          <li class="breadcrumb-separator">/</li>
+          <li class="breadcrumb-current"><%= @provider.name %></li>
+        </ol>
+      </nav>
+    </div>
+
+    <!-- Main Content Grid -->
+    <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
+
+      <!-- Left Column - Main Info -->
+      <div class="lg:col-span-2 space-y-8">
+
+        <!-- Provider Details Card -->
+        <div class="card-elevated overflow-hidden">
+          <div class="bg-gradient-to-br from-blue-700 to-indigo-800 p-8 text-white">
+            <div class="flex-center">
+              <div class="icon-wrapper-translucent">
+                <svg class="icon-size-lg" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4"/>
+                </svg>
+              </div>
+              <div>
+                <h2 class="text-2xl font-bold m-0">Provider Information</h2>
+                <p class="mt-2 m-0 text-white/80">
+                  Core details and configuration
+                </p>
+              </div>
+            </div>
+          </div>
+
+          <div class="card-body">
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+
+              <div>
+                <label class="input-label">Provider Name</label>
+                <div class="bg-gray-50 p-4 rounded-lg border border-gray-200">
+                  <span class="text-base font-semibold text-gray-800"><%= @provider.name %></span>
+                </div>
+              </div>
+
+              <div>
+                <label class="input-label">Provider Type</label>
+                <div class="bg-gray-50 p-4 rounded-lg border border-gray-200">
+                  <span class="text-base text-gray-800"><%= @provider.provider_type || "Not specified" %></span>
+                </div>
+              </div>
+
+              <div>
+                <label class="input-label">File Name Prefix</label>
+                <div class="bg-gray-50 p-4 rounded-lg border border-gray-200">
+                  <% if @provider.file_name_prefix.present? %>
+                    <code class="bg-gray-800 text-green-400 py-1 px-2 rounded text-sm"><%= @provider.file_name_prefix %></code>
+                  <% else %>
+                    <span class="text-gray-400 italic">No prefix assigned</span>
+                  <% end %>
+                </div>
+              </div>
+
+            </div>
+          </div>
+        </div>
+
+        <!-- Regions Card -->
+        <div class="card-elevated overflow-hidden">
+          <div class="bg-gradient-green p-6 text-white">
+            <div class="flex items-center gap-4">
+              <div class="icon-wrapper-translucent">
+                <svg class="icon-size-md" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"/>
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"/>
+                </svg>
+              </div>
+              <div>
+                <h3 class="text-xl font-semibold m-0">Service Regions</h3>
+                <p class="mt-1 m-0 text-white/80 text-sm">
+                  <%= pluralize(@provider.regions.count, 'region') %> served
+                </p>
+              </div>
+            </div>
+          </div>
+
+          <div class="p-6">
+            <% if @provider.regions.any? %>
+              <div class="flex flex-wrap gap-3">
+                <% @provider.regions.each do |region| %>
+                  <%= link_to region_path(region), class: "bg-gradient-to-br from-sky-50 to-sky-100 border border-sky-200 text-sky-700 py-2 px-4 rounded-full text-sm font-medium no-underline transition-all hover:bg-sky-200 hover:border-sky-300 hover:-translate-y-0.5 inline-flex items-center gap-2" do %>
+                    <svg class="icon-size-sm" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"/>
+                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"/>
+                    </svg>
+                    <%= region.name %>
+                  <% end %>
+                <% end %>
+              </div>
+            <% else %>
+              <div class="text-center text-gray-500 py-8">
+                <svg class="w-12 h-12 mx-auto mb-4 text-gray-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"/>
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"/>
+                </svg>
+                <p class="m-0 italic">No regions assigned to this provider</p>
+              </div>
+            <% end %>
+          </div>
+        </div>
+
+        <!-- Contributors Card -->
+        <div class="card-elevated overflow-hidden">
+          <div class="bg-gradient-purple p-6 text-white">
+            <div class="flex items-center gap-4">
+              <div class="icon-wrapper-translucent">
+                <svg class="icon-size-md" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197m13.5-9a2.5 2.5 0 11-5 0 2.5 2.5 0 015 0z"/>
+                </svg>
+              </div>
+              <div>
+                <h3 class="text-xl font-semibold m-0">Contributors</h3>
+                <p class="mt-1 m-0 text-white/80 text-sm">
+                  <%= pluralize(@provider.users.count, 'contributor') %>
+                </p>
+              </div>
+            </div>
+          </div>
+
+          <div class="p-6">
+            <% if @provider.users.any? %>
+              <div class="space-y-3">
+                <% @provider.users.each do |user| %>
+                  <%= link_to user_path(user), class: "flex items-center gap-4 p-4 bg-gray-50 border border-gray-200 rounded-lg no-underline transition-all hover:bg-gray-100 hover:border-gray-300 hover:-translate-y-0.5" do %>
+                    <div class="bg-gradient-purple text-white w-10 h-10 rounded-full flex items-center justify-center font-semibold text-sm">
+                      <%= user.email.first.upcase %>
+                    </div>
+                    <div>
+                      <div class="font-semibold text-gray-800 text-sm"><%= user.email %></div>
+                      <div class="text-gray-500 text-xs">Contributor</div>
+                    </div>
+                  <% end %>
+                <% end %>
+              </div>
+            <% else %>
+              <div class="text-center text-gray-500 py-8">
+                <svg class="w-12 h-12 mx-auto mb-4 text-gray-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197m13.5-9a2.5 2.5 0 11-5 0 2.5 2.5 0 015 0z"/>
+                </svg>
+                <p class="m-0 italic">No contributors assigned to this provider</p>
+              </div>
+            <% end %>
+          </div>
+        </div>
+      </div>
+
+      <!-- Right Column - Metadata -->
+      <div>
+        <div class="card-elevated overflow-hidden sticky top-8">
+          <div class="bg-gradient-amber p-6 text-white">
+            <div class="flex items-center gap-4">
+              <div class="icon-wrapper-translucent">
+                <svg class="icon-size-md" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"/>
+                </svg>
+              </div>
+              <div>
+                <h3 class="text-xl font-semibold m-0">Metadata</h3>
+                <p class="mt-1 m-0 text-white/80 text-sm">
+                  System information
+                </p>
+              </div>
+            </div>
+          </div>
+
+          <div class="p-6 space-y-6">
+            <div>
+              <label class="block text-xs font-semibold text-gray-500 mb-2 uppercase tracking-wider">Created</label>
+              <div class="text-gray-800 font-medium"><%= @provider.created_at.strftime("%B %d, %Y") %></div>
+              <div class="text-gray-500 text-sm"><%= @provider.created_at.strftime("%I:%M %p") %></div>
+            </div>
+
+            <div>
+              <label class="block text-xs font-semibold text-gray-500 mb-2 uppercase tracking-wider">Last Updated</label>
+              <div class="text-gray-800 font-medium"><%= @provider.updated_at.strftime("%B %d, %Y") %></div>
+              <div class="text-gray-500 text-sm"><%= @provider.updated_at.strftime("%I:%M %p") %></div>
+            </div>
+
+            <div>
+              <label class="block text-xs font-semibold text-gray-500 mb-2 uppercase tracking-wider">Provider ID</label>
+              <div class="font-mono bg-gray-100 p-2 rounded text-sm text-gray-700">#<%= @provider.id %></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
 </div>
