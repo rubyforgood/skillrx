@@ -505,7 +505,7 @@ GEM
       ffi (~> 1.12)
       logger
     rubyzip (3.2.1)
-    scout_apm (6.0.1)
+    scout_apm (6.0.2)
       parser
     scout_apm_logging (2.1.0)
       google-protobuf (>= 3.18)
