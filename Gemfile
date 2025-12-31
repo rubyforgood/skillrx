@@ -6,7 +6,7 @@ gem "active_storage_validations"
 gem "acts-as-taggable-on", "~> 13.0"
 gem "aws-sdk-s3", require: false
 gem "azure_file_shares"
-gem "bcrypt", "~> 3.1.7"
+gem "bcrypt", "~> 3.1.21"
 gem "bootsnap", require: false
 gem "csv"
 gem "herb", "~> 0.8.5"
