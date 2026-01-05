@@ -1,18 +1,71 @@
-<% content_for :title, "New region" %>
+<% content_for :title, "New Region" %>
 
-<section id="multiple-column-form">
-  <div class="row match-height">
-    <div class="col-12">
-      <div class="card">
-        <div class="card-header">
-          <h4>Create New Region</h4>
+<div class="bg-gradient-page page-container">
+  <div class="form-container">
+
+    <!-- Header Section -->
+    <div class="section-spacing">
+      <div class="flex-between-wrap mb-6">
+        <div class="min-w-0 flex-1">
+          <div class="flex items-center gap-4 mb-2">
+            <div class="bg-gradient-green text-white p-3 rounded-xl flex-shrink-0">
+              <svg class="icon-size-md" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"></path>
+              </svg>
+            </div>
+            <h1 class="text-4xl font-bold text-gray-800 m-0 min-w-0">New Region</h1>
+          </div>
+          <p class="text-gray-500 m-0 text-base">Create a new geographical service region</p>
         </div>
-        <div class="card-content">
-          <div class="card-body">
-            <%= render "form", region: @region %>
+      </div>
+
+      <!-- Breadcrumb -->
+      <nav class="breadcrumb-nav">
+        <ol class="breadcrumb-list">
+          <li><%= link_to "Dashboard", root_path, class: "text-gray-500 no-underline hover:text-gray-700" %></li>
+          <li class="breadcrumb-separator">/</li>
+          <li><%= link_to "Regions", regions_path, class: "text-gray-500 no-underline hover:text-gray-700" %></li>
+          <li class="breadcrumb-separator">/</li>
+          <li class="breadcrumb-current">New</li>
+        </ol>
+      </nav>
+    </div>
+
+    <!-- Form Card -->
+    <div class="card-elevated overflow-hidden">
+
+      <!-- Card Header -->
+      <div class="bg-gradient-green p-8 text-white">
+        <div class="flex-center">
+          <div class="icon-wrapper-translucent">
+            <svg class="icon-size-md" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"/>
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"/>
+            </svg>
+          </div>
+          <div>
+            <h2 class="text-2xl font-bold m-0">Create Region</h2>
+            <p class="mt-1 m-0 text-white/80 text-sm">
+              Add a new geographical service region
+            </p>
           </div>
         </div>
       </div>
+
+      <!-- Form Content -->
+      <div class="card-body">
+        <%= render "form", region: @region %>
+      </div>
+    </div>
+
+    <!-- Back Button -->
+    <div class="mt-8">
+      <%= link_to regions_path, class: "bg-gray-500 text-white py-3.5 px-7 rounded-xl no-underline font-semibold text-sm inline-flex items-center gap-2 transition-all hover:bg-gray-600 hover:-translate-y-0.5" do %>
+        <svg class="icon-size" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18"></path>
+        </svg>
+        <span>Back to Regions</span>
+      <% end %>
     </div>
   </div>
-</section>
+</div>

@@ -1,79 +1,90 @@
-<div id="<%= dom_id topic %>">
-  <div class="section">
-    <h3 class="mb-4">Topic: <%= topic.id %></h3>
-    <div class="card mb-6">
-      <div class="card-header">
-        <div class="card-title">
-          <h3><%= topic.title %></h3>
-        </div>
+<div class="bg-white rounded-xl shadow-lg p-8 mb-8">
+  <!-- Topic Content -->
+  <% if @topic.description.present? %>
+    <div class="mb-8">
+      <h3 class="text-xl font-semibold text-gray-800 mb-4">Description</h3>
+      <div class="text-gray-600 leading-relaxed">
+        <%= simple_format(@topic.description) %>
       </div>
-      <div class="card-body">
-        <div class="row mb-2">
-          <div class="col-md-3"><strong>UID:</strong></div>
-          <div class="col-md-9"><%= topic.uid %></div>
-        </div>
-        <div class="row mb-2">
-          <div class="col-md-3"><strong>Description:</strong></div>
-          <div class="col-md-9"><%= topic.description %></div>
-        </div>
-        <div class="row mb-2">
-          <div class="col-md-3"><strong>Provider:</strong></div>
-          <div class="col-md-9"><%= link_to topic.provider.name, topic.provider, class: "text-decoration-none" %></div>
-        </div>
-        <div class="row mb-2">
-          <div class="col-md-3"><strong>Language:</strong></div>
-          <div class="col-md-9"><%= link_to topic.language.name, topic.language, class: "text-decoration-none" %></div>
-        </div>
-        <div class="row mb-2">
-          <div class="col-md-3"><strong>Publishing at:</strong></div>
-          <div class="col-md-9"><%= topic.published_at.strftime('%m/%d/%Y') %></div>
-        </div>
-      </div>
-      <div class="card-footer">
-        <strong>Tags:</strong>
-        <% topic.tags.each do |tag| %>
-          <%= link_to tag.name, tag_path(tag), class: "badge bg-success text-decoration-none me-1", target: "_blank" %>
+    </div>
+  <% end %>
+
+  <!-- Documents Section -->
+  <% if @topic.documents.any? %>
+    <div class="mb-8">
+      <h3 class="text-xl font-semibold text-gray-800 mb-4">Documents</h3>
+      <div class="grid gap-4">
+        <% @topic.documents.each do |document| %>
+          <div class="flex items-center gap-4 p-4 bg-gray-50 border border-gray-200 rounded-lg">
+            <div class="bg-blue-500 text-white p-2 rounded-md flex items-center justify-center">
+              <svg class="icon-size-md" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/>
+              </svg>
+            </div>
+            <div class="flex-1">
+              <%= link_to document.filename, rails_blob_path(document, disposition: "inline"),
+                  class: "text-blue-600 no-underline font-medium hover:underline" %>
+              <div class="text-sm text-gray-500 mt-1">
+                <%= number_to_human_size(document.byte_size) %>
+              </div>
+            </div>
+            <div>
+              <%= link_to rails_blob_path(document, disposition: "attachment"),
+                  class: "bg-green-500 text-white py-2 px-4 rounded-md no-underline text-sm font-medium hover:bg-green-600 transition-colors" do %>
+                Download
+              <% end %>
+            </div>
+          </div>
         <% end %>
       </div>
     </div>
-  </div>
+  <% end %>
 
-  <div class="section">
-    <div class="col-12">
-      <h3 class="mb-4">Documents</h3>
-    </div>
-    <div>
-      <% topic.documents.each do |document| %>
-        <div class="card">
-          <div class="card-content">
-            <div class="card-body">
-              <div class="card-title">
-                <h4><%= document.filename %></h4>
-              </div>
-            </div>
+  <!-- Topic Details -->
+  <div class="border-t border-gray-200 pt-8">
+    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
 
-            <%= card_preview_media(document) %>
-
-            <div class="card-body">
-              <div class="d-flex justify-content-between">
-                <div>
-                  <span class="btn btn-sm btn-outline-secondary">
-                    <i class="bi bi-calendar-date"></i>
-                    <%= document.created_at.strftime('%m/%d/%Y') %>
-                  </span>
-                  <span class="btn btn-sm btn-outline-secondary">
-                    <i class="bi bi-clipboard-data"></i>
-                    <%= number_to_human_size(document.byte_size) %>
-                  </span>
-                </div>
-                <%= link_to rails_blob_path(document), target: "_blank", class: "btn btn-primary" do %>
-                  <i class="bi bi-file-arrow-down"></i> Download
-                <% end %>
-              </div>
-            </div>
-          </div>
+      <!-- Language -->
+      <% if @topic.language.present? %>
+        <div>
+          <div class="text-sm font-semibold text-gray-700 mb-2">Language</div>
+          <div class="text-gray-500"><%= @topic.language.name %></div>
         </div>
       <% end %>
+
+      <!-- Provider -->
+      <% if @topic.provider.present? %>
+        <div>
+          <div class="text-sm font-semibold text-gray-700 mb-2">Provider</div>
+          <div class="text-gray-500"><%= @topic.provider.name %></div>
+        </div>
+      <% end %>
+
+      <!-- Created Date -->
+      <div>
+        <div class="text-sm font-semibold text-gray-700 mb-2">Created</div>
+        <div class="text-gray-500"><%= @topic.created_at.strftime("%B %d, %Y") %></div>
+      </div>
+
+      <!-- Last Updated -->
+      <div>
+        <div class="text-sm font-semibold text-gray-700 mb-2">Last Updated</div>
+        <div class="text-gray-500"><%= @topic.updated_at.strftime("%B %d, %Y") %></div>
+      </div>
     </div>
   </div>
+
+  <!-- Tags -->
+  <% if @topic.tags.any? %>
+    <div class="border-t border-gray-200 pt-8 mt-8">
+      <div class="text-sm font-semibold text-gray-700 mb-4">Tags</div>
+      <div class="flex flex-wrap gap-2">
+        <% @topic.tags.each do |tag| %>
+          <span class="bg-blue-100 text-blue-800 py-1.5 px-3 rounded-full text-xs font-medium">
+            <%= tag.name %>
+          </span>
+        <% end %>
+      </div>
+    </div>
+  <% end %>
 </div>

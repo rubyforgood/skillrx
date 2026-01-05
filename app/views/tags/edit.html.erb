@@ -1,18 +1,80 @@
-<% content_for :title, "Editing tag" %>
+<% content_for :title, "Edit #{@tag.name}" %>
 
-<section id="basic-vertical-layouts">
-  <div class="row match-height">
-    <div class="col-md-6 col-12">
-      <div class="card">
-        <div class="card-header">
-          <h2 class="card-title">Edit tag</h2>
+<div class="bg-gradient-page page-container">
+  <div class="form-container">
+
+    <!-- Header Section -->
+    <div class="section-spacing">
+      <div class="flex justify-between items-center mb-6 flex-wrap gap-4">
+        <div class="min-w-0 flex-1">
+          <div class="flex-center mb-2">
+            <div class="bg-gradient-amber icon-wrapper text-white">
+              <svg class="icon-size-lg" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"></path>
+              </svg>
+            </div>
+            <h1 class="text-4xl font-bold text-gray-800 m-0 min-w-0">Edit Tag</h1>
+          </div>
+          <p class="page-subtitle">Modify tag details and configuration</p>
         </div>
-        <div class="card-content">
-          <div class="card-body">
-            <%= render "form", tag: @tag %>
+      </div>
+
+      <!-- Breadcrumb -->
+      <nav class="breadcrumb-nav">
+        <ol class="breadcrumb-list">
+          <li><%= link_to "Dashboard", root_path, class: "text-gray-500 no-underline hover:text-gray-700" %></li>
+          <li class="breadcrumb-separator">/</li>
+          <li><%= link_to "Tags", tags_path, class: "text-gray-500 no-underline hover:text-gray-700" %></li>
+          <li class="breadcrumb-separator">/</li>
+          <li><%= link_to @tag.name, @tag, class: "text-gray-500 no-underline hover:text-gray-700" %></li>
+          <li class="breadcrumb-separator">/</li>
+          <li class="breadcrumb-current">Edit</li>
+        </ol>
+      </nav>
+    </div>
+
+    <!-- Form Card -->
+    <div class="card-elevated overflow-hidden">
+
+      <!-- Card Header -->
+      <div class="bg-gradient-amber p-8 text-white">
+        <div class="flex-center">
+          <div class="icon-wrapper-translucent">
+            <svg class="icon-size-lg" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 7h.01M7 3h5c.512 0 1.024.195 1.414.586l7 7a2 2 0 010 2.828l-7 7a2 2 0 01-2.828 0l-7-7A1.994 1.994 0 013 12V7a4 4 0 014-4z"/>
+            </svg>
+          </div>
+          <div>
+            <h2 class="text-2xl font-bold m-0">Edit <%= @tag.name %></h2>
+            <p class="mt-1 m-0 text-white/80 text-sm">
+              Update tag information and settings
+            </p>
           </div>
         </div>
       </div>
+
+      <!-- Form Content -->
+      <div class="card-body">
+        <%= render "form", tag: @tag %>
+      </div>
+    </div>
+
+    <!-- Action Buttons -->
+    <div class="mt-8 flex gap-4 justify-between items-center flex-wrap">
+      <%= link_to tags_path, class: "bg-gray-500 text-white py-3.5 px-7 rounded-xl no-underline font-semibold text-sm inline-flex items-center gap-2 transition-all hover:bg-gray-600 hover:-translate-y-0.5" do %>
+        <svg class="w-4.5 h-4.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18"></path>
+        </svg>
+        <span>Back to Tags</span>
+      <% end %>
+
+      <%= link_to @tag, class: "bg-gradient-purple text-white py-3.5 px-7 rounded-xl no-underline font-semibold text-sm inline-flex items-center gap-2 transition-all hover:-translate-y-0.5" do %>
+        <svg class="w-4.5 h-4.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path>
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"></path>
+        </svg>
+        <span>View Tag</span>
+      <% end %>
     </div>
   </div>
-</section>
+</div>

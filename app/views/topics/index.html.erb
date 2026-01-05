@@ -1,48 +1,115 @@
 <% content_for :title, "Topics" %>
 
-<section class="section">
-  <div class="row" id="table-striped">
-    <div class="col-12 cold-md-12">
-      <%= render "search", providers: @providers, languages: @languages, params: search_params  %>
-      <%= turbo_frame_tag "topics" do %>
-        <div class="card">
-          <div class="card-header d-flex justify-content-between align-items-center">
-            <h2 class="card-title"><%= topics_title %></h2>
-            <%= link_to new_topic_path, class: "btn btn-primary", data: {turbo: false } do %>
-              <i class="bi bi-plus"></i> Add New Topic
-            <% end %>
+<div class="min-h-screen py-8 bg-gradient-page">
+  <div class="max-w-7xl mx-auto px-4 overflow-x-hidden">
+
+    <!-- Header Section -->
+    <div class="mb-8">
+      <div class="flex justify-between items-center mb-6 flex-wrap gap-4">
+        <div class="min-w-0 flex-1">
+          <div class="flex items-center gap-4 mb-2">
+            <div class="bg-gradient-purple text-white p-3 rounded-xl flex-shrink-0">
+              <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 7h.01M7 3h5c.512 0 1.024.195 1.414.586l7 7a2 2 0 010 2.828l-7 7a2 2 0 01-2.828 0l-7-7A1.994 1.994 0 013 12V7a4 4 0 014-4z"/>
+              </svg>
+            </div>
+            <h1 class="text-4xl font-bold text-gray-900 m-0 min-w-0">Topics</h1>
           </div>
-          <div class="card-content">
-            <div class="card-body">
-              <% if @available_providers.any? %>
-                <%= render "choose_provider", providers: @available_providers %>
-              <% end %>
-              <%= turbo_frame_tag "topic-list" do %>
-                <div class="table-responsive">
-                  <table class="table table-lg table-striped mb-0">
-                    <thead>
-                      <tr>
-                        <th>Title</th>
-                        <th>Description</th>
-                        <th>UID</th>
-                        <th>Language</th>
-                        <th>Provider</th>
-                        <th># of Documents</th>
-                        <th>State</th>
-                        <th class="text-end">Actions</th>
-                      </tr>
-                    </thead>
-                    <%= render "list", topics: @topics, params: search_params %>
-                  </table>
-                </div>
-                <div class="card-footer d-flex justify-content-end">
-                  <%== pagy_bootstrap_nav(@pagy) %>
-                </div>
-              <% end %>
+          <p class="text-gray-500 m-0 text-base">Manage educational topics and their associated content</p>
+        </div>
+
+        <%= link_to new_topic_path, class: "bg-gradient-blue shadow-blue text-white px-7 py-3.5 rounded-xl no-underline font-semibold text-sm inline-flex items-center gap-2 transition-all duration-200 hover:-translate-y-1 hover:shadow-blue-lg", data: {turbo: false } do %>
+          <svg class="w-4.5 h-4.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"></path>
+          </svg>
+          <span>Add New Topic</span>
+        <% end %>
+      </div>
+
+      <!-- Breadcrumb -->
+      <nav class="text-sm text-gray-500">
+        <ol class="flex gap-2 list-none p-0 m-0">
+          <li><%= link_to "Dashboard", root_path, class: "text-gray-500 no-underline hover:text-gray-700" %></li>
+          <li class="text-gray-300">/</li>
+          <li class="text-gray-700 font-medium">Topics</li>
+        </ol>
+      </nav>
+    </div>
+
+    <!-- Search Card -->
+    <div class="mb-8">
+      <%= render "search", providers: @providers, languages: @languages, params: search_params  %>
+    </div>
+
+  <!-- Topics Table Card -->
+  <%= turbo_frame_tag "topics" do %>
+  <div class="bg-white rounded-2xl shadow-xl overflow-hidden">
+
+      <!-- Card Header -->
+      <div class="bg-gradient-purple p-8 text-white">
+        <div class="flex justify-between items-center flex-wrap gap-4">
+          <div class="flex items-center gap-4">
+            <div class="bg-white/20 p-3 rounded-xl">
+              <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10"/>
+              </svg>
+            </div>
+            <div>
+              <h2 class="text-2xl font-bold m-0"><%= topics_title %></h2>
+              <p class="mt-1 mb-0 text-white/80 text-sm">
+                <%= pluralize(@pagy.count, 'topic') %> found
+              </p>
+            </div>
+          </div>
+
+          <div class="flex gap-3 items-center">
+            <div class="bg-white/10 px-4 py-2 rounded-full text-xs font-medium">
+              Total: <%= @pagy.count %>
             </div>
           </div>
         </div>
-      <% end %>
-    </div>
+      </div>
+
+      <!-- Card Content -->
+      <div class="p-0">
+        <% if @available_providers.any? %>
+          <div class="bg-gradient-gray px-5 py-4 border-b border-gray-200">
+            <%= render "choose_provider", providers: @available_providers %>
+          </div>
+        <% end %>
+
+        <%= turbo_frame_tag "topic-list" do %>
+          <div class="table-container overflow-x-auto">
+            <table class="w-full border-collapse table-fixed">
+              <thead>
+                <tr class="bg-gradient-gray border-b-2 border-gray-200">
+                  <th class="px-6 py-5 text-left text-xs font-bold text-gray-600 uppercase tracking-wider overflow-hidden text-ellipsis">Title</th>
+                  <th class="hide-mobile px-6 py-5 text-left text-xs font-bold text-gray-600 uppercase tracking-wider overflow-hidden text-ellipsis">Description</th>
+                  <th class="hide-mobile px-6 py-5 text-left text-xs font-bold text-gray-600 uppercase tracking-wider overflow-hidden text-ellipsis">UID</th>
+                  <th class="px-6 py-5 text-left text-xs font-bold text-gray-600 uppercase tracking-wider overflow-hidden text-ellipsis">Language</th>
+                  <th class="hide-mobile px-6 py-5 text-left text-xs font-bold text-gray-600 uppercase tracking-wider overflow-hidden text-ellipsis">Provider</th>
+                  <th class="px-6 py-5 text-left text-xs font-bold text-gray-600 uppercase tracking-wider overflow-hidden text-ellipsis"># of Documents</th>
+                  <th class="px-6 py-5 text-left text-xs font-bold text-gray-600 uppercase tracking-wider overflow-hidden text-ellipsis">State</th>
+                  <th class="actions-col px-6 py-5 text-right text-xs font-bold text-gray-600 uppercase tracking-wider w-40">Actions</th>
+                </tr>
+              </thead>
+              <%= render "list", topics: @topics, params: search_params %>
+            </table>
+          </div>
+
+          <!-- Pagination -->
+          <div class="bg-gray-50 px-8 py-6 border-t border-gray-200 flex justify-between items-center">
+            <div class="text-gray-500 text-sm">
+              Showing <%= @topics.size %> of <%= @pagy.count %> topics
+            </div>
+            <div>
+              <%= render "shared/pagination", pagy: @pagy %>
+            </div>
+          </div>
+        <% end %>
+      </div>
   </div>
-</section>
+  <% end %>
+  </div>
+</div>
+

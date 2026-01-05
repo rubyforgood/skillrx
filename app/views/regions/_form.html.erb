@@ -1,27 +1,56 @@
-<%= form_with(model: region) do |form| %>
+<%= form_with(model: region, local: true) do |form| %>
   <% if region.errors.any? %>
-    <div style="color: red">
-      <h2><%= pluralize(region.errors.count, "error") %> prohibited this region from being saved:</h2>
-
-      <ul>
-        <% region.errors.each do |error| %>
-          <li><%= error.full_message %></li>
-        <% end %>
-      </ul>
+    <div class="alert-error flex items-start gap-3 mb-8">
+      <svg class="icon-size-md flex-shrink-0 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+      </svg>
+      <div>
+        <h3 class="text-lg font-semibold m-0 mb-2">
+          <%= pluralize(region.errors.count, "error") %> prohibited this region from being saved:
+        </h3>
+        <ul class="m-0 pl-6">
+          <% region.errors.each do |error| %>
+            <li class="mb-2 font-medium"><%= error.full_message %></li>
+          <% end %>
+        </ul>
+      </div>
     </div>
   <% end %>
 
-  <div class="col-md-4">
-    <div class="form-group">
-      <%= form.label :name, style: "display: block" %>
-      <%= form.text_field :name, id: "basicInput", class: "form-control", autofocus: true %>
+  <div class="space-y-6">
+
+    <!-- Region Name Field -->
+    <div>
+      <%= form.label :name, class: "input-label" do %>
+        <div class="flex items-center gap-2">
+          <svg class="icon-size" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"/>
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"/>
+          </svg>
+          Region Name
+        </div>
+      <% end %>
+      <%= form.text_field :name,
+          autofocus: true,
+          placeholder: "Enter region name (e.g., North America, Europe, Asia-Pacific)",
+          class: "input-field" %>
+      <p class="text-xs text-gray-500 mt-2 m-0">
+        Provide a clear, descriptive name for the geographical region this service area covers.
+      </p>
     </div>
+
   </div>
 
-  <div class="mt-4">
-    <div class="col-12 d-flex justify-content-end">
-      <%= form.submit class: "btn btn-primary me-1 mb-1" %>
-      <%= link_to "Cancel", regions_path, class: "btn btn-light-secondary me-1 mb-1" %>
-    </div>
+  <!-- Form Actions -->
+  <div class="mt-8 pt-8 border-t border-gray-200 flex gap-4 justify-end flex-wrap">
+    <%= link_to regions_path, class: "bg-gray-500 text-white py-3.5 px-7 rounded-lg no-underline font-semibold text-sm inline-flex items-center gap-2 transition-all hover:bg-gray-600 hover:-translate-y-0.5" do %>
+      <svg class="icon-size" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
+      </svg>
+      <span>Cancel</span>
+    <% end %>
+
+    <%= form.submit (region.persisted? ? "Update Region" : "Create Region"),
+        class: "bg-gradient-green text-white py-3.5 px-7 rounded-lg border-0 font-semibold text-sm inline-flex items-center gap-2 cursor-pointer shadow-green transition-all hover:-translate-y-0.5" %>
   </div>
 <% end %>

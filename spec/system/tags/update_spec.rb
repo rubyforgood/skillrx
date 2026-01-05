@@ -8,6 +8,7 @@ RSpec.describe "Updating a Tag", type: :system do
   before do
     login_as(user)
     create(:tag_cognate, tag: tag, cognate: cognate)
+    create(:provider)
   end
 
   context "as an Admin" do
@@ -31,11 +32,16 @@ RSpec.describe "Updating a Tag", type: :system do
     end
 
     context "when the cognate entered doesn't already exist" do
-      it "show an error" do
+      it "shows an error" do
         wait_and_visit(edit_tag_path(tag.id))
-        enter_and_choose_tag("URTI")
 
-        expect(page).to have_text("Please select a tag from the list")
+        within "div[data-controller='select-tags']" do
+          tag_input = find(".ts-control input")
+          tag_input.click
+          tag_input.set("URTI")
+
+          expect(page).to have_css(".no-results", text: "No results found", visible: true)
+        end
       end
     end
   end

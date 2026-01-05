@@ -1,75 +1,120 @@
-<div class="card">
-  <div class="card-header d-flex justify-content-between align-items-center">
-    <h2 class="card-title">Search</h2>
+<div class="card-elevated overflow-hidden">
+  <div class="bg-gradient-to-br from-sky-50 to-cyan-50 p-6 border-b border-sky-200">
+    <div class="flex-center-sm">
+      <div class="bg-gradient-to-br from-sky-500 to-sky-600 text-white p-2 rounded-lg">
+        <svg class="icon-size-md" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
+        </svg>
+      </div>
+      <h3 class="text-lg font-semibold text-sky-900 m-0">Search & Filter Topics</h3>
+    </div>
   </div>
-  <div class="card-content">
-    <div class="card-body">
-      <%= form_for :search, url: topics_path, method: :get, data: { controller: "topics", topics_target: "searchForm", turbo_frame: "topic-list", turbo_action: "advance" } do |f| %>
-        <div class="form-body">
-          <div class="row">
-            <div class="col-md-6 col-12">
-              <div class="form-group">
-                <%= f.label :query %>
-                <%= f.text_field :query, value: params[:query], class: "form-control", data: { action: "input->topics#searchTopics" } %>
+  <div class="card-body-sm">
+    <%= form_for :search, url: topics_path, method: :get, data: { controller: "topics", topics_target: "searchForm", turbo_frame: "topic-list", turbo_action: "advance" } do |f| %>
+      <div id="topics-search-grid" class="form-grid-auto items-start">
+        <!-- Query -->
+        <div class="form-grid-full">
+          <%= f.label :query, class: "input-label" %>
+          <%= f.text_field :query,
+                value: params.dig(:search, :query),
+                placeholder: "Search by title, description or UID…",
+                class: "input-field",
+                data: { action: "input->topics#searchTopics" } %>
+        </div>
+
+        <!-- Language & Tags -->
+        <div class="min-w-0 col-span-full">
+          <div class="grid grid-cols-[repeat(auto-fit,minmax(220px,1fr))] gap-4 items-start">
+            <div class="relative">
+              <%= f.label :language_id, "Language", class: "input-label" %>
+              <div class="relative">
+                <%= f.select :language_id,
+                             options_from_collection_for_select(languages, :id, :name, params.dig(:search, :language_id)),
+                             { prompt: "Select language" },
+                             class: "select-field",
+                             data: { action: "change->topics#searchTopics" } %>
+                <%= render "shared/dropdown_arrow" %>
               </div>
             </div>
-            <div class="col-md-6 col-12"
-                 data-controller="select-tags"
-                 data-action="select-tags:notify->topics#searchTopics:captures">
-              <div class="form-group">
-                <div class="d-flex">
-                  <%= f.label :tag_list, class: "flex-fill" %>
-                </div>
-                <%= f.select :tag_list,
-                             options_from_collection_for_select(
-                               Tag.order(:name),
-                               :name,
-                               :name,
-                               []
-                             ),
-                             { prompt: "Select tags", include_hidden: false },
-                             multiple: true,
-                             class: "form-select",
-                             data: { "allow-clear": "true", "select-tags-target": "tagList", "action": "change->select-tags#notify" }
-                %>
-              </div>
-            </div>
-            <div class="col-md-6 col-12">
-              <div class="form-group">
-                <%= f.label :language %>
-                <%= f.select :language_id, options_from_collection_for_select(languages, :id, :name, params[:language_id]),  { prompt: "Select language" }, class: "form-select", data: { action: "change->topics#searchTopics" } %>
-              </div>
-            </div>
-            <div class="col-md-3 col-12">
-              <div class="form-group">
-                <%= f.label :year %>
-                <%= f.select :year, options_for_select((Date.today.year-10..Date.today.year).to_a, params[:year]), { prompt: "Select year" }, class: "form-select", data: { action: "change->topics#searchTopics" } %>
-              </div>
-            </div>
-            <div class="col-md-3 col-12">
-              <div class="form-group">
-                <%= f.label :month %>
-                <%= f.select :month, options_for_select((1..12).to_a, params[:month]), { prompt: "Select month" }, class: "form-select", data: { action: "change->topics#searchTopics" } %>
-              </div>
-            </div>
-            <div class="col-md-6 col-12">
-              <div class="form-group">
-                <%= f.label :state %>
-                <%= f.select :state, options_for_select(Topic::STATES.index_with(&:itself), params[:state]), { prompt: "Select state" }, class: "form-select", data: { action: "change->topics#searchTopics" } %>
-              </div>
-            </div>
-            <div class="col-md-6 col-12">
-              <div class="form-group">
-                <%= f.label :order %>
-                <%= f.select :order, options_for_select(Topic::SORTS.reverse.index_with(&:itself), params[:order]), {}, class: "form-select", data: { action: "change->topics#searchTopics" } %>
-              </div>
-            </div>
-            <div class="col-12 d-flex justify-content-end">
-              <%= link_to "Clear", topics_path, class: "btn btn-light-secondary me-1 mb-1" %>
+
+            <div data-controller="select-tags" class="relative">
+              <%= f.label :tag_list, "Tags", class: "input-label" %>
+              <%= f.select :tag_list,
+                           options_for_select(Tag.order(:name).pluck(:name), Array(params.dig(:search, :tag_list))),
+                           { include_hidden: false },
+                           multiple: true,
+                           id: "search_tag_list",
+                           placeholder: "Select tags...",
+                           data: { "select-tags-target": "tagList", "allow-clear": "true", "allow-new": "false", action: "change->topics#searchTopics" } %>
             </div>
           </div>
         </div>
-      <% end %>
-    </div>
+
+        <!-- Year -->
+        <div class="min-w-0 relative">
+          <%= f.label :year, class: "input-label" %>
+          <div class="relative">
+            <%= f.select :year,
+                         options_for_select((Date.today.year-10..Date.today.year).to_a, params.dig(:search, :year)),
+                         { prompt: "Select year" },
+                         class: "select-field",
+                         data: { action: "change->topics#searchTopics" } %>
+            <%= render "shared/dropdown_arrow" %>
+          </div>
+        </div>
+
+        <!-- Month -->
+        <div class="min-w-0 relative">
+          <%= f.label :month, class: "input-label" %>
+          <div class="relative">
+            <%= f.select :month,
+                         options_for_select((1..12).to_a, params.dig(:search, :month)),
+                         { prompt: "Select month" },
+                         class: "select-field",
+                         data: { action: "change->topics#searchTopics" },
+                         onchange: "this.form.requestSubmit()" %>
+            <%= render "shared/dropdown_arrow" %>
+          </div>
+        </div>
+
+        <!-- State -->
+        <div class="min-w-0 relative">
+          <%= f.label :state, class: "input-label" %>
+          <div class="relative">
+            <%= f.select :state,
+                         options_for_select(Topic::STATES.index_with(&:itself), params.dig(:search, :state)),
+                         { prompt: "Select state" },
+                         class: "select-field",
+                         data: { action: "change->topics#searchTopics" },
+                         onchange: "this.form.requestSubmit()" %>
+            <%= render "shared/dropdown_arrow" %>
+          </div>
+        </div>
+
+        <!-- Order -->
+        <div class="min-w-0 relative">
+          <%= f.label :order, class: "input-label" %>
+          <div class="relative">
+            <%= f.select :order,
+                         options_for_select(%w[desc asc].map { |o| [o, o] }, params.dig(:search, :order)),
+                         {},
+                         class: "select-field",
+                         data: { action: "change->topics#searchTopics" } %>
+            <%= render "shared/dropdown_arrow" %>
+          </div>
+        </div>
+      </div>
+
+      <!-- Clear Button -->
+      <div class="mt-5 flex justify-end">
+        <%= link_to topics_path,
+            class: "bg-gray-500 text-white py-2.5 px-5 rounded-lg no-underline font-semibold text-sm inline-flex items-center gap-2 transition-all shadow-sm hover:bg-gray-600 hover:-translate-y-0.5 hover:shadow-md" do %>
+          <svg class="icon-size" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+          </svg>
+          <span>Clear Filters</span>
+        <% end %>
+      </div>
+    <% end %>
   </div>
 </div>
