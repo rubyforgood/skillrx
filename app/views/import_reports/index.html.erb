@@ -69,7 +69,7 @@
 
             <!-- Pagination -->
             <div class="d-flex justify-content-center mt-3">
-              <%== pagy_nav(@pagy) if @pagy.pages > 1 %>
+              <%== @pagy.series_nav if @pagy.pages > 1 %>
             </div>
           </div>
         </div>
