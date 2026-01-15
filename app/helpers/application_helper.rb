@@ -1,6 +1,4 @@
 module ApplicationHelper
-  include Pagy::Frontend
-
   def flash_class(level)
     case level
     when "notice" then "alert-light-success"
