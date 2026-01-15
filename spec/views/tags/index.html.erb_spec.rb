@@ -3,7 +3,7 @@ require "rails_helper"
 RSpec.describe "tags/index", type: :view do
   context "when there are no tags" do
     before(:each) do
-      assign(:pagy, Pagy.new(count: 0))
+      assign(:pagy, Pagy::Offset.new(count: 0))
       assign(:tags, [])
     end
 
@@ -15,7 +15,7 @@ RSpec.describe "tags/index", type: :view do
 
   context "when there are tags but only one page" do
     before(:each) do
-      assign(:pagy, Pagy.new(count: 1))
+      assign(:pagy, Pagy::Offset.new(count: 1))
       assign(:tags, [ create(:tag, name: "Tag 1") ])
     end
 
@@ -33,7 +33,7 @@ RSpec.describe "tags/index", type: :view do
   context "when there are multiple pages of tags" do
     before(:each) do
       # Simulate being on page 2 with 10 items per page and 25 total items
-      pagy = Pagy.new(count: 25, page: 2, items: 10)
+      pagy = Pagy::Offset.new(count: 25, page: 2, items: 10)
       assign(:pagy, pagy)
       assign(:tags, create_list(:tag, 10))
     end
