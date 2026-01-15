@@ -1,9 +1,14 @@
 require "rails_helper"
 
 RSpec.describe "users/index", type: :view do
+  let(:request) do
+    request_hash = { base_url: "http://test.host", path: "/users", params: {}, cookie: nil }
+    Pagy::Request.new(request: request_hash)
+  end
+
   context "when there are no users" do
     before(:each) do
-      assign(:pagy, Pagy::Offset.new(count: 0))
+      assign(:pagy, Pagy::Offset.new(count: 0, request:))
       assign(:users, [])
     end
 
@@ -15,7 +20,7 @@ RSpec.describe "users/index", type: :view do
 
   context "when there are users but only one page" do
     before(:each) do
-      assign(:pagy, Pagy::Offset.new(count: 1))
+      assign(:pagy, Pagy::Offset.new(count: 1, request:))
       assign(:users, [ create(:user, email: "user@test.local") ])
     end
 
@@ -33,7 +38,7 @@ RSpec.describe "users/index", type: :view do
   context "when there are multiple pages of users" do
     before(:each) do
       # Simulate being on page 2 with 10 items per page and 25 total items
-      pagy = Pagy::Offset.new(count: 25, page: 2, items: 10)
+      pagy = Pagy::Offset.new(count: 25, page: 2, items: 10, request:)
       assign(:pagy, pagy)
       assign(:users, create_list(:user, 10))
     end
