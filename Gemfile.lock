@@ -214,14 +214,14 @@ GEM
       rake (>= 13)
     googleapis-common-protos-types (1.22.0)
       google-protobuf (~> 4.26)
-    herb (0.8.6-aarch64-linux-gnu)
-    herb (0.8.6-aarch64-linux-musl)
-    herb (0.8.6-arm-linux-gnu)
-    herb (0.8.6-arm-linux-musl)
-    herb (0.8.6-arm64-darwin)
-    herb (0.8.6-x86_64-darwin)
-    herb (0.8.6-x86_64-linux-gnu)
-    herb (0.8.6-x86_64-linux-musl)
+    herb (0.8.8-aarch64-linux-gnu)
+    herb (0.8.8-aarch64-linux-musl)
+    herb (0.8.8-arm-linux-gnu)
+    herb (0.8.8-arm-linux-musl)
+    herb (0.8.8-arm64-darwin)
+    herb (0.8.8-x86_64-darwin)
+    herb (0.8.8-x86_64-linux-gnu)
+    herb (0.8.8-x86_64-linux-musl)
     hotwire-spark (0.1.13)
       listen
       rails (>= 7.0.0)
@@ -619,7 +619,7 @@ DEPENDENCIES
   dotenv-rails
   factory_bot_rails
   faker
-  herb (~> 0.8.6)
+  herb (~> 0.8.8)
   hotwire-spark
   image_processing (~> 1.14)
   importmap-rails
