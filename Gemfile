@@ -29,7 +29,7 @@ gem "scout_apm_logging", "~> 2.1"
 gem "solid_cable"
 gem "solid_cache"
 gem "solid_queue"
-gem "solid_queue_monitor", "~> 0.5.0"
+gem "solid_queue_monitor", "~> 0.6.0"
 gem "stimulus-rails"
 gem "thruster", require: false
 gem "turbo-rails"
