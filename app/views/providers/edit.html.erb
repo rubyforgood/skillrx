@@ -1,12 +1,80 @@
 <% content_for :title, "Editing provider" %>
 
-<h1>Editing provider</h1>
+<div class="bg-gradient-page page-container">
+  <div class="content-wrapper">
 
-<%= render "form", provider: @provider %>
+    <!-- Header Section -->
+    <div class="section-spacing">
+      <div class="flex items-center gap-4 mb-6">
+        <%= link_to providers_path, class: "text-gray-500 hover:text-gray-700 transition-colors" do %>
+          <svg class="icon-size-lg" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18"/>
+          </svg>
+        <% end %>
+        <h1 class="text-3xl font-bold text-gray-800 m-0">
+          Edit Provider
+        </h1>
+        <div class="bg-amber-100 text-amber-700 py-1.5 px-3 rounded-full text-xs font-medium">
+          <%= @provider.name %>
+        </div>
+      </div>
 
-<br>
+      <!-- Breadcrumb -->
+      <nav class="breadcrumb-nav">
+        <ol class="breadcrumb-list">
+          <li><%= link_to "Dashboard", root_path, class: "text-gray-500 no-underline hover:text-gray-700" %></li>
+          <li class="breadcrumb-separator">/</li>
+          <li><%= link_to "Providers", providers_path, class: "text-gray-500 no-underline hover:text-gray-700" %></li>
+          <li class="breadcrumb-separator">/</li>
+          <li><%= link_to @provider.name, @provider, class: "text-gray-500 no-underline hover:text-gray-700" %></li>
+          <li class="breadcrumb-separator">/</li>
+          <li class="breadcrumb-current">Edit</li>
+        </ol>
+      </nav>
+    </div>
 
-<div>
-  <%= link_to "Show this provider", @provider %> |
-  <%= link_to "Back to providers", providers_path %>
+    <!-- Main Form Card -->
+    <div class="card-elevated overflow-hidden">
+
+      <!-- Card Header -->
+      <div class="bg-gradient-amber p-8 text-white">
+        <div class="flex-center">
+          <div class="icon-wrapper-translucent">
+            <svg class="icon-size-lg" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"/>
+            </svg>
+          </div>
+          <div>
+            <h2 class="text-2xl font-bold m-0">Update Provider Information</h2>
+            <p class="mt-2 m-0 text-white/80">
+              Modify details for <%= @provider.name %>
+            </p>
+          </div>
+        </div>
+      </div>
+
+      <!-- Form Content -->
+      <div class="card-body">
+        <%= render "form", provider: @provider %>
+      </div>
+    </div>
+
+    <!-- Quick Actions -->
+    <div class="mt-8 flex gap-4 flex-wrap">
+      <%= link_to @provider, class: "bg-gradient-blue text-white font-semibold py-3 px-6 rounded-lg no-underline text-sm inline-flex items-center gap-2 shadow-blue transition-all hover:-translate-y-0.5" do %>
+        <svg class="icon-size" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/>
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"/>
+        </svg>
+        View Provider Details
+      <% end %>
+
+      <%= link_to providers_path, class: "bg-gray-100 text-gray-500 font-semibold py-3 px-6 rounded-lg no-underline text-sm inline-flex items-center gap-2 transition-all hover:bg-gray-200" do %>
+        <svg class="icon-size" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 10h16M4 14h16M4 18h16"/>
+        </svg>
+        Back to All Providers
+      <% end %>
+    </div>
+  </div>
 </div>

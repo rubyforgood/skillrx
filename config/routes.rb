@@ -7,7 +7,7 @@ Rails.application.routes.draw do
   resource :registration, only: %i[new create]
   resource :session
   resources :uploads, only: %i[create destroy]
-  resources :users, except: :show
+  resources :users
   resources :tags, only: %i[index show edit update destroy]
   resources :topics do
     member do

@@ -1,18 +1,77 @@
 <% content_for :title, "New topic" %>
 
-<section id="basic-vertical-layouts">
-  <div class="row match-height">
-    <div class="col-md-6 col-12">
-      <div class="card">
-        <div class="card-header">
-          <h2 class="card-title">New topic</h2>
-        </div>
-        <div class="card-content">
-          <div class="card-body">
-            <%= render "form", topic: @topic, errors: @errors %>
+<div class="bg-gradient-page page-container">
+  <div class="content-wrapper">
+
+    <!-- Header Section -->
+    <div class="section-spacing">
+      <div class="flex items-center gap-4 mb-6">
+        <%= link_to topics_path, class: "text-gray-500 hover:text-gray-700 transition-colors" do %>
+          <svg class="icon-size-lg" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18"/>
+          </svg>
+        <% end %>
+        <h1 class="text-3xl font-bold text-gray-800 m-0">
+          Create New Topic
+        </h1>
+      </div>
+
+      <!-- Breadcrumb -->
+      <nav class="breadcrumb-nav">
+        <ol class="breadcrumb-list">
+          <li><%= link_to "Dashboard", root_path, class: "text-gray-500 no-underline hover:text-gray-700" %></li>
+          <li class="breadcrumb-separator">/</li>
+          <li><%= link_to "Topics", topics_path, class: "text-gray-500 no-underline hover:text-gray-700" %></li>
+          <li class="breadcrumb-separator">/</li>
+          <li class="breadcrumb-current">New Topic</li>
+        </ol>
+      </nav>
+    </div>
+
+    <!-- Main Form Card -->
+    <div class="card-elevated overflow-hidden">
+
+      <!-- Card Header -->
+      <div class="bg-gradient-to-br from-blue-800 to-indigo-900 p-8 text-white">
+        <div class="flex-center">
+          <div class="icon-wrapper-translucent">
+            <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 7h.01M7 3h5c.512 0 1.024.195 1.414.586l7 7a2 2 0 010 2.828l-7 7a2 2 0 01-2.828 0l-7-7A1.994 1.994 0 013 12V7a4 4 0 014-4z"/>
+            </svg>
           </div>
+          <div>
+            <h2 class="text-2xl font-bold m-0">Topic Information</h2>
+            <p class="mt-2 m-0 text-white/80">
+              Create a new educational topic with content and metadata
+            </p>
+          </div>
+        </div>
+      </div>
+
+      <!-- Form Content -->
+      <div class="card-body">
+        <%= render "form", topic: @topic, errors: @errors %>
+      </div>
+    </div>
+
+    <!-- Help Section -->
+    <div class="mt-8 bg-gray-50 border border-gray-200 rounded-xl p-6">
+      <div class="flex items-start gap-4">
+        <div class="bg-blue-100 text-blue-800 p-2 rounded-lg mt-1 flex-shrink-0">
+          <svg class="icon-size-md" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/>
+          </svg>
+        </div>
+        <div>
+          <h3 class="text-base font-semibold text-gray-700 m-0 mb-3">Creating Educational Topics</h3>
+          <ul class="text-gray-500 text-sm leading-relaxed m-0 pl-5">
+            <li><strong>Title:</strong> Use clear, descriptive titles that help users find relevant content</li>
+            <li><strong>Description:</strong> Provide a comprehensive overview of the topic's educational value</li>
+            <li><strong>Tags:</strong> Add relevant tags to improve searchability and organization</li>
+            <li><strong>Documents:</strong> Upload supporting materials, PDFs, or reference documents</li>
+          </ul>
         </div>
       </div>
     </div>
   </div>
-</section>
+</div>
