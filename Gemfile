@@ -1,6 +1,6 @@
 source "https://rubygems.org"
 
-ruby "3.4.8"
+ruby "4.0.1"
 
 gem "active_storage_validations"
 gem "acts-as-taggable-on", "~> 13.0"
@@ -22,6 +22,7 @@ gem "propshaft"
 gem "puma", ">= 5.0"
 gem "rack-attack"
 gem "rails", "~> 8.1.2"
+# gem "rb-inotify", "0.9.10"
 gem "reactionview", "~> 0.2.0"
 gem "requestjs-rails"
 gem "scout_apm"
@@ -50,7 +51,7 @@ end
 group :development do
   gem "annotaterb"
   gem "bullet"
-  gem "hotwire-spark"
+  # gem "hotwire-spark"
   gem "letter_opener"
 
   gem "rack-mini-profiler"

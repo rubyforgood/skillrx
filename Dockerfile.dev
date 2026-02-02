@@ -1,5 +1,5 @@
 # Use Ruby 3.x with Alpine as base image for smaller size
-FROM ruby:3.4.8-alpine
+FROM ruby:4.0.1-alpine
 
 # Set environment variables for Rails
 ENV RAILS_ENV=development \
@@ -43,7 +43,7 @@ VOLUME /app
 EXPOSE 3000
 
 # Configure entrypoint to run Rails
-ENTRYPOINT ["./bin/docker-entrypoint.dev"]
+# ENTRYPOINT ["./bin/docker-entrypoint.dev"]
 
 # Start Rails server by default
-CMD ["bundle", "exec", "rails", "server", "-b", "0.0.0.0"]
+# CMD ["bundle", "exec", "rails", "server", "-b", "0.0.0.0"]
