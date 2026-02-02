@@ -9,7 +9,7 @@ gem "azure_file_shares"
 gem "bcrypt", "~> 3.1.7"
 gem "bootsnap", require: false
 gem "csv"
-gem "herb", "~> 0.8.8"
+gem "herb", "~> 0.8.9"
 gem "image_processing", "~> 1.14"
 gem "importmap-rails"
 gem "jbuilder"
@@ -31,6 +31,7 @@ gem "solid_cache"
 gem "solid_queue"
 gem "solid_queue_monitor", "~> 0.6.0"
 gem "stimulus-rails"
+gem "tailwindcss-rails"
 gem "thruster", require: false
 gem "turbo-rails"
 

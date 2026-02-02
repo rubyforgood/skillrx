@@ -1,38 +1,86 @@
-<%= form_for tag do |f| %>
-  <div class="form-body">
-    <div class="row">
-      <%= render "shared/errors", errors: tag.errors.full_messages, resource_name: tag.class.name %>
-      <div class="col-12">
-        <div class="form-group">
-          <%= f.label :name %>
-          <%= f.text_field :name, class: "form-control", placeholder: "Name" %>
-        </div>
-        <div data-controller="select-tags">
-          <div class="form-group">
-            <div class="d-flex">
-              <%= f.label :cognates_list, "Cognates", class: "flex-fill" %>
-              <small class="flex-fill text-end fw-light text-muted text-uppercase">Press enter to add a new tag</small>
-            </div>
-            <%= f.select :cognates_list,
-                         options_from_collection_for_select(
-                           tag.all_available_tags,
-                           :name,
-                           :name,
-                           tag.cognates_list
-                         ),
-                         { prompt: "Select tags", include_blank: true },
-                         multiple: true,
-                         class: "form-select",
-                         data: { "allow-clear": "true", "not-found-message": "Please select a tag from the list", "select-tags-target": "tagList" }
-            %>
-          </div>
-        </div>
-
-        <div class="col-12 d-flex justify-content-end">
-          <%= f.submit class: "btn btn-primary me-1 mb-1" %>
-          <%= link_to "Cancel", tags_path, class: "btn btn-light-secondary me-1 mb-1" %>
-        </div>
+<%= form_with(model: tag, local: true) do |form| %>
+  <% if tag.errors.any? %>
+    <div class="alert-error">
+      <div class="flex items-center gap-3 mb-4">
+        <svg class="icon-size-md text-red-600 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+        </svg>
+        <h3 class="alert-error-title">
+          <%= pluralize(tag.errors.count, "error") %> prohibited this tag from being saved:
+        </h3>
       </div>
+      <ul class="alert-error-list">
+        <% tag.errors.each do |error| %>
+          <li class="mb-2 font-medium"><%= error.full_message %></li>
+        <% end %>
+      </ul>
     </div>
+  <% end %>
+
+  <div class="space-y-6">
+
+    <!-- Tag Name Field -->
+    <div class="mb-6">
+      <%= form.label :name, class: "input-label" do %>
+        <div class="label-with-icon">
+          <svg class="icon-size" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 7h.01M7 3h5c.512 0 1.024.195 1.414.586l7 7a2 2 0 010 2.828l-7 7a2 2 0 01-2.828 0l-7-7A1.994 1.994 0 013 12V7a4 4 0 014-4z"/>
+          </svg>
+          Tag Name
+        </div>
+      <% end %>
+      <%= form.text_field :name,
+          placeholder: "Enter tag name (e.g., healthcare, technology, education)",
+          class: "form-input" %>
+      <p class="text-muted">
+        Provide a clear, descriptive name for this content classification tag.
+      </p>
+    </div>
+
+    <!-- Cognates Field -->
+    <div data-controller="select-tags" class="mb-6">
+      <div class="flex justify-between items-end mb-2">
+        <%= form.label :cognates_list, class: "input-label" do %>
+          <div class="label-with-icon">
+            <svg class="icon-size" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13.828 10.172a4 4 0 00-5.656 0l-4 4a4 4 0 105.656 5.656l1.102-1.101m-.758-4.899a4 4 0 005.656 0l4-4a4 4 0 00-5.656-5.656l-1.1 1.1"/>
+            </svg>
+            Related Tags (Cognates)
+          </div>
+        <% end %>
+        <small class="text-xs text-gray-500 font-normal uppercase tracking-wider">
+          Press enter to add a new tag
+        </small>
+      </div>
+
+      <%= form.select :cognates_list,
+          options_from_collection_for_select(
+            tag.all_available_tags,
+            :name,
+            :name,
+            tag.cognates_list
+          ),
+          { prompt: "Select related tags", include_blank: true },
+          multiple: true,
+          data: { "allow-clear": "true", "select-tags-target": "tagList" } %>
+
+      <p class="text-muted">
+        Select related tags that share similar meanings or contexts. These help with content discovery and organization.
+      </p>
+    </div>
+
+  </div>
+
+  <!-- Form Actions -->
+  <div class="mt-8 pt-8 border-t border-gray-200 flex gap-4 justify-end flex-wrap">
+    <%= link_to tags_path, class: "bg-gray-500 text-white py-3.5 px-7 rounded-lg no-underline font-semibold text-sm inline-flex items-center gap-2 transition-all hover:bg-gray-600 hover:-translate-y-0.5" do %>
+      <svg class="icon-size" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
+      </svg>
+      <span>Cancel</span>
+    <% end %>
+
+    <%= form.submit (tag.persisted? ? "Update Tag" : "Create Tag"),
+        class: "bg-gradient-purple text-white py-3.5 px-7 rounded-lg border-0 font-semibold text-sm inline-flex items-center gap-2 cursor-pointer transition-all shadow-blue hover:-translate-y-0.5" %>
   </div>
 <% end %>

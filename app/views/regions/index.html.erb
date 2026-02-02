@@ -1,51 +1,148 @@
 <% content_for :title, "Regions" %>
 
-<section class="section">
-  <div class="row" id="table-striped">
-    <div class="col-12 cold-md-12">
-      <div class="card">
-        <div class="card-header d-flex justify-content-between align-items-center">
-          <h2>Regions Served</h2>
-          <%= link_to new_region_path, class: "btn btn-primary" do %>
-            <i class="bi bi-plus"></i> Add New Region
-          <% end %>
+<div class="bg-gradient-page page-container">
+  <div class="content-wrapper">
+
+    <!-- Header Section -->
+    <div class="section-spacing">
+      <div class="flex-between-wrap mb-6">
+        <div class="min-w-0 flex-1">
+          <div class="flex items-center gap-4 mb-2">
+            <div class="bg-gradient-green text-white p-3 rounded-xl flex-shrink-0">
+              <svg class="icon-size-md" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"/>
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"/>
+              </svg>
+            </div>
+            <h1 class="text-4xl font-bold text-gray-800 m-0 min-w-0">Regions</h1>
+          </div>
+          <p class="text-gray-500 m-0 text-base">Manage geographical regions and service areas</p>
         </div>
-        <div class="card-content">
-          <div class="card-body">
-            <!-- table striped -->
-            <div class="table-responsive">
-              <table class="table table-lg table-striped mb-0">
-                <thead>
-                <tr>
-                  <th>Region</th>
-                  <th>Providers</th>
-                  <th class="text-end">Region Actions</th>
-                </tr>
-                </thead>
-                <tbody>
-                <% @regions.each do |region| %>
-                  <tr>
-                    <td class="text-bold-500"><%= region.name %></td>
-                    <td><%= region.providers_count %></td>
-                    <td class="text-end">
-                      <%= link_to region, class: "btn btn-primary btn-sm" do %>
-                        <i class="bi bi-search"></i> View
-                      <% end %>
-                      <%= link_to edit_region_path(region), class: "btn btn-secondary btn-sm" do %>
-                        <i class="bi bi-pencil"></i> Edit
-                      <% end %>
-                      <%= link_to region, method: :delete, data: { confirm: "Are you sure?" }, class: "btn btn-danger btn-sm" do %>
-                        <i class="bi bi-trash"></i> Delete
-                      <% end %>
+
+        <%= link_to new_region_path, class: "bg-gradient-green text-white py-3.5 px-7 rounded-xl no-underline font-semibold text-sm inline-flex items-center gap-2 shadow-green transition-all hover:-translate-y-0.5", data: {turbo: false } do %>
+          <svg class="icon-size" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"></path>
+          </svg>
+          <span>Add New Region</span>
+        <% end %>
+      </div>
+
+      <!-- Breadcrumb -->
+      <nav class="breadcrumb-nav">
+        <ol class="breadcrumb-list">
+          <li><%= link_to "Dashboard", root_path, class: "text-gray-500 no-underline hover:text-gray-700" %></li>
+          <li class="breadcrumb-separator">/</li>
+          <li class="breadcrumb-current">Regions</li>
+        </ol>
+      </nav>
+    </div>
+
+    <!-- Regions Table Card -->
+    <div class="card-elevated overflow-hidden">
+
+      <!-- Card Header -->
+      <div class="bg-gradient-green p-8 text-white">
+        <div class="flex-between-wrap">
+          <div class="flex items-center gap-4">
+            <div class="icon-wrapper-translucent">
+              <svg class="icon-size-md" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 20l-5.447-2.724A1 1 0 013 16.382V5.618a1 1 0 011.447-.894L9 7m0 13l6-3m-6 3V7m6 10l4.553 2.276A1 1 0 0021 18.382V7.618a1 1 0 00-.553-.894L15 4m0 13V4m0 0L9 7"/>
+              </svg>
+            </div>
+            <h2 class="section-title">Regions</h2>
+          </div>
+        </div>
+      </div>
+
+      <!-- Table Content -->
+      <div class="p-0">
+        <div class="table-container overflow-x-auto">
+          <table class="w-full border-collapse">
+            <thead>
+              <tr class="table-header">
+                <th class="table-cell text-left">
+                  <div class="flex items-center gap-2">
+                    <svg class="icon-size" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"/>
+                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"/>
+                    </svg>
+                    Region Name
+                  </div>
+                </th>
+                <th class="hide-mobile table-cell text-left">
+                  <div class="flex items-center gap-2">
+                    <svg class="icon-size" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4"/>
+                    </svg>
+                    Providers
+                  </div>
+                </th>
+                <th class="table-cell text-right">Actions</th>
+              </tr>
+            </thead>
+            <tbody>
+              <% if @regions.any? %>
+                <% @regions.each_with_index do |region, index| %>
+                  <tr class="border-b border-gray-100 transition-all hover:bg-gray-50">
+                    <td class="table-cell">
+                      <div class="flex items-center gap-3">
+                        <div class="w-10 h-10 rounded-lg flex items-center justify-center text-white font-semibold text-sm">
+                          <%= region.name.first.upcase %>
+                        </div>
+                        <div>
+                          <div class="font-semibold text-gray-900 text-sm"><%= region.name %></div>
+                          <div class="text-gray-500 text-xs">Service Region</div>
+                        </div>
+                      </div>
+                    </td>
+                    <td class="hide-mobile table-cell">
+                      <span class="bg-gradient-blue text-white py-1.5 px-3 rounded-full text-xs font-medium inline-flex items-center">
+                        1 provider
+                      </span>
+                    </td>
+                    <td class="actions-col table-cell text-right">
+                      <div class="flex gap-2 justify-end">
+                        <%= link_to region, class: "btn-view", data: { turbo: false } do %>
+                          <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path>
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"></path>
+                          </svg>
+                          <span>View</span>
+                        <% end %>
+                        <%= link_to edit_region_path(region), class: "btn-edit", data: { turbo: false } do %>
+                          <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"></path>
+                          </svg>
+                          <span>Edit</span>
+                        <% end %>
+                        <%= button_to region, method: :delete, data: { turbo_confirm: "Are you sure you want to delete this region?" }, class: "bg-red-600 text-white py-2 px-3 rounded-md no-underline text-xs font-semibold inline-flex items-center gap-1.5 transition-all hover:bg-red-700" do %>
+                          <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"></path>
+                          </svg>
+                          <span>Delete</span>
+                        <% end %>
+                      </div>
                     </td>
                   </tr>
                 <% end %>
-                </tbody>
-              </table>
-            </div>
-          </div>
+              <% else %>
+                <tr>
+                  <td colspan="3" class="empty-state">
+                    <div class="text-gray-400">
+                      <svg class="w-12 h-12 mx-auto mb-4 text-gray-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"/>
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"/>
+                      </svg>
+                      <p class="text-base font-medium text-gray-500 m-0">No regions found</p>
+                      <p class="text-sm text-gray-400 mt-2 m-0">Create your first region to get started.</p>
+                    </div>
+                  </td>
+                </tr>
+              <% end %>
+            </tbody>
+          </table>
         </div>
       </div>
     </div>
   </div>
-</section>
+</div>

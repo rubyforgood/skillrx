@@ -26,7 +26,7 @@
     <%= javascript_importmap_tags %>
   </head>
 
-  <body>
+  <body style="background: #f8f9fa;">
     <script src="https://cdn.jsdelivr.net/gh/zuramai/mazer@docs/demo/assets/static/js/initTheme.js"></script>
 
     <!-- Start content here -->
@@ -41,5 +41,41 @@
     <!-- Need: Apexcharts -->
     <script src="https://cdn.jsdelivr.net/gh/zuramai/mazer@docs/demo/assets/extensions/apexcharts/apexcharts.min.js"></script>
     <script src="https://cdn.jsdelivr.net/gh/zuramai/mazer@docs/demo/assets/static/js/pages/dashboard.js"></script>
+
+    <script>
+      // Enhanced form interactions
+      document.addEventListener('DOMContentLoaded', function() {
+        // Password visibility toggle (if needed)
+        const passwordFields = document.querySelectorAll('input[type="password"]');
+        passwordFields.forEach(field => {
+          // Create wrapper div for the input field
+          const wrapper = document.createElement('div');
+          wrapper.style.position = 'relative';
+          wrapper.style.display = 'block';
+
+          // Insert wrapper before the field and move field into wrapper
+          field.parentNode.insertBefore(wrapper, field);
+          wrapper.appendChild(field);
+
+          // Create toggle button
+          const toggleBtn = document.createElement('button');
+          toggleBtn.type = 'button';
+          toggleBtn.className = 'btn btn-link position-absolute end-0 top-50 translate-middle-y me-3';
+          toggleBtn.innerHTML = '<i class="bi bi-eye"></i>';
+          toggleBtn.style.zIndex = '10';
+          toggleBtn.style.border = 'none';
+          toggleBtn.style.background = 'none';
+
+          // Append button to wrapper
+          wrapper.appendChild(toggleBtn);
+
+          toggleBtn.addEventListener('click', function() {
+            const type = field.getAttribute('type') === 'password' ? 'text' : 'password';
+            field.setAttribute('type', type);
+            this.innerHTML = type === 'password' ? '<i class="bi bi-eye"></i>' : '<i class="bi bi-eye-slash"></i>';
+          });
+        });
+      });
+    </script>
   </body>
 </html>

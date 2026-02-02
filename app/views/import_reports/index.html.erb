@@ -1,79 +1,272 @@
 <% content_for :title, "Import Reports" %>
 
-<section class="section">
-  <div class="row" id="table-striped">
-    <div class="col-12 cold-md-12">
-      <div class="card">
-        <div class="card-header d-flex justify-content-between align-items-center">
-          <h2 class="card-title">Import Reports</h2>
+<div class="bg-gradient-page page-container">
+  <div class="content-wrapper">
+
+    <!-- Header Section -->
+    <div class="section-spacing">
+      <div class="flex-between-wrap mb-6">
+        <div class="min-w-0 flex-1">
+          <div class="flex items-center gap-4 mb-2">
+            <div class="bg-gradient-blue text-white p-3 rounded-xl flex-shrink-0">
+              <svg class="icon-size-md" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/>
+              </svg>
+            </div>
+            <h1 class="text-4xl font-bold text-gray-800 m-0 min-w-0">Import Reports</h1>
+          </div>
+          <p class="text-gray-500 m-0 text-base">View and monitor import operations and their status</p>
         </div>
-        <div class="card-content">
-          <div class="card-body">
-            <p class="card-text">View and monitor import operations and their status.</p>
-            
-            <!-- Filters -->
-            <div class="row mb-3">
-              <div class="col-md-4">
-                <%= form_with url: import_reports_path, method: :get, local: true, class: "d-flex gap-2" do |form| %>
-                  <%= form.select :status, options_for_select([["All Statuses", ""]] + @available_statuses.map { |status| [status.humanize, status] }, params[:status]), {}, { class: "form-select", onchange: "this.form.submit();" } %>
-                <% end %>
+      </div>
+
+      <!-- Breadcrumb -->
+      <nav class="breadcrumb-nav">
+        <ol class="breadcrumb-list">
+          <li><%= link_to "Dashboard", root_path, class: "text-gray-500 no-underline hover:text-gray-700" %></li>
+          <li class="breadcrumb-separator">/</li>
+          <li class="breadcrumb-current">Import Reports</li>
+        </ol>
+      </nav>
+    </div>
+
+    <!-- Filter Card -->
+    <div class="mb-8">
+      <div class="card-elevated overflow-hidden">
+
+        <!-- Filter Header -->
+        <div class="bg-gradient-to-br from-blue-700 to-indigo-800 p-6 text-white">
+          <div class="flex items-center gap-4">
+            <div class="icon-wrapper-translucent">
+              <svg class="icon-size-md" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 4a1 1 0 011-1h16a1 1 0 011 1v2.586a1 1 0 01-.293.707l-6.414 6.414a1 1 0 00-.293.707V17l-4 4v-6.586a1 1 0 00-.293-.707L3.293 7.414A1 1 0 013 6.707V4z"/>
+              </svg>
+            </div>
+            <h2 class="text-xl font-semibold m-0">Filter Reports</h2>
+          </div>
+        </div>
+
+        <!-- Filter Body -->
+        <div class="card-body">
+          <%= form_with url: import_reports_path, method: :get, local: true, data: { controller: "search", search_target: "search" } do |f| %>
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+
+              <!-- Status Filter -->
+              <div>
+                <label class="input-label">
+                  <div class="flex items-center gap-2">
+                    <svg class="icon-size-sm text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/>
+                    </svg>
+                    Status
+                  </div>
+                </label>
+                <%= f.select :status, options_for_select([["All Statuses", ""]] + @available_statuses.map { |status| [status.humanize, status] }, params[:status]),
+                    {},
+                    class: "input-field",
+                    data: { action: "change->search#submit" } %>
               </div>
             </div>
 
-            <div class="table-responsive">
-              <table class="table table-lg table-striped mb-0">
-                <thead>
-                  <tr>
-                    <th>ID</th>
-                    <th>Import Type</th>
-                    <th>Status</th>
-                    <th>Started At</th>
-                    <th>Completed At</th>
-                    <th>Errors</th>
-                    <th class="text-end">Actions</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  <% @import_reports.each do |import_report| %>
-                    <tr>
-                      <td class="text-bold-500"><%= import_report.id %></td>
-                      <td class="text-bold-500"><%= import_report.import_type.humanize %></td>
-                      <td>
-                        <span class="badge bg-<%= import_report.status == "completed" ? "success" : "info" %>">
-                          <%= import_report.status.humanize %>
-                        </span>
-                      </td>
-                      <td class="text-bold-500">
-                        <%= import_report.started_at&.strftime("%m/%d/%Y %I:%M %p") || "Not started" %>
-                      </td>
-                      <td class="text-bold-500">
-                        <%= import_report.completed_at&.strftime("%m/%d/%Y %I:%M %p") || "Not completed" %>
-                      </td>
-                      <td class="text-bold-500">
-                        <% if import_report.import_errors.any? %>
-                          <span class="badge bg-danger"><%= import_report.import_errors.count %></span>
-                        <% else %>
-                          <span class="badge bg-success">0</span>
-                        <% end %>
-                      </td>
-                      <td class="text-end">
-                        <%= link_to import_report_path(import_report), class: "btn btn-secondary btn-sm" do %>
-                          <i class="bi bi-eye"></i> View
-                        <% end %>
-                      </td>
-                    </tr>
-                  <% end %>
-                </tbody>
-              </table>
+            <!-- Clear Button -->
+            <div class="mt-6 flex justify-end">
+              <%= link_to "Clear Filters", import_reports_path,
+                  class: "bg-gray-100 text-gray-600 font-semibold py-2.5 px-5 rounded-lg no-underline text-sm transition-all hover:bg-gray-200 inline-flex items-center gap-2" %>
             </div>
-
-            <!-- Pagination -->
-            <div class="d-flex justify-content-center mt-3">
-              <%== pagy_nav(@pagy) if @pagy.pages > 1 %>
-            </div>
-          </div>
+          <% end %>
         </div>
       </div>
     </div>
+
+    <!-- Reports Table Card -->
+    <%= turbo_frame_tag "reports-list" do %>
+      <div class="card-elevated overflow-hidden">
+
+        <!-- Card Header -->
+        <div class="bg-gradient-green p-8 text-white">
+          <div class="flex justify-between items-center flex-wrap gap-4">
+            <div class="flex items-center gap-4">
+              <div class="icon-wrapper-translucent">
+                <svg class="icon-size-lg" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10"/>
+                </svg>
+              </div>
+              <div>
+                <h2 class="text-2xl font-bold m-0">Import Reports</h2>
+                <p class="mt-1 m-0 text-white/80 text-sm">
+                  <%= pluralize(@import_reports.count, 'report') %> found
+                </p>
+              </div>
+            </div>
+
+            <div class="flex gap-3 items-center">
+              <div class="bg-white/10 py-2 px-4 rounded-full text-xs font-medium">
+                Total: <%= @import_reports.count %>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Table Content -->
+        <div class="table-container overflow-x-auto">
+          <table class="w-full border-collapse">
+            <thead>
+              <tr class="table-header">
+                <th class="table-cell text-left">
+                  <div class="flex items-center gap-2">
+                    <svg class="icon-size-sm" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 20l4-16m2 16l4-16M6 9h14M4 15h14"/>
+                    </svg>
+                    ID
+                  </div>
+                </th>
+                <th class="table-cell text-left">
+                  <div class="flex items-center gap-2">
+                    <svg class="icon-size-sm" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12"/>
+                    </svg>
+                    Import Type
+                  </div>
+                </th>
+                <th class="table-cell text-left">
+                  <div class="flex items-center gap-2">
+                    <svg class="icon-size-sm" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/>
+                    </svg>
+                    Status
+                  </div>
+                </th>
+                <th class="table-cell text-left">
+                  <div class="flex items-center gap-2">
+                    <svg class="icon-size-sm" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"/>
+                    </svg>
+                    Started
+                  </div>
+                </th>
+                <th class="table-cell text-left hidden md:table-cell">
+                  <div class="flex items-center gap-2">
+                    <svg class="icon-size-sm" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/>
+                    </svg>
+                    Completed
+                  </div>
+                </th>
+                <th class="table-cell text-left">
+                  <div class="flex items-center gap-2">
+                    <svg class="icon-size-sm" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-2.5L13.732 4c-.77-.833-1.964-.833-2.732 0L3.732 16.5c-.77.833.192 2.5 1.732 2.5z"/>
+                    </svg>
+                    Errors
+                  </div>
+                </th>
+                <th class="table-cell text-right">
+                  Actions
+                </th>
+              </tr>
+            </thead>
+            <tbody>
+              <% if @import_reports.any? %>
+                <% @import_reports.each_with_index do |import_report, index| %>
+                  <tr class="border-b border-gray-100 transition-all hover:bg-gray-50">
+                    <td class="table-cell">
+                      <div class="font-semibold text-gray-900 text-sm">#<%= import_report.id %></div>
+                    </td>
+                    <td class="table-cell">
+                      <div class="font-semibold text-gray-900 text-sm"><%= import_report.import_type.humanize %></div>
+                    </td>
+                    <td class="table-cell">
+                      <% if import_report.status == "completed" %>
+                        <span class="bg-gradient-green text-white py-1 px-3 rounded-full text-xs font-semibold inline-flex items-center gap-1.5">
+                          <svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/>
+                          </svg>
+                          <%= import_report.status.humanize %>
+                        </span>
+                      <% elsif import_report.status == "failed" %>
+                        <span class="bg-gradient-to-br from-red-600 to-red-700 text-white py-1 px-3 rounded-full text-xs font-semibold inline-flex items-center gap-1.5">
+                          <svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/>
+                          </svg>
+                          <%= import_report.status.humanize %>
+                        </span>
+                      <% else %>
+                        <span class="bg-gradient-blue text-white py-1 px-3 rounded-full text-xs font-semibold inline-flex items-center gap-1.5">
+                          <svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"/>
+                          </svg>
+                          <%= import_report.status.humanize %>
+                        </span>
+                      <% end %>
+                    </td>
+                    <td class="table-cell">
+                      <div class="text-gray-600 text-sm">
+                        <%= import_report.started_at&.strftime('%b %d, %Y at %I:%M %p') || "Not started" %>
+                      </div>
+                    </td>
+                    <td class="table-cell hidden md:table-cell">
+                      <div class="text-gray-600 text-sm">
+                        <%= import_report.completed_at&.strftime('%b %d, %Y at %I:%M %p') || "Not completed" %>
+                      </div>
+                    </td>
+                    <td class="table-cell">
+                      <% if import_report.import_errors.any? %>
+                        <span class="bg-gradient-to-br from-red-600 to-red-700 text-white py-1 px-3 rounded-full text-xs font-semibold inline-flex items-center gap-1.5">
+                          <svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-2.5L13.732 4c-.77-.833-1.964-.833-2.732 0L3.732 16.5c-.77.833.192 2.5 1.732 2.5z"/>
+                          </svg>
+                          <%= import_report.import_errors.count %>
+                        </span>
+                      <% else %>
+                        <span class="bg-gradient-green text-white py-1 px-3 rounded-full text-xs font-semibold inline-flex items-center gap-1.5">
+                          <svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/>
+                          </svg>
+                          0
+                        </span>
+                      <% end %>
+                    </td>
+                    <td class="table-cell text-right">
+                      <div class="flex gap-2 justify-end">
+                        <%= link_to import_report, data: { turbo_frame: "_top" }, class: "btn-view" do %>
+                          <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path>
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"></path>
+                          </svg>
+                          <span>View</span>
+                        <% end %>
+                      </div>
+                    </td>
+                  </tr>
+                <% end %>
+              <% else %>
+                <tr>
+                  <td colspan="7" class="empty-state">
+                    <div class="text-gray-400">
+                      <svg class="w-12 h-12 mx-auto mb-4 text-gray-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path>
+                      </svg>
+                      <p class="text-base font-medium text-gray-500 m-0">No import reports found</p>
+                      <p class="text-sm text-gray-400 mt-2 m-0">Try adjusting your search filters.</p>
+                    </div>
+                  </td>
+                </tr>
+              <% end %>
+            </tbody>
+          </table>
+        </div>
+
+        <!-- Pagination -->
+        <div class="bg-gray-50 px-6 py-6 border-t border-gray-200 flex justify-between items-center flex-wrap gap-4">
+          <div class="text-gray-600 text-sm">
+            Showing <%= @import_reports.count %> of <%= @pagy.count %> reports
+          </div>
+          <div>
+            <% if @pagy.pages > 1 %>
+              <%= render "shared/pagination", pagy: @pagy %>
+            <% end %>
+          </div>
+        </div>
+      </div>
+    <% end %>
   </div>
-</section>
+</div>

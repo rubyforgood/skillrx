@@ -1,12 +1,14 @@
-<%= form_for :provider , url: provider_settings_path, method: :put, data: { controller: "topics", topics_target: "chooseForm", turbo_frame: "topics", turbo_action: "advance" } do |f| %>
-  <div class="form-body">
-    <div class="row">
-      <div class="col-md-6 col-12">
-        <div class="form-group">
-          <%= f.label :provider %>
-          <%= f.select :id, options_from_collection_for_select(providers, :id, :name), { prompt: "Change provider" }, class: "form-select", data: { action: "change->topics#chooseProvider" } %>
-        </div>
-      </div>
+<%= form_for :provider, url: provider_settings_path, method: :put, data: { controller: "topics", topics_target: "chooseForm", turbo_frame: "topics", turbo_action: "advance" } do |f| %>
+  <div class="flex flex-wrap gap-3 items-center">
+    <label for="provider_id" class="input-label m-0">Provider</label>
+    <div class="relative min-w-[220px] max-w-full w-80">
+      <%= f.select :id,
+                   options_from_collection_for_select(providers, :id, :name),
+                   { prompt: "Change provider" },
+                   class: "select-field",
+                   data: { action: "change->topics#chooseProvider" },
+                   id: "provider_id" %>
+      <%= render "shared/dropdown_arrow" %>
     </div>
   </div>
 <% end %>
