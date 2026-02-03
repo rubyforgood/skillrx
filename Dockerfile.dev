@@ -44,7 +44,7 @@ VOLUME /app
 EXPOSE 3000
 
 # Configure entrypoint to run Rails
-# ENTRYPOINT ["./bin/docker-entrypoint.dev"]
+ENTRYPOINT ["./bin/docker-entrypoint.dev"]
 
 # Start Rails server by default
-# CMD ["bundle", "exec", "rails", "server", "-b", "0.0.0.0"]
+CMD ["bundle", "exec", "rails", "server", "-b", "0.0.0.0"]
