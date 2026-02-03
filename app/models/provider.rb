@@ -1,6 +1,7 @@
 # == Schema Information
 #
 # Table name: providers
+# Database name: primary
 #
 #  id               :bigint           not null, primary key
 #  file_name_prefix :string
@@ -20,6 +21,8 @@ class Provider < ApplicationRecord
   has_many :contributors
   has_many :users, through: :contributors
   has_many :topics
+  has_many :beacon_providers, dependent: :destroy
+  has_many :beacons, through: :beacon_providers
 
   validates :name, :provider_type, presence: true
   validates :name, uniqueness: true

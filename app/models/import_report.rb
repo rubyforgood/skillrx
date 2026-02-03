@@ -1,6 +1,7 @@
 # == Schema Information
 #
 # Table name: import_reports
+# Database name: primary
 #
 #  id              :bigint           not null, primary key
 #  completed_at    :datetime
