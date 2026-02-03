@@ -2,7 +2,7 @@ name: Deploy to Staging
 
 on:
   push:
-    branches: [ main ]
+    branches: [main]
   workflow_dispatch:
 
 jobs:
@@ -12,38 +12,38 @@ jobs:
     concurrency:
       group: deploy-staging
       cancel-in-progress: false
-    
+
     steps:
-    - name: Checkout code
-      uses: actions/checkout@v6
+      - name: Checkout code
+        uses: actions/checkout@v6
 
-    - name: Set up Ruby
-      uses: ruby/setup-ruby@v1
-      with:
-        ruby-version: '3.4.8'
-        bundler-cache: true
+      - name: Set up Ruby
+        uses: ruby/setup-ruby@v1
+        with:
+          ruby-version: "4.0.1"
+          bundler-cache: true
 
-    - name: Install Kamal
-      run: gem install kamal
+      - name: Install Kamal
+        run: gem install kamal
 
-    - name: Set up SSH key
-      run: |
-        mkdir -p ~/.ssh
-        echo "${{ secrets.STAGING_SSH_PRIVATE_KEY }}" > ~/.ssh/skillrx_web_staging.pem
-        chmod 600 ~/.ssh/skillrx_web_staging.pem
+      - name: Set up SSH key
+        run: |
+          mkdir -p ~/.ssh
+          echo "${{ secrets.STAGING_SSH_PRIVATE_KEY }}" > ~/.ssh/skillrx_web_staging.pem
+          chmod 600 ~/.ssh/skillrx_web_staging.pem
 
-    - name: Deploy to staging with Kamal
-      env:
-        KAMAL_REGISTRY_USERNAME: ${{ secrets.DOCKERHUB_USERNAME }}
-        KAMAL_REGISTRY_PASSWORD: ${{ secrets.DOCKERHUB_PASSWORD }}
-        DATABASE_URL: ${{ secrets.STAGING_DATABASE_URL }}
-        SECRET_KEY_BASE: ${{ secrets.STAGING_SECRET_KEY_BASE }}
-        RAILS_MASTER_KEY: ${{ secrets.RAILS_MASTER_KEY }}
-        AWS_ACCESS_KEY_ID: ${{ secrets.STAGING_AWS_ACCESS_KEY_ID }}
-        AWS_SECRET_ACCESS_KEY: ${{ secrets.STAGING_AWS_SECRET_ACCESS_KEY }}
-        AZURE_STORAGE_ACCOUNT_NAME: ${{ secrets.STAGING_AZURE_STORAGE_ACCOUNT_NAME }}
-        AZURE_STORAGE_ACCOUNT_KEY: ${{ secrets.STAGING_AZURE_STORAGE_ACCOUNT_KEY }}
-        SCOUT_KEY: ${{ secrets.STAGING_SCOUT_KEY }}
-        SCOUT_LOGS_INGEST_KEY: ${{ secrets.STAGING_SCOUT_LOGS_INGEST_KEY }}
-      run: |
-        bin/kamal deploy -d staging
+      - name: Deploy to staging with Kamal
+        env:
+          KAMAL_REGISTRY_USERNAME: ${{ secrets.DOCKERHUB_USERNAME }}
+          KAMAL_REGISTRY_PASSWORD: ${{ secrets.DOCKERHUB_PASSWORD }}
+          DATABASE_URL: ${{ secrets.STAGING_DATABASE_URL }}
+          SECRET_KEY_BASE: ${{ secrets.STAGING_SECRET_KEY_BASE }}
+          RAILS_MASTER_KEY: ${{ secrets.RAILS_MASTER_KEY }}
+          AWS_ACCESS_KEY_ID: ${{ secrets.STAGING_AWS_ACCESS_KEY_ID }}
+          AWS_SECRET_ACCESS_KEY: ${{ secrets.STAGING_AWS_SECRET_ACCESS_KEY }}
+          AZURE_STORAGE_ACCOUNT_NAME: ${{ secrets.STAGING_AZURE_STORAGE_ACCOUNT_NAME }}
+          AZURE_STORAGE_ACCOUNT_KEY: ${{ secrets.STAGING_AZURE_STORAGE_ACCOUNT_KEY }}
+          SCOUT_KEY: ${{ secrets.STAGING_SCOUT_KEY }}
+          SCOUT_LOGS_INGEST_KEY: ${{ secrets.STAGING_SCOUT_LOGS_INGEST_KEY }}
+        run: |
+          bin/kamal deploy -d staging
