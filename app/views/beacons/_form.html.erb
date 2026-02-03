@@ -97,7 +97,7 @@
     <div class="form-grid-full" data-controller="select-tags" data-select-tags-dropdown-parent-value="body">
       <%= form.label :topic_ids, "Topics", class: "form-label" %>
       <%= form.select :topic_ids, 
-          options_from_collection_for_select(@topics, :id, :name, beacon.topic_ids),
+          options_from_collection_for_select(@topics, :id, :title, beacon.topic_ids),
           { prompt: "Start typing to select topics", include_blank: true },
           { multiple: true, 
             data: { 

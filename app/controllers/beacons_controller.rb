@@ -11,7 +11,7 @@ class BeaconsController < ApplicationController
     @languages = Language.order(:name)
     @providers = Provider.order(:name)
     @regions = Region.order(:name)
-    @topics = Topic.order(:name)
+    @topics = Topic.active.order(:title)
   end
 
   def create
@@ -25,7 +25,7 @@ class BeaconsController < ApplicationController
       @languages = Language.order(:name)
       @providers = Provider.order(:name)
       @regions = Region.order(:name)
-      @topics = Topic.order(:name)
+      @topics = Topic.active.order(:title)
       render :new, status: :unprocessable_entity
     end
   end
@@ -38,7 +38,7 @@ class BeaconsController < ApplicationController
     @languages = Language.order(:name)
     @providers = Provider.order(:name)
     @regions = Region.order(:name)
-    @topics = Topic.order(:name)
+    @topics = Topic.active.order(:title)
   end
 
   def update
@@ -48,7 +48,7 @@ class BeaconsController < ApplicationController
       @languages = Language.order(:name)
       @providers = Provider.order(:name)
       @regions = Region.order(:name)
-      @topics = Topic.order(:name)
+      @topics = Topic.active.order(:title)
       render :edit, status: :unprocessable_entity
     end
   end
