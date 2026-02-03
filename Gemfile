@@ -1,6 +1,6 @@
 source "https://rubygems.org"
 
-ruby "3.4.8"
+ruby "4.0.1"
 
 gem "active_storage_validations"
 gem "acts-as-taggable-on", "~> 13.0"
