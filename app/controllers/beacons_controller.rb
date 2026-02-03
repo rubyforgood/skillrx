@@ -1,6 +1,6 @@
 class BeaconsController < ApplicationController
   before_action :redirect_contributors
-  before_action :set_beacon, only: %i[show edit update]
+  before_action :set_beacon, only: %i[show edit update regenerate_key]
 
   def index
     @beacons = Beacon.includes(:language, :region, :providers, :topics).order(created_at: :desc)
@@ -51,6 +51,13 @@ class BeaconsController < ApplicationController
       @topics = Topic.active.order(:title)
       render :edit, status: :unprocessable_entity
     end
+  end
+
+  def regenerate_key
+    beacon, new_key = Beacons::KeyRegenerator.new.call(@beacon)
+    flash[:notice] = "API key has been regenerated successfully."
+    flash[:api_key] = new_key
+    redirect_to @beacon
   end
 
   private

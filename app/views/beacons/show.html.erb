@@ -138,26 +138,26 @@
         </div>
         <div class="p-6">
           <% if @api_key_display %>
-            <div class="bg-gray-50 rounded-lg p-4 border border-gray-200 mb-4">
+            <div class="bg-green-50 rounded-lg p-4 border-2 border-green-300 mb-4">
               <div class="flex items-center justify-between mb-2">
-                <span class="text-xs font-semibold text-gray-500 uppercase">API Key (save this now - it won't be shown again)</span>
+                <span class="text-xs font-semibold text-green-800 uppercase">✓ Beacon Provisioned - API Key Generated</span>
                 <button onclick="copyApiKey()" class="text-xs text-blue-600 hover:text-blue-800 font-semibold">
                   Copy to Clipboard
                 </button>
               </div>
-              <code id="beacon-api-key" class="text-sm text-gray-900 font-mono break-all block"><%= @api_key_display %></code>
+              <code id="beacon-api-key" class="text-sm text-gray-900 font-mono break-all block bg-white p-3 rounded border border-green-200"><%= @api_key_display %></code>
             </div>
-            <div class="bg-yellow-50 border border-yellow-200 rounded-lg p-4">
+            <div class="bg-blue-50 border border-blue-200 rounded-lg p-4">
               <div class="flex">
                 <div class="flex-shrink-0">
-                  <svg class="h-5 w-5 text-yellow-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"/>
+                  <svg class="h-5 w-5 text-blue-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/>
                   </svg>
                 </div>
                 <div class="ml-3">
-                  <h3 class="text-sm font-medium text-yellow-800 m-0 mb-1">Important - Save This Key</h3>
-                  <p class="text-sm text-yellow-700 m-0">
-                    This API key will only be shown once. Make sure to copy and save it securely. You can regenerate a new key if needed.
+                  <h3 class="text-sm font-medium text-blue-800 m-0 mb-1">Save This Key</h3>
+                  <p class="text-sm text-blue-700 m-0">
+                    Copy this API key and configure it in your beacon deployment. This page will only show the full key immediately after creation. You can regenerate a new key anytime if needed.
                   </p>
                 </div>
               </div>
@@ -169,7 +169,7 @@
               </div>
               <code class="text-sm text-gray-900 font-mono break-all block"><%= @beacon.api_key_prefix %>***</code>
             </div>
-            <div class="bg-blue-50 border border-blue-200 rounded-lg p-4">
+            <div class="bg-blue-50 border border-blue-200 rounded-lg p-4 mb-4">
               <div class="flex">
                 <div class="flex-shrink-0">
                   <svg class="h-5 w-5 text-blue-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -177,13 +177,21 @@
                   </svg>
                 </div>
                 <div class="ml-3">
-                  <h3 class="text-sm font-medium text-blue-800 m-0 mb-1">API Key Hidden</h3>
+                  <h3 class="text-sm font-medium text-blue-800 m-0 mb-1">API Key Active</h3>
                   <p class="text-sm text-blue-700 m-0">
-                    The full API key is hidden for security. Only the prefix is shown. If you need a new key, you can regenerate it.
+                    The API key for this beacon is active (shown by prefix above). The full key was displayed when the beacon was first created. If you need a new key, use the regenerate button below.
                   </p>
                 </div>
               </div>
             </div>
+            <%= button_to regenerate_key_beacon_path(@beacon), method: :post, 
+                class: "w-full bg-orange-600 hover:bg-orange-700 text-white font-semibold py-3 px-4 rounded-lg transition-colors inline-flex items-center justify-center gap-2",
+                data: { turbo_confirm: "Are you sure? This will invalidate the current API key and generate a new one. Any beacons using the old key will stop working." } do %>
+              <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"></path>
+              </svg>
+              <span>Regenerate API Key</span>
+            <% end %>
           <% end %>
         </div>
       </div>
