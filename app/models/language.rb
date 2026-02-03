@@ -1,6 +1,7 @@
 # == Schema Information
 #
 # Table name: languages
+# Database name: primary
 #
 #  id         :bigint           not null, primary key
 #  name       :string
@@ -10,6 +11,7 @@
 class Language < ApplicationRecord
   has_many :topics, dependent: :destroy
   has_many :providers, through: :topics
+  has_many :devices, dependent: :destroy
 
   validates :name, presence: true, uniqueness: true, length: { minimum: 2 }
 
