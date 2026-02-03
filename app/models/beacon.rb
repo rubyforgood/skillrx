@@ -1,6 +1,6 @@
 # == Schema Information
 #
-# Table name: devices
+# Table name: beacons
 # Database name: primary
 #
 #  id             :bigint           not null, primary key
@@ -15,24 +15,24 @@
 #
 # Indexes
 #
-#  index_devices_on_api_key_digest  (api_key_digest) UNIQUE
-#  index_devices_on_language_id     (language_id)
-#  index_devices_on_region_id       (region_id)
+#  index_beacons_on_api_key_digest  (api_key_digest) UNIQUE
+#  index_beacons_on_language_id     (language_id)
+#  index_beacons_on_region_id       (region_id)
 #
 # Foreign Keys
 #
 #  fk_rails_...  (language_id => languages.id)
 #  fk_rails_...  (region_id => regions.id)
 #
-class Device < ApplicationRecord
+class Beacon < ApplicationRecord
   belongs_to :language
   belongs_to :region
 
-  has_many :device_providers, dependent: :destroy
-  has_many :providers, through: :device_providers
+  has_many :beacon_providers, dependent: :destroy
+  has_many :providers, through: :beacon_providers
 
-  has_many :device_topics, dependent: :destroy
-  has_many :topics, through: :device_topics
+  has_many :beacon_topics, dependent: :destroy
+  has_many :topics, through: :beacon_topics
 
   validates :name, presence: true
   validates :api_key_digest, presence: true, uniqueness: true

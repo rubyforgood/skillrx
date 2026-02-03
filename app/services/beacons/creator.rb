@@ -1,4 +1,4 @@
-module Devices
+module Beacons
   class Creator
     attr_reader :key_generator
 
@@ -9,16 +9,16 @@ module Devices
     def call(params)
       key_result = key_generator.call
 
-      device = Device.new(
+      beacon = Beacon.new(
         **params,
         api_key_digest: key_result.digest,
         api_key_prefix: key_result.prefix,
       )
 
-      if device.save
-        [ true, device, key_result.raw_key ]
+      if beacon.save
+        [ true, beacon, key_result.raw_key ]
       else
-        [ false, device, nil ]
+        [ false, beacon, nil ]
       end
     end
   end

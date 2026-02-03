@@ -1,6 +1,6 @@
 require "rails_helper"
 
-RSpec.describe Devices::ApiKeyGenerator do
+RSpec.describe Beacons::ApiKeyGenerator do
   subject(:generator) { described_class.new }
 
   describe "#call" do

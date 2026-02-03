@@ -1,6 +1,6 @@
 # == Schema Information
 #
-# Table name: devices
+# Table name: beacons
 # Database name: primary
 #
 #  id             :bigint           not null, primary key
@@ -15,9 +15,9 @@
 #
 # Indexes
 #
-#  index_devices_on_api_key_digest  (api_key_digest) UNIQUE
-#  index_devices_on_language_id     (language_id)
-#  index_devices_on_region_id       (region_id)
+#  index_beacons_on_api_key_digest  (api_key_digest) UNIQUE
+#  index_beacons_on_language_id     (language_id)
+#  index_beacons_on_region_id       (region_id)
 #
 # Foreign Keys
 #
@@ -26,8 +26,8 @@
 #
 require "rails_helper"
 
-RSpec.describe Device, type: :model do
-  subject { create(:device) }
+RSpec.describe Beacon, type: :model do
+  subject { create(:beacon) }
 
   describe "validations" do
     it { is_expected.to validate_presence_of(:name) }
@@ -39,25 +39,25 @@ RSpec.describe Device, type: :model do
   describe "associations" do
     it { is_expected.to belong_to(:language) }
     it { is_expected.to belong_to(:region) }
-    it { is_expected.to have_many(:device_providers).dependent(:destroy) }
-    it { is_expected.to have_many(:providers).through(:device_providers) }
-    it { is_expected.to have_many(:device_topics).dependent(:destroy) }
-    it { is_expected.to have_many(:topics).through(:device_topics) }
+    it { is_expected.to have_many(:beacon_providers).dependent(:destroy) }
+    it { is_expected.to have_many(:providers).through(:beacon_providers) }
+    it { is_expected.to have_many(:beacon_topics).dependent(:destroy) }
+    it { is_expected.to have_many(:topics).through(:beacon_topics) }
   end
 
   describe "scopes" do
-    let!(:active_device) { create(:device) }
-    let!(:revoked_device) { create(:device, :revoked) }
+    let!(:active_beacon) { create(:beacon) }
+    let!(:revoked_beacon) { create(:beacon, :revoked) }
 
     describe ".active" do
-      it "returns only active devices" do
-        expect(described_class.active).to contain_exactly(active_device)
+      it "returns only active beacons" do
+        expect(described_class.active).to contain_exactly(active_beacon)
       end
     end
 
     describe ".revoked" do
-      it "returns only revoked devices" do
-        expect(described_class.revoked).to contain_exactly(revoked_device)
+      it "returns only revoked beacons" do
+        expect(described_class.revoked).to contain_exactly(revoked_beacon)
       end
     end
   end
@@ -66,25 +66,25 @@ RSpec.describe Device, type: :model do
     include ActiveSupport::Testing::TimeHelpers
 
     it "sets revoked_at to the current time" do
-      device = create(:device)
+      beacon = create(:beacon)
       now = Time.current
 
       travel_to(now) do
-        device.revoke!
-        expect(device.revoked_at).to be_within(1.second).of(now)
+        beacon.revoke!
+        expect(beacon.revoked_at).to be_within(1.second).of(now)
       end
     end
   end
 
   describe "#revoked?" do
-    it "returns false for active devices" do
-      device = create(:device)
-      expect(device).not_to be_revoked
+    it "returns false for active beacons" do
+      beacon = create(:beacon)
+      expect(beacon).not_to be_revoked
     end
 
-    it "returns true for revoked devices" do
-      device = create(:device, :revoked)
-      expect(device).to be_revoked
+    it "returns true for revoked beacons" do
+      beacon = create(:beacon, :revoked)
+      expect(beacon).to be_revoked
     end
   end
 end

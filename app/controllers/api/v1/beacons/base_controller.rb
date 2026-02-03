@@ -1,8 +1,8 @@
 module Api
   module V1
-    module Devices
+    module Beacons
       class BaseController < Api::V1::BaseController
-        include Api::DeviceAuthentication
+        include Api::BeaconAuthentication
       end
     end
   end

@@ -1,6 +1,6 @@
 # == Schema Information
 #
-# Table name: devices
+# Table name: beacons
 # Database name: primary
 #
 #  id             :bigint           not null, primary key
@@ -15,9 +15,9 @@
 #
 # Indexes
 #
-#  index_devices_on_api_key_digest  (api_key_digest) UNIQUE
-#  index_devices_on_language_id     (language_id)
-#  index_devices_on_region_id       (region_id)
+#  index_beacons_on_api_key_digest  (api_key_digest) UNIQUE
+#  index_beacons_on_language_id     (language_id)
+#  index_beacons_on_region_id       (region_id)
 #
 # Foreign Keys
 #
@@ -25,8 +25,8 @@
 #  fk_rails_...  (region_id => regions.id)
 #
 FactoryBot.define do
-  factory :device do
-    sequence(:name) { |n| "Device #{n}" }
+  factory :beacon do
+    sequence(:name) { |n| "Beacon #{n}" }
     association :language
     association :region
     api_key_digest { OpenSSL::Digest::SHA256.hexdigest(SecureRandom.hex(16)) }
@@ -41,8 +41,8 @@ FactoryBot.define do
         provider_count { 2 }
       end
 
-      after(:create) do |device, evaluator|
-        create_list(:device_provider, evaluator.provider_count, device: device)
+      after(:create) do |beacon, evaluator|
+        create_list(:beacon_provider, evaluator.provider_count, beacon: beacon)
       end
     end
 
@@ -51,8 +51,8 @@ FactoryBot.define do
         topic_count { 2 }
       end
 
-      after(:create) do |device, evaluator|
-        create_list(:device_topic, evaluator.topic_count, device: device)
+      after(:create) do |beacon, evaluator|
+        create_list(:beacon_topic, evaluator.topic_count, beacon: beacon)
       end
     end
   end

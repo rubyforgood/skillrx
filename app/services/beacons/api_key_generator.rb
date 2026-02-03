@@ -1,4 +1,4 @@
-module Devices
+module Beacons
   class ApiKeyGenerator
     PREFIX = "sk_live_"
 

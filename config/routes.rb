@@ -40,7 +40,7 @@ Rails.application.routes.draw do
     namespace :v1 do
       resources :tags, only: %i[index show]
 
-      namespace :devices do
+      namespace :beacons do
         resource :status, only: :show
       end
     end
