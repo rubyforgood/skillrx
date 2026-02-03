@@ -23,7 +23,8 @@ RUN apk add --no-cache \
     ca-certificates \
     ttf-freefont \
     chromium \
-    chromium-chromedriver
+    chromium-chromedriver \
+    libffi-dev
 
 # Set Chrome environment variables
 ENV CHROME_BIN=/usr/bin/chromium-browser \
