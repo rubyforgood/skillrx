@@ -46,6 +46,7 @@ RSpec.describe Topics::Mutator do
   end
 
   describe "#update" do
+    let(:beacon) { create(:beacon) }
     let(:topic) { create(:topic, :with_documents, description: "topic details") }
     let(:document_signed_ids) do
       [
@@ -75,6 +76,12 @@ RSpec.describe Topics::Mutator do
       )
     end
 
+    it "dispatches a manifest rebuild job for each associated beacon" do
+      create(:beacon_topic, beacon: beacon, topic: topic)
+
+      expect { subject.update }.to have_enqueued_job(Beacons::RebuildManifestJob).with(beacon.id)
+    end
+
     context "when existing document is not removed" do
       let(:document_ids) { [ topic.documents.first.signed_id ] }
       let(:document_signed_ids) { [] }
@@ -96,6 +103,7 @@ RSpec.describe Topics::Mutator do
   end
 
   describe "#archive" do
+    let(:beacon) { create(:beacon) }
     let(:topic) { create(:topic, :with_documents) }
 
     it "archives the topic and runs the sync job for documents" do
@@ -111,9 +119,16 @@ RSpec.describe Topics::Mutator do
       expect(archived_topic).to be_persisted
       expect(archived_topic.state).to eq("archived")
     end
+
+    it "dispatches a manifest rebuild job for each associated beacon" do
+      create(:beacon_topic, beacon: beacon, topic: topic)
+
+      expect { subject.archive }.to have_enqueued_job(Beacons::RebuildManifestJob).with(beacon.id)
+    end
   end
 
   describe "#unarchive" do
+    let(:beacon) { create(:beacon) }
     let(:topic) { create(:topic, :with_documents, state: "archived") }
 
     it "unarchive the topics" do
@@ -129,9 +144,16 @@ RSpec.describe Topics::Mutator do
       expect(unarchived_topic).to be_persisted
       expect(unarchived_topic.state).to eq("active")
     end
+
+    it "dispatches a manifest rebuild job for each associated beacon" do
+      create(:beacon_topic, beacon: beacon, topic: topic)
+
+      expect { subject.unarchive }.to have_enqueued_job(Beacons::RebuildManifestJob).with(beacon.id)
+    end
   end
 
   describe "#destroy" do
+    let(:beacon) { create(:beacon) }
     let(:topic) { create(:topic, :with_documents) }
 
     it "deletes the topic and runs the sync job for documents" do
@@ -144,6 +166,12 @@ RSpec.describe Topics::Mutator do
         document_id: topic_shadow.documents.first.id,
         action: "delete",
       )
+    end
+
+    it "dispatches a manifest rebuild job for each associated beacon" do
+      create(:beacon_topic, beacon: beacon, topic: topic)
+
+      expect { subject.destroy }.to have_enqueued_job(Beacons::RebuildManifestJob).with(beacon.id).at_least(:once)
     end
   end
 end
