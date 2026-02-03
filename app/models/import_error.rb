@@ -1,6 +1,7 @@
 # == Schema Information
 #
 # Table name: import_errors
+# Database name: primary
 #
 #  id               :bigint           not null, primary key
 #  error_message    :text

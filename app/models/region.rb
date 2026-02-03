@@ -1,6 +1,7 @@
 # == Schema Information
 #
 # Table name: regions
+# Database name: primary
 #
 #  id         :bigint           not null, primary key
 #  name       :string
@@ -10,6 +11,7 @@
 class Region < ApplicationRecord
   has_many :branches, dependent: :destroy
   has_many :providers, through: :branches
+  has_many :beacons, dependent: :destroy
 
   validates :name, presence: true
 end
