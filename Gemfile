@@ -1,4 +1,4 @@
-source "https://rubygems.org"
+source "https://gem.coop"
 
 ruby "4.0.1"
 
