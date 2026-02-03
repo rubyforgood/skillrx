@@ -11,18 +11,22 @@
 #  created_at     :datetime         not null
 #  updated_at     :datetime         not null
 #  language_id    :bigint           not null
+#  region_id      :bigint           not null
 #
 # Indexes
 #
 #  index_devices_on_api_key_digest  (api_key_digest) UNIQUE
 #  index_devices_on_language_id     (language_id)
+#  index_devices_on_region_id       (region_id)
 #
 # Foreign Keys
 #
 #  fk_rails_...  (language_id => languages.id)
+#  fk_rails_...  (region_id => regions.id)
 #
 class Device < ApplicationRecord
   belongs_to :language
+  belongs_to :region
 
   has_many :device_providers, dependent: :destroy
   has_many :providers, through: :device_providers

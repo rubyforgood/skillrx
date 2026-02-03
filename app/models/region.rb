@@ -11,6 +11,7 @@
 class Region < ApplicationRecord
   has_many :branches, dependent: :destroy
   has_many :providers, through: :branches
+  has_many :devices, dependent: :destroy
 
   validates :name, presence: true
 end

@@ -3,10 +3,11 @@ require "rails_helper"
 RSpec.describe Devices::Creator do
   describe "#call" do
     let(:language) { create(:language) }
+    let(:region) { create(:region) }
 
     it "creates a device and returns the raw key" do
       creator = described_class.new
-      success, device, raw_key = creator.call(name: "Test Device", language: language)
+      success, device, raw_key = creator.call(name: "Test Device", language: language, region: region)
 
       expect(success).to be true
       expect(device).to be_persisted
@@ -15,7 +16,7 @@ RSpec.describe Devices::Creator do
 
     it "sets the api_key_digest and api_key_prefix on the device" do
       creator = described_class.new
-      _, device, raw_key = creator.call(name: "Test Device", language: language)
+      _, device, raw_key = creator.call(name: "Test Device", language: language, region: region)
       expected_digest = OpenSSL::Digest::SHA256.hexdigest(raw_key)
 
       expect(device.api_key_digest).to eq(expected_digest)
@@ -24,7 +25,7 @@ RSpec.describe Devices::Creator do
 
     it "returns failure when params are invalid" do
       creator = described_class.new
-      success, device, raw_key = creator.call(name: "", language: language)
+      success, device, raw_key = creator.call(name: "", language: language, region: region)
 
       expect(success).to be false
       expect(device).not_to be_persisted
@@ -40,7 +41,7 @@ RSpec.describe Devices::Creator do
       fake_generator = instance_double(Devices::ApiKeyGenerator, call: fake_result)
       creator = described_class.new(key_generator: fake_generator)
 
-      success, device, raw_key = creator.call(name: "Test Device", language: language)
+      success, device, raw_key = creator.call(name: "Test Device", language: language, region: region)
 
       expect(success).to be true
       expect(device.api_key_digest).to eq("fake_digest_value")

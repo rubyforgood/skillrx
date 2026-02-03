@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.1].define(version: 2026_02_03_100002) do
+ActiveRecord::Schema[8.1].define(version: 2026_02_03_100003) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_catalog.plpgsql"
 
@@ -86,10 +86,12 @@ ActiveRecord::Schema[8.1].define(version: 2026_02_03_100002) do
     t.datetime "created_at", null: false
     t.bigint "language_id", null: false
     t.string "name", null: false
+    t.bigint "region_id", null: false
     t.datetime "revoked_at"
     t.datetime "updated_at", null: false
     t.index ["api_key_digest"], name: "index_devices_on_api_key_digest", unique: true
     t.index ["language_id"], name: "index_devices_on_language_id"
+    t.index ["region_id"], name: "index_devices_on_region_id"
   end
 
   create_table "import_errors", force: :cascade do |t|
@@ -224,6 +226,7 @@ ActiveRecord::Schema[8.1].define(version: 2026_02_03_100002) do
   add_foreign_key "device_topics", "devices"
   add_foreign_key "device_topics", "topics"
   add_foreign_key "devices", "languages"
+  add_foreign_key "devices", "regions"
   add_foreign_key "import_errors", "import_reports"
   add_foreign_key "sessions", "users"
   add_foreign_key "tag_cognates", "tags"

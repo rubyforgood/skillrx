@@ -11,20 +11,24 @@
 #  created_at     :datetime         not null
 #  updated_at     :datetime         not null
 #  language_id    :bigint           not null
+#  region_id      :bigint           not null
 #
 # Indexes
 #
 #  index_devices_on_api_key_digest  (api_key_digest) UNIQUE
 #  index_devices_on_language_id     (language_id)
+#  index_devices_on_region_id       (region_id)
 #
 # Foreign Keys
 #
 #  fk_rails_...  (language_id => languages.id)
+#  fk_rails_...  (region_id => regions.id)
 #
 FactoryBot.define do
   factory :device do
     sequence(:name) { |n| "Device #{n}" }
     association :language
+    association :region
     api_key_digest { OpenSSL::Digest::SHA256.hexdigest(SecureRandom.hex(16)) }
     api_key_prefix { SecureRandom.hex(4) }
 
