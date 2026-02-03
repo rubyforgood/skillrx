@@ -17,6 +17,7 @@ Rails.application.routes.draw do
     resources :tags, only: %i[index], controller: "topics/tags"
   end
   resources :import_reports, only: %i[index show]
+  resources :beacons, only: %i[index new create show edit update]
   resource :settings, only: [] do
     put :provider, on: :collection
   end

@@ -1,0 +1,133 @@
+<%= form_with model: beacon, local: true do |form| %>
+  <% if beacon.errors.any? %>
+    <div class="bg-red-50 border border-red-200 rounded-lg p-4 mb-6">
+      <div class="flex">
+        <div class="flex-shrink-0">
+          <svg class="h-5 w-5 text-red-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/>
+          </svg>
+        </div>
+        <div class="ml-3">
+          <h3 class="text-sm font-medium text-red-800">
+            <%= pluralize(beacon.errors.count, "error") %> prohibited this beacon from being saved:
+          </h3>
+          <div class="mt-2 text-sm text-red-700">
+            <ul class="list-disc pl-5 space-y-1">
+              <% beacon.errors.full_messages.each do |message| %>
+                <li><%= message %></li>
+              <% end %>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </div>
+  <% end %>
+
+  <div class="form-grid">
+    <!-- Basic Information Section -->
+    <div class="form-grid-full">
+      <h3 class="text-lg font-semibold text-gray-900 mb-4 pb-2 border-b border-gray-200">Basic Information</h3>
+    </div>
+    
+    <div>
+      <%= form.label :name, class: "form-label" do %>
+        Beacon Name
+        <span class="form-required">*</span>
+      <% end %>
+      <%= form.text_field :name, class: "form-input", placeholder: "e.g., Kampala-Central", required: true %>
+      <p class="form-help-text">A descriptive name for this beacon location</p>
+    </div>
+
+    <div>
+      <%= form.label :location, class: "form-label" do %>
+        Location
+        <span class="form-required">*</span>
+      <% end %>
+      <%= form.text_field :location, class: "form-input", placeholder: "e.g., Kampala, Uganda", required: true %>
+      <p class="form-help-text">Geographic location where the beacon is deployed</p>
+    </div>
+
+    <div>
+      <%= form.label :version, "Software Version", class: "form-label" %>
+      <%= form.text_field :version, class: "form-input", placeholder: "e.g., 2.3", pattern: "\\d\\.\\d" %>
+      <p class="form-help-text">Version number (format: X.X)</p>
+    </div>
+
+    <!-- Document Access Filters Section -->
+    <div class="form-grid-full">
+      <h3 class="text-lg font-semibold text-gray-900 mb-4 pb-2 border-b border-gray-200 mt-4">
+        Document Access Filters
+      </h3>
+      <p class="text-sm text-gray-600 mb-4">
+        Select which documents this beacon can access. Leave filters blank to allow access to all documents.
+      </p>
+    </div>
+
+    <div>
+      <%= form.label :language_id, "Language", class: "form-label" %>
+      <div style="position:relative;">
+        <%= form.select :language_id, 
+            options_from_collection_for_select(@languages, :id, :name, beacon.language_id),
+            { include_blank: "All Languages" },
+            class: "form-select" %>
+        <%= render "shared/dropdown_arrow" %>
+      </div>
+      <p class="form-help-text">Restrict to documents in a specific language</p>
+    </div>
+
+    <div>
+      <%= form.label :provider_id, "Provider", class: "form-label" %>
+      <div style="position:relative;">
+        <%= form.select :provider_id, 
+            options_from_collection_for_select(@providers, :id, :name, beacon.provider_id),
+            { include_blank: "All Providers" },
+            class: "form-select" %>
+        <%= render "shared/dropdown_arrow" %>
+      </div>
+      <p class="form-help-text">Restrict to documents from a specific provider</p>
+    </div>
+
+    <div>
+      <%= form.label :region_id, "Region", class: "form-label" %>
+      <div style="position:relative;">
+        <%= form.select :region_id, 
+            options_from_collection_for_select(@regions, :id, :name, beacon.region_id),
+            { include_blank: "All Regions" },
+            class: "form-select" %>
+        <%= render "shared/dropdown_arrow" %>
+      </div>
+      <p class="form-help-text">Restrict to documents from providers in a specific region</p>
+    </div>
+
+    <div class="form-grid-full" data-controller="select-tags" data-select-tags-dropdown-parent-value="body">
+      <%= form.label :tag_ids, "Tags", class: "form-label" %>
+      <%= form.select :tag_ids, 
+          options_from_collection_for_select(@tags, :id, :name, beacon.tag_ids),
+          { prompt: "Start typing to select tags", include_blank: true },
+          { multiple: true, 
+            data: { 
+              "allow-new": "false", 
+              "allow-clear": "true", 
+              "select-tags-target": "tagList",
+              "dropdown-parent": "body" 
+            } 
+          } %>
+      <p class="form-help-text">Select tags to filter which documents this beacon can access. Documents matching any selected tag will be included.</p>
+    </div>
+  </div>
+
+  <!-- Action Buttons -->
+  <div class="flex justify-between items-center pt-8 border-t border-gray-100 mt-8">
+    <div class="flex gap-4">
+      <%= form.submit beacon.persisted? ? "Update Beacon" : "Provision Beacon", class: "bg-gradient-green text-white font-semibold py-3 px-8 rounded-lg border-0 cursor-pointer text-sm shadow-md transition-all hover:-translate-y-0.5" %>
+      <%= link_to "Back to Beacons", beacons_path,
+        class: "bg-gray-100 text-gray-500 font-semibold py-3 px-8 rounded-lg no-underline text-sm transition-all hover:bg-gray-200" %>
+    </div>
+
+    <% if beacon.persisted? %>
+      <div class="text-gray-500 text-xs">
+        Last updated: <%= beacon.updated_at.strftime("%B %d, %Y at %I:%M %p") %>
+      </div>
+    <% end %>
+  </div>
+<% end %>

@@ -1,0 +1,215 @@
+<% content_for :title, "Beacon Management" %>
+
+<div class="bg-gradient-page page-container">
+  <div class="content-wrapper">
+
+    <!-- Header Section -->
+    <div class="section-spacing">
+      <div class="flex-between-wrap mb-6">
+        <div class="min-w-0 flex-1">
+          <div class="flex items-center gap-4 mb-2">
+            <div class="bg-gradient-green text-white p-3 rounded-xl flex-shrink-0">
+              <svg class="icon-size-lg" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8.111 16.404a5.5 5.5 0 017.778 0M12 20h.01m-7.08-7.071c3.904-3.905 10.236-3.905 14.141 0M1.394 9.393c5.857-5.857 15.355-5.857 21.213 0"></path>
+              </svg>
+            </div>
+            <h1 class="text-4xl font-bold text-gray-800 m-0 min-w-0">Beacon Management</h1>
+          </div>
+          <p class="text-gray-500 m-0 text-base">Monitor system beacons deployed in the field</p>
+        </div>
+
+        <div class="flex items-center gap-3">
+          <div class="text-right mr-4">
+            <div class="text-sm text-gray-600">
+              Online: <span class="font-semibold text-green-600"><%= @beacons.count { |b| b[:online] } %></span> / 
+              Offline: <span class="font-semibold text-red-600"><%= @beacons.count { |b| !b[:online] } %></span>
+            </div>
+          </div>
+
+          <%= link_to new_beacon_path, class: "bg-gradient-green text-white py-3.5 px-7 rounded-xl no-underline font-semibold text-sm inline-flex items-center gap-2 shadow-green transition-all hover:-translate-y-0.5", data: {turbo: false } do %>
+            <svg class="icon-size" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"></path>
+            </svg>
+            <span>Provision New Beacon</span>
+          <% end %>
+        </div>
+      </div>
+    </div>
+
+    <!-- Beacons Table Card -->
+    <div class="card-elevated overflow-hidden">
+      <div class="table-container overflow-x-auto">
+        <table class="w-full border-collapse">
+          <thead>
+            <tr class="table-header">
+              <th class="table-cell text-left">Status</th>
+              <th class="table-cell text-left">Beacon Name</th>
+              <th class="table-cell text-left">Location</th>
+              <th class="table-cell text-left">Last Seen</th>
+              <th class="table-cell text-left">Version</th>
+            </tr>
+          </thead>
+          <tbody>
+            <% if @beacons.any? %>
+              <% @beacons.each do |beacon| %>
+                <tr class="border-b border-gray-100 transition-all hover:bg-gray-50">
+                  <td class="table-cell">
+                    <div class="flex items-center gap-2">
+                      <span class="<%= beacon.online ? 'beacon-online' : 'beacon-offline' %>"></span>
+                      <span class="text-xs font-medium <%= beacon.online ? 'text-green-700' : 'text-red-700' %>">
+                        <%= beacon.online ? 'Online' : 'Offline' %>
+                      </span>
+                    </div>
+                  </td>
+                  <td class="table-cell">
+                    <%= link_to beacon_path(beacon), class: "no-underline" do %>
+                      <div class="flex items-center gap-3">
+                        <div class="w-10 h-10 bg-gradient-green rounded-lg flex items-center justify-center text-white font-semibold text-sm">
+                          <svg class="icon-size-md" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8.111 16.404a5.5 5.5 0 017.778 0M12 20h.01m-7.08-7.071c3.904-3.905 10.236-3.905 14.141 0M1.394 9.393c5.857-5.857 15.355-5.857 21.213 0"></path>
+                          </svg>
+                        </div>
+                        <div>
+                          <div class="font-semibold text-gray-900 text-sm"><%= beacon.name %></div>
+                          <div class="text-xs text-gray-500">ID: <%= beacon.id %></div>
+                        </div>
+                      </div>
+                    <% end %>
+                  </td>
+                  <td class="table-cell">
+                    <div class="flex items-center gap-2">
+                      <svg class="w-4 h-4 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"></path>
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"></path>
+                      </svg>
+                      <span class="text-sm text-gray-700"><%= beacon.location %></span>
+                    </div>
+                  </td>
+                  <td class="table-cell">
+                    <span class="text-sm text-gray-600">
+                      <% if beacon.last_seen_at.present? %>
+                        <%= time_ago_in_words(beacon.last_seen_at) %> ago
+                      <% else %>
+                        Never
+                      <% end %>
+                    </span>
+                  </td>
+                  <td class="table-cell">
+                    <span class="bg-purple-50 text-purple-900 py-1 px-3 rounded-full text-xs font-medium">
+                      v<%= beacon.version || '1.0' %>
+                    </span>
+                  </td>
+                </tr>
+              <% end %>
+            <% else %>
+              <tr>
+                <td colspan="5" class="empty-state">
+                  <div class="text-gray-400">
+                    <svg class="w-12 h-12 mx-auto mb-4 text-gray-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1" d="M8.111 16.404a5.5 5.5 0 017.778 0M12 20h.01m-7.08-7.071c3.904-3.905 10.236-3.905 14.141 0M1.394 9.393c5.857-5.857 15.355-5.857 21.213 0"></path>
+                    </svg>
+                    <p class="text-base font-medium text-gray-500 m-0">No beacons provisioned yet</p>
+                    <p class="text-sm text-gray-400 mt-2 m-0">Get started by provisioning your first beacon.</p>
+                  </div>
+                </td>
+              </tr>
+            <% end %>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- Statistics Card -->
+    <div class="mt-6 grid grid-cols-1 md:grid-cols-3 gap-4">
+      <div class="card-elevated p-6">
+        <div class="flex items-center justify-between">
+          <div>
+            <p class="text-sm text-gray-500 m-0">Total Beacons</p>
+            <p class="text-3xl font-bold text-gray-800 m-0 mt-2"><%= @beacons.count %></p>
+          </div>
+          <div class="w-12 h-12 bg-blue-100 rounded-lg flex items-center justify-center">
+            <svg class="w-6 h-6 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8.111 16.404a5.5 5.5 0 017.778 0M12 20h.01m-7.08-7.071c3.904-3.905 10.236-3.905 14.141 0M1.394 9.393c5.857-5.857 15.355-5.857 21.213 0"></path>
+            </svg>
+          </div>
+        </div>
+      </div>
+
+      <div class="card-elevated p-6">
+        <div class="flex items-center justify-between">
+          <div>
+            <p class="text-sm text-gray-500 m-0">Online Now</p>
+            <p class="text-3xl font-bold text-green-600 m-0 mt-2"><%= @beacons.count { |b| b[:online] } %></p>
+          </div>
+          <div class="w-12 h-12 bg-green-100 rounded-lg flex items-center justify-center">
+            <svg class="w-6 h-6 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
+            </svg>
+          </div>
+        </div>
+      </div>
+
+      <div class="card-elevated p-6">
+        <div class="flex items-center justify-between">
+          <div>
+            <p class="text-sm text-gray-500 m-0">Offline</p>
+            <p class="text-3xl font-bold text-red-600 m-0 mt-2"><%= @beacons.count { |b| !b[:online] } %></p>
+          </div>
+          <div class="w-12 h-12 bg-red-100 rounded-lg flex items-center justify-center">
+            <svg class="w-6 h-6 text-red-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
+            </svg>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<style>
+  .beacon-online {
+    display: inline-block;
+    width: 10px;
+    height: 10px;
+    background-color: #10b981;
+    border-radius: 50%;
+    animation: pulse-green 2s infinite;
+  }
+
+  .beacon-offline {
+    display: inline-block;
+    width: 10px;
+    height: 10px;
+    background-color: #ef4444;
+    border-radius: 50%;
+  }
+
+  @keyframes pulse-green {
+    0%, 100% {
+      opacity: 1;
+      box-shadow: 0 0 0 0 rgba(16, 185, 129, 0.7);
+    }
+    50% {
+      opacity: 0.8;
+      box-shadow: 0 0 0 6px rgba(16, 185, 129, 0);
+    }
+  }
+
+  .grid {
+    display: grid;
+  }
+
+  .grid-cols-1 {
+    grid-template-columns: repeat(1, minmax(0, 1fr));
+  }
+
+  .gap-4 {
+    gap: 1rem;
+  }
+
+  @media (min-width: 768px) {
+    .md\:grid-cols-3 {
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+    }
+  }
+</style>
