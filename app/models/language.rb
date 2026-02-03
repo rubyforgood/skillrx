@@ -11,6 +11,7 @@
 class Language < ApplicationRecord
   has_many :topics, dependent: :destroy
   has_many :providers, through: :topics
+  has_many :beacons, dependent: :destroy
 
   validates :name, presence: true, uniqueness: true, length: { minimum: 2 }
 

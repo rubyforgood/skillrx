@@ -36,6 +36,8 @@ class Topic < ApplicationRecord
 
   belongs_to :language
   belongs_to :provider
+  has_many :beacon_topics, dependent: :destroy
+  has_many :beacons, through: :beacon_topics
   has_many_attached :documents, dependent: :purge
 
   validates :title, :language_id, :provider_id, :published_at, presence: true

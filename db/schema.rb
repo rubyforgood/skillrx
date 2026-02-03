@@ -10,7 +10,11 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
+<<<<<<< HEAD
 ActiveRecord::Schema[8.1].define(version: 2026_02_03_100134) do
+=======
+ActiveRecord::Schema[8.1].define(version: 2026_02_03_100004) do
+>>>>>>> origin/feature/device-management-api-keys
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_catalog.plpgsql"
 
@@ -42,6 +46,7 @@ ActiveRecord::Schema[8.1].define(version: 2026_02_03_100134) do
     t.index ["blob_id", "variation_digest"], name: "index_active_storage_variant_records_uniqueness", unique: true
   end
 
+<<<<<<< HEAD
   create_table "beacon_tags", force: :cascade do |t|
     t.bigint "beacon_id"
     t.datetime "created_at", null: false
@@ -74,6 +79,46 @@ ActiveRecord::Schema[8.1].define(version: 2026_02_03_100134) do
     t.datetime "created_at", null: false
     t.bigint "provider_id"
     t.bigint "region_id"
+=======
+  create_table "beacon_providers", force: :cascade do |t|
+    t.bigint "beacon_id", null: false
+    t.datetime "created_at", null: false
+    t.bigint "provider_id", null: false
+    t.datetime "updated_at", null: false
+    t.index ["beacon_id", "provider_id"], name: "index_beacon_providers_on_beacon_id_and_provider_id", unique: true
+    t.index ["beacon_id"], name: "index_beacon_providers_on_beacon_id"
+    t.index ["provider_id"], name: "index_beacon_providers_on_provider_id"
+  end
+
+  create_table "beacon_topics", force: :cascade do |t|
+    t.bigint "beacon_id", null: false
+    t.datetime "created_at", null: false
+    t.bigint "topic_id", null: false
+    t.datetime "updated_at", null: false
+    t.index ["beacon_id", "topic_id"], name: "index_beacon_topics_on_beacon_id_and_topic_id", unique: true
+    t.index ["beacon_id"], name: "index_beacon_topics_on_beacon_id"
+    t.index ["topic_id"], name: "index_beacon_topics_on_topic_id"
+  end
+
+  create_table "beacons", force: :cascade do |t|
+    t.string "api_key_digest", null: false
+    t.string "api_key_prefix", null: false
+    t.datetime "created_at", null: false
+    t.bigint "language_id", null: false
+    t.string "name", null: false
+    t.bigint "region_id", null: false
+    t.datetime "revoked_at"
+    t.datetime "updated_at", null: false
+    t.index ["api_key_digest"], name: "index_beacons_on_api_key_digest", unique: true
+    t.index ["language_id"], name: "index_beacons_on_language_id"
+    t.index ["region_id"], name: "index_beacons_on_region_id"
+  end
+
+  create_table "branches", force: :cascade do |t|
+    t.datetime "created_at", null: false
+    t.bigint "provider_id"
+    t.bigint "region_id"
+>>>>>>> origin/feature/device-management-api-keys
     t.datetime "updated_at", null: false
     t.index ["provider_id"], name: "index_branches_on_provider_id"
     t.index ["region_id"], name: "index_branches_on_region_id"
@@ -215,6 +260,12 @@ ActiveRecord::Schema[8.1].define(version: 2026_02_03_100134) do
 
   add_foreign_key "active_storage_attachments", "active_storage_blobs", column: "blob_id"
   add_foreign_key "active_storage_variant_records", "active_storage_blobs", column: "blob_id"
+  add_foreign_key "beacon_providers", "beacons"
+  add_foreign_key "beacon_providers", "providers"
+  add_foreign_key "beacon_topics", "beacons"
+  add_foreign_key "beacon_topics", "topics"
+  add_foreign_key "beacons", "languages"
+  add_foreign_key "beacons", "regions"
   add_foreign_key "import_errors", "import_reports"
   add_foreign_key "sessions", "users"
   add_foreign_key "tag_cognates", "tags"
