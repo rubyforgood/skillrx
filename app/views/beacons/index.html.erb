@@ -44,10 +44,11 @@
             <tr class="table-header">
               <th class="table-cell text-left">Status</th>
               <th class="table-cell text-left">Beacon Name</th>
-              <th class="table-cell text-left">Region</th>
-              <th class="table-cell text-left">Language</th>
-              <th class="table-cell text-left">Providers</th>
-              <th class="table-cell text-left">Topics</th>
+              <th class="table-cell text-left">Current Manifest Version</th>
+              <th class="table-cell text-left">Latest Manifest Version</th>
+              <th class="table-cell text-left">Up to Date?</th>
+              <th class="table-cell text-left">Last Seen at</th>
+              <th class="table-cell text-left">Last Sync at</th>
             </tr>
           </thead>
           <tbody>
@@ -78,31 +79,28 @@
                     <% end %>
                   </td>
                   <td class="table-cell">
-                    <span class="bg-purple-50 text-purple-900 py-1 px-3 rounded-full text-xs font-medium">
-                      <%= beacon.region.name %>
-                    </span>
-                  </td>
-                  <td class="table-cell">
-                    <span class="bg-blue-50 text-blue-900 py-1 px-3 rounded-full text-xs font-medium">
-                      <%= beacon.language.name %>
+                    <span class="text-sm text-gray-600">
+                      current manifest
                     </span>
                   </td>
                   <td class="table-cell">
                     <span class="text-sm text-gray-600">
-                      <% if beacon.providers.any? %>
-                        <%= beacon.providers.count %> selected
-                      <% else %>
-                        All
-                      <% end %>
+                      latest manifest
                     </span>
                   </td>
                   <td class="table-cell">
                     <span class="text-sm text-gray-600">
-                      <% if beacon.topics.any? %>
-                        <%= beacon.topics.count %> selected
-                      <% else %>
-                        All
-                      <% end %>
+                      is up to date?
+                    </span>
+                  </td>
+                  <td class="table-cell">
+                    <span class="text-sm text-gray-600">
+                      last seen at
+                    </span>
+                  </td>
+                  <td class="table-cell">
+                    <span class="text-sm text-gray-600">
+                      last sync at
                     </span>
                   </td>
                 </tr>

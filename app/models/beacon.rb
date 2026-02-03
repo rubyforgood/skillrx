@@ -41,6 +41,18 @@ class Beacon < ApplicationRecord
   scope :active, -> { where(revoked_at: nil) }
   scope :revoked, -> { where.not(revoked_at: nil) }
 
+  def regenerate
+    key_result = Beacons::ApiKeyGenerator.new.call
+
+    update!(
+      api_key_digest: key_result.digest,
+      api_key_prefix: key_result.prefix,
+      revoked_at: nil
+    )
+
+    key_result.raw_key
+  end
+
   def revoke!
     update!(revoked_at: Time.current)
   end

@@ -19,7 +19,6 @@ class BeaconsController < ApplicationController
     
     if success
       flash[:notice] = "Beacon was successfully provisioned. API Key: #{api_key}"
-      flash[:api_key] = api_key
       redirect_to @beacon
     else
       @languages = Language.order(:name)
@@ -54,12 +53,29 @@ class BeaconsController < ApplicationController
   end
 
   def regenerate_key
-    beacon, new_key = Beacons::KeyRegenerator.new.call(@beacon)
-    flash[:notice] = "API key has been regenerated successfully."
-    flash[:api_key] = new_key
-    redirect_to @beacon
+    begin
+      api_key = @beacon.regenerate
+      flash[:notice] = "API key has been successfully regenerated. API Key: #{api_key}"
+      redirect_to @beacon
+
+      rescue => e
+        flash[:alert] = "API key could not be regenerated."
+        redirect_to @beacon
+    end
   end
 
+  def revoke_key
+    begin
+      api_key = @beacon.revoke
+      flash[:notice] = "API key has been successfully revoked."
+      redirect_to @beacon
+
+      rescue => e
+        flash[:alert] = "API key could not be revoked."
+        redirect_to @beacon
+    end
+  end
+  
   private
 
   def set_beacon
