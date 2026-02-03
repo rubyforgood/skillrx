@@ -285,10 +285,7 @@ nav.pagy a.gap {
 }
 
 .content-wrapper {
-  max-width: 1200px;
-  margin: 0 auto;
-  padding: 0 1rem;
-  overflow-x: hidden;
+  @apply max-w-7xl mx-auto overflow-x-hidden px-4;
 }
 
 .section-spacing {
