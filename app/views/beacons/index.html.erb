@@ -21,8 +21,8 @@
         <div class="flex items-center gap-3">
           <div class="text-right mr-4">
             <div class="text-sm text-gray-600">
-              Online: <span class="font-semibold text-green-600"><%= @beacons.count { |b| b[:online] } %></span> / 
-              Offline: <span class="font-semibold text-red-600"><%= @beacons.count { |b| !b[:online] } %></span>
+              Active: <span class="font-semibold text-green-600"><%= @beacons.count { |b| !b.revoked? } %></span> / 
+              Revoked: <span class="font-semibold text-red-600"><%= @beacons.count { |b| b.revoked? } %></span>
             </div>
           </div>
 
@@ -44,9 +44,10 @@
             <tr class="table-header">
               <th class="table-cell text-left">Status</th>
               <th class="table-cell text-left">Beacon Name</th>
-              <th class="table-cell text-left">Location</th>
-              <th class="table-cell text-left">Last Seen</th>
-              <th class="table-cell text-left">Version</th>
+              <th class="table-cell text-left">Region</th>
+              <th class="table-cell text-left">Language</th>
+              <th class="table-cell text-left">Providers</th>
+              <th class="table-cell text-left">Topics</th>
             </tr>
           </thead>
           <tbody>
@@ -55,9 +56,9 @@
                 <tr class="border-b border-gray-100 transition-all hover:bg-gray-50">
                   <td class="table-cell">
                     <div class="flex items-center gap-2">
-                      <span class="<%= beacon.online ? 'beacon-online' : 'beacon-offline' %>"></span>
-                      <span class="text-xs font-medium <%= beacon.online ? 'text-green-700' : 'text-red-700' %>">
-                        <%= beacon.online ? 'Online' : 'Offline' %>
+                      <span class="<%= beacon.revoked? ? 'beacon-offline' : 'beacon-online' %>"></span>
+                      <span class="text-xs font-medium <%= beacon.revoked? ? 'text-red-700' : 'text-green-700' %>">
+                        <%= beacon.revoked? ? 'Revoked' : 'Active' %>
                       </span>
                     </div>
                   </td>
@@ -71,39 +72,44 @@
                         </div>
                         <div>
                           <div class="font-semibold text-gray-900 text-sm"><%= beacon.name %></div>
-                          <div class="text-xs text-gray-500">ID: <%= beacon.id %></div>
+                          <div class="text-xs text-gray-500"><%= beacon.api_key_prefix %>***</div>
                         </div>
                       </div>
                     <% end %>
                   </td>
                   <td class="table-cell">
-                    <div class="flex items-center gap-2">
-                      <svg class="w-4 h-4 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"></path>
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"></path>
-                      </svg>
-                      <span class="text-sm text-gray-700"><%= beacon.location %></span>
-                    </div>
+                    <span class="bg-purple-50 text-purple-900 py-1 px-3 rounded-full text-xs font-medium">
+                      <%= beacon.region.name %>
+                    </span>
+                  </td>
+                  <td class="table-cell">
+                    <span class="bg-blue-50 text-blue-900 py-1 px-3 rounded-full text-xs font-medium">
+                      <%= beacon.language.name %>
+                    </span>
                   </td>
                   <td class="table-cell">
                     <span class="text-sm text-gray-600">
-                      <% if beacon.last_seen_at.present? %>
-                        <%= time_ago_in_words(beacon.last_seen_at) %> ago
+                      <% if beacon.providers.any? %>
+                        <%= beacon.providers.count %> selected
                       <% else %>
-                        Never
+                        All
                       <% end %>
                     </span>
                   </td>
                   <td class="table-cell">
-                    <span class="bg-purple-50 text-purple-900 py-1 px-3 rounded-full text-xs font-medium">
-                      v<%= beacon.version || '1.0' %>
+                    <span class="text-sm text-gray-600">
+                      <% if beacon.topics.any? %>
+                        <%= beacon.topics.count %> selected
+                      <% else %>
+                        All
+                      <% end %>
                     </span>
                   </td>
                 </tr>
               <% end %>
             <% else %>
               <tr>
-                <td colspan="5" class="empty-state">
+                <td colspan="6" class="empty-state">
                   <div class="text-gray-400">
                     <svg class="w-12 h-12 mx-auto mb-4 text-gray-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                       <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1" d="M8.111 16.404a5.5 5.5 0 017.778 0M12 20h.01m-7.08-7.071c3.904-3.905 10.236-3.905 14.141 0M1.394 9.393c5.857-5.857 15.355-5.857 21.213 0"></path>

@@ -35,22 +35,7 @@
         <span class="form-required">*</span>
       <% end %>
       <%= form.text_field :name, class: "form-input", placeholder: "e.g., Kampala-Central", required: true %>
-      <p class="form-help-text">A descriptive name for this beacon location</p>
-    </div>
-
-    <div>
-      <%= form.label :location, class: "form-label" do %>
-        Location
-        <span class="form-required">*</span>
-      <% end %>
-      <%= form.text_field :location, class: "form-input", placeholder: "e.g., Kampala, Uganda", required: true %>
-      <p class="form-help-text">Geographic location where the beacon is deployed</p>
-    </div>
-
-    <div>
-      <%= form.label :version, "Software Version", class: "form-label" %>
-      <%= form.text_field :version, class: "form-input", placeholder: "e.g., 2.3", pattern: "\\d\\.\\d" %>
-      <p class="form-help-text">Version number (format: X.X)</p>
+      <p class="form-help-text">A descriptive name for this beacon deployment</p>
     </div>
 
     <!-- Document Access Filters Section -->
@@ -64,46 +49,40 @@
     </div>
 
     <div>
-      <%= form.label :language_id, "Language", class: "form-label" %>
+      <%= form.label :language_id, "Language", class: "form-label" do %>
+        Language
+        <span class="form-required">*</span>
+      <% end %>
       <div style="position:relative;">
         <%= form.select :language_id, 
             options_from_collection_for_select(@languages, :id, :name, beacon.language_id),
-            { include_blank: "All Languages" },
-            class: "form-select" %>
+            { include_blank: "Select a language" },
+            class: "form-select", required: true %>
         <%= render "shared/dropdown_arrow" %>
       </div>
-      <p class="form-help-text">Restrict to documents in a specific language</p>
+      <p class="form-help-text">Language for documents this beacon will access</p>
     </div>
 
     <div>
-      <%= form.label :provider_id, "Provider", class: "form-label" %>
-      <div style="position:relative;">
-        <%= form.select :provider_id, 
-            options_from_collection_for_select(@providers, :id, :name, beacon.provider_id),
-            { include_blank: "All Providers" },
-            class: "form-select" %>
-        <%= render "shared/dropdown_arrow" %>
-      </div>
-      <p class="form-help-text">Restrict to documents from a specific provider</p>
-    </div>
-
-    <div>
-      <%= form.label :region_id, "Region", class: "form-label" %>
+      <%= form.label :region_id, "Region", class: "form-label" do %>
+        Region
+        <span class="form-required">*</span>
+      <% end %>
       <div style="position:relative;">
         <%= form.select :region_id, 
             options_from_collection_for_select(@regions, :id, :name, beacon.region_id),
-            { include_blank: "All Regions" },
-            class: "form-select" %>
+            { include_blank: "Select a region" },
+            class: "form-select", required: true %>
         <%= render "shared/dropdown_arrow" %>
       </div>
-      <p class="form-help-text">Restrict to documents from providers in a specific region</p>
+      <p class="form-help-text">Geographic region for this beacon</p>
     </div>
 
     <div class="form-grid-full" data-controller="select-tags" data-select-tags-dropdown-parent-value="body">
-      <%= form.label :tag_ids, "Tags", class: "form-label" %>
-      <%= form.select :tag_ids, 
-          options_from_collection_for_select(@tags, :id, :name, beacon.tag_ids),
-          { prompt: "Start typing to select tags", include_blank: true },
+      <%= form.label :provider_ids, "Providers", class: "form-label" %>
+      <%= form.select :provider_ids, 
+          options_from_collection_for_select(@providers, :id, :name, beacon.provider_ids),
+          { prompt: "Start typing to select providers", include_blank: true },
           { multiple: true, 
             data: { 
               "allow-new": "false", 
@@ -112,7 +91,23 @@
               "dropdown-parent": "body" 
             } 
           } %>
-      <p class="form-help-text">Select tags to filter which documents this beacon can access. Documents matching any selected tag will be included.</p>
+      <p class="form-help-text">Select which content providers this beacon can access</p>
+    </div>
+
+    <div class="form-grid-full" data-controller="select-tags" data-select-tags-dropdown-parent-value="body">
+      <%= form.label :topic_ids, "Topics", class: "form-label" %>
+      <%= form.select :topic_ids, 
+          options_from_collection_for_select(@topics, :id, :name, beacon.topic_ids),
+          { prompt: "Start typing to select topics", include_blank: true },
+          { multiple: true, 
+            data: { 
+              "allow-new": "false", 
+              "allow-clear": "true", 
+              "select-tags-target": "tagList",
+              "dropdown-parent": "body" 
+            } 
+          } %>
+      <p class="form-help-text">Select which topics this beacon can access. Leave blank to allow access to all topics.</p>
     </div>
   </div>
 

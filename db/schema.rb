@@ -10,11 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-<<<<<<< HEAD
 ActiveRecord::Schema[8.1].define(version: 2026_02_03_100134) do
-=======
-ActiveRecord::Schema[8.1].define(version: 2026_02_03_100004) do
->>>>>>> origin/feature/device-management-api-keys
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_catalog.plpgsql"
 
@@ -46,40 +42,6 @@ ActiveRecord::Schema[8.1].define(version: 2026_02_03_100004) do
     t.index ["blob_id", "variation_digest"], name: "index_active_storage_variant_records_uniqueness", unique: true
   end
 
-<<<<<<< HEAD
-  create_table "beacon_tags", force: :cascade do |t|
-    t.bigint "beacon_id"
-    t.datetime "created_at", null: false
-    t.bigint "tag_id"
-    t.datetime "updated_at", null: false
-    t.index ["beacon_id", "tag_id"], name: "index_beacon_tags_on_beacon_id_and_tag_id", unique: true
-    t.index ["beacon_id"], name: "index_beacon_tags_on_beacon_id"
-    t.index ["tag_id"], name: "index_beacon_tags_on_tag_id"
-  end
-
-  create_table "beacons", force: :cascade do |t|
-    t.datetime "created_at", null: false
-    t.bigint "language_id"
-    t.datetime "last_seen_at"
-    t.string "location"
-    t.string "name"
-    t.boolean "online", default: false
-    t.bigint "provider_id"
-    t.bigint "region_id"
-    t.string "token"
-    t.datetime "updated_at", null: false
-    t.string "version"
-    t.index ["language_id"], name: "index_beacons_on_language_id"
-    t.index ["provider_id"], name: "index_beacons_on_provider_id"
-    t.index ["region_id"], name: "index_beacons_on_region_id"
-    t.index ["token"], name: "index_beacons_on_token", unique: true
-  end
-
-  create_table "branches", force: :cascade do |t|
-    t.datetime "created_at", null: false
-    t.bigint "provider_id"
-    t.bigint "region_id"
-=======
   create_table "beacon_providers", force: :cascade do |t|
     t.bigint "beacon_id", null: false
     t.datetime "created_at", null: false
@@ -118,7 +80,6 @@ ActiveRecord::Schema[8.1].define(version: 2026_02_03_100004) do
     t.datetime "created_at", null: false
     t.bigint "provider_id"
     t.bigint "region_id"
->>>>>>> origin/feature/device-management-api-keys
     t.datetime "updated_at", null: false
     t.index ["provider_id"], name: "index_branches_on_provider_id"
     t.index ["region_id"], name: "index_branches_on_region_id"
