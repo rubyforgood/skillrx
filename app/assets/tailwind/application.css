@@ -514,3 +514,7 @@ nav.pagy a.current {
 .table-container table td.actions-col {
   white-space: nowrap;
 }
+
+.help-text {
+  @apply mt-2 text-xs text-gray-500 m-0;
+}
