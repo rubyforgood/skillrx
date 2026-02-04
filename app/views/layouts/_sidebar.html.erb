@@ -58,17 +58,18 @@
             <span>Users</span>
           <% end %>
         </li>
-
-        <li style="margin-bottom: 0.5rem;">
+      
+              
+        <li style="mb-2">
           <%= link_to beacons_path, style: "sidebar__link #{active_link_class(beacons_path)}" do %>
-            <span style="font-size: 1.1rem;">📡</span>
+            <span style="text-lg">📡</span>
             <span>Beacon Management</span>
           <% end %>
         </li>
 
-        <li style="margin-bottom: 0.5rem;">
-          <%= link_to import_reports_path, style: "sidebar__link #{active_link_class(import_reports_path)}" do %>
-            <span style="font-size: 1.1rem;">📊</span>
+        <li class="mb-2">
+          <%= link_to import_reports_path, class: "sidebar__link #{active_link_class(import_reports_path)}" do %>
+            <span class="text-lg">📊</span>
             <span>Import Reports</span>
           <% end %>
         </li>
