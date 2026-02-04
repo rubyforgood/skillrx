@@ -9,5 +9,8 @@ bundle check || bundle install
 # If running the rails server then create or migrate existing database
 ./bin/rails db:prepare
 
+# Build CSS assets
+./bin/rails tailwindcss:build
+
 # Execute the main command passed to docker run
 exec "$@"
