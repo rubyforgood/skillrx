@@ -16,7 +16,7 @@ class BeaconsController < ApplicationController
 
   def create
     success, @beacon, api_key = Beacons::Creator.new.call(beacon_params)
-    
+
     if success
       flash[:notice] = "Beacon was successfully provisioned. API Key: #{api_key}"
       redirect_to @beacon
@@ -75,7 +75,7 @@ class BeaconsController < ApplicationController
         redirect_to @beacon
     end
   end
-  
+
   private
 
   def set_beacon

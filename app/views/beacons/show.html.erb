@@ -194,7 +194,7 @@
                 <span>Regenerate API Key</span>
               <% end %>
 
-              <%= button_to regenerate_key_beacon_path(@beacon), method: :post, 
+              <%= button_to revoke_key_beacon_path(@beacon), method: :post, 
                   class: "w-full bg-red-600 hover:bg-red-700 text-white font-semibold py-3 px-4 rounded-lg transition-colors inline-flex items-center justify-center gap-2",
                   data: { turbo_confirm: "Are you sure? This will invalidate the current API key. Any beacons using the old key will stop working." } do %>
                 <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">

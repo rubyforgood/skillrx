@@ -20,6 +20,7 @@ Rails.application.routes.draw do
   resources :beacons, only: %i[index new create show edit update] do
     member do
       post :regenerate_key
+      post :revoke_key
     end
   end
   resource :settings, only: [] do

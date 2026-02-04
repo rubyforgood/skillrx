@@ -64,10 +64,10 @@ class Beacon < ApplicationRecord
   # Get count of topics that match this beacon's configuration
   def document_count
     scope = Topic.active
-    
+
     # Filter by beacon's language
     scope = scope.where(language_id: language_id) if language_id.present?
-    
+
     # If beacon has specific providers selected, filter by those
     if providers.any?
       scope = scope.where(provider_id: providers.pluck(:id))
@@ -78,32 +78,32 @@ class Beacon < ApplicationRecord
         scope = scope.where(provider_id: provider_ids)
       end
     end
-    
+
     # If beacon has specific topics selected, filter by those
     if topics.any?
       scope = scope.where(id: topics.pluck(:id))
     end
-    
+
     scope.count
   end
 
   # Get count of actual document files attached to matching topics
   def file_count
     scope = Topic.active
-    
+
     scope = scope.where(language_id: language_id) if language_id.present?
-    
+
     if providers.any?
       scope = scope.where(provider_id: providers.pluck(:id))
     elsif region.present?
       provider_ids = region.providers.pluck(:id)
       scope = scope.where(provider_id: provider_ids)
     end
-    
+
     if topics.any?
       scope = scope.where(id: topics.pluck(:id))
     end
-    
+
     # Count total attached documents
     scope.joins(:documents_attachments).count
   end
