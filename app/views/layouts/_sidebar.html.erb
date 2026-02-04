@@ -1,73 +1,74 @@
 
-<div class="w-full h-full bg-white shadow-lg overflow-y-auto" style="border-right: 1px solid #e5e7eb; display: flex; flex-direction: column;">
-  <div class="p-6" style="border-bottom: 1px solid #f3f4f6;">
-    <div class="flex justify-start items-center mb-6">
+<div class="w-full h-full bg-white shadow-lg overflow-y-auto border-r-1 border-gray-200 flex flex-col">
+  <div class="p-6 border-b-1 border-gray-200">
+    <div class="flex justify-start items-center">
       <div class="text-xl font-bold text-gray-800">
-        <%= link_to(root_path, class: "hover:opacity-80", style: "text-decoration: none; transition: opacity 0.2s;") do %>
-          <%= image_tag("skill.svg", alt: "SkillRx", style: "height: 4rem; width: auto;") %>
+        <%= link_to(root_path, class: "hover:opacity-80 transition-opacity duration-200 no-underline block") do %>
+          <%= image_tag("skill.svg", alt: "SkillRx", class: "h-16") %>
         <% end %>
       </div>
     </div>
   </div>
 
-  <nav class="sidebar-nav px-4 py-2" style="flex: 1;">
-    <ul style="list-style: none; padding: 0; margin: 0;">
-      <li style="margin-bottom: 0.5rem;">
-        <%= link_to topics_path, style: nav_link_class(topics_path) do %>
-          <span style="font-size: 1.1rem;">🏷️</span>
+  <nav class="sidebar-nav px-4 py-2 flex-1">
+    <ul class="list-none p-0">
+      <li class="mb-2">
+        <%= link_to topics_path, class: "sidebar__link #{active_link_class(topics_path)}" do %>
+          <span class="text-lg">🏷️</span>
           <span>Topics</span>
         <% end %>
       </li>
 
       <% if Current.user.is_admin? %>
-        <li style="margin: 1.5rem 0 1rem 0;">
-          <div style="padding: 0.5rem 1rem; font-size: 0.75rem; font-weight: 600; color: #6b7280; letter-spacing: 0.05em; border-bottom: 1px solid #f3f4f6; margin-bottom: 0.75rem;">Administration</div>
+        <li class="mt-6 mb-4">
+          <div class="px-4 py-2 text-xs font-semibold border-b-1 border-gray-200 text-gray-500 tracking-wider">Administration</div>
         </li>
-        <li style="margin-bottom: 0.5rem;">
-          <%= link_to regions_path, style: nav_link_class(regions_path) do %>
-            <span style="font-size: 1.1rem;">🌍</span>
+
+        <li class="mb-2">
+          <%= link_to regions_path, class: "sidebar__link #{active_link_class(regions_path)}" do %>
+            <span class="text-lg">🌍</span>
             <span>Regions</span>
           <% end %>
         </li>
 
-        <li style="margin-bottom: 0.5rem;">
-          <%= link_to providers_path, style: nav_link_class(providers_path) do %>
-            <span style="font-size: 1.1rem;">🏥</span>
+        <li class="mb-2">
+          <%= link_to providers_path, class: "sidebar__link #{active_link_class(providers_path)}" do %>
+            <span class="text-lg">🏥</span>
             <span>Providers</span>
           <% end %>
         </li>
 
-        <li style="margin-bottom: 0.5rem;">
-          <%= link_to languages_path, style: nav_link_class(languages_path) do %>
-            <span style="font-size: 1.1rem;">🌐</span>
+        <li class="mb-2">
+          <%= link_to languages_path, class: "sidebar__link #{active_link_class(languages_path)}" do %>
+            <span class="text-lg">🌐</span>
             <span>Languages</span>
           <% end %>
         </li>
 
-        <li style="margin-bottom: 0.5rem;">
-          <%= link_to tags_path, style: nav_link_class(tags_path) do %>
-            <span style="font-size: 1.1rem;">🏷️</span>
+        <li class="mb-2">
+          <%= link_to tags_path, class: "sidebar__link #{active_link_class(tags_path)}" do %>
+            <span class="text-lg">🏷️</span>
             <span>Tags</span>
           <% end %>
         </li>
 
-        <li style="margin-bottom: 0.5rem;">
-          <%= link_to users_path, style: nav_link_class(users_path) do %>
-            <span style="font-size: 1.1rem;">👥</span>
+        <li class="mb-2">
+          <%= link_to users_path, class: "sidebar__link #{active_link_class(users_path)}" do %>
+            <span class="text-lg">👥</span>
             <span>Users</span>
           <% end %>
         </li>
 
-        <li style="margin-bottom: 0.5rem;">
-          <%= link_to import_reports_path, style: nav_link_class(import_reports_path) do %>
-            <span style="font-size: 1.1rem;">📊</span>
+        <li class="mb-2">
+          <%= link_to import_reports_path, class: "sidebar__link #{active_link_class(import_reports_path)}" do %>
+            <span class="text-lg">📊</span>
             <span>Import Reports</span>
           <% end %>
         </li>
 
-        <li style="margin-bottom: 0.5rem;">
-          <%= link_to "/jobs", style: nav_link_class("/jobs"), target: "_blank" do %>
-            <span style="font-size: 1.1rem;">🛠️</span>
+        <li class="mb-2">
+          <%= link_to "/jobs", class: "sidebar__link #{active_link_class("/jobs")}", target: "_blank" do %>
+            <span class="text-lg">🛠️</span>
             <span>Jobs</span>
           <% end %>
         </li>
@@ -75,40 +76,10 @@
     </ul>
   </nav>
 
-  <div class="p-6" style="border-top: 1px solid #f3f4f6;">
-    <%= button_to session_path, method: :delete, style: "width: 100%; background-color: #dc2626; color: white; font-weight: 500; padding: 0.75rem 1rem; border-radius: 0.5rem; border: none; cursor: pointer; transition: background-color 0.2s; display: flex; align-items: center; justify-content: center; gap: 0.5rem;" do %>
-      <span style="font-size: 1.1rem;">↗</span>
+  <div class="p-6 border-t-1 border-gray-200">
+    <%= button_to session_path, method: :delete, class: "sidebar__logout-button" do %>
+      <span class="text-lg">↗</span>
       <span>Log out</span>
     <% end %>
   </div>
 </div>
-
-<style>
-  /* Sidebar hover effects - scoped to sidebar only */
-  .sidebar-nav a:hover {
-    background-color: #f3f4f6 !important;
-    color: #2563eb !important;
-  }
-
-  /* Active link styling - you can add logic to detect current page */
-  .sidebar-nav a[href*="languages"]:hover {
-    background-color: #dbeafe !important;
-    color: #1d4ed8 !important;
-  }
-
-  /* Logout button hover */
-  button[form]:hover {
-    background-color: #b91c1c !important;
-  }
-
-  /* Logo hover */
-  a[href="/"]:hover {
-    color: #2563eb !important;
-  }
-
-  /* Theme toggle hover */
-  div[title]:hover {
-    color: #374151 !important;
-    transform: scale(1.1);
-  }
-</style>

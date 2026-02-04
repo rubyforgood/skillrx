@@ -1,4 +1,5 @@
 @import "tailwindcss";
+@import "./components/sidebar.css";
 
 /* Tom Select Tailwind Styles */
 
@@ -280,12 +281,11 @@ nav.pagy a.gap {
 
 /* Layout Utilities */
 .page-container {
-  min-height: 100vh;
-  padding: 2rem 0;
+  @apply m-h-screen py-1;
 }
 
 .content-wrapper {
-  @apply max-w-7xl mx-auto overflow-x-hidden px-4;
+  @apply max-w-7xl mx-auto overflow-x-hidden p-4 min-h-screen;
 }
 
 .section-spacing {
