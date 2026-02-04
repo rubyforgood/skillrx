@@ -14,7 +14,7 @@
             placeholder: "Enter provider name (e.g., Johns Hopkins, Mayo Clinic)",
             autofocus: true,
             class: "input-field bg-gray-50" %>
-        <p class="mt-2 text-xs text-gray-500 m-0">The official name of the healthcare provider or organization.</p>
+        <p class="help-text">The official name of the healthcare provider or organization.</p>
       </div>
 
       <!-- Provider Type -->
@@ -26,7 +26,7 @@
         <%= form.text_field :provider_type,
             placeholder: "e.g., Hospital, Clinic, Health System",
             class: "input-field bg-gray-50" %>
-        <p class="mt-2 text-xs text-gray-500 m-0">The type or category of healthcare provider.</p>
+        <p class="help-text">The type or category of healthcare provider.</p>
       </div>
 
       <!-- Regions -->
@@ -38,7 +38,7 @@
             { include_hidden: false },
             multiple: true,
             class: "input-field bg-gray-50 min-h-[120px]" %>
-        <p class="mt-2 text-xs text-gray-500 m-0">Select one or more regions this provider serves. Hold Ctrl/Cmd to select multiple.</p>
+        <p class="help-text">Select one or more regions this provider serves. Hold Ctrl/Cmd to select multiple.</p>
       </div>
     </div>
 
