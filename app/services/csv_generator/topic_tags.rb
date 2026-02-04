@@ -1,19 +1,12 @@
 class CsvGenerator::TopicTags < CsvGenerator::Base
-  def initialize(language, **args)
-    @language = language
-    @args = args
-  end
-
   private
-
-  attr_reader :language, :args
 
   def headers
     %w[TopicID TagID]
   end
 
   def scope
-    language.topics.active.includes(:tags)
+    topics_collection.active.includes(:tags)
       .flat_map do |topic|
         topic.tags_on(language.code.to_sym).map do |tag|
           [
