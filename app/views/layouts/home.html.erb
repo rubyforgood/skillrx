@@ -17,9 +17,7 @@
     <%= javascript_importmap_tags %>
   </head>
 
-  <body class="d-flex flex-column min-vh-100" data-controller="home">
-    <script src="https://cdn.jsdelivr.net/gh/zuramai/mazer@docs/demo/assets/static/js/initTheme.js"></script>
-
+  <body class="min-vh-100 pt-16" data-controller="home">
     <style>
       /* Modern animations and effects */
       @keyframes fadeInUp {
@@ -141,11 +139,6 @@
         transform: scale(1.1);
       }
       
-      /* Ensure proper spacing for fixed navbar */
-      body {
-        padding-top: 76px;
-      }
-      
       /* Mobile responsiveness fixes */
       @media (max-width: 768px) {
         body {
@@ -196,14 +189,5 @@
     <!-- Start content here -->
     <%= yield %>
     <!-- End content -->
-
-    <script src="https://cdn.jsdelivr.net/gh/zuramai/mazer@docs/demo/assets/static/js/components/dark.js"></script>
-    <script src="https://cdn.jsdelivr.net/gh/zuramai/mazer@docs/demo/assets/extensions/perfect-scrollbar/perfect-scrollbar.min.js"></script>
-
-    <script src="https://cdn.jsdelivr.net/gh/zuramai/mazer@docs/demo/assets/compiled/js/app.js"></script>
-
-    <!-- Need: Apexcharts -->
-    <script src="https://cdn.jsdelivr.net/gh/zuramai/mazer@docs/demo/assets/extensions/apexcharts/apexcharts.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/gh/zuramai/mazer@docs/demo/assets/static/js/pages/dashboard.js"></script>
   </body>
 </html>

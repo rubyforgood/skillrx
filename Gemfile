@@ -34,6 +34,7 @@ gem "stimulus-rails"
 gem "tailwindcss-rails"
 gem "thruster", require: false
 gem "turbo-rails"
+gem "inline_svg"
 
 gem "tzinfo-data", platforms: %i[ windows jruby ]
 
