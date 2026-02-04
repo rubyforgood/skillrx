@@ -44,7 +44,7 @@ class Beacon < ApplicationRecord
   def regenerate
     _, raw_key = Beacons::KeyRegenerator.new.call(self)
 
-    key_result
+    raw_key
   end
 
   def revoke!
