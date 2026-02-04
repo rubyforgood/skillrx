@@ -1,6 +1,6 @@
 class BeaconsController < ApplicationController
   before_action :redirect_contributors
-  before_action :set_beacon, only: %i[show edit update regenerate_key]
+  before_action :set_beacon, only: %i[show edit update regenerate_key revoke_key]
 
   def index
     @beacons = Beacon.includes(:language, :region, :providers, :topics).order(created_at: :desc)
@@ -66,7 +66,7 @@ class BeaconsController < ApplicationController
 
   def revoke_key
     begin
-      api_key = @beacon.revoke
+      api_key = @beacon.revoke!
       flash[:notice] = "API key has been successfully revoked."
       redirect_to @beacon
 

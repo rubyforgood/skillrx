@@ -128,36 +128,29 @@ RSpec.describe "/beacons", type: :request do
   end
 
   describe "POST /regenerate_key" do
+    let(:beacon) { create(:beacon) }
     subject { post regenerate_key_beacon_url(beacon) }
 
     it "regenerates the API key for the requested beacon" do
-      beacon = create(:beacon)
-
-      expect { subject }.to change { beacon.api_key_digest }
-        .and change { beacon.api_key_prefix }
+      expect { subject }.to change { beacon.reload.api_key_digest }
+        .and change { beacon.reload.api_key_prefix }
     end
 
     it "redirects to the beacon" do
-      beacon = create(:beacon)
-
       subject
 
       expect(response).to redirect_to(beacon_url(beacon))
     end
 
     context "when there is an error" do
-      allow(Beacon).to receive(:regenerate).raise_error
+      before { allow(beacon).to receive(:regenerate).and_raise("Error") }
 
       it "does not regenerate the API key for the requested beacon" do
-        beacon = create(:beacon)
-
-        expect { subject }.not_to change { beacon.api_key_digest }
-          .and change { beacon.api_key_prefix }
+        expect { subject }.not_to change { beacon.reload.api_key_digest }
+          .and change { beacon.reload.api_key_prefix }
       end
 
       it "redirects to the beacon" do
-        beacon = create(:beacon)
-
         subject
 
         expect(response).to redirect_to(beacon_url(beacon))
@@ -167,22 +160,20 @@ RSpec.describe "/beacons", type: :request do
 
   describe "POST /revoke_key" do
     include ActiveSupport::Testing::TimeHelpers
+
+    let(:beacon) { create(:beacon) }
     subject { post revoke_key_beacon_url(beacon) }
 
     it "redirects to the beacon" do
-      beacon = create(:beacon)
-
       subject
 
       expect(response).to redirect_to(beacon_url(beacon))
     end
 
     context "when there is an error" do
-      allow(Beacon).to receive(:regenerate).raise_error
+      before { allow(beacon).to receive(:revoke!).and_raise("Error") }
 
       it "redirects to the beacon" do
-        beacon = create(:beacon)
-
         subject
 
         expect(response).to redirect_to(beacon_url(beacon))
