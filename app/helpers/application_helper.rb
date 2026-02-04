@@ -21,13 +21,7 @@ module ApplicationHelper
     end
   end
 
-  def nav_link_class(path)
-    base_style = "display: flex; align-items: center; gap: 0.75rem; padding: 0.75rem 1rem; text-decoration: none; border-radius: 0.5rem; transition: all 0.2s; font-weight: 500;"
-
-    if current_page?(path)
-      base_style + " background-color: #dbeafe; color: #1d4ed8;"
-    else
-      base_style + " color: #374151;"
-    end
+  def active_link_class(path)
+    current_page?(path) ? "!bg-blue-100" : ""
   end
 end
