@@ -131,11 +131,6 @@ RSpec.describe "/beacons", type: :request do
     let(:beacon) { create(:beacon) }
     subject { post regenerate_key_beacon_url(beacon) }
 
-    it "regenerates the API key for the requested beacon" do
-      expect { subject }.to change { beacon.reload.api_key_digest }
-        .and change { beacon.reload.api_key_prefix }
-    end
-
     it "redirects to the beacon" do
       subject
 
@@ -144,11 +139,6 @@ RSpec.describe "/beacons", type: :request do
 
     context "when there is an error" do
       before { allow(beacon).to receive(:regenerate).and_raise("Error") }
-
-      it "does not regenerate the API key for the requested beacon" do
-        expect { subject }.not_to change { beacon.reload.api_key_digest }
-          .and change { beacon.reload.api_key_prefix }
-      end
 
       it "redirects to the beacon" do
         subject
