@@ -63,7 +63,7 @@ RSpec.describe FeatureFlags do
       before do
         allow(Rails.application.credentials).to receive(:dig)
           .with(:features, :beacons)
-          .and_return({ enabled: false, allowed_emails: ["admin@skillrx.org"] })
+          .and_return({ enabled: false, allowed_emails: [ "admin@skillrx.org" ] })
       end
 
       it "returns true for a user whose email is allowed" do
@@ -87,7 +87,7 @@ RSpec.describe FeatureFlags do
       before do
         allow(Rails.application.credentials).to receive(:dig)
           .with(:features, :beacons)
-          .and_return({ enabled: true, allowed_emails: ["admin@skillrx.org"] })
+          .and_return({ enabled: true, allowed_emails: [ "admin@skillrx.org" ] })
       end
 
       it "returns true regardless of user" do
