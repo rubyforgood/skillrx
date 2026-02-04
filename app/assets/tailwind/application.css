@@ -281,7 +281,7 @@ nav.pagy a.gap {
 
 /* Layout Utilities */
 .page-container {
-  @apply m-h-screen py-1;
+  @apply min-h-screen py-1;
 }
 
 .content-wrapper {
