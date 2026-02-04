@@ -7,7 +7,7 @@ module Api
 
           # During sync, beacon sends If-Match with its current version.
           # If the manifest changed since sync started, return 412 so beacon aborts and restarts.
-          if stale_by_match?(stored_etag)
+          if sync_version_stale?(stored_etag)
             response.headers["ETag"] = stored_etag
             head :precondition_failed
             return
@@ -15,7 +15,7 @@ module Api
 
           # Beacon sends If-None-Match with its cached version to check for updates.
           # If versions match, return 304 — no sync needed.
-          if fresh_by_none_match?(stored_etag)
+          if cached_version_fresh?(stored_etag)
             response.headers["ETag"] = stored_etag
             head :not_modified
             return
@@ -33,14 +33,14 @@ module Api
           ::Beacons::ManifestBuilder.new(Current.beacon)
         end
 
-        def stale_by_match?(etag)
+        def sync_version_stale?(etag)
           if_match = request.headers["If-Match"]
           return false if if_match.blank?
 
           if_match != etag
         end
 
-        def fresh_by_none_match?(etag)
+        def cached_version_fresh?(etag)
           if_none_match = request.headers["If-None-Match"]
           return false if if_none_match.blank?
 
