@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.1].define(version: 2026_02_03_100006) do
+ActiveRecord::Schema[8.1].define(version: 2026_02_03_100007) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_catalog.plpgsql"
 
@@ -71,6 +71,7 @@ ActiveRecord::Schema[8.1].define(version: 2026_02_03_100006) do
     t.jsonb "manifest_data"
     t.integer "manifest_version", default: 0, null: false
     t.string "name", null: false
+    t.jsonb "previous_manifest_data"
     t.bigint "region_id", null: false
     t.datetime "revoked_at"
     t.datetime "updated_at", null: false

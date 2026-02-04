@@ -212,6 +212,37 @@ RSpec.describe Beacons::ManifestBuilder do
       expect(beacon.reload.manifest_data).to eq(original_data)
     end
 
+    it "keeps previous_manifest_data nil on first build" do
+      builder.call
+
+      expect(beacon.reload.previous_manifest_data).to be_nil
+    end
+
+    it "rotates manifest_data into previous_manifest_data when content changes" do
+      builder.call
+      first_data = beacon.reload.manifest_data
+
+      topic = create(:topic, :with_documents, title: "New Topic", provider: provider, language: language)
+      beacon.topics << topic
+
+      described_class.new(beacon.reload).call
+
+      expect(beacon.reload.previous_manifest_data).to eq(first_data)
+    end
+
+    it "does not update previous_manifest_data when content is unchanged" do
+      builder.call
+
+      topic = create(:topic, :with_documents, title: "New Topic", provider: provider, language: language)
+      beacon.topics << topic
+      described_class.new(beacon.reload).call
+      previous_data = beacon.reload.previous_manifest_data
+
+      described_class.new(beacon.reload).call
+
+      expect(beacon.reload.previous_manifest_data).to eq(previous_data)
+    end
+
     it "produces stable checksum for unchanged content" do
       result1 = builder.call
       result2 = described_class.new(beacon.reload).call

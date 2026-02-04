@@ -26,6 +26,7 @@ module Beacons
       beacon.update!(
         manifest_version: beacon.manifest_version + 1,
         manifest_checksum: checksum,
+        previous_manifest_data: beacon.manifest_data,
         manifest_data: content,
       )
 
