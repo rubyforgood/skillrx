@@ -7,7 +7,7 @@ module Beacons
     def call
       content = build_content
       checksum = "sha256:#{compute_checksum(content)}"
-      version = resolve_version(checksum)
+      version = resolve_version(checksum, content)
 
       content.merge(
         manifest_version: "v#{version}",
@@ -20,12 +20,13 @@ module Beacons
 
     attr_reader :beacon
 
-    def resolve_version(checksum)
+    def resolve_version(checksum, content)
       return beacon.manifest_version if beacon.manifest_checksum == checksum
 
       beacon.update!(
         manifest_version: beacon.manifest_version + 1,
         manifest_checksum: checksum,
+        manifest_data: content,
       )
 
       beacon.manifest_version

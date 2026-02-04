@@ -7,6 +7,7 @@
 #  api_key_digest    :string           not null
 #  api_key_prefix    :string           not null
 #  manifest_checksum :string
+#  manifest_data     :jsonb
 #  manifest_version  :integer          default(0), not null
 #  name              :string           not null
 #  revoked_at        :datetime

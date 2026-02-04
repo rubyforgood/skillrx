@@ -191,6 +191,27 @@ RSpec.describe Beacons::ManifestBuilder do
       expect(beacon.reload.manifest_checksum).to eq(result[:manifest_checksum])
     end
 
+    it "stores the manifest content on the beacon" do
+      result = builder.call
+      stored = beacon.reload.manifest_data
+
+      expect(stored["language"]["id"]).to eq(result[:language][:id])
+      expect(stored["region"]["id"]).to eq(result[:region][:id])
+      expect(stored["providers"].size).to eq(result[:providers].size)
+      expect(stored).not_to have_key("manifest_version")
+      expect(stored).not_to have_key("manifest_checksum")
+      expect(stored).not_to have_key("generated_at")
+    end
+
+    it "does not update manifest_data when content is unchanged" do
+      builder.call
+      original_data = beacon.reload.manifest_data
+
+      described_class.new(beacon.reload).call
+
+      expect(beacon.reload.manifest_data).to eq(original_data)
+    end
+
     it "produces stable checksum for unchanged content" do
       result1 = builder.call
       result2 = described_class.new(beacon.reload).call
