@@ -285,48 +285,6 @@
   </div>
 </div>
 
-<style>
-  .beacon-online-large {
-    display: inline-block;
-    width: 16px;
-    height: 16px;
-    background-color: #10b981;
-    border-radius: 50%;
-    animation: pulse-green 2s infinite;
-  }
-
-  .beacon-offline-large {
-    display: inline-block;
-    width: 16px;
-    height: 16px;
-    background-color: #ef4444;
-    border-radius: 50%;
-  }
-
-  @keyframes pulse-green {
-    0%, 100% {
-      opacity: 1;
-      box-shadow: 0 0 0 0 rgba(16, 185, 129, 0.7);
-    }
-    50% {
-      opacity: 0.8;
-      box-shadow: 0 0 0 8px rgba(16, 185, 129, 0);
-    }
-  }
-
-  .space-y-3 > * + * {
-    margin-top: 0.75rem;
-  }
-
-  .space-y-4 > * + * {
-    margin-top: 1rem;
-  }
-
-  .flex-wrap {
-    flex-wrap: wrap;
-  }
-</style>
-
 <script>
   function copyApiKey() {
     const apiKeyElement = document.getElementById('beacon-api-key');

@@ -7,73 +7,55 @@ class BeaconsController < ApplicationController
   end
 
   def new
-    @beacon = Beacon.new
-    @languages = Language.order(:name)
-    @providers = Provider.order(:name)
-    @regions = Region.order(:name)
-    @topics = Topic.active.order(:title)
+    prepare_associations
   end
 
   def create
     success, @beacon, api_key = Beacons::Creator.new.call(beacon_params)
 
-    if success
+    case Beacons::Creator.new.call(beacon_params)
+    when [true, @beacon, api_key]
       flash[:notice] = "Beacon was successfully provisioned. API Key: #{api_key}"
       redirect_to @beacon
-    else
-      @languages = Language.order(:name)
-      @providers = Provider.order(:name)
-      @regions = Region.order(:name)
-      @topics = Topic.active.order(:title)
+    when [false, _, _]
+      prepare_associations
       render :new, status: :unprocessable_entity
     end
   end
 
-  def show
-    @api_key_display = flash[:api_key]
-  end
+  def show; end
 
   def edit
-    @languages = Language.order(:name)
-    @providers = Provider.order(:name)
-    @regions = Region.order(:name)
-    @topics = Topic.active.order(:title)
+    prepare_associations
   end
 
   def update
-    if @beacon.update(beacon_update_params)
+    if @beacon.update(beacon_params)
       redirect_to @beacon, notice: "Beacon was successfully updated."
     else
-      @languages = Language.order(:name)
-      @providers = Provider.order(:name)
-      @regions = Region.order(:name)
-      @topics = Topic.active.order(:title)
+      prepare_associations
       render :edit, status: :unprocessable_entity
     end
   end
 
   def regenerate_key
-    begin
-      api_key = @beacon.regenerate
-      flash[:notice] = "API key has been successfully regenerated. API Key: #{api_key}"
-      redirect_to @beacon
+    api_key = @beacon.regenerate
+    flash[:notice] = "API key has been successfully regenerated. API Key: #{api_key}"
+    redirect_to @beacon
 
-      rescue => e
-        flash[:alert] = "API key could not be regenerated."
-        redirect_to @beacon
-    end
+    rescue => e
+      flash[:alert] = "API key could not be regenerated."
+      redirect_to @beacon
   end
 
   def revoke_key
-    begin
-      api_key = @beacon.revoke!
-      flash[:notice] = "API key has been successfully revoked."
-      redirect_to @beacon
+    api_key = @beacon.revoke!
+    flash[:notice] = "API key has been successfully revoked."
+    redirect_to @beacon
 
-      rescue => e
-        flash[:alert] = "API key could not be revoked."
-        redirect_to @beacon
-    end
+    rescue => e
+      flash[:alert] = "API key could not be revoked."
+      redirect_to @beacon
   end
 
   private
@@ -82,14 +64,17 @@ class BeaconsController < ApplicationController
     @beacon = Beacon.find(params[:id])
   end
 
+  def prepare_associations
+    @languages = Language.order(:name)
+    @providers = Provider.order(:name)
+    @regions = Region.order(:name)
+    @topics = Topic.active.order(:title)
+  end
+
   def beacon_params
     params.require(:beacon).permit(:name, :language_id, :region_id, provider_ids: [], topic_ids: [])
   end
-
-  def beacon_update_params
-    params.require(:beacon).permit(:name, :language_id, :region_id, provider_ids: [], topic_ids: [])
-  end
-
+  
   def redirect_contributors
     redirect_to root_path, alert: "You don't have permission to access this page." unless Current.user&.is_admin?
   end
