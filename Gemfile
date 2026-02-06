@@ -12,6 +12,7 @@ gem "csv"
 gem "herb", "~> 0.8.9"
 gem "image_processing", "~> 1.14"
 gem "importmap-rails"
+gem "inline_svg"
 gem "jbuilder"
 gem "kamal", require: false
 gem "mission_control-jobs"
@@ -34,7 +35,6 @@ gem "stimulus-rails"
 gem "tailwindcss-rails"
 gem "thruster", require: false
 gem "turbo-rails"
-gem "inline_svg"
 
 gem "tzinfo-data", platforms: %i[ windows jruby ]
 
