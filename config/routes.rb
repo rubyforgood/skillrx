@@ -17,14 +17,17 @@ Rails.application.routes.draw do
     resources :tags, only: %i[index], controller: "topics/tags"
   end
   resources :import_reports, only: %i[index show]
-  resources :beacons, except: :destroy do
-    member do
-      post :regenerate_key
-      post :revoke_key
-    end
-  end
   resource :settings, only: [] do
     put :provider, on: :collection
+  end
+
+  scope module: :beacons do
+    resources :beacons, except: :destroy do
+      member do
+        post :regenerate_key
+        post :revoke_key
+      end
+    end
   end
 
   # Render dynamic PWA files from app/views/pwa/* (remember to link manifest in application.html.erb)
