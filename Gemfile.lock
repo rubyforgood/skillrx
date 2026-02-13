@@ -451,7 +451,7 @@ GEM
       erb
       psych (>= 4.0.0)
       tsort
-    reactionview (0.2.0)
+    reactionview (0.2.1)
       actionview (>= 7.0)
       herb (>= 0.8.0, < 1.0.0)
     regexp_parser (2.11.3)
@@ -652,7 +652,7 @@ DEPENDENCIES
   rack-mini-profiler
   rails (~> 8.1.2)
   rails-controller-testing
-  reactionview (~> 0.2.0)
+  reactionview (~> 0.2.1)
   requestjs-rails
   rspec-rails
   rubocop-rails-omakase
