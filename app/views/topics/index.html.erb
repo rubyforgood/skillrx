@@ -83,14 +83,14 @@
             <table class="w-full border-collapse table-fixed">
               <thead>
                 <tr class="bg-gradient-gray border-b-2 border-gray-200">
-                  <th class="px-6 py-5 text-left text-xs font-bold text-gray-600 uppercase tracking-wider overflow-hidden text-ellipsis">Title</th>
-                  <th class="hide-mobile px-6 py-5 text-left text-xs font-bold text-gray-600 uppercase tracking-wider overflow-hidden text-ellipsis">Description</th>
-                  <th class="hide-mobile px-6 py-5 text-left text-xs font-bold text-gray-600 uppercase tracking-wider overflow-hidden text-ellipsis">UID</th>
-                  <th class="px-6 py-5 text-left text-xs font-bold text-gray-600 uppercase tracking-wider overflow-hidden text-ellipsis">Language</th>
-                  <th class="hide-mobile px-6 py-5 text-left text-xs font-bold text-gray-600 uppercase tracking-wider overflow-hidden text-ellipsis">Provider</th>
-                  <th class="px-6 py-5 text-left text-xs font-bold text-gray-600 uppercase tracking-wider overflow-hidden text-ellipsis"># of Documents</th>
-                  <th class="px-6 py-5 text-left text-xs font-bold text-gray-600 uppercase tracking-wider overflow-hidden text-ellipsis">State</th>
-                  <th class="actions-col px-6 py-5 text-right text-xs font-bold text-gray-600 uppercase tracking-wider w-40">Actions</th>
+                  <th class="px-6 py-5 text-left text-xs font-bold text-gray-600 uppercase tracking-wider truncate">Title</th>
+                  <th class="px-6 py-5 text-left text-xs font-bold text-gray-600 uppercase tracking-wider truncate hide-mobile">Description</th>
+                  <th class="px-6 py-5 text-left text-xs font-bold text-gray-600 uppercase tracking-wider truncate hide-mobile">UID</th>
+                  <th class="px-6 py-5 text-left text-xs font-bold text-gray-600 uppercase tracking-wider truncate">Language</th>
+                  <th class="px-6 py-5 text-left text-xs font-bold text-gray-600 uppercase tracking-wider truncate hide-mobile">Provider</th>
+                  <th class="px-6 py-5 text-left text-xs font-bold text-gray-600 uppercase tracking-wider truncate"># of Documents</th>
+                  <th class="px-6 py-5 text-left text-xs font-bold text-gray-600 uppercase tracking-wider truncate">State</th>
+                  <th class="px-6 py-5 text-right text-xs font-bold text-gray-600 uppercase tracking-wider w-40 actions-col">Actions</th>
                 </tr>
               </thead>
               <%= render "list", topics: @topics, params: search_params %>

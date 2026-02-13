@@ -12,6 +12,7 @@ gem "csv"
 gem "herb", "~> 0.8.10"
 gem "image_processing", "~> 1.14"
 gem "importmap-rails"
+gem "inline_svg"
 gem "jbuilder"
 gem "kamal", require: false
 gem "mission_control-jobs"
