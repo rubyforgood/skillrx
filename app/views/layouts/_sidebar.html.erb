@@ -60,6 +60,13 @@
         </li>
 
         <li class="mb-2">
+          <%= link_to beacons_path, class: "sidebar__link #{active_link_class(beacons_path)}" do %>
+            <span class="text-lg">📡</span>
+            <span>Beacon Management</span>
+          <% end %>
+        </li>
+
+        <li class="mb-2">
           <%= link_to import_reports_path, class: "sidebar__link #{active_link_class(import_reports_path)}" do %>
             <span class="text-lg">📊</span>
             <span>Import Reports</span>

@@ -1,0 +1,308 @@
+<% content_for :title, @beacon.name %>
+
+<div class="bg-gradient-page page-container">
+  <div class="content-wrapper">
+
+    <!-- Header Section -->
+    <div class="section-spacing">
+      <div class="flex justify-between items-center mb-6 flex-wrap gap-4">
+        <div class="min-w-0 flex-1">
+          <div class="flex-center mb-2">
+            <div class="bg-gradient-green icon-wrapper text-white">
+              <svg class="icon-size-lg" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8.111 16.404a5.5 5.5 0 017.778 0M12 20h.01m-7.08-7.071c3.904-3.905 10.236-3.905 14.141 0M1.394 9.393c5.857-5.857 15.355-5.857 21.213 0"></path>
+              </svg>
+            </div>
+            <h1 class="text-4xl font-bold text-gray-800 m-0 min-w-0"><%= @beacon.name %></h1>
+          </div>
+          <p class="page-subtitle"><%= @beacon.region.name %> Region</p>
+        </div>
+
+        <div class="flex gap-3 flex-wrap">
+          <%= link_to edit_beacon_path(@beacon), class: "bg-gradient-blue text-white py-3.5 px-7 rounded-xl no-underline font-semibold text-sm inline-flex items-center gap-2 shadow-blue transition-all hover:-translate-y-0.5", data: {turbo: false } do %>
+            <svg class="w-4.5 h-4.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"></path>
+            </svg>
+            <span>Edit Beacon</span>
+          <% end %>
+        </div>
+      </div>
+
+      <!-- Breadcrumb -->
+      <nav class="breadcrumb-nav">
+        <ol class="breadcrumb-list">
+          <li><%= link_to "Dashboard", root_path, class: "text-gray-500 no-underline hover:text-gray-700" %></li>
+          <li class="breadcrumb-separator">/</li>
+          <li><%= link_to "Beacons", beacons_path, class: "text-gray-500 no-underline hover:text-gray-700" %></li>
+          <li class="breadcrumb-separator">/</li>
+          <li class="breadcrumb-current"><%= @beacon.name %></li>
+        </ol>
+      </nav>
+    </div>
+
+    <!-- Status Overview Cards -->
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
+      <div class="card-elevated p-6">
+        <div class="flex items-center justify-between">
+          <div>
+            <p class="text-sm text-gray-500 m-0">Status</p>
+            <p class="text-2xl font-bold m-0 mt-2 <%= @beacon.revoked? ? 'text-red-600' : 'text-green-600' %>">
+              <%= @beacon.revoked? ? 'Revoked' : 'Active' %>
+            </p>
+          </div>
+          <div class="w-12 h-12 <%= @beacon.revoked? ? 'bg-red-100' : 'bg-green-100' %> rounded-lg flex items-center justify-center">
+            <svg class="w-6 h-6 <%= @beacon.revoked? ? 'text-red-600' : 'text-green-600' %>" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <% if @beacon.revoked? %>
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
+              <% else %>
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
+              <% end %>
+            </svg>
+          </div>
+        </div>
+      </div>
+
+      <div class="card-elevated p-6">
+        <div class="flex items-center justify-between">
+          <div>
+            <p class="text-sm text-gray-500 m-0">Files Included on Beacon</p>
+            <p class="text-2xl font-bold text-gray-800 m-0 mt-2"><%= @beacon.document_count %></p>
+          </div>
+          <div class="w-12 h-12 bg-blue-100 rounded-lg flex items-center justify-center">
+            <svg class="w-6 h-6 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path>
+            </svg>
+          </div>
+        </div>
+      </div>
+
+      <div class="card-elevated p-6">
+        <div class="flex items-center justify-between">
+          <div>
+            <p class="text-sm text-gray-500 m-0">Topics Included</p>
+            <p class="text-2xl font-bold text-gray-800 m-0 mt-2"><%= @beacon.file_count %></p>
+          </div>
+          <div class="w-12 h-12 bg-purple-100 rounded-lg flex items-center justify-center">
+            <svg class="w-6 h-6 text-purple-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 21h10a2 2 0 002-2V9.414a1 1 0 00-.293-.707l-5.414-5.414A1 1 0 0012.586 3H7a2 2 0 00-2 2v14a2 2 0 002 2z"></path>
+            </svg>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Main Content Grid -->
+    <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+      
+      <!-- Beacon Details Card -->
+      <div class="card-elevated">
+        <div class="bg-gradient-to-br from-green-700 to-emerald-800 p-6 text-white rounded-t-xl">
+          <h2 class="text-xl font-bold m-0 flex items-center gap-2">
+            <svg class="icon-size-md" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/>
+            </svg>
+            Beacon Details
+          </h2>
+        </div>
+        <div class="p-6">
+          <dl class="space-y-4">
+            <div class="flex justify-between py-3 border-b border-gray-100">
+              <dt class="text-sm font-medium text-gray-500">ID</dt>
+              <dd class="text-sm text-gray-900 font-mono"><%= @beacon.id %></dd>
+            </div>
+            <div class="flex justify-between py-3 border-b border-gray-100">
+              <dt class="text-sm font-medium text-gray-500">API Key Prefix</dt>
+              <dd class="text-sm text-gray-900 font-mono"><%= @beacon.api_key_prefix %>***</dd>
+            </div>
+            <div class="flex justify-between py-3 border-b border-gray-100">
+              <dt class="text-sm font-medium text-gray-500">Created</dt>
+              <dd class="text-sm text-gray-900"><%= @beacon.created_at.strftime("%B %d, %Y at %I:%M %p") %></dd>
+            </div>
+            <div class="flex justify-between py-3">
+              <dt class="text-sm font-medium text-gray-500">Updated</dt>
+              <dd class="text-sm text-gray-900"><%= @beacon.updated_at.strftime("%B %d, %Y at %I:%M %p") %></dd>
+            </div>
+          </dl>
+        </div>
+      </div>
+
+      <!-- API Key Card -->
+      <div class="card-elevated">
+        <div class="bg-gradient-to-br from-purple-700 to-indigo-800 p-6 text-white rounded-t-xl">
+          <h2 class="text-xl font-bold m-0 flex items-center gap-2">
+            <svg class="icon-size-md" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 7a2 2 0 012 2m4 0a6 6 0 01-7.743 5.743L11 17H9v2H7v2H4a1 1 0 01-1-1v-2.586a1 1 0 01.293-.707l5.964-5.964A6 6 0 1121 9z"></path>
+            </svg>
+            API Key
+          </h2>
+        </div>
+        <div class="p-6">
+          <% if @api_key_display %>
+            <div class="bg-green-50 rounded-lg p-4 border-2 border-green-300 mb-4">
+              <div class="flex items-center justify-between mb-2">
+                <span class="text-xs font-semibold text-green-800 uppercase">✓ Beacon Provisioned - API Key Generated</span>
+                <button onclick="copyApiKey()" class="text-xs text-blue-600 hover:text-blue-800 font-semibold">
+                  Copy to Clipboard
+                </button>
+              </div>
+              <code id="beacon-api-key" class="text-sm text-gray-900 font-mono break-all block bg-white p-3 rounded border border-green-200"><%= @api_key_display %></code>
+            </div>
+            <div class="bg-blue-50 border border-blue-200 rounded-lg p-4">
+              <div class="flex">
+                <div class="flex-shrink-0">
+                  <svg class="h-5 w-5 text-blue-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/>
+                  </svg>
+                </div>
+                <div class="ml-3">
+                  <h3 class="text-sm font-medium text-blue-800 m-0 mb-1">Save This Key</h3>
+                  <p class="text-sm text-blue-700 m-0">
+                    Copy this API key and configure it in your beacon deployment. This page will only show the full key immediately after creation. You can regenerate a new key anytime if needed.
+                  </p>
+                </div>
+              </div>
+            </div>
+          <% else %>
+            <div class="bg-gray-50 rounded-lg p-4 border border-gray-200 mb-4">
+              <div class="flex items-center justify-between mb-2">
+                <span class="text-xs font-semibold text-gray-500 uppercase">API Key Prefix</span>
+              </div>
+              <code class="text-sm text-gray-900 font-mono break-all block"><%= @beacon.api_key_prefix %>***</code>
+            </div>
+            <div class="bg-blue-50 border border-blue-200 rounded-lg p-4 mb-4">
+              <div class="flex">
+                <div class="flex-shrink-0">
+                  <svg class="h-5 w-5 text-blue-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/>
+                  </svg>
+                </div>
+                <div class="ml-3">
+                  <h3 class="text-sm font-medium text-blue-800 m-0 mb-1">API Key Active</h3>
+                  <p class="text-sm text-blue-700 m-0">
+                    The API key for this beacon is active (shown by prefix above). The full key was displayed when the beacon was first created. If you need a new key, use the regenerate button below.
+                  </p>
+                </div>
+              </div>
+            </div>
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-2">
+              <%= button_to regenerate_key_beacon_path(@beacon), method: :post, 
+                  class: "w-full bg-amber-600 hover:bg-amber-700 text-white font-semibold py-3 px-4 rounded-lg transition-colors inline-flex items-center justify-center gap-2",
+                  data: { turbo_confirm: "Are you sure? This will invalidate the current API key and generate a new one. Any beacons using the old key will stop working." } do %>
+                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"></path>
+                </svg>
+                <span>Regenerate API Key</span>
+              <% end %>
+
+              <%= button_to revoke_key_beacon_path(@beacon), method: :post, 
+                  class: "w-full bg-red-600 hover:bg-red-700 text-white font-semibold py-3 px-4 rounded-lg transition-colors inline-flex items-center justify-center gap-2",
+                  data: { turbo_confirm: "Are you sure? This will invalidate the current API key. Any beacons using the old key will stop working." } do %>
+                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"/>
+                </svg>
+                <span>Revoke API Key</span>
+              <% end %>
+            </div>
+          <% end %>
+        </div>
+      </div>
+    </div>
+
+    <!-- Document Filters Card -->
+    <div class="card-elevated mt-6">
+      <div class="bg-gradient-to-br from-blue-700 to-indigo-800 p-6 text-white rounded-t-xl">
+        <h2 class="text-xl font-bold m-0 flex items-center gap-2">
+          <svg class="icon-size-md" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 4a1 1 0 011-1h16a1 1 0 011 1v2.586a1 1 0 01-.293.707l-6.414 6.414a1 1 0 00-.293.707V17l-4 4v-6.586a1 1 0 00-.293-.707L3.293 7.293A1 1 0 013 6.586V4z"></path>
+          </svg>
+          Document Access Configuration
+        </h2>
+      </div>
+      <div class="p-6">
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+          <div>
+            <h3 class="text-sm font-semibold text-gray-700 mb-3">Basic Configuration</h3>
+            <dl class="space-y-3">
+              <div class="flex justify-between py-2 border-b border-gray-100">
+                <dt class="text-sm font-medium text-gray-500">Language</dt>
+                <dd class="text-sm text-gray-900">
+                  <span class="bg-blue-50 text-blue-900 py-1 px-3 rounded-full text-xs font-medium">
+                    <%= @beacon.language.name %>
+                  </span>
+                </dd>
+              </div>
+              <div class="flex justify-between py-2">
+                <dt class="text-sm font-medium text-gray-500">Region</dt>
+                <dd class="text-sm text-gray-900">
+                  <span class="bg-purple-50 text-purple-900 py-1 px-3 rounded-full text-xs font-medium">
+                    <%= @beacon.region.name %>
+                  </span>
+                </dd>
+              </div>
+            </dl>
+          </div>
+          <div>
+            <h3 class="text-sm font-semibold text-gray-700 mb-3">Access Filters</h3>
+            <dl class="space-y-3">
+              <div class="py-2 border-b border-gray-100">
+                <dt class="text-sm font-medium text-gray-500 mb-2">Providers</dt>
+                <dd class="text-sm text-gray-900">
+                  <% if @beacon.providers.any? %>
+                    <div class="flex flex-wrap gap-2">
+                      <% @beacon.providers.each do |provider| %>
+                        <span class="bg-green-50 text-green-900 py-1 px-3 rounded-full text-xs font-medium">
+                          <%= provider.name %>
+                        </span>
+                      <% end %>
+                    </div>
+                  <% else %>
+                    <span class="text-gray-400">All Providers</span>
+                  <% end %>
+                </dd>
+              </div>
+              <div class="py-2">
+                <dt class="text-sm font-medium text-gray-500 mb-2">Topics</dt>
+                <dd class="text-sm text-gray-900">
+                  <% if @beacon.topics.any? %>
+                    <div class="flex flex-wrap gap-2">
+                      <% @beacon.topics.each do |topic| %>
+                        <span class="bg-orange-50 text-orange-900 py-1 px-3 rounded-full text-xs font-medium">
+                          <%= topic.title %>
+                        </span>
+                      <% end %>
+                    </div>
+                  <% else %>
+                    <span class="text-gray-400">All Topics</span>
+                  <% end %>
+                </dd>
+              </div>
+            </dl>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<script>
+  function copyApiKey() {
+    const apiKeyElement = document.getElementById('beacon-api-key');
+    const apiKey = apiKeyElement.textContent;
+    
+    navigator.clipboard.writeText(apiKey).then(() => {
+      const button = event.target;
+      const originalText = button.textContent;
+      button.textContent = 'Copied!';
+      button.classList.add('text-green-600');
+      
+      setTimeout(() => {
+        button.textContent = originalText;
+        button.classList.remove('text-green-600');
+      }, 2000);
+    }).catch(err => {
+      console.error('Failed to copy:', err);
+      alert('Failed to copy API key to clipboard');
+    });
+  }
+</script>
