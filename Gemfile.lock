@@ -371,7 +371,7 @@ GEM
       bigdecimal (>= 3.0)
     pagy (9.4.0)
     parallel (1.27.0)
-    parser (3.3.10.1)
+    parser (3.3.10.2)
       ast (~> 2.4.1)
       racc
     pg (1.6.3)
@@ -511,7 +511,7 @@ GEM
       ffi (~> 1.12)
       logger
     rubyzip (3.2.2)
-    scout_apm (6.1.0)
+    scout_apm (6.1.1)
       parser
     scout_apm_logging (2.1.0)
       google-protobuf (>= 3.18)
