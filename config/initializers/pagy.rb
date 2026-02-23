@@ -9,7 +9,7 @@
 # You can set any pagy variable as a Pagy::DEFAULT. They can also be overridden per instance by just passing them to
 # Pagy.new|Pagy::Countless.new|Pagy::Calendar::*.new or any of the #pagy* controller methods
 # Here are the few that make more sense as DEFAULTs:
-Pagy::DEFAULT[:limit]       = 20                    # display 20 results per page to match UI expectations
+# Pagy::DEFAULT[:limit]       = 20                    # display 20 results per page to match UI expectations
 # Pagy::DEFAULT[:size]        = 7                     # default
 # Pagy::DEFAULT[:ends]        = true                  # default
 # Pagy::DEFAULT[:page_param]  = :page                 # default
