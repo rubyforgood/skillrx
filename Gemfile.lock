@@ -369,8 +369,9 @@ GEM
     ostruct (0.6.3)
     ox (2.14.23)
       bigdecimal (>= 3.0)
-    pagy (43.2.4)
+    pagy (43.3.0)
       json
+      uri
       yaml
     parallel (1.27.0)
     parser (3.3.10.1)

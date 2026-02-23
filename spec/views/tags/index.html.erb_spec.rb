@@ -1,8 +1,6 @@
 require "rails_helper"
 
 RSpec.describe "tags/index", type: :view do
-  include Pagy::Frontend
-
   context "when there are no tags" do
     before(:each) do
       assign(:pagy, Pagy::Offset.new(count: 0, request:))

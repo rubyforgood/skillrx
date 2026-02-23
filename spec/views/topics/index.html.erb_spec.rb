@@ -1,8 +1,6 @@
 require "rails_helper"
 
 RSpec.describe "topics/index", type: :view do
-  include Pagy::Frontend
-
   let(:request) do
     request_hash = { base_url: "http://test.host", path: "/topics", params: {}, cookie: nil }
     Pagy::Request.new(request: request_hash)
@@ -52,7 +50,7 @@ RSpec.describe "topics/index", type: :view do
   context "when there are multiple pages of topics" do
     before(:each) do
       # Simulate being on page 2 with 10 items per page and 25 total items
-      pagy = Pagy::Offset.new(count: 25, page: 2, items: 10, request:)
+      pagy = Pagy::Offset.new(count: 25, page: 2, limit: 10, request:)
       assign(:pagy, pagy)
       assign(:topics, create_list(:topic, 10))
     end
