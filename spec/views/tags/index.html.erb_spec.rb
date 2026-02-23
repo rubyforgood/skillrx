@@ -1,14 +1,7 @@
 require "rails_helper"
 
 RSpec.describe "tags/index", type: :view do
-  let(:request) do
-    request_hash = { base_url: "http://test.host", path: "/tags", params: {}, cookie: nil }
-    Pagy::Request.new(request: request_hash)
-  end
-
-  before(:each) do
-    allow(view).to receive(:params).and_return(ActionController::Parameters.new)
-  end
+  include Pagy::Frontend
 
   context "when there are no tags" do
     before(:each) do
@@ -33,16 +26,16 @@ RSpec.describe "tags/index", type: :view do
       assert_select "table>tbody>tr", count: 1
     end
 
-    it "renders pagination nav without page links" do
+    it "does not render pagination when only one page present" do
       render
-      assert_dom "nav.pagy-bootstrap .page-link", text: "1", count: 1
+      assert_select "nav[aria-label='Pages']", count: 0
     end
   end
 
   context "when there are multiple pages of tags" do
     before(:each) do
       # Simulate being on page 2 with 10 items per page and 25 total items
-      pagy = Pagy::Offset.new(count: 25, page: 2, items: 10, request:)
+      pagy = Pagy::Offset.new(count: 25, page: 2, limit: 10, request:)
       assign(:pagy, pagy)
       assign(:tags, create_list(:tag, 10))
     end
@@ -54,8 +47,8 @@ RSpec.describe "tags/index", type: :view do
 
     it "renders pagination with multiple pages" do
       render
-      assert_select "nav.pagy-bootstrap .page-item", minimum: 2
-      assert_dom "nav.pagy-bootstrap .page-item.active", text: "2", count: 1
+      assert_select "nav[aria-label='Pages'] a", count: 5 # Previous, 1, 2, 3, Next
+      assert_select "nav[aria-label='Pages'] a[aria-current='page']", text: "2", count: 1
     end
   end
 end

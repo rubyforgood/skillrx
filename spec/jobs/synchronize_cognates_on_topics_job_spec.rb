@@ -37,5 +37,14 @@ RSpec.describe SynchronizeCognatesOnTopicsJob, type: :job do
       expect(Topic.find_by(id: english_topic_1.id).tag_list)
         .to match_array([ "tag", "english cognate", "english reverse cognate", "spanish cognate", "spanish reverse cognate" ])
     end
+
+    it "dispatches rebuild manifest jobs for beacons associated with modified topics" do
+      beacon = create(:beacon)
+      create(:beacon_topic, beacon: beacon, topic: english_topic_1)
+
+      expect {
+        SynchronizeCognatesOnTopicsJob.perform_now(tag)
+      }.to have_enqueued_job(Beacons::RebuildManifestJob).with(beacon.id)
+    end
   end
 end

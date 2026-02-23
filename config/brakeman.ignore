@@ -3,7 +3,7 @@
     {
       "warning_type": "SQL Injection",
       "warning_code": 0,
-      "fingerprint": "574a24662084f6c06b2ab956a5ab6b850248892cae89bb5fbeb85337895940fc",
+      "fingerprint": "3d7a4e1b85dd5a655c28e73db63d14e1bc4a029c98e05bc96a9c2da2b678d104",
       "check_name": "SQL",
       "message": "Possible SQL injection",
       "file": "lib/autorequire/data_import.rb",
@@ -14,7 +14,7 @@
       "location": {
         "type": "method",
         "class": "DataImport",
-        "method": "s(:self).reset_pk_sequence_for"
+        "method": "self.reset_pk_sequence_for"
       },
       "user_input": "((model.maximum(model.primary_key) or 0) + 1)",
       "confidence": "Medium",
@@ -24,5 +24,5 @@
       "note": ""
     }
   ],
-  "brakeman_version": "7.1.0"
+  "brakeman_version": "8.0.2"
 }

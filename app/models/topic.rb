@@ -1,6 +1,7 @@
 # == Schema Information
 #
 # Table name: topics
+# Database name: primary
 #
 #  id              :bigint           not null, primary key
 #  description     :text
@@ -35,6 +36,8 @@ class Topic < ApplicationRecord
 
   belongs_to :language
   belongs_to :provider
+  has_many :beacon_topics, dependent: :destroy
+  has_many :beacons, through: :beacon_topics
   has_many_attached :documents, dependent: :purge
 
   validates :title, :language_id, :provider_id, :published_at, presence: true
@@ -46,11 +49,15 @@ class Topic < ApplicationRecord
 
   class << self
     def by_year(year)
-      where("extract(year from published_at) = ?", year)
+      return all if year.blank?
+
+      where("extract(year from published_at) = ?", year.to_i)
     end
 
     def by_month(month)
-      where("extract(month from published_at) = ?", month)
+      return all if month.blank?
+
+      where("extract(month from published_at) = ?", month.to_i)
     end
   end
 

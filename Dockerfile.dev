@@ -1,5 +1,5 @@
 # Use Ruby 3.x with Alpine as base image for smaller size
-FROM ruby:3.4.8-alpine
+FROM ruby:4.0.1-alpine
 
 # Set environment variables for Rails
 ENV RAILS_ENV=development \
@@ -23,7 +23,8 @@ RUN apk add --no-cache \
     ca-certificates \
     ttf-freefont \
     chromium \
-    chromium-chromedriver
+    chromium-chromedriver \
+    libffi-dev
 
 # Set Chrome environment variables
 ENV CHROME_BIN=/usr/bin/chromium-browser \

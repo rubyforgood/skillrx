@@ -40,3 +40,6 @@ db/structure.sql
 # Ignore IDE config files
 .idea/
 .DS_Store
+
+/app/assets/builds/*
+!/app/assets/builds/.keep
