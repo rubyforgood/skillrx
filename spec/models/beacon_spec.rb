@@ -66,6 +66,22 @@ RSpec.describe Beacon, type: :model do
     end
   end
 
+  describe "#regenerate" do
+    it "reassigns the API key's prefix and digest" do
+      beacon = create(:beacon)
+
+      expect { beacon.regenerate }.to change { beacon.api_key_digest }
+        .and change { beacon.api_key_prefix }
+    end
+
+    it "sets revoked_at to nil" do
+      beacon = create(:beacon, :revoked)
+
+      beacon.regenerate
+      expect(beacon.revoked_at).to be_nil
+    end
+  end
+
   describe "#revoke!" do
     include ActiveSupport::Testing::TimeHelpers
 
