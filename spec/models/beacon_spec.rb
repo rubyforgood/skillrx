@@ -91,4 +91,67 @@ RSpec.describe Beacon, type: :model do
       expect(beacon).to be_revoked
     end
   end
+
+  describe "#accessible_blobs" do
+    let(:beacon) { create(:beacon) }
+    let(:provider) { create(:provider) }
+    let(:other_beacon) { create(:beacon) }
+
+    before do
+      beacon.providers << provider
+      other_beacon.providers << provider
+    end
+
+    context "when beacon has topics with documents" do
+      let!(:topic1) { create(:topic, :with_documents, provider: provider, language: beacon.language) }
+      let!(:topic2) { create(:topic, :with_documents, provider: provider, language: beacon.language) }
+
+      before do
+        beacon.topics << topic1
+        beacon.topics << topic2
+      end
+
+      it "returns blobs from all beacon topics" do
+        expected_blob_ids = (topic1.documents + topic2.documents).map(&:blob_id)
+        expect(beacon.accessible_blobs.pluck(:id)).to match_array(expected_blob_ids)
+      end
+
+      it "returns ActiveStorage::Blob records" do
+        expect(beacon.accessible_blobs.first).to be_a(ActiveStorage::Blob)
+      end
+    end
+
+    context "when beacon has no topics" do
+      it "returns empty relation" do
+        expect(beacon.accessible_blobs).to be_empty
+      end
+    end
+
+    context "when topics have no documents" do
+      let!(:topic_without_docs) { create(:topic, provider: provider, language: beacon.language) }
+
+      before do
+        beacon.topics << topic_without_docs
+      end
+
+      it "returns empty relation" do
+        expect(beacon.accessible_blobs).to be_empty
+      end
+    end
+
+    context "when other beacons have topics with documents" do
+      let!(:beacon_topic) { create(:topic, :with_documents, provider: provider, language: beacon.language) }
+      let!(:other_topic) { create(:topic, :with_documents, provider: provider, language: other_beacon.language) }
+
+      before do
+        beacon.topics << beacon_topic
+        other_beacon.topics << other_topic
+      end
+
+      it "only returns blobs from this beacon's topics" do
+        expected_blob_ids = beacon_topic.documents.map(&:blob_id)
+        expect(beacon.accessible_blobs.pluck(:id)).to match_array(expected_blob_ids)
+      end
+    end
+  end
 end

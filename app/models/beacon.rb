@@ -52,4 +52,16 @@ class Beacon < ApplicationRecord
   def revoked?
     revoked_at.present?
   end
+
+  def accessible_blobs
+    ActiveStorage::Blob
+      .joins(:attachments)
+      .where(
+        active_storage_attachments: {
+          record_type: "Topic",
+          name: "documents",
+          record_id: topic_ids,
+        }
+      )
+  end
 end
