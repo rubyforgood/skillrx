@@ -34,18 +34,15 @@ class Beacon < ApplicationRecord
   has_many :beacon_topics, dependent: :destroy
   has_many :topics, through: :beacon_topics
 
+  delegate :name, to: :region, prefix: true
+  delegate :name, to: :language, prefix: true
+
   validates :name, presence: true
   validates :api_key_digest, presence: true, uniqueness: true
   validates :api_key_prefix, presence: true
 
   scope :active, -> { where(revoked_at: nil) }
   scope :revoked, -> { where.not(revoked_at: nil) }
-
-  def regenerate
-    _, raw_key = Beacons::KeyRegenerator.new.call(self)
-
-    raw_key
-  end
 
   def revoke!
     update!(revoked_at: Time.current)
@@ -57,48 +54,11 @@ class Beacon < ApplicationRecord
 
   # Get count of topics that match this beacon's configuration
   def document_count
-    scope = Topic.active
-
-    # Filter by beacon's language
-    scope = scope.where(language_id: language_id) if language_id.present?
-
-    # If beacon has specific providers selected, filter by those
-    if providers.any?
-      scope = scope.where(provider_id: providers.pluck(:id))
-    else
-      # If no providers selected, filter by providers in the beacon's region
-      if region.present?
-        provider_ids = region.providers.pluck(:id)
-        scope = scope.where(provider_id: provider_ids)
-      end
-    end
-
-    # If beacon has specific topics selected, filter by those
-    if topics.any?
-      scope = scope.where(id: topics.pluck(:id))
-    end
-
-    scope.count
+    topics.count
   end
 
   # Get count of actual document files attached to matching topics
   def file_count
-    scope = Topic.active
-
-    scope = scope.where(language_id: language_id) if language_id.present?
-
-    if providers.any?
-      scope = scope.where(provider_id: providers.pluck(:id))
-    elsif region.present?
-      provider_ids = region.providers.pluck(:id)
-      scope = scope.where(provider_id: provider_ids)
-    end
-
-    if topics.any?
-      scope = scope.where(id: topics.pluck(:id))
-    end
-
-    # Count total attached documents
-    scope.joins(:documents_attachments).count
+    topics.joins(:documents_attachments).count
   end
 end

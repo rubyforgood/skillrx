@@ -16,7 +16,7 @@ module Beacons
 
       if success
         flash[:notice] = "Beacon was successfully provisioned. API Key: #{api_key}"
-        redirect_to @beacon
+        redirect_to beacon_path(@beacon, api_key: api_key)
       else
         prepare_associations
         render :new, status: :unprocessable_entity
@@ -37,9 +37,9 @@ module Beacons
     end
 
     def regenerate_key
-      api_key = @beacon.regenerate
+      _, api_key = Beacons::KeyRegenerator.new.call(@beacon)
       flash[:notice] = "API key has been successfully regenerated. API Key: #{api_key}"
-      redirect_to @beacon
+      redirect_to beacon_path(@beacon, api_key: api_key)
 
       rescue => e
         flash[:alert] = "API key could not be regenerated."

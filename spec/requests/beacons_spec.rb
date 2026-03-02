@@ -65,7 +65,8 @@ RSpec.describe "/beacons", type: :request do
       it "redirects to the created beacon" do
         post beacons_url, params: { beacon: valid_attributes }
 
-        expect(response).to redirect_to(beacon_url(Beacon.last))
+        expect(response).to have_http_status(302)
+        expect(assigns(:beacon)).to eq(Beacon.last)
       end
     end
 
@@ -134,16 +135,18 @@ RSpec.describe "/beacons", type: :request do
     it "redirects to the beacon" do
       subject
 
-      expect(response).to redirect_to(beacon_url(beacon))
+      expect(response).to have_http_status(302)
+      expect(assigns(:beacon)).to eq(beacon)
     end
 
     context "when there is an error" do
-      before { allow(beacon).to receive(:regenerate).and_raise("Error") }
+      before { allow(Beacons::KeyRegenerator.new).to receive(:call).and_raise("Error") }
 
       it "redirects to the beacon" do
         subject
 
-        expect(response).to redirect_to(beacon_url(beacon))
+        expect(response).to have_http_status(302)
+        expect(assigns(:beacon)).to eq(beacon)
       end
     end
   end
