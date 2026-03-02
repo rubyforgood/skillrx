@@ -1,7 +1,10 @@
 require "rails_helper"
 
 RSpec.describe "topics/index", type: :view do
-  include Pagy::Frontend
+  let(:request) do
+    request_hash = { base_url: "http://test.host", path: "/topics", params: {}, cookie: nil }
+    Pagy::Request.new(request: request_hash)
+  end
 
   before(:each) do
     def view.search_params = {}
@@ -17,7 +20,7 @@ RSpec.describe "topics/index", type: :view do
 
   context "when there are no topics" do
     before(:each) do
-      assign(:pagy, Pagy.new(count: 0))
+      assign(:pagy, Pagy::Offset.new(count: 0, request:))
       assign(:topics, [])
     end
 
@@ -29,7 +32,7 @@ RSpec.describe "topics/index", type: :view do
 
   context "when there are topics but only one page" do
     before(:each) do
-      assign(:pagy, Pagy.new(count: 1))
+      assign(:pagy, Pagy::Offset.new(count: 1, request:))
       assign(:topics, [ create(:topic, title: "Topic 1") ])
     end
 
@@ -47,7 +50,7 @@ RSpec.describe "topics/index", type: :view do
   context "when there are multiple pages of topics" do
     before(:each) do
       # Simulate being on page 2 with 10 items per page and 25 total items
-      pagy = Pagy.new(count: 25, page: 2, limit: 10)
+      pagy = Pagy::Offset.new(count: 25, page: 2, limit: 10, request:)
       assign(:pagy, pagy)
       assign(:topics, create_list(:topic, 10))
     end
