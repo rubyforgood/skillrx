@@ -21,7 +21,7 @@ Rails.application.routes.draw do
     put :provider, on: :collection
   end
 
-  resources :beacons, except: :destroy, module: :beacons do
+  resources :beacons, except: :destroy do
     member do
       post :regenerate_key
       post :revoke_key
