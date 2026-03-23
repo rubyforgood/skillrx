@@ -62,7 +62,7 @@ class BeaconsController < ApplicationController
 
     render json: {
       topics: topics.select(:id, :title),
-      providers: providers.select(:id, :name)
+      providers: providers.select(:id, :name),
     }
   end
 
