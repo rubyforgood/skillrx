@@ -46,7 +46,7 @@
           <div>
             <p class="text-sm text-gray-500 m-0">Status</p>
             <p class="text-2xl font-bold m-0 mt-2 <%= @beacon.revoked? ? 'text-red-600' : 'text-green-600' %>">
-              <%= status_string(@beacon) %>
+              <%= @beacon.status_str %>
             </p>
           </div>
           <div class="w-12 h-12 <%= @beacon.revoked? ? 'bg-red-100' : 'bg-green-100' %> rounded-lg flex items-center justify-center">

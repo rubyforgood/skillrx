@@ -56,6 +56,10 @@ class Beacon < ApplicationRecord
     revoked_at.present?
   end
 
+  def status_str
+    revoked? ? "Revoked" : "Active"
+  end
+
   # Get count of topics that match this beacon's configuration
   def document_count
     topics.count
