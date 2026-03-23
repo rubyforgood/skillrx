@@ -41,7 +41,7 @@ module Beacons
       flash[:notice] = "API key has been successfully regenerated. API Key: #{api_key}"
       redirect_to beacon_path(@beacon, api_key: api_key)
 
-      rescue => e
+      rescue => StandardError
         flash[:alert] = "API key could not be regenerated."
         redirect_to @beacon
     end
