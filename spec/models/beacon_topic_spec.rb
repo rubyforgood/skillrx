@@ -27,4 +27,23 @@ RSpec.describe BeaconTopic, type: :model do
     it { is_expected.to belong_to(:beacon) }
     it { is_expected.to belong_to(:topic) }
   end
+
+  describe "callbacks" do
+    let(:beacon) { create(:beacon) }
+    let(:topic) { create(:topic) }
+
+    it "enqueues a rebuild manifest job on create" do
+      expect {
+        create(:beacon_topic, beacon: beacon, topic: topic)
+      }.to have_enqueued_job(Beacons::RebuildManifestJob).with(beacon.id)
+    end
+
+    it "enqueues a rebuild manifest job on destroy" do
+      beacon_topic = create(:beacon_topic, beacon: beacon, topic: topic)
+
+      expect {
+        beacon_topic.destroy!
+      }.to have_enqueued_job(Beacons::RebuildManifestJob).with(beacon.id)
+    end
+  end
 end
