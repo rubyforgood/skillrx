@@ -47,6 +47,25 @@ class BeaconsController < ApplicationController
       redirect_to @beacon
   end
 
+  def filter_options
+    topics = if params[:language_id].present?
+      Topic.active.where(language_id: params[:language_id]).order(:title)
+    else
+      Topic.active.order(:title)
+    end
+
+    providers = if params[:region_id].present?
+      Provider.joins(:branches).where(branches: { region_id: params[:region_id] }).distinct.order(:name)
+    else
+      Provider.order(:name)
+    end
+
+    render json: {
+      topics: topics.select(:id, :title),
+      providers: providers.select(:id, :name)
+    }
+  end
+
   def revoke_key
     api_key = @beacon.revoke!
     flash[:notice] = "API key has been successfully revoked."

@@ -1,4 +1,5 @@
-<%= form_with model: beacon, local: true do |form| %>
+<%= form_with model: beacon, local: true,
+    data: { controller: "beacon-form", beacon_form_filter_url_value: filter_options_beacons_path } do |form| %>
   <% if beacon.errors.any? %>
     <div class="bg-red-50 border border-red-200 rounded-lg p-4 mb-6">
       <div class="flex">
@@ -54,10 +55,14 @@
         <span class="form-required">*</span>
       <% end %>
       <div style="position:relative;">
-        <%= form.select :language_id, 
+        <%= form.select :language_id,
             options_from_collection_for_select(@languages, :id, :name, beacon.language_id),
             { include_blank: "Select a language" },
-            class: "form-select", required: true %>
+            class: "form-select", required: true,
+            data: {
+              action: "change->beacon-form#fetchOptions",
+              "beacon-form-target": "languageSelect"
+            } %>
         <%= render "shared/dropdown_arrow" %>
       </div>
       <p class="form-help-text">Language for documents this beacon will access</p>
@@ -69,10 +74,14 @@
         <span class="form-required">*</span>
       <% end %>
       <div style="position:relative;">
-        <%= form.select :region_id, 
+        <%= form.select :region_id,
             options_from_collection_for_select(@regions, :id, :name, beacon.region_id),
             { include_blank: "Select a region" },
-            class: "form-select", required: true %>
+            class: "form-select", required: true,
+            data: {
+              action: "change->beacon-form#fetchOptions",
+              "beacon-form-target": "regionSelect"
+            } %>
         <%= render "shared/dropdown_arrow" %>
       </div>
       <p class="form-help-text">Geographic region for this beacon</p>
@@ -80,32 +89,34 @@
 
     <div class="form-grid-full" data-controller="select-tags" data-select-tags-dropdown-parent-value="body">
       <%= form.label :provider_ids, "Providers", class: "form-label" %>
-      <%= form.select :provider_ids, 
+      <%= form.select :provider_ids,
           options_from_collection_for_select(@providers, :id, :name, beacon.provider_ids),
           { prompt: "Start typing to select providers", include_blank: true },
-          { multiple: true, 
-            data: { 
-              "allow-new": "false", 
-              "allow-clear": "true", 
+          { multiple: true,
+            data: {
+              "allow-new": "false",
+              "allow-clear": "true",
               "select-tags-target": "tagList",
-              "dropdown-parent": "body" 
-            } 
+              "dropdown-parent": "body",
+              "beacon-form-target": "providersSelect"
+            }
           } %>
       <p class="form-help-text">Select which content providers this beacon can access</p>
     </div>
 
     <div class="form-grid-full" data-controller="select-tags" data-select-tags-dropdown-parent-value="body">
       <%= form.label :topic_ids, "Topics", class: "form-label" %>
-      <%= form.select :topic_ids, 
+      <%= form.select :topic_ids,
           options_from_collection_for_select(@topics, :id, :title, beacon.topic_ids),
           { prompt: "Start typing to select topics", include_blank: true },
-          { multiple: true, 
-            data: { 
-              "allow-new": "false", 
-              "allow-clear": "true", 
+          { multiple: true,
+            data: {
+              "allow-new": "false",
+              "allow-clear": "true",
               "select-tags-target": "tagList",
-              "dropdown-parent": "body" 
-            } 
+              "dropdown-parent": "body",
+              "beacon-form-target": "topicsSelect"
+            }
           } %>
       <p class="form-help-text">Select which topics this beacon can access. Leave blank to allow access to all topics.</p>
     </div>

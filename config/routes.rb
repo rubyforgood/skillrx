@@ -22,6 +22,9 @@ Rails.application.routes.draw do
   end
 
   resources :beacons, except: :destroy do
+    collection do
+      get :filter_options
+    end
     member do
       post :regenerate_key
       post :revoke_key
