@@ -1,19 +1,12 @@
 class CsvGenerator::Files < CsvGenerator::Base
-  def initialize(language, **args)
-    @language = language
-    @args = args
-  end
-
   private
-
-  attr_reader :language, :args
 
   def headers
     %w[FileID TopicID FileName FileType FileSize]
   end
 
   def scope
-    language.topics.active
+    topics_collection.active
       .flat_map do |topic|
         topic.documents.map do |doc|
           [
