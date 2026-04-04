@@ -5,7 +5,7 @@ class BeaconsController < ApplicationController
   before_action :prepare_associations, only: %i[new edit]
 
   def index
-    @beacons = Beacon.includes(:language, :region, :providers, :topics).order(created_at: :desc)
+    @beacons = Beacon.order(created_at: :desc)
   end
 
   def new
