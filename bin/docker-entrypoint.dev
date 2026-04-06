@@ -9,5 +9,8 @@ bundle check || bundle install
 # If running the rails server then create or migrate existing database
 ./bin/rails db:prepare
 
+# Remove compiled asset manifest so Propshaft serves assets dynamically in development
+rm -f /app/public/assets/.manifest.json
+
 # Execute the main command passed to docker run
 exec "$@"

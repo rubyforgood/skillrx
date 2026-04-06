@@ -38,6 +38,9 @@ class Beacon < ApplicationRecord
   has_many :beacon_topics, dependent: :destroy
   has_many :topics, through: :beacon_topics
 
+  delegate :name, to: :region, prefix: true
+  delegate :name, to: :language, prefix: true
+
   validates :name, presence: true
   validates :api_key_digest, presence: true, uniqueness: true
   validates :api_key_prefix, presence: true
@@ -51,6 +54,20 @@ class Beacon < ApplicationRecord
 
   def revoked?
     revoked_at.present?
+  end
+
+  def status_str
+    revoked? ? "Revoked" : "Active"
+  end
+
+  # Get count of topics that match this beacon's configuration
+  def document_count
+    topics.count
+  end
+
+  # Get count of actual document files attached to matching topics
+  def file_count
+    topics.joins(:documents_attachments).count
   end
 
   def accessible_blobs

@@ -1,0 +1,60 @@
+<% content_for :title, "Provision New Beacon" %>
+
+<div class="bg-gradient-page page-container">
+  <div class="content-wrapper">
+
+    <!-- Header Section -->
+    <div class="section-spacing">
+      <div class="flex items-center gap-4 mb-6">
+        <%= link_to beacons_path, class: "text-gray-500 hover:text-gray-700 transition-colors" do %>
+          <svg class="icon-size-lg" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18"/>
+          </svg>
+        <% end %>
+        <h1 class="text-3xl font-bold text-gray-800 m-0">
+          Provision New Beacon
+        </h1>
+      </div>
+
+      <!-- Breadcrumb -->
+      <nav class="breadcrumb-nav">
+        <ol class="breadcrumb-list">
+          <li><%= link_to "Dashboard", root_path, class: "text-gray-500 no-underline hover:text-gray-700" %></li>
+          <li class="breadcrumb-separator">/</li>
+          <li><%= link_to "Beacons", beacons_path, class: "text-gray-500 no-underline hover:text-gray-700" %></li>
+          <li class="breadcrumb-separator">/</li>
+          <li class="breadcrumb-current">New Beacon</li>
+        </ol>
+      </nav>
+    </div>
+
+    <!-- Main Form Card -->
+    <div class="card-elevated" style="overflow: visible;">
+      <!-- Form Content -->
+      <div class="card-body">
+        <%= render "form", beacon: @beacon %>
+      </div>
+    </div>
+
+    <!-- Help Section -->
+    <div class="mt-8 bg-gray-50 border border-gray-200 rounded-xl p-6">
+      <div class="flex items-start gap-4">
+        <div class="bg-blue-100 text-blue-800 p-2 rounded-lg mt-1 flex-shrink-0">
+          <svg class="icon-size-md" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/>
+          </svg>
+        </div>
+        <div>
+          <h3 class="text-base font-semibold text-gray-700 m-0 mb-3">How Document Filtering Works</h3>
+          <ul class="text-gray-500 text-sm leading-relaxed m-0 pl-5">
+            <li><strong>Required fields:</strong> Language and Region must be selected for each beacon</li>
+            <li><strong>Providers:</strong> Select specific content providers this beacon can access, or leave blank for all providers</li>
+            <li><strong>Topics:</strong> Select specific topics this beacon can access, or leave blank for all topics</li>
+            <li><strong>API Key generation:</strong> A secure API key will be automatically generated upon provisioning</li>
+            <li><strong>Security:</strong> Keep the API key secure - it will only be shown once during creation</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
