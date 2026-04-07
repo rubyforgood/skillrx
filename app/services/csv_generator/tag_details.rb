@@ -13,14 +13,14 @@ class CsvGenerator::TagDetails < CsvGenerator::Base
   end
 
   def scope
-    language.topics.active.includes(:tags)
-      .flat_map { |topic| topic.tags_on(language.code.to_sym) }
-      .uniq
-      .map do |tag|
-        [
-          tag.id,
-          tag.name,
-        ]
-      end
+    language.topics.active.includes(taggings: :tag)
+      .flat_map do |topic|
+        topic.taggings.map do |tagging|
+          [
+            tagging.tag.id,
+            tagging.tag.name,
+          ]
+        end
+      end.uniq
   end
 end
