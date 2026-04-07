@@ -13,7 +13,7 @@ class CsvGenerator::TagDetails < CsvGenerator::Base
   end
 
   def scope
-    language.topics.active.includes(:tags)
+    language.topics.active.includes(taggings: :tag)
       .flat_map do |topic|
         topic.taggings.map do |tagging|
           [
