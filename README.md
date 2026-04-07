@@ -15,6 +15,11 @@ Thank you for checking out our work. We are in the process of setting up the rep
 
 [Contribution guidelines for this project](CONTRIBUTING.md)
 
+## Contributing
+We welcome contributions from developers of all skill levels! To get started:
+1. Check out the [Issues](https://github.com/rubyforgood/skillrx/issues) for "good first issue" labels.
+2. Read our [Contributing Guidelines](CONTRIBUTING.md) for details on our workflow and coding standards.
+3. Join the conversation on the [Ruby for Good Slack](https://rubyforgood.herokuapp.com/) to meet the team.
 
 # Install & Setup
 
@@ -79,96 +84,4 @@ This project uses:
 * `shoulda-matchers` for expectations
 * `factory_bot` for making records
 
-To run tests, simply use `bin/rspec`. You can also use `bin/quality` to check for code style issues.
-
-# Docker Development Environment
-
-This project is containerised using Docker to ensure consistent development environments across the team.
-
-## Prerequisites
-
-- Docker Engine installed on your system
-- Docker Compose V2 or later
-
-## Initial Setup
-
-1. Copy the environment configuration file:
-   ```
-   cp .env.example .env
-   ```
-
-2. Configure the environment variables in `.env` as needed. These variables set up the containerised services. Update the `.env.example` file with any new or changed variables.
-
-3. To view the uploaded files from http://localstack:4566 in your browser, add the following line to your `/etc/hosts` to resolve `localstack` to your host system:
-    ```
-    127.0.0.1 	localstack
-    ```
-
-4. Build and start the containers:
-    ```
-    docker compose up
-    ```
-
-This will build the images and initialise the containers. You can exit and stop the containers using CTRL+C.
-
-## Container Architecture
-The development environment consists of three containerised services:
-
-* app : Rails application service
-    * Handles the main application logic
-    * Runs on Ruby on Rails
-* db : PostgreSQL database service
-    * Persists application data
-    * Runs independently from the application
-* localstack : AWS S3 emulator
-     * Provides local S3-compatible storage
-     * Enables development without actual AWS setup
-
-## Development Workflow
-
-We provide a Makefile to simplify common development tasks. Here are the most frequently used commands:
-```
-  make build             # Build image containers
-  make start [service]   # Start all containers or a specific service
-  make stop [service]    # Stop all containers or a specific service
-  make shell             # Open a bash shell in the app container
-  make console           # Start Rails console
-  make test              # Run all tests
-```
-
-For a complete list of available commands:
-```bash
-make help
-```
-
-## Common Tasks
-### Rebuilding the Environment
-To completely rebuild your development environment:
-
-```bash
-make rebuild
-```
-This command will clean existing containers, rebuild images, and prepare the database.
-
-### Viewing Logs
-To monitor service logs:
-```
-make logs         # View all container logs
-make logs app     # View only Rails application logs
-```
-
-### Container Management
-Individual services can be managed using:
-```
-make start db     # Start only the database container
-make stop app     # Stop only the application container
-make restart db   # Restart only the database container
-```
-
-### Troubleshooting
-If you encounter issues:
-- Ensure all required ports are available on your system
-- Verify that your .env file contains all necessary variables
-- Try rebuilding the environment with make rebuild
-- Check container logs for specific error messages
-# Test staging deployment
+To run tests, simply use `bin/rspec`. You can
