@@ -41,7 +41,9 @@ Rails.application.routes.draw do
       resources :tags, only: %i[index show]
 
       namespace :beacons do
+        resources :files, only: :show
         resource :status, only: :show
+        resource :manifest, only: :show
       end
     end
   end

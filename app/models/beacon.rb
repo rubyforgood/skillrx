@@ -3,15 +3,19 @@
 # Table name: beacons
 # Database name: primary
 #
-#  id             :bigint           not null, primary key
-#  api_key_digest :string           not null
-#  api_key_prefix :string           not null
-#  name           :string           not null
-#  revoked_at     :datetime
-#  created_at     :datetime         not null
-#  updated_at     :datetime         not null
-#  language_id    :bigint           not null
-#  region_id      :bigint           not null
+#  id                     :bigint           not null, primary key
+#  api_key_digest         :string           not null
+#  api_key_prefix         :string           not null
+#  manifest_checksum      :string
+#  manifest_data          :jsonb
+#  manifest_version       :integer          default(0), not null
+#  name                   :string           not null
+#  previous_manifest_data :jsonb
+#  revoked_at             :datetime
+#  created_at             :datetime         not null
+#  updated_at             :datetime         not null
+#  language_id            :bigint           not null
+#  region_id              :bigint           not null
 #
 # Indexes
 #
@@ -47,5 +51,17 @@ class Beacon < ApplicationRecord
 
   def revoked?
     revoked_at.present?
+  end
+
+  def accessible_blobs
+    ActiveStorage::Blob
+      .joins(:attachments)
+      .where(
+        active_storage_attachments: {
+          record_type: "Topic",
+          name: "documents",
+          record_id: topic_ids,
+        }
+      )
   end
 end
