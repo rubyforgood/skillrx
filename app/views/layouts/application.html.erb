@@ -13,85 +13,46 @@
     <%# Enable PWA manifest for installable apps (make sure to enable in config/routes.rb too!) %>
     <%#= tag.link rel: "manifest", href: pwa_manifest_path(format: :json) %>
 
-    <link rel="icon" href="/icon.png" type="image/png">
-    <link rel="icon" href="/icon.svg" type="image/svg+xml">
-    <link rel="apple-touch-icon" href="/icon.png">
+    <link rel="icon" href="/favicon.ico" type="image/x-icon" sizes="any">
+    <link rel="icon" href="/favicon-32x32.png" type="image/png" sizes="32x32">
+    <link rel="icon" href="/skill-icon.svg" type="image/svg+xml">
+    <link rel="apple-touch-icon" href="/apple-touch-icon.png">
 
     <%# Includes all stylesheet files in app/assets/stylesheets %>
-
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>SkillRx</title>
-
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/zuramai/mazer@docs/demo/assets/compiled/css/app.css">
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/zuramai/mazer@docs/demo/assets/compiled/css/app-dark.css">
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/zuramai/mazer@docs/demo/assets/compiled/css/iconly.css">
+    <%= stylesheet_link_tag "tailwind", "data-turbo-track": "reload" %>
+    <%= stylesheet_link_tag "application", "data-turbo-track": "reload" %>
+    <%= stylesheet_link_tag "animations", "data-turbo-track": "reload" %>
 
     <%= javascript_importmap_tags %>
-
-    <style>
-      #app {
-        display: flex;
-        min-height: 100vh;
-      }
-
-      #main {
-        flex: 1;
-        display: flex;
-        flex-direction: column;
-        min-height: 100vh;
-        position: relative;
-        padding-bottom: 60px; /* Height of footer */
-      }
-
-      #main-content {
-        flex: 1;
-        overflow-x: hidden; /* Prevent horizontal scroll */
-        margin-bottom: 1rem;
-      }
-
-      footer {
-        bottom: 0;
-        width: 100%;
-        height: 60px; /* Fixed height */
-        background: white;
-        border-top: 1px solid #eee;
-        padding: 1rem;
-        z-index: 1000;
-      }
-
-      .section {
-        padding-bottom: 2rem; /* Add space before footer */
-      }
-    </style>
   </head>
 
-  <body>
-    <script src="https://cdn.jsdelivr.net/gh/zuramai/mazer@docs/demo/assets/static/js/initTheme.js"></script>
-    <script src="https://cdn.jsdelivr.net/gh/zuramai/mazer@docs/demo/assets/static/js/components/dark.js"></script>
-    <script src="https://cdn.jsdelivr.net/gh/zuramai/mazer@docs/demo/assets/extensions/perfect-scrollbar/perfect-scrollbar.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/gh/zuramai/mazer@docs/demo/assets/compiled/js/app.js"></script>
+  <body class="bg-gray-50">
+    <div class="flex">
+      <div class="w-64 fixed left-0 top-0 h-full z-40 ease-in-out duration-300 -translate-x-full md:translate-none">
+        <%= render "layouts/sidebar" %>
+      </div>
 
-    <div id="app">
-      <%= render "layouts/sidebar" %>
-      <div id="main" class='layout-navbar'>
-        <div id="main-content">
+      <div class="flex-1 md:ml-64 flex flex-col min-h-screen relative">
+        <div class="flex-1 overflow-y-auto main-content">
           <%= render "shared/flash" %>
-
           <%= yield %>
         </div>
-        <footer>
-          <div class="footer clearfix mb-0 text-muted">
-            <div class="float-start">
-              <p></p>
-            </div>
-            <div class="float-end">
-              <p>Built with <span class="text-danger"><i class="bi bi-heart-fill icon-mid"></i></span>
-                by <a href="https://rubyforgood.org">Ruby for Good</a></p>
-            </div>
-          </div>
-        </footer>
       </div>
     </div>
+
+    <!-- Fixed footer that spans full width -->
+    <footer class="fixed bottom-0 left-0 right-0 bg-white border-t border-gray-200 z-30">
+      <div class="flex justify-center items-center text-gray-600 text-sm px-4 py-3 md:pl-64">
+        <!-- Center content -->
+        <div class="flex items-center space-x-1">
+          <span>Built with</span>
+          <svg class="w-4 h-4 text-red-500" fill="currentColor" viewBox="0 0 24 24">
+            <path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/>
+          </svg>
+          <span>by</span>
+          <a href="https://rubyforgood.org" class="text-blue-600 hover:text-blue-800">Ruby for Good</a>
+        </div>
+      </div>
+    </footer>
   </body>
 </html>

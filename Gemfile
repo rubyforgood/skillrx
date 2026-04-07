@@ -1,17 +1,18 @@
 source "https://rubygems.org"
 
-ruby "3.4.6"
+ruby "4.0.1"
 
 gem "active_storage_validations"
-gem "acts-as-taggable-on"
+gem "acts-as-taggable-on", "~> 13.0"
 gem "aws-sdk-s3", require: false
 gem "azure_file_shares"
-gem "bcrypt", "~> 3.1.7"
+gem "bcrypt", "~> 3.1.22"
 gem "bootsnap", require: false
 gem "csv"
-gem "herb", "~> 0.8.2"
+gem "herb", "~> 0.9.4"
 gem "image_processing", "~> 1.14"
 gem "importmap-rails"
+gem "inline_svg"
 gem "jbuilder"
 gem "kamal", require: false
 gem "mission_control-jobs"
@@ -21,16 +22,17 @@ gem "pg", "~> 1.6"
 gem "propshaft"
 gem "puma", ">= 5.0"
 gem "rack-attack"
-gem "rails", "~> 8.0.4"
-gem "reactionview", "~> 0.1.6"
+gem "rails", "~> 8.1.3"
+gem "reactionview", "~> 0.3.0"
 gem "requestjs-rails"
 gem "scout_apm"
 gem "scout_apm_logging", "~> 2.1"
 gem "solid_cable"
 gem "solid_cache"
 gem "solid_queue"
-gem "solid_queue_monitor", "~> 0.3.2"
+gem "solid_queue_monitor", "~> 0.6.0"
 gem "stimulus-rails"
+gem "tailwindcss-rails"
 gem "thruster", require: false
 gem "turbo-rails"
 

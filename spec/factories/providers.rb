@@ -1,6 +1,7 @@
 # == Schema Information
 #
 # Table name: providers
+# Database name: primary
 #
 #  id               :bigint           not null, primary key
 #  file_name_prefix :string

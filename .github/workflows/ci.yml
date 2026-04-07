@@ -82,11 +82,14 @@ jobs:
           ruby-version: .ruby-version
           bundler-cache: true
 
+      - name: Build Tailwind CSS
+        run: bin/rails tailwindcss:build
+
       - name: Run tests
         run: bin/rails db:test:prepare && bin/rspec
 
       - name: Keep screenshots from failed system tests
-        uses: actions/upload-artifact@v5
+        uses: actions/upload-artifact@v7
         if: failure()
         with:
           name: screenshots

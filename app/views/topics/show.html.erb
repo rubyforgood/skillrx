@@ -1,25 +1,90 @@
-<div style="color: green"><%= notice %></div>
+<% content_for :title, @topic.title %>
 
-<%= render @topic %>
+<div class="bg-gradient-page page-container">
+  <div class="content-wrapper">
 
-<%= link_to "Back to topics", topics_path(search: search_params), class: "mt-4" %>
+    <!-- Header Section -->
+    <div class="section-spacing">
+  <div class="flex items-center justify-between gap-4 mb-6 flex-wrap">
+        <div class="flex items-center gap-4">
+          <%= link_to topics_path, class: "text-gray-500 hover:text-gray-700 transition-colors" do %>
+            <svg class="icon-size-lg" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18"/>
+            </svg>
+          <% end %>
+          <h1 class="text-3xl font-bold text-gray-800 m-0">
+            <%= @topic.title %>
+          </h1>
+          <div class="bg-gradient-blue text-white py-1.5 px-3 rounded-full text-xs font-medium">
+            <%= @topic.archived? ? "Archived" : "Active" %>
+          </div>
+        </div>
 
-<div>
-  <%= link_to "Edit this topic", edit_topic_path(@topic), class: "btn btn-primary mt-4" %>
+        <!-- Action Buttons -->
+        <div class="flex gap-3 flex-wrap">
+          <%= link_to edit_topic_path(@topic), class: "bg-gradient-amber text-white font-semibold py-3 px-6 rounded-lg no-underline text-sm inline-flex items-center gap-2 shadow-md transition-all hover:-translate-y-0.5" do %>
+            <svg class="icon-size" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"/>
+            </svg>
+            Edit Topic
+          <% end %>
+
+          <% if @topic.archived? %>
+            <%= button_to unarchive_topic_path(@topic), method: :put,
+                class: "bg-gradient-green text-white font-semibold py-3 px-6 rounded-lg border-0 cursor-pointer text-sm inline-flex items-center gap-2 shadow-md transition-all hover:-translate-y-0.5" do %>
+              <svg class="icon-size" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-8l-4-4m0 0L8 8m4-4v12"/>
+              </svg>
+              Unarchive Topic
+            <% end %>
+          <% else %>
+            <%= button_to archive_topic_path(@topic), method: :put,
+                class: "bg-gradient-to-br from-gray-600 to-gray-700 text-white font-semibold py-3 px-6 rounded-lg border-0 cursor-pointer text-sm inline-flex items-center gap-2 shadow-md transition-all hover:-translate-y-0.5" do %>
+              <svg class="icon-size" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 8l4 4 4-4"/>
+              </svg>
+              Archive Topic
+            <% end %>
+          <% end %>
+
+          <% if Current.user.is_admin? %>
+            <div id="delete_topic_<%= @topic.id %>">
+              <%= button_to @topic, method: :delete,
+                  data: { confirm: "Are you sure you want to delete '#{@topic.title}'? This action cannot be undone." },
+                  class: "bg-gradient-red text-white font-semibold py-3 px-6 rounded-lg border-0 cursor-pointer text-sm inline-flex items-center gap-2 shadow-md transition-all hover:-translate-y-0.5" do %>
+                <svg class="icon-size" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"/>
+                </svg>
+                Delete Topic
+              <% end %>
+            </div>
+          <% end %>
+        </div>
+      </div>
+
+      <!-- Breadcrumb -->
+      <nav class="breadcrumb-nav">
+        <ol class="breadcrumb-list">
+          <li><%= link_to "Dashboard", root_path, class: "text-gray-500 no-underline hover:text-gray-700" %></li>
+          <li class="breadcrumb-separator">/</li>
+          <li><%= link_to "Topics", topics_path, class: "text-gray-500 no-underline hover:text-gray-700" %></li>
+          <li class="breadcrumb-separator">/</li>
+          <li class="breadcrumb-current"><%= @topic.title %></li>
+        </ol>
+      </nav>
+    </div>
+
+    <!-- Success Message -->
+    <% if notice %>
+      <div class="alert-success flex items-center gap-3">
+        <svg class="icon-size-md flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/>
+        </svg>
+        <span class="font-medium"><%= notice %></span>
+      </div>
+    <% end %>
+
+    <!-- Main Content -->
+    <%= render @topic %>
+  </div>
 </div>
-
-<% if @topic.archived? %>
-  <div>
-    <%= button_to "Unarchive this topic", unarchive_topic_path(@topic), method: :put, class: "btn btn-danger mt-4" %>
-  </div>
-<% else %>
-  <div>
-    <%= button_to "Archive this topic", archive_topic_path(@topic), method: :put, class: "btn btn-danger mt-4" %>
-  </div>
-<% end %>
-
-<% if Current.user.is_admin? %>
-  <div id="delete_topic_<%= @topic.id %>">
-    <%= button_to "Delete this topic", @topic, method: :delete, class: "btn btn-danger mt-4" %>
-  </div>
-<% end %>

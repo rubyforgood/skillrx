@@ -1,10 +1,81 @@
-<% content_for :title, "Editing region" %>
+<% content_for :title, "Edit #{@region.name}" %>
 
-<h1>Editing region</h1>
+<div class="bg-gradient-page page-container">
+  <div class="form-container">
 
-<%= render "form", region: @region %>
+    <!-- Header Section -->
+    <div class="section-spacing">
+      <div class="flex-between-wrap mb-6">
+        <div class="min-w-0 flex-1">
+          <div class="flex items-center gap-4 mb-2">
+            <div class="bg-gradient-amber text-white p-3 rounded-xl flex-shrink-0">
+              <svg class="icon-size-md" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"></path>
+              </svg>
+            </div>
+            <h1 class="text-4xl font-bold text-gray-800 m-0 min-w-0">Edit Region</h1>
+          </div>
+          <p class="text-gray-500 m-0 text-base">Modify region details and configuration</p>
+        </div>
+      </div>
 
-<div class="mt-4">
-  <%= link_to "Show this region", @region %> |
-  <%= link_to "Back to regions", regions_path %>
+      <!-- Breadcrumb -->
+      <nav class="breadcrumb-nav">
+        <ol class="breadcrumb-list">
+          <li><%= link_to "Dashboard", root_path, class: "text-gray-500 no-underline hover:text-gray-700" %></li>
+          <li class="breadcrumb-separator">/</li>
+          <li><%= link_to "Regions", regions_path, class: "text-gray-500 no-underline hover:text-gray-700" %></li>
+          <li class="breadcrumb-separator">/</li>
+          <li><%= link_to @region.name, @region, class: "text-gray-500 no-underline hover:text-gray-700" %></li>
+          <li class="breadcrumb-separator">/</li>
+          <li class="breadcrumb-current">Edit</li>
+        </ol>
+      </nav>
+    </div>
+
+    <!-- Form Card -->
+    <div class="card-elevated overflow-hidden">
+
+      <!-- Card Header -->
+      <div class="bg-gradient-amber p-8 text-white">
+        <div class="flex-center">
+          <div class="icon-wrapper-translucent">
+            <svg class="icon-size-md" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"/>
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"/>
+            </svg>
+          </div>
+          <div>
+            <h2 class="text-2xl font-bold m-0">Edit <%= @region.name %></h2>
+            <p class="mt-1 m-0 text-white/80 text-sm">
+              Update region information and settings
+            </p>
+          </div>
+        </div>
+      </div>
+
+      <!-- Form Content -->
+      <div class="card-body">
+        <%= render "form", region: @region %>
+      </div>
+    </div>
+
+    <!-- Action Buttons -->
+    <div class="mt-8 flex gap-4 justify-between items-center flex-wrap">
+      <%= link_to regions_path, class: "bg-gray-500 text-white py-3.5 px-7 rounded-xl no-underline font-semibold text-sm inline-flex items-center gap-2 transition-all hover:bg-gray-600 hover:-translate-y-0.5" do %>
+        <svg class="icon-size" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18"></path>
+        </svg>
+        <span>Back to Regions</span>
+      <% end %>
+
+      <%= link_to @region, class: "bg-gradient-green text-white py-3.5 px-7 rounded-xl no-underline font-semibold text-sm inline-flex items-center gap-2 shadow-green transition-all hover:-translate-y-0.5" do %>
+        <svg class="icon-size" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path>
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"></path>
+        </svg>
+        <span>View Region</span>
+      <% end %>
+    </div>
+  </div>
 </div>

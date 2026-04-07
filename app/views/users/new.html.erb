@@ -1,18 +1,59 @@
 <% content_for :title, "New user" %>
 
-<section id="multiple-column-form">
-  <div class="row match-height">
-    <div class="col-12">
-      <div class="card">
-        <div class="card-header">
-          <h4>Create New User</h4>
+<% if notice %>
+  <div class="alert-success">
+    <%= notice %>
+  </div>
+<% end %>
+
+<div class="bg-gradient-page page-container">
+  <div class="form-container">
+
+    <!-- Header Section -->
+    <div class="section-spacing">
+      <div class="flex items-center justify-between gap-4 mb-6 flex-wrap">
+        <div class="flex-center">
+          <%= link_to users_path, class: "text-gray-500 hover:text-gray-700 transition-colors" do %>
+            <svg class="icon-size-lg" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18"/>
+            </svg>
+          <% end %>
+          <h1 class="text-3xl font-bold text-gray-800 m-0">
+            Create New User
+          </h1>
         </div>
-        <div class="card-content">
-          <div class="card-body">
-            <%= render "form", user: @user %>
-          </div>
+      </div>
+
+      <!-- Breadcrumb -->
+      <nav class="breadcrumb-nav">
+        <ol class="breadcrumb-list">
+          <li><%= link_to "Dashboard", root_path, class: "text-gray-500 no-underline hover:text-gray-700" %></li>
+          <li class="breadcrumb-separator">/</li>
+          <li><%= link_to "Users", users_path, class: "text-gray-500 no-underline hover:text-gray-700" %></li>
+          <li class="breadcrumb-separator">/</li>
+          <li class="breadcrumb-current">New User</li>
+        </ol>
+      </nav>
+    </div>
+
+    <!-- Form Card -->
+    <div class="card-elevated overflow-hidden">
+
+      <!-- Card Header -->
+      <div class="bg-gradient-green p-8 text-white">
+        <div class="flex-center mb-2">
+          <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M18 9v3m0 0v3m0-3h3m-3 0h-3m-2-5a4 4 0 11-8 0 4 4 0 018 0zM3 20a6 6 0 0112 0v1H3v-1z"/>
+          </svg>
+          <h2 class="text-2xl font-bold m-0">User Information</h2>
         </div>
+        <p class="m-0 opacity-90 text-sm">Fill out the form below to create a new user account</p>
+      </div>
+
+      <!-- Card Body -->
+      <div class="card-body">
+        <%= render "form", user: @user %>
       </div>
     </div>
   </div>
-</section>
+</div>
