@@ -9,7 +9,7 @@ gem "azure_file_shares"
 gem "bcrypt", "~> 3.1.22"
 gem "bootsnap", require: false
 gem "csv"
-gem "herb", "~> 0.9.6"
+gem "herb", "~> 0.9.7"
 gem "image_processing", "~> 1.14"
 gem "importmap-rails"
 gem "inline_svg"
