@@ -117,7 +117,7 @@ GEM
     base64 (0.3.0)
     bcrypt (3.1.22)
     bcrypt_pbkdf (1.1.2)
-    bigdecimal (4.1.1)
+    bigdecimal (4.1.2)
     bindex (0.8.1)
     bootsnap (1.22.0)
       msgpack (~> 1.2)
@@ -368,7 +368,7 @@ GEM
     opentelemetry-semantic_conventions (1.36.0)
       opentelemetry-api (~> 1.0)
     ostruct (0.6.3)
-    ox (2.14.23)
+    ox (2.14.24)
       bigdecimal (>= 3.0)
     pagy (43.3.0)
       json
