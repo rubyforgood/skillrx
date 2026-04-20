@@ -9,6 +9,9 @@ bundle check || bundle install
 # If running the rails server then create or migrate existing database
 ./bin/rails db:prepare
 
+# Build CSS assets
+./bin/rails tailwindcss:build
+
 # Remove compiled asset manifest so Propshaft serves assets dynamically in development
 rm -f /app/public/assets/.manifest.json
 

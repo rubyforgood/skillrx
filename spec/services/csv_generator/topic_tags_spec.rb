@@ -14,8 +14,8 @@ RSpec.describe CsvGenerator::TopicTags do
     let!(:topic) { create(:topic, :tagged, language:) }
     let(:data) do
       header.tap do |csv|
-        topic.tags_on(language.code.to_sym).each do |tag|
-          csv << "#{topic.id},#{tag.id}\n"
+        topic.taggings.each do |tagging|
+          csv << "#{topic.id},#{tagging.tag.id}\n"
         end
       end
     end
