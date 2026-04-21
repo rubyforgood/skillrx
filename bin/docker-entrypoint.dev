@@ -12,5 +12,8 @@ bundle check || bundle install
 # Build CSS assets
 ./bin/rails tailwindcss:build
 
+# Remove compiled asset manifest so Propshaft serves assets dynamically in development
+rm -f /app/public/assets/.manifest.json
+
 # Execute the main command passed to docker run
 exec "$@"

@@ -20,4 +20,8 @@ class ApplicationController < ActionController::Base
     end
   end
   helper_method :current_provider
+
+  def non_contributor_redirect_path
+    topics_path
+  end
 end
