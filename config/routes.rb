@@ -53,6 +53,7 @@ Rails.application.routes.draw do
       namespace :beacons do
         resources :files, only: :show
         resource :status, only: :show
+        resource :sync_status, only: :create
         resource :manifest, only: :show
       end
     end
