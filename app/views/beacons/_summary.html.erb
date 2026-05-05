@@ -1,0 +1,43 @@
+<div class="mt-6 grid grid-cols-1 md:grid-cols-3 gap-4">
+  <div class="card-elevated p-6">
+    <div class="flex items-center justify-between">
+      <div>
+        <p class="text-sm text-gray-500 m-0">Total Beacons</p>
+        <p class="text-3xl font-bold text-gray-800 m-0 mt-2"><%= @beacons.count %></p>
+      </div>
+      <div class="w-12 h-12 bg-blue-100 rounded-lg flex items-center justify-center">
+        <svg class="w-6 h-6 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8.111 16.404a5.5 5.5 0 017.778 0M12 20h.01m-7.08-7.071c3.904-3.905 10.236-3.905 14.141 0M1.394 9.393c5.857-5.857 15.355-5.857 21.213 0"></path>
+        </svg>
+      </div>
+    </div>
+  </div>
+
+  <div class="card-elevated p-6">
+    <div class="flex items-center justify-between">
+      <div>
+        <p class="text-sm text-gray-500 m-0">Online Now</p>
+        <p class="text-3xl font-bold text-green-600 m-0 mt-2"><%= @beacons.count { |b| b[:online] } %></p>
+      </div>
+      <div class="w-12 h-12 bg-green-100 rounded-lg flex items-center justify-center">
+        <svg class="w-6 h-6 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
+        </svg>
+      </div>
+    </div>
+  </div>
+
+  <div class="card-elevated p-6">
+    <div class="flex items-center justify-between">
+      <div>
+        <p class="text-sm text-gray-500 m-0">Offline</p>
+        <p class="text-3xl font-bold text-red-600 m-0 mt-2"><%= @beacons.count { |b| !b[:online] } %></p>
+      </div>
+      <div class="w-12 h-12 bg-red-100 rounded-lg flex items-center justify-center">
+        <svg class="w-6 h-6 text-red-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
+        </svg>
+      </div>
+    </div>
+  </div>
+</div>
