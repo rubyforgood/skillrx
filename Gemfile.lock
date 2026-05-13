@@ -249,7 +249,7 @@ GEM
       actionview (>= 7.0.0)
       activesupport (>= 7.0.0)
     jmespath (1.6.2)
-    json (2.19.4)
+    json (2.19.5)
     jwt (2.10.2)
       base64
     kamal (2.11.0)
@@ -370,7 +370,7 @@ GEM
     ostruct (0.6.3)
     ox (2.14.25)
       bigdecimal (>= 3.0)
-    pagy (43.3.0)
+    pagy (43.5.4)
       json
       uri
       yaml
