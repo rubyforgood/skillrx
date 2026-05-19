@@ -26,4 +26,21 @@ class Provider < ApplicationRecord
 
   validates :name, :provider_type, presence: true
   validates :name, uniqueness: true
+
+  validate :file_name_prefix_may_be_changed, on: :update, if: :file_name_prefix_changed?
+
+  def topics?
+    topics.any?
+  end
+
+  private
+
+  def file_name_prefix_may_be_changed
+    if topics?
+      errors.add(
+        :file_name_prefix,
+        "can't be changed as provider has associated topics and so file names are established"
+      )
+    end
+  end
 end
