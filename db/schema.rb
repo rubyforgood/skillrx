@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.1].define(version: 2026_02_03_100007) do
+ActiveRecord::Schema[8.1].define(version: 2026_02_03_100008) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_catalog.plpgsql"
 
@@ -66,18 +66,29 @@ ActiveRecord::Schema[8.1].define(version: 2026_02_03_100007) do
     t.string "api_key_digest", null: false
     t.string "api_key_prefix", null: false
     t.datetime "created_at", null: false
+    t.jsonb "device_info"
     t.bigint "language_id", null: false
+    t.datetime "last_seen_at"
+    t.datetime "last_sync_at"
+    t.text "last_sync_error"
     t.string "manifest_checksum"
     t.jsonb "manifest_data"
     t.integer "manifest_version", default: 0, null: false
     t.string "name", null: false
     t.jsonb "previous_manifest_data"
     t.bigint "region_id", null: false
+    t.integer "reported_files_count"
+    t.string "reported_manifest_checksum"
+    t.string "reported_manifest_version"
+    t.bigint "reported_total_size_bytes"
     t.datetime "revoked_at"
+    t.string "sync_status"
     t.datetime "updated_at", null: false
     t.index ["api_key_digest"], name: "index_beacons_on_api_key_digest", unique: true
     t.index ["language_id"], name: "index_beacons_on_language_id"
+    t.index ["last_seen_at"], name: "index_beacons_on_last_seen_at"
     t.index ["region_id"], name: "index_beacons_on_region_id"
+    t.index ["sync_status"], name: "index_beacons_on_sync_status"
   end
 
   create_table "branches", force: :cascade do |t|

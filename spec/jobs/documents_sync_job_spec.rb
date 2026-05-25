@@ -1,12 +1,10 @@
 require "rails_helper"
 
 RSpec.describe DocumentsSyncJob, type: :job do
-  let(:topic) { create(:topic, :with_documents) }
-  let(:provider) { topic.provider }
+  let(:provider) { create(:provider, file_name_prefix: "MyPrefix") }
+  let(:topic) { create(:topic, :with_documents, provider:) }
   let(:document) { topic.documents.first }
   let(:file_name) { document.filename }
-
-  before { provider.update(file_name_prefix: "MyPrefix") }
 
   describe "#perform" do
     let(:file_worker) { instance_double(FileWorker) }

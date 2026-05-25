@@ -14,6 +14,7 @@ RSpec.describe "providers/new", type: :view do
     assert_select "form[action=?][method=?]", providers_path, "post" do
       assert_select "input[name=?]", "provider[name]"
       assert_select "input[name=?]", "provider[provider_type]"
+      assert_select "input[name=?]", "provider[file_name_prefix]"
       assert_select "input[type='submit'][value='Create Provider']"
     end
   end
