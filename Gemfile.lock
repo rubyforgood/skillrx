@@ -372,7 +372,7 @@ GEM
     ostruct (0.6.3)
     ox (2.14.26)
       bigdecimal (>= 3.0)
-    pagy (43.5.4)
+    pagy (43.5.5)
       json
       uri
       yaml
