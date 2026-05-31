@@ -66,8 +66,12 @@
   box-shadow: 0 0 0 4px rgba(59, 130, 246, 0.1);
 }
 
-.input-field:hover:not(:focus) {
+.input-field:hover:not(:focus):not(:disabled) {
   @apply border-gray-400;
+}
+
+.input-field:disabled {
+  @apply bg-gray-100 text-gray-500;
 }
 
 .select-field {
