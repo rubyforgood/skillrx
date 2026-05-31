@@ -7,16 +7,17 @@ class Topics::Mutator
   end
 
   def create
-    mutate
+    mutate.tap { |status, _| rebuild_beacon_manifests if status == :ok }
   end
 
   def update
-    mutate
+    mutate.tap { |status, _| rebuild_beacon_manifests if status == :ok }
   end
 
   def archive
     if @topic.archived!
       sync_docs_for_topic_archive if topic.documents.any?
+      rebuild_beacon_manifests
       return [ :ok, topic ]
     end
 
@@ -26,6 +27,7 @@ class Topics::Mutator
   def unarchive
     if @topic.active!
       sync_docs_for_topic_archive if topic.documents.any?
+      rebuild_beacon_manifests
       return [ :ok, topic ]
     end
 
@@ -33,10 +35,15 @@ class Topics::Mutator
   end
 
   def destroy
+    beacon_ids = topic.beacon_topics.pluck(:beacon_id)
+
     # If topic deletion fails for some reason, documents deletion still will happen
     # This case is unlikely, and only admins can delete topics
     sync_docs_for_topic_deletion if topic.documents.any?
-    return [ :ok, topic ] if topic.destroy
+    if topic.destroy
+      dispatch_rebuild_jobs(beacon_ids)
+      return [ :ok, topic ]
+    end
 
     [ :error, topic.errors.full_messages ]
   end
@@ -147,5 +154,15 @@ class Topics::Mutator
   def extract_document_ids
     documents = params && params[:documents] || []
     documents.map { |doc| doc.is_a?(String) ? doc : doc.signed_id }
+  end
+
+  def rebuild_beacon_manifests
+    dispatch_rebuild_jobs(topic.beacon_topics.pluck(:beacon_id))
+  end
+
+  def dispatch_rebuild_jobs(beacon_ids)
+    beacon_ids.each do |beacon_id|
+      Beacons::RebuildManifestJob.perform_later(beacon_id)
+    end
   end
 end

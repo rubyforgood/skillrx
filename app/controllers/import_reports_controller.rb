@@ -1,5 +1,5 @@
 class ImportReportsController < ApplicationController
-  include Pagy::Backend
+  include Pagy::Method
 
   before_action :redirect_contributors
   before_action :set_import_report, only: [ :show ]

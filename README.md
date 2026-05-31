@@ -1,4 +1,5 @@
 # SkillRX
+
 SkillRX is a Ruby on Rails content management application which will allow medical training providers to upload and manage content which will be delivered to Raspberry Pi and other computers in low-resource areas for use by medical professionals at these locations.
 
 The project provides a ground-up rewrite of the [CMES Admin Panel](https://github.com/techieswithoutborders/cmes-admin-panel-next) for [Techies Without Borders](https://techieswithoutborders.us/).
@@ -14,7 +15,6 @@ SkillRX is one of many projects initiated and run by Ruby for Good. You can find
 Thank you for checking out our work. We are in the process of setting up the repository, roadmap, values, and contribution guidelines for the project. We will be adding issues and putting out a call for contributions soon.
 
 [Contribution guidelines for this project](CONTRIBUTING.md)
-
 
 # Install & Setup
 
@@ -35,7 +35,7 @@ bin/setup
 
 To run the app locally, use:
 ```
-bin/dev
+bin/server
 ```
 
 To update dependencies in Gemfile, use:
@@ -48,31 +48,7 @@ You should see the seed organization by going to:
 http://localhost:3000/
 ```
 
-
 # Running specs
-
-```sh
-# Default: Run all spec files (i.e., those matching spec/**/*_spec.rb)
-$ bundle exec rspec
-
-# Run all spec files in a single directory (recursively)
-$ bundle exec rspec spec/models
-
-# Run a single spec file
-$ bundle exec rspec spec/controllers/accounts_controller_spec.rb
-
-# Run a single example from a spec file (by line number)
-$ bundle exec rspec spec/controllers/accounts_controller_spec.rb:8
-
-# See all options for running specs
-$ bundle exec rspec --help
-```
-
-# Setup
-
-Clone this repo and run `bin/setup`. Run `bin/dev` or `bin/server` (if you like Overmind) to start working with app.
-
-# Testing
 
 This project uses:
 * `rspec` for testing
@@ -80,6 +56,23 @@ This project uses:
 * `factory_bot` for making records
 
 To run tests, simply use `bin/rspec`. You can also use `bin/quality` to check for code style issues.
+
+```sh
+# Default: Run all spec files (i.e., those matching spec/**/*_spec.rb)
+$ bin/rspec
+
+# Run all spec files in a single directory (recursively)
+$ bin/rspec spec/models
+
+# Run a single spec file
+$ bin/rspec spec/controllers/accounts_controller_spec.rb
+
+# Run a single example from a spec file (by line number)
+$ bin/rspec spec/controllers/accounts_controller_spec.rb:8
+
+# See all options for running specs
+$ bin/rspec --help
+```
 
 # Docker Development Environment
 
@@ -106,14 +99,20 @@ This project is containerised using Docker to ensure consistent development envi
 
 4. Build and start the containers:
     ```
-    docker compose up
+    make build
+    make start
+    ```
+
+   Or directly with Docker Compose:
+    ```
+    docker compose -f docker-compose.dev.yml up
     ```
 
 This will build the images and initialise the containers. You can exit and stop the containers using CTRL+C.
 
 ## Container Architecture
-The development environment consists of three containerised services:
 
+The development environment consists of three containerised services:
 * app : Rails application service
     * Handles the main application logic
     * Runs on Ruby on Rails
@@ -142,7 +141,9 @@ make help
 ```
 
 ## Common Tasks
+
 ### Rebuilding the Environment
+
 To completely rebuild your development environment:
 
 ```bash
@@ -151,6 +152,7 @@ make rebuild
 This command will clean existing containers, rebuild images, and prepare the database.
 
 ### Viewing Logs
+
 To monitor service logs:
 ```
 make logs         # View all container logs
@@ -158,6 +160,7 @@ make logs app     # View only Rails application logs
 ```
 
 ### Container Management
+
 Individual services can be managed using:
 ```
 make start db     # Start only the database container
@@ -166,9 +169,11 @@ make restart db   # Restart only the database container
 ```
 
 ### Troubleshooting
+
 If you encounter issues:
 - Ensure all required ports are available on your system
 - Verify that your .env file contains all necessary variables
 - Try rebuilding the environment with make rebuild
 - Check container logs for specific error messages
+
 # Test staging deployment

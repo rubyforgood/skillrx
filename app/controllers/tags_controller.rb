@@ -1,6 +1,6 @@
 
 class TagsController < ApplicationController
-  include Pagy::Backend
+  include Pagy::Method
 
   before_action :redirect_contributors
   before_action :set_tag, only: [ :show, :edit, :update, :destroy ]

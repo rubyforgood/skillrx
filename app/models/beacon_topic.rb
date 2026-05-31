@@ -23,4 +23,12 @@
 class BeaconTopic < ApplicationRecord
   belongs_to :beacon
   belongs_to :topic
+
+  after_commit :rebuild_beacon_manifest, on: [ :create, :destroy ]
+
+  private
+
+  def rebuild_beacon_manifest
+    Beacons::RebuildManifestJob.perform_later(beacon_id)
+  end
 end

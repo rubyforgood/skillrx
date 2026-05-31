@@ -35,6 +35,29 @@ services:
       POSTGRES_PASSWORD: ${DATABASE_PASSWORD}
       POSTGRES_DB: ${DATABASE_NAME}
 
+  test:
+    build:
+      context: .
+      dockerfile: Dockerfile.dev
+    volumes:
+      - ./:/app
+      - ./config:/app/config
+    env_file:
+      - .env
+    environment:
+      AWS_ENDPOINT_URL: ${AWS_ENDPOINT_URL}
+      RAILS_ENV: test
+      DATABASE_USER: ${DATABASE_USER}
+      DATABASE_PASSWORD: ${DATABASE_PASSWORD}
+      DATABASE_NAME: ${DATABASE_NAME}_test
+      DATABASE_PORT: ${DATABASE_PORT}
+      DATABASE_HOST: ${DATABASE_HOST}
+      DOCKER_CONTAINER: true
+    command: sleep infinity
+    depends_on:
+      - db
+      - localstack
+
   localstack:
       image: localstack/localstack
       ports:

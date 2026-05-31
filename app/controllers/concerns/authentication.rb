@@ -13,7 +13,7 @@ module Authentication
   end
 
   def redirect_contributors
-    redirect_to topics_path unless Current.user.is_admin?
+    redirect_to non_contributor_redirect_path unless Current.user.is_admin?
   end
 
   private

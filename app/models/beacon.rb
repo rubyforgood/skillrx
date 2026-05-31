@@ -3,21 +3,36 @@
 # Table name: beacons
 # Database name: primary
 #
-#  id             :bigint           not null, primary key
-#  api_key_digest :string           not null
-#  api_key_prefix :string           not null
-#  name           :string           not null
-#  revoked_at     :datetime
-#  created_at     :datetime         not null
-#  updated_at     :datetime         not null
-#  language_id    :bigint           not null
-#  region_id      :bigint           not null
+#  id                         :bigint           not null, primary key
+#  api_key_digest             :string           not null
+#  api_key_prefix             :string           not null
+#  device_info                :jsonb
+#  last_seen_at               :datetime
+#  last_sync_at               :datetime
+#  last_sync_error            :text
+#  manifest_checksum          :string
+#  manifest_data              :jsonb
+#  manifest_version           :integer          default(0), not null
+#  name                       :string           not null
+#  previous_manifest_data     :jsonb
+#  reported_files_count       :integer
+#  reported_manifest_checksum :string
+#  reported_manifest_version  :string
+#  reported_total_size_bytes  :bigint
+#  revoked_at                 :datetime
+#  sync_status                :string
+#  created_at                 :datetime         not null
+#  updated_at                 :datetime         not null
+#  language_id                :bigint           not null
+#  region_id                  :bigint           not null
 #
 # Indexes
 #
 #  index_beacons_on_api_key_digest  (api_key_digest) UNIQUE
 #  index_beacons_on_language_id     (language_id)
+#  index_beacons_on_last_seen_at    (last_seen_at)
 #  index_beacons_on_region_id       (region_id)
+#  index_beacons_on_sync_status     (sync_status)
 #
 # Foreign Keys
 #
@@ -25,6 +40,8 @@
 #  fk_rails_...  (region_id => regions.id)
 #
 class Beacon < ApplicationRecord
+  SYNC_STATUSES = %w[synced syncing outdated error].freeze
+
   belongs_to :language
   belongs_to :region
 
@@ -33,6 +50,11 @@ class Beacon < ApplicationRecord
 
   has_many :beacon_topics, dependent: :destroy
   has_many :topics, through: :beacon_topics
+
+  delegate :name, to: :region, prefix: true
+  delegate :name, to: :language, prefix: true
+
+  enum :sync_status, SYNC_STATUSES.index_with(&:itself)
 
   validates :name, presence: true
   validates :api_key_digest, presence: true, uniqueness: true
@@ -47,5 +69,31 @@ class Beacon < ApplicationRecord
 
   def revoked?
     revoked_at.present?
+  end
+
+  def status_str
+    revoked? ? "Revoked" : "Active"
+  end
+
+  # Get count of topics that match this beacon's configuration
+  def document_count
+    topics.count
+  end
+
+  # Get count of actual document files attached to matching topics
+  def file_count
+    topics.joins(:documents_attachments).count
+  end
+
+  def accessible_blobs
+    ActiveStorage::Blob
+      .joins(:attachments)
+      .where(
+        active_storage_attachments: {
+          record_type: "Topic",
+          name: "documents",
+          record_id: topic_ids,
+        }
+      )
   end
 end

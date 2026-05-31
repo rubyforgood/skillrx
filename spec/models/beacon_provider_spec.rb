@@ -27,4 +27,23 @@ RSpec.describe BeaconProvider, type: :model do
     it { is_expected.to belong_to(:beacon) }
     it { is_expected.to belong_to(:provider) }
   end
+
+  describe "callbacks" do
+    let(:beacon) { create(:beacon) }
+    let(:provider) { create(:provider) }
+
+    it "enqueues a rebuild manifest job on create" do
+      expect {
+        create(:beacon_provider, beacon: beacon, provider: provider)
+      }.to have_enqueued_job(Beacons::RebuildManifestJob).with(beacon.id)
+    end
+
+    it "enqueues a rebuild manifest job on destroy" do
+      beacon_provider = create(:beacon_provider, beacon: beacon, provider: provider)
+
+      expect {
+        beacon_provider.destroy!
+      }.to have_enqueued_job(Beacons::RebuildManifestJob).with(beacon.id)
+    end
+  end
 end

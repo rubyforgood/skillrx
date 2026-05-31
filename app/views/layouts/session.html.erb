@@ -16,66 +16,13 @@
     <%# Enable PWA manifest for installable apps (make sure to enable in config/routes.rb too!) %>
     <%#= tag.link rel: "manifest", href: pwa_manifest_path(format: :json) %>
 
-
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/zuramai/mazer@docs/demo/assets/compiled/css/app.css">
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/zuramai/mazer@docs/demo/assets/compiled/css/app-dark.css">
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/zuramai/mazer@docs/demo/assets/compiled/css/iconly.css">
-
     <%# Includes all stylesheet files in app/assets/stylesheets %>
     <%= stylesheet_link_tag :app, "data-turbo-track": "reload" %>
     <%= javascript_importmap_tags %>
   </head>
-
   <body style="background: #f8f9fa;">
-    <script src="https://cdn.jsdelivr.net/gh/zuramai/mazer@docs/demo/assets/static/js/initTheme.js"></script>
-
     <!-- Start content here -->
     <%= yield %>
     <!-- End content -->
-
-    <script src="https://cdn.jsdelivr.net/gh/zuramai/mazer@docs/demo/assets/static/js/components/dark.js"></script>
-    <script src="https://cdn.jsdelivr.net/gh/zuramai/mazer@docs/demo/assets/extensions/perfect-scrollbar/perfect-scrollbar.min.js"></script>
-
-    <script src="https://cdn.jsdelivr.net/gh/zuramai/mazer@docs/demo/assets/compiled/js/app.js"></script>
-
-    <!-- Need: Apexcharts -->
-    <script src="https://cdn.jsdelivr.net/gh/zuramai/mazer@docs/demo/assets/extensions/apexcharts/apexcharts.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/gh/zuramai/mazer@docs/demo/assets/static/js/pages/dashboard.js"></script>
-
-    <script>
-      // Enhanced form interactions
-      document.addEventListener('DOMContentLoaded', function() {
-        // Password visibility toggle (if needed)
-        const passwordFields = document.querySelectorAll('input[type="password"]');
-        passwordFields.forEach(field => {
-          // Create wrapper div for the input field
-          const wrapper = document.createElement('div');
-          wrapper.style.position = 'relative';
-          wrapper.style.display = 'block';
-
-          // Insert wrapper before the field and move field into wrapper
-          field.parentNode.insertBefore(wrapper, field);
-          wrapper.appendChild(field);
-
-          // Create toggle button
-          const toggleBtn = document.createElement('button');
-          toggleBtn.type = 'button';
-          toggleBtn.className = 'btn btn-link position-absolute end-0 top-50 translate-middle-y me-3';
-          toggleBtn.innerHTML = '<i class="bi bi-eye"></i>';
-          toggleBtn.style.zIndex = '10';
-          toggleBtn.style.border = 'none';
-          toggleBtn.style.background = 'none';
-
-          // Append button to wrapper
-          wrapper.appendChild(toggleBtn);
-
-          toggleBtn.addEventListener('click', function() {
-            const type = field.getAttribute('type') === 'password' ? 'text' : 'password';
-            field.setAttribute('type', type);
-            this.innerHTML = type === 'password' ? '<i class="bi bi-eye"></i>' : '<i class="bi bi-eye-slash"></i>';
-          });
-        });
-      });
-    </script>
   </body>
 </html>

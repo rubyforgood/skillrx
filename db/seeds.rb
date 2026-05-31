@@ -81,7 +81,7 @@ users = [
   { email: "admin@mail.com", password: "test123", is_admin: true },
   { email: "me@mail.com", password: "test123" },
 ].map do |user_data|
-  user = User.find_or_initialize_by(email: user_data[:email]).tap do |u|
+  User.find_or_initialize_by(email: user_data[:email]).tap do |u|
     u.password = user_data[:password]
     u.is_admin = user_data[:is_admin] || false
     u.providers << Provider.first unless u.is_admin
@@ -95,7 +95,7 @@ Provider.all.each do |provider|
 end
 
 10.times do
-  user = User.find_or_initialize_by(email: Faker::Internet.email).tap do |u|
+  User.find_or_initialize_by(email: Faker::Internet.email).tap do |u|
     u.password = Faker::Internet.password
     u.is_admin = false
     u.providers << Provider.first unless u.is_admin

@@ -1,0 +1,41 @@
+<% content_for :title, "Edit Beacon" %>
+
+<div class="bg-gradient-page page-container">
+  <div class="content-wrapper">
+
+    <!-- Header Section -->
+    <div class="section-spacing">
+      <div class="flex items-center gap-4 mb-6">
+        <%= link_to beacon_path(@beacon), class: "text-gray-500 hover:text-gray-700 transition-colors" do %>
+          <svg class="icon-size-lg" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18"/>
+          </svg>
+        <% end %>
+        <h1 class="text-3xl font-bold text-gray-800 m-0">
+          Edit Beacon
+        </h1>
+      </div>
+
+      <!-- Breadcrumb -->
+      <nav class="breadcrumb-nav">
+        <ol class="breadcrumb-list">
+          <li><%= link_to "Dashboard", root_path, class: "text-gray-500 no-underline hover:text-gray-700" %></li>
+          <li class="breadcrumb-separator">/</li>
+          <li><%= link_to "Beacons", beacons_path, class: "text-gray-500 no-underline hover:text-gray-700" %></li>
+          <li class="breadcrumb-separator">/</li>
+          <li><%= link_to @beacon.name, beacon_path(@beacon), class: "text-gray-500 no-underline hover:text-gray-700" %></li>
+          <li class="breadcrumb-separator">/</li>
+          <li class="breadcrumb-current">Edit</li>
+        </ol>
+      </nav>
+    </div>
+
+    <!-- Main Form Card -->
+    <div class="card-elevated" style="overflow: visible;">
+      <!-- Form Content -->
+      <div class="card-body">
+        <%= render "form", beacon: @beacon %>
+      </div>
+    </div>
+  </div>
+</div>
