@@ -11,8 +11,13 @@ RSpec.describe "/beacons", type: :request do
       }
   end
   let(:invalid_attributes) { { name: "" } }
+  let(:beacons_feature_config) { { enabled: false, allowed_emails: [ "admin@skillrx.org" ] } }
 
   before do
+    allow(Rails.application.credentials).to receive(:dig).and_call_original
+    allow(Rails.application.credentials).to receive(:dig)
+      .with(:features, :beacons)
+      .and_return(beacons_feature_config)
     sign_in(user)
   end
 
