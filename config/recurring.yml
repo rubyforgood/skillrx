@@ -4,6 +4,10 @@ default: &default
     command: LanguageFilesScheduler.new.perform
     queue: default
     schedule: "@hourly"
+  provider_region_data:
+    command: ProviderRegionDataBuilder.new.perform
+    queue: default
+    schedule: "@daily"
   clear_solid_queue_finished_jobs:
     command: "SolidQueue::Job.clear_finished_in_batches(sleep_between_batches: 0.3)"
     schedule: every hour at minute 12
