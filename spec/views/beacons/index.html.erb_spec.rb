@@ -21,7 +21,7 @@ RSpec.describe "beacons/index", type: :view do
     let(:revoked_beacon) { create(:beacon, :revoked) }
 
     before do
-      assign(:beacons, [active_beacon, revoked_beacon])
+      assign(:beacons, [ active_beacon, revoked_beacon ])
       render
     end
 
