@@ -15,6 +15,14 @@ Language.destroy_all
 User.destroy_all
 Tag.destroy_all
 
+puts "Creating regions..."
+
+[ "Northeast", "Southeast", "Midwest", "Southwest", "West" ].each do |name|
+  Region.find_or_create_by!(name: name)
+end
+
+puts "Regions created!"
+
 puts "Creating languages..."
 
 [
