@@ -86,7 +86,7 @@ GEM
       zeitwerk (>= 2.4, < 3.0)
     addressable (2.9.0)
       public_suffix (>= 2.0.2, < 8.0)
-    annotaterb (4.22.0)
+    annotaterb (4.23.0)
       activerecord (>= 6.0.0)
       activesupport (>= 6.0.0)
     ast (2.4.3)
