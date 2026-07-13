@@ -104,7 +104,7 @@ module Beacons
         id: blob.id,
         filename: filename,
         path: "providers/#{topic.provider_id}/topics/#{topic.id}/#{filename}",
-        checksum: blob.checksum,
+        checksum: "sha256:#{blob.ensure_sha256_checksum}",
         size_bytes: blob.byte_size,
         content_type: blob.content_type,
         updated_at: blob.created_at.iso8601,
