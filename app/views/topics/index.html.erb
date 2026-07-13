@@ -38,7 +38,7 @@
 
     <!-- Search Card -->
     <div class="mb-8">
-      <%= render "search", providers: @providers, languages: @languages, params: search_params  %>
+      <%= render "search", providers: @providers, languages: @languages %>
     </div>
 
   <!-- Topics Table Card -->
@@ -83,14 +83,14 @@
             <table class="w-full border-collapse table-fixed">
               <thead>
                 <tr class="bg-gradient-gray border-b-2 border-gray-200">
-                  <th class="px-6 py-5 text-left text-xs font-bold text-gray-600 uppercase tracking-wider truncate">Title</th>
-                  <th class="px-6 py-5 text-left text-xs font-bold text-gray-600 uppercase tracking-wider truncate hide-mobile">Description</th>
-                  <th class="px-6 py-5 text-left text-xs font-bold text-gray-600 uppercase tracking-wider truncate hide-mobile">UID</th>
-                  <th class="px-6 py-5 text-left text-xs font-bold text-gray-600 uppercase tracking-wider truncate">Language</th>
-                  <th class="px-6 py-5 text-left text-xs font-bold text-gray-600 uppercase tracking-wider truncate hide-mobile">Provider</th>
-                  <th class="px-6 py-5 text-left text-xs font-bold text-gray-600 uppercase tracking-wider truncate"># of Documents</th>
-                  <th class="px-6 py-5 text-left text-xs font-bold text-gray-600 uppercase tracking-wider truncate">State</th>
-                  <th class="px-6 py-5 text-right text-xs font-bold text-gray-600 uppercase tracking-wider w-40 actions-col">Actions</th>
+                  <th scope="col" class="px-6 py-5 text-left text-xs font-bold text-gray-600 uppercase tracking-wider truncate" aria-sort="<%= topic_sort_aria(:published_at) %>"><%= topic_sort_header("Published", :published_at) %></th>
+                  <th scope="col" class="px-6 py-5 text-left text-xs font-bold text-gray-600 uppercase tracking-wider truncate">Title</th>
+                  <th scope="col" class="px-6 py-5 text-left text-xs font-bold text-gray-600 uppercase tracking-wider truncate" aria-sort="<%= topic_sort_aria(:created_at) %>"><%= topic_sort_header("Added", :created_at) %></th>
+                  <th scope="col" class="px-6 py-5 text-left text-xs font-bold text-gray-600 uppercase tracking-wider truncate">Language</th>
+                  <th scope="col" class="px-6 py-5 text-left text-xs font-bold text-gray-600 uppercase tracking-wider truncate hide-mobile">Provider</th>
+                  <th scope="col" class="px-6 py-5 text-left text-xs font-bold text-gray-600 uppercase tracking-wider truncate"># of Documents</th>
+                  <th scope="col" class="px-6 py-5 text-left text-xs font-bold text-gray-600 uppercase tracking-wider truncate">State</th>
+                  <th scope="col" class="px-6 py-5 text-right text-xs font-bold text-gray-600 uppercase tracking-wider w-40 actions-col">Actions</th>
                 </tr>
               </thead>
               <%= render "list", topics: @topics, params: search_params %>

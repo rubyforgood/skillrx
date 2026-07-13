@@ -5,7 +5,10 @@ class TopicsController < ApplicationController
   before_action :set_topic, only: [ :show, :edit, :update, :destroy, :archive, :unarchive ]
 
   def index
-    @pagy, @topics = pagy(scope.includes(:documents_attachments).search_with_params(search_params))
+    topics = scope.includes(:documents_attachments).search_with_params(search_params)
+    topics = topics.reorder(created_at: Topic.sort_order(search_params[:order]&.to_sym)) if search_params[:sort] == "created_at"
+
+    @pagy, @topics = pagy(topics)
     @available_providers = other_available_providers
     @languages = scope.map(&:language).uniq.sort_by(&:name)
   end
@@ -107,7 +110,7 @@ class TopicsController < ApplicationController
   def search_params
     return { state: :active } unless params[:search].present?
 
-    params.require(:search).permit(:query, :state, :language_id, :year, :month, :order, tag_list: [])
+    params.require(:search).permit(:query, :state, :language_id, :year, :month, :sort, :order, tag_list: [])
   end
   helper_method :search_params
 

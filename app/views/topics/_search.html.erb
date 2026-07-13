@@ -11,6 +11,7 @@
   </div>
   <div class="card-body-sm">
     <%= form_for :search, url: topics_path, method: :get, data: { controller: "topics", topics_target: "searchForm", turbo_frame: "topic-list", turbo_action: "advance" } do |f| %>
+      <%= f.hidden_field :sort, value: params.dig(:search, :sort) if params.dig(:search, :sort) == "created_at" %>
       <div id="topics-search-grid" class="form-grid-auto items-start">
         <!-- Query -->
         <div class="form-grid-full">
