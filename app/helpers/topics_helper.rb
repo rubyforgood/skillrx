@@ -1,4 +1,31 @@
 module TopicsHelper
+  def topic_sort_header(label, column)
+    current_column = search_params[:sort].presence_in(%w[published_at created_at]) || "published_at"
+    current_order = search_params[:order].presence_in(%w[asc desc]) || "desc"
+    active = current_column == column.to_s
+    next_order = current_order
+    next_order = current_order == "asc" ? "desc" : "asc" if active
+    indicator = active ? (current_order == "asc" ? "▲" : "▼") : "↕"
+    query = search_params.to_h.merge(sort: column, order: next_order)
+
+    link_to topics_path(search: query),
+      class: "inline-flex items-center gap-1 hover:text-gray-900 focus-visible:outline-2 focus-visible:outline-offset-2",
+      aria: { label: "Sort by #{label} #{next_order == "asc" ? "ascending" : "descending"}" },
+      data: { turbo_frame: "_top" } do
+      safe_join([
+        content_tag(:span, label),
+        content_tag(:span, indicator, class: active ? "text-gray-700" : "text-gray-400", aria: { hidden: true }),
+      ])
+    end
+  end
+
+  def topic_sort_aria(column)
+    current_column = search_params[:sort].presence_in(%w[published_at created_at]) || "published_at"
+    return "none" unless current_column == column.to_s
+
+    search_params[:order] == "asc" ? "ascending" : "descending"
+  end
+
   def card_preview_media(file)
     case file.content_type
     in /image/ then render_image(file)
