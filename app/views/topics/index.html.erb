@@ -38,7 +38,7 @@
 
     <!-- Search Card -->
     <div class="mb-8">
-      <%= render "search", providers: @providers, languages: @languages %>
+      <%= render "search", providers: @providers, languages: @languages, search_params: search_params %>
     </div>
 
   <!-- Topics Table Card -->
@@ -112,4 +112,3 @@
   <% end %>
   </div>
 </div>
-
