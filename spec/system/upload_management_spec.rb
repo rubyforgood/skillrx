@@ -26,6 +26,14 @@ RSpec.describe "Upload Management", type: :system do
       click_button("remove-button-1")
       expect(page).not_to have_text("logo_ruby_for_good.png")
     end
+
+    it "explains why an empty file was not uploaded" do
+      page.attach_file(Rails.root.join("spec/fixtures/files/empty.pdf")) do
+        page.find("#documents").click
+      end
+      expect(page).to have_text("empty.pdf is empty (0 bytes)")
+      expect(page).to have_button("Save Topic", disabled: false)
+    end
   end
 
   context "when updating a topic " do

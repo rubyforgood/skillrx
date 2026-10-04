@@ -7,6 +7,7 @@ export default class extends Controller {
     "filesContainer",
     "hiddenField",
     "submitButton",
+    "errorMessage",
   ];
 
   uploadFile(event) {
@@ -15,6 +16,7 @@ export default class extends Controller {
     this.submitButtonTarget.disabled = true;
     this.submitButtonTarget.classList.add("disabled:opacity-75");
     this.submitButtonTarget.value = "Uploading...";
+    this.showError("");
 
     const filesInput = this.filesInputTarget;
     let files = Array.from(filesInput.files);
@@ -40,13 +42,26 @@ export default class extends Controller {
       .then((data) => {
         if (data.result === "success") {
           this.filesContainerTarget.innerHTML += data.html;
-          filesInput.value = "";
+        } else {
+          this.showError(data.message || "The upload failed. Please try again.");
         }
-
+      })
+      .catch(() => {
+        this.showError("The upload failed. Please try again.");
+      })
+      .finally(() => {
+        filesInput.value = "";
         this.submitButtonTarget.disabled = false;
         this.submitButtonTarget.classList.remove("disabled:opacity-75");
         this.submitButtonTarget.value = "Save Topic";
       });
+  }
+
+  showError(message) {
+    if (!this.hasErrorMessageTarget) return;
+
+    this.errorMessageTarget.textContent = message;
+    this.errorMessageTarget.hidden = !message;
   }
 
   removeFile(event) {
