@@ -28,6 +28,22 @@ RSpec.describe DocumentsSyncJob, type: :job do
     end
   end
 
+  describe "retries" do
+    let(:job_args) { { topic_id: topic.id, document_id: document.id, action: "update" } }
+
+    it "retries when Azure returns an API error" do
+      allow(FileManager).to receive(:new).and_raise(AzureFileShares::Errors::ApiError.new("ServerBusy"))
+
+      expect { described_class.perform_now(**job_args) }.to have_enqueued_job(described_class).with(**job_args)
+    end
+
+    it "retries when the Azure request times out" do
+      allow(FileManager).to receive(:new).and_raise(Timeout::Error)
+
+      expect { described_class.perform_now(**job_args) }.to have_enqueued_job(described_class).with(**job_args)
+    end
+  end
+
   describe "#perform" do
     let(:file_worker) { instance_double(FileWorker) }
 
