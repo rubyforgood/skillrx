@@ -70,7 +70,7 @@ RSpec.describe FileWorker do
       expect { worker.send }.to raise_error(AzureFileShares::Errors::ApiError)
     end
 
-    it "does not upload blank files" do
+    it "refuses to upload blank files and fails loudly" do
       worker_with_blank_file = described_class.new(
         share: "skillrx-test",
         file: "",
@@ -80,7 +80,7 @@ RSpec.describe FileWorker do
 
       expect(files).not_to receive(:upload_file)
 
-      worker_with_blank_file.send
+      expect { worker_with_blank_file.send }.to raise_error(FileWorker::EmptyFileError, /#{name}/)
     end
   end
 
