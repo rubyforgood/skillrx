@@ -6,6 +6,44 @@ RSpec.describe DocumentsSyncJob, type: :job do
   let(:document) { topic.documents.first }
   let(:file_name) { document.filename }
 
+  describe "enqueueing" do
+    let(:job_args) { { topic_id: topic.id, document_id: document.id, action: "update" } }
+
+    it "waits for the surrounding transaction to commit" do
+      expect {
+        ActiveRecord::Base.transaction do
+          expect { described_class.perform_later(**job_args) }.not_to have_enqueued_job(described_class)
+        end
+      }.to have_enqueued_job(described_class).with(**job_args)
+    end
+
+    it "is dropped when the surrounding transaction rolls back" do
+      expect {
+        ActiveRecord::Base.transaction do
+          described_class.perform_later(**job_args)
+
+          raise ActiveRecord::Rollback
+        end
+      }.not_to have_enqueued_job(described_class)
+    end
+  end
+
+  describe "retries" do
+    let(:job_args) { { topic_id: topic.id, document_id: document.id, action: "update" } }
+
+    it "retries when Azure returns an API error" do
+      allow(FileManager).to receive(:new).and_raise(AzureFileShares::Errors::ApiError.new("ServerBusy"))
+
+      expect { described_class.perform_now(**job_args) }.to have_enqueued_job(described_class).with(**job_args)
+    end
+
+    it "retries when the Azure request times out" do
+      allow(FileManager).to receive(:new).and_raise(Timeout::Error)
+
+      expect { described_class.perform_now(**job_args) }.to have_enqueued_job(described_class).with(**job_args)
+    end
+  end
+
   describe "#perform" do
     let(:file_worker) { instance_double(FileWorker) }
 

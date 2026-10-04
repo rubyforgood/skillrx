@@ -1,6 +1,8 @@
 class FileWorker
   UPLOAD_TIMEOUT = 300
 
+  class EmptyFileError < StandardError; end
+
   def initialize(share:, name:, path:, file:, new_path: nil)
     @share = share
     @name = name
@@ -28,7 +30,8 @@ class FileWorker
   def send_file
     validate_filename
 
-    return if file.blank?
+    # Skipping quietly left the file listed in File.csv but missing from Azure
+    raise EmptyFileError, "#{name} is empty and was not uploaded to #{path}" if file.blank?
 
     create_subdirs(path)
 
