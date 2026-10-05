@@ -39,10 +39,12 @@ class ProvidersController < ApplicationController
   end
 
   def destroy
-    @provider.destroy!
-
     respond_to do |format|
-      format.html { redirect_to providers_path, status: :see_other, notice: "Provider was successfully destroyed." }
+      if @provider.destroy
+        format.html { redirect_to providers_path, status: :see_other, notice: "Provider was successfully destroyed." }
+      else
+        format.html { redirect_to providers_path, status: :see_other, alert: @provider.errors.full_messages.to_sentence }
+      end
     end
   end
 

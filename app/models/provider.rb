@@ -20,7 +20,7 @@ class Provider < ApplicationRecord
   has_many :regions, through: :branches
   has_many :contributors
   has_many :users, through: :contributors
-  has_many :topics
+  has_many :topics, dependent: :restrict_with_error
   has_many :beacon_providers, dependent: :destroy
   has_many :beacons, through: :beacon_providers
 
