@@ -24,6 +24,23 @@ RSpec.describe FileUploadJob, type: :job do
       end
     end
 
+    context "when generating the file fails" do
+      before { allow(CsvGenerator::Topics).to receive(:new).and_raise(NoMethodError, "undefined method 'name' for nil") }
+
+      it "raises so the job is recorded as failed" do
+        expect { described_class.perform_now(language.id, "topics", "file") }.to raise_error(NoMethodError)
+      end
+    end
+
+    context "when Azure returns an API error" do
+      before { allow(FileWorker).to receive(:new).and_raise(AzureFileShares::Errors::ApiError.new("ServerBusy")) }
+
+      it "retries the job" do
+        expect { described_class.perform_now(language.id, "topics", "file") }
+          .to have_enqueued_job(described_class).with(language.id, "topics", "file")
+      end
+    end
+
     context "when provider specific file" do
       let(:provider) { create(:provider, name: "Test Provider") }
 
