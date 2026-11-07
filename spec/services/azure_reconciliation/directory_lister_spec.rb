@@ -70,7 +70,7 @@ RSpec.describe AzureReconciliation::DirectoryLister do
       <Message>Server failed to authenticate the request.#{' padding' * 60}</Message>
       <AuthenticationErrorDetail>Server used following string to sign: 'GET\\n\\n...'</AuthenticationErrorDetail></Error>
     XML
-    stubs.get("/contentshare/Content") { [ 403, {}, body ] }
+    stubs.get("/contentshare/Content") { [ 403, {}, "\uFEFF#{body}".b ] }
 
     expect { lister.files_in("Content") }.to raise_error(
       AzureReconciliation::DirectoryLister::Error,

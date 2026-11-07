@@ -63,9 +63,10 @@ module AzureReconciliation
     # Azure's AuthenticationErrorDetail holds the string it signed, which is
     # what to compare against when a signature is rejected.
     def error_detail(body)
-      xml = Nokogiri::XML(body.to_s.sub(/\A﻿/, ""))
+      text = body.to_s.dup.force_encoding(Encoding::UTF_8).scrub.delete_prefix("﻿")
+      xml = Nokogiri::XML(text)
       parts = %w[Code Message AuthenticationErrorDetail].filter_map { |tag| xml.at_xpath("//Error/#{tag}")&.text&.strip }
-      parts.any? ? parts.join("\n") : body.to_s[0, 500]
+      parts.any? ? parts.join("\n") : text[0, 500]
     end
 
     def encode_path(directory)
