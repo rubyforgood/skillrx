@@ -5,6 +5,10 @@ class ApplicationJob < ActiveJob::Base
   # Most jobs are safe to ignore if the underlying records are no longer available
   # discard_on ActiveJob::DeserializationError
 
+  # Solid Queue lives in its own database, so a job enqueued inside a transaction
+  # can be picked up before the records it needs are committed.
+  self.enqueue_after_transaction_commit = true
+
   around_perform do |job, block|
     start_time = Time.current
     Rails.logger.debug "[Job Start] #{job.class.name} ID=#{job.job_id} Args=#{job.arguments}"

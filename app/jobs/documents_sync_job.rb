@@ -1,4 +1,6 @@
 class DocumentsSyncJob < ApplicationJob
+  retry_on AzureFileShares::Errors::ApiError, Timeout::Error, wait: :polynomially_longer, attempts: 5
+
   def perform(topic_id:, document_id:, action:, share: ENV["AZURE_STORAGE_SHARE_NAME"])
     return if ENV["AZURE_MEDIA_FILES_SYNC_DISABLED"].present?
 
