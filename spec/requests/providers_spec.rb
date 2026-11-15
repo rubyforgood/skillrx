@@ -139,5 +139,19 @@ RSpec.describe "/providers", type: :request do
 
       expect(response).to redirect_to(providers_url)
     end
+
+    context "when the provider has topics" do
+      it "keeps the provider and explains why" do
+        provider = Provider.create! valid_attributes
+        create(:topic, provider:)
+
+        expect {
+          delete provider_url(provider)
+        }.not_to change(Provider, :count)
+
+        expect(response).to redirect_to(providers_url)
+        expect(flash[:alert]).to match(/topics/i)
+      end
+    end
   end
 end

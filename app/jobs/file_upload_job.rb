@@ -3,14 +3,8 @@ class FileUploadJob < ApplicationJob
   # or use a more specific key to avoid blocking all jobs for a language
   limits_concurrency to: 3, key: ->(_language_id, content_id, _content_type) { "hard-limit" }
 
-  retry_on AzureFileShares::Errors::ApiError, wait: :exponentially_longer, attempts: 3
-  retry_on Timeout::Error, wait: :exponentially_longer, attempts: 2
-
-  discard_on StandardError do |job, error|
-    Rails.logger.error "FileUploadJob failed permanently: #{error.message}"
-    Rails.logger.error "Job arguments: #{job.arguments}"
-    Rails.logger.error "Suggestion: Check provider names for invalid characters if Azure API errors"
-  end
+  retry_on AzureFileShares::Errors::ApiError, wait: :polynomially_longer, attempts: 3
+  retry_on Timeout::Error, wait: :polynomially_longer, attempts: 2
 
   def perform(language_id, content_id, content_type, share = ENV["AZURE_STORAGE_SHARE_NAME"])
     @language = Language.find(language_id)
