@@ -1,5 +1,5 @@
 @import "tailwindcss";
-/* Ruby For Good design system tokens, vendored from @rubyforgood/design-system@0.1.3
+/* Ruby For Good design system tokens, vendored from @rubyforgood/design-system@0.1.4
    (tokens/theme.css). See docs/design/design.md. */
 @import "./rfg-theme.css" theme(static);
 @import "./components/sidebar.css";
@@ -15,10 +15,6 @@
   --color-brand-600: #055889;
   --color-brand-700: #044a72;
 
-  /* Fixes a bug in design system v0.1.3's theme.css, which sets this to var(--radius-full), a
-     variable Tailwind v4 doesn't have, so pills and avatars were square. Fixed upstream in
-     rubyforgood/designsystem cc75653; delete this line when upgrading to a release with it. */
-  --radius-pill: calc(infinity * 1px);
 }
 
 /* Figtree, self-hosted (SIL Open Font License, app/assets/fonts/figtree/OFL.txt). */

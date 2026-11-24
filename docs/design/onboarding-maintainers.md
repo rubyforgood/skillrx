@@ -65,7 +65,7 @@ mkdir -p public/design-previews && cp docs/design/previews/* public/design-previ
 Components are vendored as standalone files (Lit bundled in), at a pinned version:
 
 ```bash
-V=https://cdn.jsdelivr.net/npm/@rubyforgood/design-system@0.1.3
+V=https://cdn.jsdelivr.net/npm/@rubyforgood/design-system@0.1.4
 curl -fo /tmp/x.mjs $V/dist/standalone/modal.mjs
 # add the four-line provenance header (copy it from any vendor/javascript/rfg-*.js), then:
 #   vendor/javascript/rfg-modal.js
@@ -74,14 +74,14 @@ curl -fo /tmp/x.mjs $V/dist/standalone/modal.mjs
 ```
 
 **Upgrading** means changing the version in `V` and downloading every `rfg-*.js` and
-`rfg-theme.css` again. Read the release notes first. When upgrading past 0.1.3, remove the
-`--radius-pill` override in `application.css` (it works around a bug fixed upstream).
+`rfg-theme.css` again. Read the release notes first.
 
 **Never edit a vendored file.** SkillRx-specific values go in `application.css`.
 
 ## Running the checks
 
-**Specs:** `bundle exec rspec`. The system specs need Chrome; if Selenium fails with
+**Specs:** `bundle exec rspec`, the whole suite, before every commit that changes a screen. A shared
+helper can depend on any screen's markup: sign-in once broke 47 specs elsewhere. The system specs need Chrome; if Selenium fails with
 `* is not a valid URL` (Chrome 158 and later), run them against Chrome 157:
 `SE_BROWSER_VERSION=157 bundle exec rspec`.
 

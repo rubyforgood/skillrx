@@ -68,12 +68,8 @@ Vendored at a pinned version, never loaded from a CDN at runtime:
 | `app/assets/tailwind/rfg-theme.css` | `tokens/theme.css`, imported with `theme(static)` so every token is emitted (the components read them as CSS variables) |
 | `vendor/javascript/rfg-*.js` | `dist/standalone/<name>.mjs`, pinned in `config/importmap.rb`, imported in `application.js` |
 
-Current version: **0.1.3**. To upgrade, change the version in the URL in each file's header and
+Current version: **0.1.4** (upgraded 2026-11-24). To upgrade, change the version in the URL in each file's header and
 download again. Don't edit them by hand: SkillRx-specific values go in `application.css`.
-
-One local workaround: `--radius-pill` is overridden in `application.css`, because v0.1.3's
-`theme.css` points it at a Tailwind variable that doesn't exist (pills and avatars were square).
-Fixed upstream in rubyforgood/designsystem `cc75653`; remove the override on the next upgrade.
 
 ## App shell
 

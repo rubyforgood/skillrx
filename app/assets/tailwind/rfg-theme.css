@@ -44,7 +44,7 @@
      elevations (surface, overlay) rather than a continuous scale. */
   --radius-surface: var(--radius-2xl);  /* cards, dialogs */
   --radius-control: var(--radius-lg);   /* buttons, inputs, menus */
-  --radius-pill:    var(--radius-full); /* pills, avatars */
+  --radius-pill:    calc(infinity * 1px); /* pills, avatars. Not var(--radius-full): Tailwind v4 has no such variable (theme-tokens-audit.js) */
 
   --shadow-surface: var(--shadow-sm);
   --shadow-overlay: var(--shadow-xl);

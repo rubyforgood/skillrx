@@ -1,8 +1,8 @@
 module SystemHelpers
   def login_as(user)
     visit new_session_path
-    fill_in "Enter your email address", with: user.email
-    fill_in "Enter your password", with: user.password
+    fill_in "Email address", with: user.email
+    fill_in "Password", with: user.password
     click_button "Sign in"
   end
 
