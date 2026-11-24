@@ -9,6 +9,7 @@ year. Write PENDING, commit, then fill in the hash in the next commit.
 | `6373a2d` | App shell (option A): grouped rail, mobile drawer (new: phones had no navigation), skip link, account menu with Sign out, footer no longer fixed. Design system tokens, SkillRx blue, self-hosted Figtree, `<html lang="en">`. Three components vendored (avatar, button, menu). WCAG audit: 4 violations on 83 elements → 3 on 58; none in the shell. Specs: 516, 0 failures (3 specs updated for the account menu and the email now shown in the rail). |
 | `ceed409` | Sign-in and password pages: centered card, `<rfg-field>` labels, messages as callouts in the card, no "Remember me" (it did nothing), contact@skillrx.org. Form controls app-wide: neutral-500 border (4.76:1), brand focus outline. Vendored callout and field. axe clean on both pages. |
 | `ddb398d` | Home page: same sections restyled (solid brand hero, one accent color, no entrance animation), numbers section and module counts removed, footer links named, mobile menu, plain-link primary actions, contact@skillrx.org. `home_controller.js` replaced by CSS smooth scroll. |
+| `PENDING` | Onboarding docs: `onboarding-maintainers.md` and `guide-for-users.md`. WCAG audit after shell, sign-in and home: 3 violations on 38 elements (from 4 on 83), measured with the setup the maintainer doc gives. |
 
 ### Baseline WCAG audit, before any change
 

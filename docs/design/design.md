@@ -153,6 +153,14 @@ in, forgot password and choose a new password.
 
 *What is deliberately left as it is, and why. Every entry needs a reason.*
 
+## Onboarding
+
+- [Maintaining SkillRx's design](onboarding-maintainers.md): where things live, how to build a
+  screen, previews, vendoring components, running the checks.
+- [Guide for people using SkillRx](guide-for-users.md): what changed and where things are now.
+
+Both are updated in the same pull request as the screens they describe.
+
 ## Decisions that are not obvious
 
 See [`decisions.md`](decisions.md).
