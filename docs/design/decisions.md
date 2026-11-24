@@ -139,3 +139,14 @@ choice, the unchecked case needs a session cookie, which is a change to authenti
 Headings, buttons, labels, nav and table headers use sentence case ("Add new topic", not "Add New
 Topic"). Proper names keep their capitals (SkillRx, Ruby For Good). Applied to each screen as it's
 migrated, so a screen is never half converted.
+
+### "Join thousands of healthcare professionals" is kept
+
+Asked separately on 2026-11-24, since it's also an unverified figure: kept as is, by decision.
+
+### The home page's illustration is not real data
+
+The hero card (a topic, "Hand hygiene in the clinic", with two documents "Available offline")
+illustrates what SkillRx holds. It replaced today's "Cardiology updates, 75% complete", which showed
+learner progress, a feature SkillRx's admin app doesn't have. It's hidden from screen readers
+(`aria-hidden`), since it isn't content.

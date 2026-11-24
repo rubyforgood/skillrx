@@ -6,7 +6,7 @@ RSpec.describe "home/index", type: :view do
 
     it "displays link to the login page" do
       render
-      expect(rendered).to have_link("Sign In", href: new_session_path)
+      expect(rendered).to have_link("Sign in", href: new_session_path)
     end
   end
 
@@ -20,7 +20,7 @@ RSpec.describe "home/index", type: :view do
 
     it "has button to sign out" do
       render
-      expect(rendered).to have_button("Sign Out")
+      expect(rendered).to have_button("Sign out")
     end
   end
 end

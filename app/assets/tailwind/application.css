@@ -476,3 +476,67 @@ nav.pagy a.current {
 .auth a, .auth-help a { @apply font-medium text-brand-700 underline underline-offset-2 hover:text-brand-600; }
 .auth-foot { @apply text-sm; }
 .auth a:focus-visible { @apply rounded-sm outline-2 outline-offset-2 outline-brand-600; }
+
+/* The public home page: docs/design/design.md, "Home page". One accent color (the brand blue),
+   no gradients, no entrance animation. */
+.site { @apply bg-white text-neutral-900; font-family: var(--font-sans); scroll-behavior: smooth; }
+@media (prefers-reduced-motion: reduce) { .site { scroll-behavior: auto; } }
+.site section[id] { scroll-margin-top: 4.5rem; }
+.site-wrap { @apply mx-auto w-full max-w-6xl px-4 sm:px-8; }
+.site-head { @apply sticky top-0 z-40 border-b border-neutral-200 bg-white; }
+.site-head-row { @apply flex h-[4.25rem] items-center gap-6; }
+.site-logo img { @apply h-9; }
+.site-nav { @apply ml-auto hidden items-center gap-1 md:flex; }
+.site-nav a, .site-nav-link { @apply rounded-control px-3 py-2 font-medium text-neutral-700 no-underline hover:bg-neutral-100; }
+.site-account { @apply ml-auto flex items-center gap-2 md:ml-0; }
+.site-button-primary { @apply inline-flex h-10 items-center rounded-control bg-brand-600 px-4 font-semibold text-white no-underline hover:bg-brand-700; }
+.site-contact .site-button-primary { @apply h-12 px-5; }
+.site-button-secondary { @apply cursor-pointer rounded-control border border-neutral-500 bg-white px-3.5 py-2 font-medium text-neutral-700 hover:bg-neutral-50; }
+.site-menu-button { @apply inline-flex size-10 cursor-pointer items-center justify-center rounded-control text-neutral-700 hover:bg-neutral-100 md:hidden; }
+.site-menu-button svg { @apply size-6; }
+.site-menu { @apply flex flex-col border-t border-neutral-200 px-4 py-2 md:hidden; }
+.site-menu[hidden] { display: none; }
+.site-menu a { @apply rounded-control px-3 py-2.5 font-medium text-neutral-700 no-underline hover:bg-neutral-100; }
+
+.site-hero { @apply bg-brand-700 text-white; }
+.site-hero-row { @apply grid items-center gap-12 py-16 md:py-24 lg:grid-cols-[1.1fr_0.9fr]; }
+.site-hero h1 { @apply m-0 mb-4 text-4xl leading-[1.08] font-bold tracking-tight sm:text-5xl; }
+.site-hero p { @apply m-0 mb-8 max-w-xl text-lg text-brand-100; }
+.site-ctas { @apply flex flex-wrap gap-3; }
+.site-button-light { @apply inline-flex h-12 items-center rounded-control bg-white px-5 font-semibold text-brand-700 no-underline hover:bg-brand-50; }
+.site-button-outline { @apply inline-flex h-12 items-center rounded-control border border-white px-5 font-semibold text-white no-underline hover:bg-white/10; }
+.site-hero-card { @apply hidden flex-col gap-3.5 rounded-surface bg-white p-6 text-neutral-900 shadow-overlay lg:flex; }
+.site-hero-card-title { @apply font-semibold; }
+.site-hero-card-meta { @apply text-sm text-neutral-500; }
+.site-hero-doc { @apply flex items-center gap-3 rounded-control border border-neutral-200 p-3; }
+.site-hero-doc svg { @apply size-7 shrink-0 text-brand-600; }
+
+.site-band { @apply py-16 md:py-20; }
+.site-band-alt { @apply border-y border-neutral-200 bg-neutral-50; }
+.site-band h2 { @apply m-0 mb-2 text-3xl font-bold tracking-tight; }
+.site-sub { @apply m-0 mb-10 max-w-2xl text-lg text-neutral-500; }
+.site-grid-3 { @apply grid gap-6 md:grid-cols-3; }
+.site-feature { @apply rounded-surface border border-neutral-200 bg-white p-6; }
+.site-feature-icon { @apply mb-4 flex size-11 items-center justify-center rounded-control bg-brand-50 text-brand-700; }
+.site-feature-icon svg { @apply size-[22px]; }
+.site-feature h3 { @apply m-0 mb-1.5 text-lg font-semibold; }
+.site-feature p { @apply m-0 text-neutral-700; }
+.site-mission { @apply grid gap-12 lg:grid-cols-2; }
+.site-mission .site-sub { @apply mb-0; }
+.site-principles { @apply m-0 mt-6 grid list-none gap-4 p-0 sm:grid-cols-2; }
+.site-principles b { @apply block; }
+.site-principles span { @apply text-sm text-neutral-500; }
+.site-subjects-heading { @apply m-0 mb-4 text-lg font-semibold; }
+.site-subjects { @apply m-0 grid list-none grid-cols-2 gap-3 p-0; }
+.site-subjects li { @apply rounded-surface border border-neutral-200 bg-white p-5 font-semibold; }
+.site-contact { @apply text-center; }
+.site-contact .site-sub { @apply mx-auto mb-8; }
+
+.site-foot { @apply border-t border-neutral-200 py-6 text-sm text-neutral-500; }
+.site-foot-row { @apply flex flex-wrap items-center justify-between gap-4; }
+.site-foot p { @apply m-0; }
+.site-foot nav { @apply flex gap-4; }
+.site-foot a { @apply text-neutral-700 underline underline-offset-2 hover:text-neutral-900; }
+
+.site a:focus-visible, .site button:focus-visible { @apply outline-2 outline-offset-2 outline-brand-600; }
+.site-hero a:focus-visible { @apply outline-white; }

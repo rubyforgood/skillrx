@@ -5,7 +5,7 @@ RSpec.describe "User Login", type: :system do
 
   before do
     visit root_path
-    click_link("Sign In")
+    click_link("Sign in")
   end
 
   context "with correct email and password" do

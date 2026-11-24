@@ -1,10 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
   <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title><%= content_for(:title) || "Skillrx" %></title>
-
+    <title><%= content_for(:title) || "SkillRx" %></title>
     <meta name="viewport" content="width=device-width,initial-scale=1">
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="mobile-web-app-capable" content="yes">
@@ -13,13 +10,19 @@
 
     <%= yield :head %>
 
-    <%= stylesheet_link_tag :app, "data-turbo-track": "reload" %>
+    <link rel="icon" href="/favicon.ico" type="image/x-icon" sizes="any">
+    <link rel="icon" href="/favicon-32x32.png" type="image/png" sizes="32x32">
+    <link rel="icon" href="/skill-icon.svg" type="image/svg+xml">
+    <link rel="apple-touch-icon" href="/apple-touch-icon.png">
+
+    <%= stylesheet_link_tag "tailwind", "data-turbo-track": "reload" %>
+    <%= stylesheet_link_tag "application", "data-turbo-track": "reload" %>
     <%= javascript_importmap_tags %>
   </head>
 
-  <body class="min-vh-100 pt-16" data-controller="home">
-    <!-- Start content here -->
+  <%# The public home page: docs/design/design.md, "Home page". %>
+  <body class="site">
+    <a href="#main-content" class="shell-skip-link">Skip to main content</a>
     <%= yield %>
-    <!-- End content -->
   </body>
 </html>

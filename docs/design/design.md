@@ -24,7 +24,7 @@ workers without an internet connection.
 
 ## Status
 
-Migration started 2026-11-24 on branch `skillsrxdesign`. **Done:** tokens, font, app shell, form controls, sign-in and password pages. **Next:** the home page, then the signed-in screens.
+Migration started 2026-11-24 on branch `skillsrxdesign`. **Done:** tokens, font, app shell, form controls, sign-in and password pages, home page. **Next:** the signed-in screens.
 
 Baseline, measured 2026-11-24 before any change:
 
@@ -124,6 +124,26 @@ in, forgot password and choose a new password.
   someone looking at the form won't see it.
 - **No "Remember me".** Every sign-in already lasts until you sign out (see decisions.md).
 - **Contact:** `contact@skillrx.org`, everywhere.
+
+## Home page
+
+`layouts/home.html.erb`, `home/index.html.erb`: **today's sections, restyled** (option A, decided
+2026-11-24). Header, hero, features, mission, contact, footer. Copy is today's, in sentence case.
+
+- **One accent color,** the brand blue: a solid `brand-700` hero instead of the animated gradient,
+  `brand-50` icon tiles instead of six colors.
+- **No entrance animation.** The hero heading started at 13% opacity and took about a second to
+  appear.
+- **Primary actions are plain links** styled as buttons, so they work before JavaScript loads.
+  "Get started today" became **Contact us**: it went to sign-in, where nobody can create an account.
+- **Removed, pending verification:** the numbers section and the subject module counts (see
+  decisions.md for how to restore them). "Join thousands of healthcare professionals…" is kept, by
+  decision.
+- **Small screens:** a menu button opens the section links (`disclosure_controller.js`); following a
+  link closes it. In-page links scroll smoothly unless reduced motion is set, and land below the
+  sticky header (`scroll-margin-top`).
+- **Footer links have text** (GitHub, LinkedIn, Email). They were icon-only with no name, a WCAG
+  failure.
 
 ## Screens
 
