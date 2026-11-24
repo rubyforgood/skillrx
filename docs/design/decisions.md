@@ -88,3 +88,54 @@ and entry pages, with different needs from the signed-in app.
 
 Every screen's own content still has its old styling (gradient banners, per-screen colors, old
 buttons). Those are migrated screen by screen next.
+
+## 2026-11-24: Sign-in is a centered card; home page keeps its sections, without unverified figures
+
+Asked: "Sign in: do B the centered card. make note in this follows patterns for GitHub, Stripe,
+Linear, Atlassian. Home page: A, but remove the numbers section. make note of it, so it can be added
+back later if numbers are verified. contact email, make both: contact@skillrx.org." Chosen from
+`previews/entry.html`.
+
+### Sign-in and password reset: centered card (option B)
+
+Logo, one card holding the form, a link back to the home page. Nothing else on the page.
+
+- **Industry pattern:** GitHub, Stripe, Linear and Atlassian all sign in this way: a single centered
+  form, no marketing panel. Only people who already have an account sign in, so the page doesn't
+  need to explain what SkillRx is.
+- **Rejected: A, split layout** (today's structure, and Human Essentials'). More to keep true and
+  up to date, for context these visitors don't need.
+- **Applies to all four pages on the session layout:** sign in, forgot password, reset password, and
+  the password info panel (which goes; it held a decorative "Security tip").
+
+### Home page: same sections, restyled (option A), minus the numbers
+
+Same content in the same order, with the new look: solid blue hero instead of the animated
+gradient, one accent color instead of six, sentence case.
+
+- **The numbers section is removed:** "500+ medical topics, 50+ countries, 10k+ healthcare
+  professionals, 24/7 offline access". Nobody could confirm them. **To restore it**, verify each
+  figure, then bring back the section from `main`'s `app/views/home/index.html.erb` (the block
+  between the features cards and "Our Mission"), restyled like the features cards.
+- **The module counts are removed too** (asked separately, same reason): Cardiology 150 modules,
+  Emergency 120, Pharmacy 80, Infectious 95. The four subject cards stay, without counts. Same
+  restore rule: verify, then add them back.
+- **The sign-in panel's "500+ topics" goes with sign-in option B.**
+
+### Contact email
+
+Every "contact us" link uses `contact@skillrx.org`. The sign-in page's linked to a volunteer's own
+address, which shouldn't be on a public page.
+
+### "Remember me" is removed
+
+The checkbox wasn't connected to anything: `authentication.rb` sets a permanent session cookie on
+every sign-in, checked or not (measured 2026-11-24, line 49). A control that does nothing misleads.
+Sign-in behavior doesn't change: you stay signed in until you sign out. If SkillRx wants a real
+choice, the unchecked case needs a session cookie, which is a change to authentication, not design.
+
+### Sentence case everywhere
+
+Headings, buttons, labels, nav and table headers use sentence case ("Add new topic", not "Add New
+Topic"). Proper names keep their capitals (SkillRx, Ruby For Good). Applied to each screen as it's
+migrated, so a screen is never half converted.
