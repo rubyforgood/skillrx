@@ -43,3 +43,6 @@ db/structure.sql
 
 /app/assets/builds/*
 !/app/assets/builds/.keep
+
+# Served copies of docs/design/previews (the tracked copies live there)
+/public/design-previews/

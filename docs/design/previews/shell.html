@@ -1,0 +1,262 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>SkillRx app shell: preview</title>
+<!-- Preview only. Loads the published design system (v0.1.3) from jsDelivr. The app itself will
+     vendor these files, not load them from a CDN. -->
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@rubyforgood/design-system@0.1.3/tokens/tokens.css">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fontsource/figtree@5.3.0/400.css">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fontsource/figtree@5.3.0/500.css">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fontsource/figtree@5.3.0/600.css">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fontsource/figtree@5.3.0/700.css">
+<script type="module">
+  const V = "https://cdn.jsdelivr.net/npm/@rubyforgood/design-system@0.1.3/dist/standalone/";
+  for (const c of ["button", "page-header", "status-pill", "table", "filter-bar", "pagination", "menu", "avatar"]) import(V + c + ".mjs");
+</script>
+<style>
+  /* Brand option: SkillRx's logo blue (#055889) vs. the system default indigo. */
+  body.brand-skillrx {
+    --color-brand-50: #eef6fb; --color-brand-100: #d5e8f4;
+    --color-brand-600: #055889; --color-brand-700: #044a72;
+  }
+  * { box-sizing: border-box; }
+  body { margin: 0; font-family: var(--font-sans); color: var(--color-neutral-900); background: var(--color-neutral-50); }
+  a { color: var(--color-brand-700); }
+
+  /* Preview chrome (not part of the design) */
+  .chooser { position: sticky; top: 0; z-index: 50; background: #111827; color: #fff; padding: 10px 16px;
+             display: flex; flex-wrap: wrap; gap: 8px 16px; align-items: center; font-size: 14px; }
+  .chooser b { font-weight: 600; margin-right: 4px; }
+  .chooser button { font: inherit; background: #374151; color: #fff; border: 0; border-radius: 6px; padding: 6px 10px; cursor: pointer; }
+  .chooser button[aria-pressed="true"] { background: #fff; color: #111827; font-weight: 600; }
+  .notes { max-width: 1100px; margin: 0 auto; padding: 24px 16px 48px; line-height: 1.55; }
+  .notes h2 { margin: 32px 0 8px; font-size: 20px; }
+  .notes table { border-collapse: collapse; width: 100%; font-size: 14px; }
+  .notes th, .notes td { text-align: left; vertical-align: top; border-top: 1px solid var(--color-neutral-200); padding: 8px; }
+  .frame { border-bottom: 1px solid var(--color-neutral-200); }
+  .variant { display: none; } .variant.on { display: block; }
+  .current img { display: block; max-width: 100%; margin: 0 auto; }
+
+  /* ---- The app shell ---- */
+  .app { display: grid; grid-template-columns: 256px 1fr; min-height: 760px; background: var(--color-neutral-50); }
+  .rail { background: #fff; border-right: 1px solid var(--color-neutral-200); display: flex; flex-direction: column; }
+  .logo { display: flex; align-items: center; gap: 8px; height: 64px; padding: 0 20px; border-bottom: 1px solid var(--color-neutral-200); }
+  .logo img { height: 34px; }
+  .nav { padding: 16px 12px; display: flex; flex-direction: column; gap: 16px; flex: 1; }
+  .nav a, .nav .group-btn { display: flex; align-items: center; gap: 10px; padding: 8px 10px; border-radius: var(--radius-control);
+        color: var(--color-neutral-700); text-decoration: none; font-size: 15px; font-weight: 500; border: 0; background: none; width: 100%; font-family: inherit; cursor: pointer; text-align: left; }
+  .nav a:hover, .nav .group-btn:hover { background: var(--color-neutral-100); }
+  .nav a[aria-current="page"] { background: var(--color-brand-50); color: var(--color-brand-700); font-weight: 600; }
+  .nav svg { width: 20px; height: 20px; flex: none; }
+  .group-items { display: flex; flex-direction: column; gap: 2px; margin-top: 4px; }
+  .group-items a { padding-left: 40px; font-weight: 400; font-size: 14px; }
+  .chev { margin-left: auto; transition: transform .15s; }
+  .group-btn[aria-expanded="false"] .chev { transform: rotate(-90deg); }
+  .static-label { font-size: 12px; font-weight: 600; letter-spacing: .04em; text-transform: uppercase; color: var(--color-neutral-500); padding: 0 10px 4px; }
+  .flat-items { display: flex; flex-direction: column; gap: 2px; }
+  .account { border-top: 1px solid var(--color-neutral-200); height: 64px; display: flex; align-items: center; gap: 10px; padding: 0 16px; font-size: 14px; }
+  .account .who { flex: 1; min-width: 0; }
+  .account .who div:first-child { font-weight: 600; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+  .account .who div:last-child { color: var(--color-neutral-500); font-size: 13px; }
+  .main { display: flex; flex-direction: column; min-width: 0; }
+  .content { padding: 24px 32px; flex: 1; display: flex; flex-direction: column; gap: 20px; }
+  .colophon { border-top: 1px solid var(--color-neutral-200); height: 64px; display: flex; align-items: center; justify-content: center;
+              color: var(--color-neutral-500); font-size: 13px; background: #fff; }
+
+  /* Top-bar option */
+  .app.top { grid-template-columns: 1fr; grid-template-rows: auto 1fr; }
+  .topbar { background: #fff; border-bottom: 1px solid var(--color-neutral-200); height: 64px; display: flex; align-items: center; gap: 24px; padding: 0 24px; }
+  .topbar img { height: 30px; }
+  .topnav { display: flex; gap: 4px; flex: 1; }
+  .topnav a, .topnav button { padding: 8px 12px; border-radius: var(--radius-control); color: var(--color-neutral-700); text-decoration: none; font: 500 15px var(--font-sans); background: none; border: 0; cursor: pointer; display: flex; align-items: center; gap: 6px; }
+  .topnav a[aria-current="page"] { background: var(--color-brand-50); color: var(--color-brand-700); font-weight: 600; }
+  .topnav a:hover, .topnav button:hover { background: var(--color-neutral-100); }
+  .top .content { max-width: 1280px; width: 100%; margin: 0 auto; }
+
+  /* Screen content */
+  .surface { background: #fff; border: 1px solid var(--color-neutral-200); border-radius: var(--radius-surface); box-shadow: var(--shadow-surface); }
+  .field { display: flex; flex-direction: column; gap: 6px; font-size: 14px; }
+  .field label { font-weight: 500; color: var(--color-neutral-700); }
+  .field input, .field select { font: inherit; font-size: 14px; height: 40px; padding: 0 12px; border: 1px solid var(--color-neutral-200); border-radius: var(--radius-control); background: #fff; color: var(--color-neutral-900); min-width: 150px; }
+  .field input:focus, .field select:focus { outline: 2px solid var(--color-brand-600); outline-offset: 1px; }
+  caption { text-align: left; font-weight: 600; padding: 16px 16px 8px; font-size: 16px; }
+  table.data { width: 100%; border-collapse: collapse; font-size: 14px; }
+  table.data th { font-weight: 600; color: var(--color-neutral-500); font-size: 13px; text-align: left; border-bottom: 1px solid var(--color-neutral-200); }
+  table.data td { border-bottom: 1px solid var(--color-neutral-100); }
+  table.data td .meta { color: var(--color-neutral-500); font-size: 13px; }
+  .uid { font-family: ui-monospace, monospace; font-size: 13px; color: var(--color-neutral-500); }
+  .table-foot { padding: 12px 16px; }
+</style>
+</head>
+<body class="brand-skillrx">
+<div class="chooser" role="group" aria-label="Preview options">
+  <span><b>Shell:</b>
+    <button data-v="current" aria-pressed="false">Today</button>
+    <button data-v="a" aria-pressed="true">A: grouped rail (recommended)</button>
+    <button data-v="b" aria-pressed="false">B: flat rail</button>
+    <button data-v="c" aria-pressed="false">C: top bar</button>
+  </span>
+  <span><b>Brand color:</b>
+    <button data-brand="skillrx" aria-pressed="true">SkillRx blue (recommended)</button>
+    <button data-brand="default" aria-pressed="false">System default indigo</button>
+  </span>
+</div>
+
+<template id="icons">
+</template>
+
+<div class="frame">
+  <div class="variant current" data-variant="current"><img src="today-topics.png" alt="SkillRx Topics screen as it looks today" width="1280"></div>
+
+  <!-- A: grouped rail -->
+  <div class="variant on" data-variant="a">
+    <div class="app">
+      <aside class="rail" aria-label="Main">
+        <div class="logo"><img src="/skill-icon.svg" alt="SkillRx"></div>
+        <nav class="nav">
+          <a href="#" aria-current="page"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><path d="M4 5h16M4 12h16M4 19h10"/></svg>Topics</a>
+          <a href="#"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><path d="M5 12a7 7 0 0 1 14 0M8.5 12a3.5 3.5 0 0 1 7 0"/><circle cx="12" cy="12" r="1"/><path d="M12 13v7"/></svg>Beacons</a>
+          <div>
+            <button class="group-btn" aria-expanded="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><circle cx="12" cy="12" r="3"/><path d="M12 2v3M12 19v3M4.2 4.2l2.1 2.1M17.7 17.7l2.1 2.1M2 12h3M19 12h3M4.2 19.8l2.1-2.1M17.7 6.3l2.1-2.1"/></svg>Administration<svg class="chev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="m6 9 6 6 6-6"/></svg></button>
+            <div class="group-items">
+              <a href="#">Providers</a><a href="#">Regions</a><a href="#">Languages</a><a href="#">Tags</a><a href="#">Users</a><a href="#">Import reports</a><a href="#">Jobs</a>
+            </div>
+          </div>
+        </nav>
+        <div class="account">
+          <rfg-avatar name="Admin User"></rfg-avatar>
+          <div class="who"><div>admin@mail.com</div><div>Administrator</div></div>
+          <rfg-menu label="Account">
+            <rfg-button slot="trigger" variant="ghost" size="xs" aria-label="Account menu"><svg slot="icon" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><circle cx="5" cy="12" r="1.8"/><circle cx="12" cy="12" r="1.8"/><circle cx="19" cy="12" r="1.8"/></svg></rfg-button>
+            <a role="menuitem" href="#">Sign out</a>
+          </rfg-menu>
+        </div>
+      </aside>
+      <div class="main"><div class="content screen"></div><footer class="colophon">Built by Ruby For Good volunteers</footer></div>
+    </div>
+  </div>
+
+  <!-- B: flat rail -->
+  <div class="variant" data-variant="b">
+    <div class="app">
+      <aside class="rail" aria-label="Main">
+        <div class="logo"><img src="/skill-icon.svg" alt="SkillRx"></div>
+        <nav class="nav">
+          <div class="flat-items"><a href="#" aria-current="page">Topics</a><a href="#">Beacons</a></div>
+          <div>
+            <div class="static-label">Administration</div>
+            <div class="flat-items"><a href="#">Providers</a><a href="#">Regions</a><a href="#">Languages</a><a href="#">Tags</a><a href="#">Users</a><a href="#">Import reports</a><a href="#">Jobs</a></div>
+          </div>
+        </nav>
+        <div class="account">
+          <rfg-avatar name="Admin User"></rfg-avatar>
+          <div class="who"><div>admin@mail.com</div><div>Administrator</div></div>
+          <rfg-menu label="Account">
+            <rfg-button slot="trigger" variant="ghost" size="xs" aria-label="Account menu"><svg slot="icon" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><circle cx="5" cy="12" r="1.8"/><circle cx="12" cy="12" r="1.8"/><circle cx="19" cy="12" r="1.8"/></svg></rfg-button>
+            <a role="menuitem" href="#">Sign out</a>
+          </rfg-menu>
+        </div>
+      </aside>
+      <div class="main"><div class="content screen"></div><footer class="colophon">Built by Ruby For Good volunteers</footer></div>
+    </div>
+  </div>
+
+  <!-- C: top bar -->
+  <div class="variant" data-variant="c">
+    <div class="app top">
+      <header class="topbar">
+        <img src="/skill-icon.svg" alt="SkillRx">
+        <nav class="topnav" aria-label="Main">
+          <a href="#" aria-current="page">Topics</a><a href="#">Beacons</a>
+          <rfg-menu label="Administration">
+            <button slot="trigger">Administration <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="m6 9 6 6 6-6"/></svg></button>
+            <a role="menuitem" href="#">Providers</a><a role="menuitem" href="#">Regions</a><a role="menuitem" href="#">Languages</a><a role="menuitem" href="#">Tags</a><a role="menuitem" href="#">Users</a><a role="menuitem" href="#">Import reports</a><a role="menuitem" href="#">Jobs</a>
+          </rfg-menu>
+        </nav>
+        <rfg-menu label="Account">
+          <button slot="trigger" style="border:0;background:none;cursor:pointer;padding:0" aria-label="Account menu for admin@mail.com"><rfg-avatar name="Admin User"></rfg-avatar></button>
+          <a role="menuitem" href="#">Sign out</a>
+        </rfg-menu>
+      </header>
+      <div class="main"><div class="content screen"></div><footer class="colophon">Built by Ruby For Good volunteers</footer></div>
+    </div>
+  </div>
+</div>
+
+<template id="screen">
+  <rfg-page-header heading="Topics" subtitle="Educational topics and the documents in them">
+    <rfg-button slot="actions" variant="primary" href="#">New topic</rfg-button>
+  </rfg-page-header>
+  <rfg-filter-bar action="#">
+    <div slot="fields" class="field"><label for="q-%">Search</label><input id="q-%" name="query" type="search" placeholder="Title, description or UID"></div>
+    <div slot="fields" class="field"><label for="l-%">Language</label><select id="l-%" name="language"><option>All languages</option><option>English</option><option>Spanish</option></select></div>
+    <div slot="fields" class="field"><label for="y-%">Year</label><select id="y-%" name="year"><option>Any year</option><option>2026</option></select></div>
+    <div slot="fields" class="field"><label for="s-%">State</label><select id="s-%" name="state"><option>Any state</option><option>Active</option><option>Archived</option></select></div>
+    <rfg-button slot="actions" type="submit">Filter</rfg-button>
+  </rfg-filter-bar>
+  <div class="surface">
+    <rfg-table>
+      <table class="data">
+        <caption>Provided by the government</caption>
+        <thead><tr><th scope="col">Title</th><th scope="col">Language</th><th scope="col">UID</th><th scope="col" class="numeric">Documents</th><th scope="col">State</th><th scope="col"><span class="sr-only" style="position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0)">Actions</span></th></tr></thead>
+        <tbody>
+          <tr><td><a href="#">Introduction to English</a><div class="meta">Published Nov 23, 2026</div></td><td>English</td><td class="uid">d290f1ee-6c54</td><td class="numeric">0</td><td><rfg-status-pill tone="success">Active</rfg-status-pill></td><td style="text-align:right"><rfg-button size="xs" variant="ghost" href="#">Edit</rfg-button></td></tr>
+          <tr><td><a href="#">Hand hygiene in the clinic</a><div class="meta">Published Oct 2, 2026</div></td><td>Spanish</td><td class="uid">8c1b44aa-91e0</td><td class="numeric">4</td><td><rfg-status-pill tone="success">Active</rfg-status-pill></td><td style="text-align:right"><rfg-button size="xs" variant="ghost" href="#">Edit</rfg-button></td></tr>
+          <tr><td><a href="#">Neonatal resuscitation basics</a><div class="meta">Published Mar 14, 2025</div></td><td>English</td><td class="uid">5f0e2c13-7a2d</td><td class="numeric">12</td><td><rfg-status-pill tone="neutral">Archived</rfg-status-pill></td><td style="text-align:right"><rfg-button size="xs" variant="ghost" href="#">Edit</rfg-button></td></tr>
+        </tbody>
+      </table>
+    </rfg-table>
+    <div class="table-foot"><rfg-pagination total="3" page="1" page-size="25" entry-name="topic"></rfg-pagination></div>
+  </div>
+</template>
+
+<div class="notes">
+  <h2>What this decides</h2>
+  <p>The app shell is the frame every SkillRx screen sits in: navigation, account, footer. It comes first because every other screen is built inside it. The Topics screen inside each option is the same in all three. It already follows the design system (one page header, one filter bar, a table with a caption, status pills), so you can judge the shell on its own.</p>
+  <p>Not decided here: what goes in each screen's table, row actions, the topic form, the sign-in page and the public home page. Each gets its own preview.</p>
+
+  <h2>The options</h2>
+  <table>
+    <tr><th></th><th>What it is</th><th>Who does this</th><th>Cost</th></tr>
+    <tr><td><b>A: grouped rail</b> (recommended)</td><td>Sidebar. Topics and Beacons at the top level with icons. Administration is a group that opens and closes, and its seven items are indented, with no icons. Account and sign-out at the bottom.</td><td>Shopify Polaris, GitHub's repository settings, Linear. Same as Human Essentials, the other Ruby For Good app on this system.</td><td>Needs a small Stimulus controller to open and close the group, and to open it on load when you're on an admin page.</td></tr>
+    <tr><td><b>B: flat rail</b></td><td>Sidebar with no icons. "Administration" is a heading, not a button, and every link is always visible.</td><td>Stripe's settings sidebar, Vercel's project sidebar.</td><td>No JavaScript. Nine links fit without scrolling. Contributors see two links and no heading.</td></tr>
+    <tr><td><b>C: top bar</b></td><td>Horizontal bar. Topics and Beacons as links, and Administration as a menu.</td><td>GitHub's top navigation, Basecamp.</td><td>Full width for tables. Admin pages are one more click away, and you can't see which admin page you're on from the bar.</td></tr>
+  </table>
+  <p><b>Why A:</b> it matches Human Essentials, so volunteers who work on both apps find the same shell. It keeps the admin pages visible to administrators while giving contributors (who see only Topics and Beacons) the same layout. It also follows design.md's sidebar rules: icons on one level only, sentence case for group headers that are buttons, and the account pinned at the bottom.</p>
+
+  <h2>What changes from today, whichever you pick</h2>
+  <p>These follow from the design system's existing rules, so they aren't choices:</p>
+  <ul>
+    <li><b>Emoji icons in the nav go.</b> Today every link has an emoji. The rule is one icon set at one level of the hierarchy, or none.</li>
+    <li><b>"Log out" stops being a red button.</b> Red means destructive, and signing out deletes nothing. It moves into the account menu and is renamed "Sign out", matching the sign-in page.</li>
+    <li><b>The fixed footer becomes an ordinary one.</b> Today "Built with ❤️ by Ruby for Good" is pinned to the bottom of the window on every screen, taking 45px of height from every page, with a pulsing heart. It moves to the end of the page, where it shows once you scroll down.</li>
+    <li><b>Each page stops having its own color.</b> Topics is purple, Users green, Regions green, the topic form dark blue, each with a gradient banner. The system's rule is one brand color, with other colors used only for meaning (success, warning, danger).</li>
+    <li><b>Filters fold behind a "Filters" toggle</b> when a screen has more than two, as Topics (seven) does. Today the panel is always open and 547px tall, so on a 1280×800 screen the table starts at 875px, below the fold (measured 2026-11-24). The design system's filter bar shows one or two filters inline and folds the rest, so the table is the first thing on the page.</li>
+    <li><b>The font changes to Figtree,</b> the design system's typeface, self-hosted.</li>
+  </ul>
+
+  <h2>Brand color</h2>
+  <p>The design system ships indigo as its default brand color, but each app sets its own. <b>Recommended: SkillRx's logo blue</b> (#055889), so the nav, links, focus rings and primary buttons match the logo. It's 7.6:1 on white, so it passes WCAG AA for text. Use the toggle at the top to compare.</p>
+</div>
+
+<script>
+  const tpl = document.getElementById("screen").innerHTML;
+  document.querySelectorAll(".screen").forEach((el, i) => { el.innerHTML = tpl.replaceAll("-%", "-" + i); });
+  const show = (v) => {
+    document.querySelectorAll(".variant").forEach((el) => el.classList.toggle("on", el.dataset.variant === v));
+    document.querySelectorAll("[data-v]").forEach((b) => b.setAttribute("aria-pressed", b.dataset.v === v));
+  };
+  document.querySelectorAll("[data-v]").forEach((b) => b.addEventListener("click", () => show(b.dataset.v)));
+  document.querySelectorAll("[data-brand]").forEach((b) => b.addEventListener("click", () => {
+    document.body.classList.toggle("brand-skillrx", b.dataset.brand === "skillrx");
+    document.querySelectorAll("[data-brand]").forEach((x) => x.setAttribute("aria-pressed", x === b));
+  }));
+  document.querySelectorAll(".group-btn").forEach((b) => b.addEventListener("click", () => {
+    const open = b.getAttribute("aria-expanded") === "true";
+    b.setAttribute("aria-expanded", !open); b.nextElementSibling.hidden = open;
+  }));
+</script>
+</body>
+</html>
