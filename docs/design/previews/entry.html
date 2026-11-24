@@ -1,0 +1,290 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>SkillRx sign-in and home: preview</title>
+<!-- Preview only: the design system's published tokens and components (v0.1.3) from jsDelivr. -->
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@rubyforgood/design-system@0.1.3/tokens/tokens.css">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fontsource/figtree@5.3.0/400.css">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fontsource/figtree@5.3.0/500.css">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fontsource/figtree@5.3.0/600.css">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fontsource/figtree@5.3.0/700.css">
+<script type="module">
+  const V = "https://cdn.jsdelivr.net/npm/@rubyforgood/design-system@0.1.3/dist/standalone/";
+  for (const c of ["button", "field"]) import(V + c + ".mjs");
+</script>
+<style>
+  :root {
+    --color-brand-50: #eef6fb; --color-brand-100: #d5e8f4; --color-brand-600: #055889; --color-brand-700: #044a72;
+    --radius-pill: 9999px;
+  }
+  * { box-sizing: border-box; }
+  body { margin: 0; font-family: var(--font-sans); color: var(--color-neutral-900); background: #fff; }
+  a { color: var(--color-brand-700); }
+
+  /* preview chrome */
+  .chooser { position: sticky; top: 0; z-index: 50; background: #111827; color: #fff; padding: 10px 16px; display: flex; flex-wrap: wrap; gap: 8px 20px; align-items: center; font-size: 14px; }
+  .chooser b { font-weight: 600; margin-right: 4px; }
+  .chooser button { font: inherit; background: #374151; color: #fff; border: 0; border-radius: 6px; padding: 6px 10px; cursor: pointer; }
+  .chooser button[aria-pressed="true"] { background: #fff; color: #111827; font-weight: 600; }
+  .variant { display: none; } .variant.on { display: block; }
+  .today img { display: block; max-width: 100%; margin: 0 auto; }
+  .notes { max-width: 1040px; margin: 0 auto; padding: 32px 16px 64px; line-height: 1.55; border-top: 1px solid var(--color-neutral-200); }
+  .notes h2 { margin: 28px 0 8px; font-size: 20px; }
+  .notes table { border-collapse: collapse; width: 100%; font-size: 14px; }
+  .notes th, .notes td { text-align: left; vertical-align: top; border-top: 1px solid var(--color-neutral-200); padding: 8px; }
+
+  /* shared form bits */
+  .form { display: flex; flex-direction: column; gap: 20px; width: 100%; max-width: 380px; }
+  .form h1 { margin: 0; font-size: 28px; font-weight: 700; letter-spacing: -0.01em; }
+  .form .lede { margin: -12px 0 0; color: var(--color-neutral-500); }
+  .f { display: flex; flex-direction: column; gap: 6px; font-size: 14px; }
+  .f label { font-weight: 500; color: var(--color-neutral-700); }
+  .f input { font: inherit; font-size: 15px; height: 44px; padding: 0 12px; border: 1px solid var(--color-neutral-200); border-radius: var(--radius-control); }
+  .f input:focus { outline: 2px solid var(--color-brand-600); outline-offset: 1px; }
+  .row { display: flex; justify-content: space-between; align-items: center; font-size: 14px; }
+  .row label { display: flex; gap: 8px; align-items: center; color: var(--color-neutral-700); }
+  .row input { width: 16px; height: 16px; accent-color: var(--color-brand-600); }
+  .form rfg-button { width: 100%; }
+  .help { font-size: 14px; color: var(--color-neutral-500); text-align: center; margin: 0; }
+
+  /* Sign-in A: split */
+  .split { display: grid; grid-template-columns: 1fr 1fr; min-height: 720px; }
+  .split .formcol { display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 48px 24px; gap: 32px; }
+  .split .formcol img { height: 56px; }
+  .brandpanel { background: var(--color-brand-700); color: #fff; display: flex; flex-direction: column; justify-content: center; padding: 64px; gap: 28px; }
+  .brandpanel h2 { margin: 0; font-size: 32px; line-height: 1.2; font-weight: 700; }
+  .brandpanel p { margin: 0; font-size: 17px; color: #d5e8f4; max-width: 440px; }
+  .brandpanel ul { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: 14px; }
+  .brandpanel li { display: flex; gap: 12px; align-items: flex-start; }
+  .brandpanel li svg { flex: none; width: 22px; height: 22px; margin-top: 1px; }
+  .brandpanel li b { display: block; font-weight: 600; }
+  .brandpanel li span { color: #d5e8f4; font-size: 15px; }
+  .brandpanel .back { color: #fff; font-size: 15px; }
+
+  /* Sign-in B: centered */
+  .centered { background: var(--color-neutral-50); min-height: 720px; display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 48px 16px; gap: 24px; }
+  .centered img { height: 56px; }
+  .card { background: #fff; border: 1px solid var(--color-neutral-200); border-radius: var(--radius-surface); box-shadow: var(--shadow-surface); padding: 32px; width: 100%; max-width: 440px; display: flex; justify-content: center; }
+  .centered .foot { font-size: 14px; color: var(--color-neutral-500); }
+
+  /* Home */
+  .site-head { display: flex; align-items: center; justify-content: space-between; height: 68px; padding: 0 32px; border-bottom: 1px solid var(--color-neutral-200); background: #fff; }
+  .site-head img { height: 36px; }
+  .site-head nav { display: flex; gap: 8px; align-items: center; }
+  .site-head nav a { color: var(--color-neutral-700); text-decoration: none; font-weight: 500; padding: 8px 12px; border-radius: var(--radius-control); }
+  .site-head nav a:hover { background: var(--color-neutral-100); }
+  .wrap { max-width: 1120px; margin: 0 auto; padding: 0 32px; }
+  .hero { background: var(--color-brand-700); color: #fff; }
+  .hero .wrap { display: grid; grid-template-columns: 1.1fr 0.9fr; gap: 48px; align-items: center; padding-top: 88px; padding-bottom: 88px; }
+  .hero h1 { margin: 0 0 16px; font-size: 52px; line-height: 1.05; letter-spacing: -0.02em; font-weight: 700; }
+  .hero p { margin: 0 0 32px; font-size: 19px; color: #d5e8f4; max-width: 520px; }
+  .hero .ctas { display: flex; gap: 12px; flex-wrap: wrap; }
+  .btn-light { display: inline-flex; align-items: center; height: 48px; padding: 0 20px; border-radius: var(--radius-control); background: #fff; color: var(--color-brand-700); font-weight: 600; text-decoration: none; }
+  .btn-outline { display: inline-flex; align-items: center; height: 48px; padding: 0 20px; border-radius: var(--radius-control); border: 1px solid #fff; color: #fff; font-weight: 600; text-decoration: none; }
+  .hero-card { background: #fff; color: var(--color-neutral-900); border-radius: var(--radius-surface); padding: 24px; box-shadow: var(--shadow-overlay); display: flex; flex-direction: column; gap: 14px; }
+  .hero-card .t { font-weight: 600; } .hero-card .m { color: var(--color-neutral-500); font-size: 14px; }
+  .hero-card .doc { display: flex; gap: 12px; align-items: center; padding: 12px; border: 1px solid var(--color-neutral-200); border-radius: var(--radius-control); }
+  .hero-card .doc svg { width: 28px; height: 28px; color: var(--color-brand-600); flex: none; }
+  section.band { padding: 80px 0; }
+  section.band.alt { background: var(--color-neutral-50); border-top: 1px solid var(--color-neutral-200); border-bottom: 1px solid var(--color-neutral-200); }
+  .band h2 { font-size: 32px; margin: 0 0 8px; letter-spacing: -0.01em; }
+  .band .sub { color: var(--color-neutral-500); margin: 0 0 40px; font-size: 17px; max-width: 640px; }
+  .grid3 { display: grid; grid-template-columns: repeat(3, 1fr); gap: 24px; }
+  .feature { border: 1px solid var(--color-neutral-200); border-radius: var(--radius-surface); padding: 24px; background: #fff; }
+  .feature .ic { width: 44px; height: 44px; border-radius: var(--radius-control); background: var(--color-brand-50); color: var(--color-brand-700); display: flex; align-items: center; justify-content: center; margin-bottom: 16px; }
+  .feature .ic svg { width: 22px; height: 22px; }
+  .feature h3 { margin: 0 0 6px; font-size: 18px; }
+  .feature p { margin: 0; color: var(--color-neutral-700); font-size: 15px; }
+  .mission { display: grid; grid-template-columns: 1fr 1fr; gap: 48px; align-items: start; }
+  .mission ul { list-style: none; padding: 0; margin: 24px 0 0; display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+  .mission li b { display: block; } .mission li span { color: var(--color-neutral-500); font-size: 14px; }
+  .flag { display: inline-block; font-size: 12px; font-weight: 600; background: #fef3c7; color: #92400e; border-radius: 6px; padding: 2px 6px; margin-left: 6px; vertical-align: middle; }
+  .stats { display: grid; grid-template-columns: repeat(4, 1fr); gap: 16px; }
+  .stat { border: 1px solid var(--color-neutral-200); border-radius: var(--radius-surface); padding: 20px; background: #fff; }
+  .stat b { font-size: 30px; display: block; color: var(--color-brand-700); }
+  .stat span { color: var(--color-neutral-500); font-size: 14px; }
+  .contact { text-align: center; }
+  .contact .sub { margin-left: auto; margin-right: auto; }
+  .site-foot { border-top: 1px solid var(--color-neutral-200); padding: 24px 0; color: var(--color-neutral-500); font-size: 14px; }
+  .site-foot .wrap { display: flex; justify-content: space-between; align-items: center; gap: 16px; flex-wrap: wrap; }
+  .site-foot nav { display: flex; gap: 16px; } .site-foot a { color: var(--color-neutral-700); }
+</style>
+</head>
+<body>
+<div class="chooser" role="group" aria-label="Preview options">
+  <span><b>Sign-in:</b>
+    <button data-g="signin" data-v="today" aria-pressed="false">Today</button>
+    <button data-g="signin" data-v="a" aria-pressed="true">A: split (recommended)</button>
+    <button data-g="signin" data-v="b" aria-pressed="false">B: centered card</button>
+  </span>
+  <span><b>Home:</b>
+    <button data-g="home" data-v="today" aria-pressed="false">Today</button>
+    <button data-g="home" data-v="a" aria-pressed="true">A: same sections, restyled (recommended)</button>
+    <button data-g="home" data-v="b" aria-pressed="false">B: shorter page</button>
+  </span>
+</div>
+
+<template id="signin-form">
+  <form class="form" onsubmit="return false">
+    <div>
+      <h1>Sign in</h1>
+    </div>
+    <p class="lede">to manage SkillRx topics and beacons</p>
+    <div class="f"><label for="email-%">Email address</label><input id="email-%" type="email" autocomplete="username"></div>
+    <div class="f"><label for="pw-%">Password</label><input id="pw-%" type="password" autocomplete="current-password"></div>
+    <div class="row"><label><input type="checkbox"> Remember me</label><a href="#">Forgot your password?</a></div>
+    <rfg-button variant="primary" type="submit">Sign in</rfg-button>
+    <p class="help">No account? Accounts are created by a SkillRx administrator. <a href="mailto:contact@skillrx.org">Contact us</a></p>
+  </form>
+</template>
+
+<!-- ============ SIGN-IN ============ -->
+<div class="variant today" data-g="signin" data-v="today"><img src="today-sign-in.png" alt="SkillRx sign-in page as it looks today" width="1280"></div>
+
+<div class="variant on" data-g="signin" data-v="a">
+  <div class="split">
+    <div class="formcol"><img src="/skill-icon.svg" alt="SkillRx"><div class="slot-form"></div></div>
+    <aside class="brandpanel" aria-label="About SkillRx">
+      <h2>Medical education that works offline</h2>
+      <p>SkillRx gets training material to health workers in places without reliable internet.</p>
+      <ul>
+        <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><path d="M17.5 19a4.5 4.5 0 1 0-1.4-8.8A6 6 0 1 0 6 16.5"/><path d="m3 3 18 18"/></svg><div><b>Offline ready</b><span>Content is served from beacons in the field.</span></div></li>
+        <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M3 12h18M12 3a14 14 0 0 1 0 18M12 3a14 14 0 0 0 0 18"/></svg><div><b>In many languages</b><span>Each topic is published in its own language.</span></div></li>
+        <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><path d="M12 21s-7-4.5-7-11a7 7 0 0 1 14 0c0 6.5-7 11-7 11z"/></svg><div><b>Free</b><span>Built and run by Ruby For Good volunteers.</span></div></li>
+      </ul>
+      <a class="back" href="#">← Back to the SkillRx home page</a>
+    </aside>
+  </div>
+</div>
+
+<div class="variant" data-g="signin" data-v="b">
+  <div class="centered">
+    <img src="/skill-icon.svg" alt="SkillRx">
+    <div class="card"><div class="slot-form"></div></div>
+    <div class="foot"><a href="#">← Back to the SkillRx home page</a></div>
+  </div>
+</div>
+
+<!-- ============ HOME ============ -->
+<div class="variant today" data-g="home" data-v="today"><img src="today-home.png" alt="SkillRx home page as it looks today" width="1280"></div>
+
+<template id="home-head">
+  <header class="site-head">
+    <img src="/skill-icon.svg" alt="SkillRx">
+    <nav aria-label="Main"><a href="#">About</a><a href="#">Features</a><a href="#">Contact</a><rfg-button variant="primary" href="#">Sign in</rfg-button></nav>
+  </header>
+  <div class="hero"><div class="wrap">
+    <div>
+      <h1>Medical education without borders</h1>
+      <p>Continuing medical education for health workers everywhere, available offline and free.</p>
+      <div class="ctas"><a class="btn-light" href="#">Contact us</a><a class="btn-outline" href="#">How it works</a></div>
+    </div>
+    <div class="hero-card" aria-hidden="true">
+      <div><div class="t">Hand hygiene in the clinic</div><div class="m">Spanish · Provided by the Ministry of Health</div></div>
+      <div class="doc"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M14 3H6a1 1 0 0 0-1 1v16a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1V8z"/><path d="M14 3v5h5"/></svg><div><div class="t">Handwashing steps.pdf</div><div class="m">Available offline on 12 beacons</div></div></div>
+      <div class="doc"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M9 18V5l12-2v13"/><circle cx="6" cy="18" r="3"/><circle cx="18" cy="16" r="3"/></svg><div><div class="t">Audio guide.mp3</div><div class="m">Available offline on 12 beacons</div></div></div>
+    </div>
+  </div></div>
+</template>
+
+<template id="home-features">
+  <section class="band" id="features-%"><div class="wrap">
+    <h2>How SkillRx works</h2>
+    <p class="sub">Training material reaches health workers even where the internet doesn't.</p>
+    <div class="grid3">
+      <div class="feature"><div class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><path d="M17.5 19a4.5 4.5 0 1 0-1.4-8.8A6 6 0 1 0 6 16.5"/><path d="m3 3 18 18"/></svg></div><h3>Offline first</h3><p>Content is stored on beacons in the field, so it can be read with no internet connection.</p></div>
+      <div class="feature"><div class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><path d="M21 12a9 9 0 1 1-3-6.7L21 8M21 3v5h-5"/></svg></div><h3>Syncs when connected</h3><p>Beacons download new and updated content whenever they get a connection.</p></div>
+      <div class="feature"><div class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><rect x="4" y="4" width="16" height="16" rx="2"/><path d="M9 9h6v6H9z"/></svg></div><h3>Runs anywhere</h3><p>On USB drives, phones, or a local server, depending on what's available.</p></div>
+    </div>
+  </div></section>
+</template>
+
+<template id="home-contact">
+  <section class="band contact" id="contact-%"><div class="wrap">
+    <h2>Bring SkillRx to your health workers</h2>
+    <p class="sub">Have questions, or want to get started? We'd like to hear from you.</p>
+    <rfg-button variant="primary" href="mailto:contact@skillrx.org">Email contact@skillrx.org</rfg-button>
+  </div></section>
+  <footer class="site-foot"><div class="wrap">
+    <span>© 2026 SkillRx. Built by <a href="https://rubyforgood.org">Ruby For Good</a> volunteers.</span>
+    <nav aria-label="Elsewhere"><a href="https://github.com/rubyforgood/skillrx">GitHub</a><a href="https://www.linkedin.com/company/ruby-for-good">LinkedIn</a><a href="mailto:contact@skillrx.org">Email</a></nav>
+  </div></footer>
+</template>
+
+<div class="variant on" data-g="home" data-v="a">
+  <div class="slot-head"></div>
+  <div class="slot-features"></div>
+  <section class="band alt"><div class="wrap">
+    <h2>In numbers <span class="flag">Needs real figures</span></h2>
+    <p class="sub">Today's page says 500+ topics, 50+ countries, 10k+ professionals. Keep these only if they're true.</p>
+    <div class="stats">
+      <div class="stat"><b>500+</b><span>Medical topics</span></div>
+      <div class="stat"><b>50+</b><span>Countries</span></div>
+      <div class="stat"><b>10k+</b><span>Health workers</span></div>
+      <div class="stat"><b>24/7</b><span>Offline access</span></div>
+    </div>
+  </div></section>
+  <section class="band"><div class="wrap mission">
+    <div>
+      <h2>Our mission</h2>
+      <p class="sub" style="margin-bottom:0">Help health workers in resource-constrained areas keep their skills current and improve patient care, through free continuing education.</p>
+      <ul>
+        <li><b>Free</b><span>Always free and open</span></li>
+        <li><b>Current</b><span>Up-to-date clinical material</span></li>
+        <li><b>Global</b><span>Available worldwide</span></li>
+        <li><b>Adaptable</b><span>Fits local needs</span></li>
+      </ul>
+    </div>
+    <div class="grid3" style="grid-template-columns:1fr 1fr">
+      <div class="feature"><h3>Cardiology</h3><p>150 modules <span class="flag">Real?</span></p></div>
+      <div class="feature"><h3>Emergency</h3><p>120 modules</p></div>
+      <div class="feature"><h3>Pharmacy</h3><p>80 modules</p></div>
+      <div class="feature"><h3>Infectious disease</h3><p>95 modules</p></div>
+    </div>
+  </div></section>
+  <div class="slot-contact"></div>
+</div>
+
+<div class="variant" data-g="home" data-v="b">
+  <div class="slot-head"></div>
+  <div class="slot-features"></div>
+  <div class="slot-contact"></div>
+</div>
+
+<div class="notes">
+  <h2>What this decides</h2>
+  <p>How the two pages people see before signing in look. Both use the shell you chose: SkillRx blue, Figtree, no gradients. The copy is today's, lightly edited (sentence case, shorter). Use the bar at the top to switch, and "Today" to compare.</p>
+
+  <h2>Sign-in</h2>
+  <table>
+    <tr><th></th><th>What it is</th><th>Who does this</th><th>Cost</th></tr>
+    <tr><td><b>A: split</b> (recommended)</td><td>Form on the left, a solid blue panel on the right with what SkillRx is. Same layout as today, without the gradient. Below 1024px the panel goes away and the form is centered.</td><td>Human Essentials (same design system), Notion, Mailchimp.</td><td>The panel has to stay short and true, or it turns into a second home page.</td></tr>
+    <tr><td><b>B: centered card</b></td><td>Logo, one card with the form, a link back home. Nothing else.</td><td>GitHub, Stripe, Linear, Atlassian.</td><td>The least to build and maintain. Loses the "what is this" context, which matters less because only people with accounts sign in.</td></tr>
+  </table>
+  <p><b>Why A:</b> it's what SkillRx users already know, and it matches Human Essentials' sign-in, so both Ruby For Good apps on this system look related. B is a good choice too if you'd rather have less to maintain.</p>
+  <p><b>Either way:</b> the heading becomes "Sign in" (not "Welcome back", which today renders in light gray at 2.48:1 contrast, below WCAG's 3:1 for large text). "Don't have an account? Contact us to get started" becomes a clearer line: accounts are created by an administrator. <b>One question:</b> today that link emails a person directly (a Ruby For Good volunteer's own address), while the home page uses contact@skillrx.org. The preview uses contact@skillrx.org for both. Is that right? The password-reset pages use the same layout.</p>
+
+  <h2>Home page</h2>
+  <table>
+    <tr><th></th><th>What it is</th><th>Cost</th></tr>
+    <tr><td><b>A: same sections, restyled</b> (recommended)</td><td>Today's sections in today's order: hero, features, numbers, mission, contact. Solid blue hero instead of the animated gradient, one accent color instead of six.</td><td>Keeps the numbers and the "150 modules" figures, which need to be true (see below).</td></tr>
+    <tr><td><b>B: shorter page</b></td><td>Hero, how it works, contact. Drops the numbers and the mission section.</td><td>Less to keep true. Loses the mission statement.</td></tr>
+  </table>
+  <p><b>Why A:</b> a design migration shouldn't change what the site says. That's a content decision for SkillRx's maintainers. A changes only the look, so it's the safe default.</p>
+  <p><b>Needs an answer whichever you pick:</b> are the figures real? Today's page says <i>500+ medical topics, 50+ countries, 10k+ healthcare professionals</i>, and "Cardiology: 150 modules", and so on. If nobody can confirm them, they should come out (option B does that). Marked "Needs real figures" in the preview.</p>
+  <p><b>Fixed either way:</b> the footer's icon-only LinkedIn, GitHub and email links get names (a WCAG failure today). The hero's entrance animation and floating cards go: the heading starts nearly invisible (13% opacity) and takes about a second to appear. The "Get started today" button goes to the sign-in page, but nobody can create an account there, so it becomes "Contact us".</p>
+</div>
+
+<script>
+  const fill = (cls, tpl) => document.querySelectorAll(cls).forEach((el, i) => { el.innerHTML = document.getElementById(tpl).innerHTML.replaceAll("-%", "-" + cls.slice(6) + i); });
+  fill(".slot-form", "signin-form"); fill(".slot-head", "home-head"); fill(".slot-features", "home-features"); fill(".slot-contact", "home-contact");
+  document.querySelectorAll(".chooser button").forEach((b) => b.addEventListener("click", () => {
+    const g = b.dataset.g;
+    document.querySelectorAll(`.variant[data-g=${g}]`).forEach((el) => el.classList.toggle("on", el.dataset.v === b.dataset.v));
+    document.querySelectorAll(`.chooser button[data-g=${g}]`).forEach((x) => x.setAttribute("aria-pressed", x === b));
+  }));
+</script>
+</body>
+</html>
