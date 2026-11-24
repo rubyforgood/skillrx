@@ -57,11 +57,13 @@ RSpec.describe "User Login", type: :system do
   end
 
   context "after logging in" do
-    it "allows users to log out" do
+    it "allows users to sign out from the account menu" do
       fill_in "email", with: user.email
       fill_in "password", with: user.password
       click_button("Sign in")
-      click_button("Log out")
+      # The account menu's trigger is an <rfg-button>, whose real <button> is in its shadow root.
+      find(".shell-account rfg-button").click
+      find("[role=menuitem]", text: "Sign out").click
       expect(page).to have_button("Sign in")
     end
   end

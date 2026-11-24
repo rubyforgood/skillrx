@@ -24,7 +24,7 @@ workers without an internet connection.
 
 ## Status
 
-Migration started 2026-11-24 on branch `skillsrxdesign`. Nothing is migrated yet.
+Migration started 2026-11-24 on branch `skillsrxdesign`. **Done:** tokens, font, app shell. **Next:** screens, then the public home page and sign-in.
 
 Baseline, measured 2026-11-24 before any change:
 
@@ -34,8 +34,7 @@ Baseline, measured 2026-11-24 before any change:
 | Templates | 69 `.erb` files under `app/views` |
 | Hand-written CSS | 648 lines: `app/assets/tailwind/` (576) and `app/assets/stylesheets/` (72) |
 | WCAG audit | `bin/design/wcag-audit.js`, exit 1. Results in the change log |
-| Specs (non-system) | 464 examples, 1 failure, already failing at the branch point |
-| System specs | 52 examples. They don't run on this machine (Selenium can't drive Chrome 158 here), but they pass in CI on `main` |
+| Specs | 516 examples, 0 failures (including 52 system specs) |
 
 ## Foundations
 
@@ -43,16 +42,63 @@ All from the global spec unless listed here.
 
 ### Color
 
-*Pending, see the shell preview.* Proposed: brand scale from the SkillRx logo blue `#055889`
-(7.6:1 on white).
+**Local: the brand scale is the SkillRx logo blue** (decided 2026-11-24, see decisions.md).
+Defined in `app/assets/tailwind/application.css`, overriding the design system's default indigo:
+
+| Token | Value | Contrast |
+| --- | --- | --- |
+| `--color-brand-50` | `#eef6fb` | background for current nav item |
+| `--color-brand-100` | `#d5e8f4` | |
+| `--color-brand-600` | `#055889` | 7.6:1 on white |
+| `--color-brand-700` | `#044a72` | 9.4:1 on white, 8.6:1 on brand-50 |
+
+Everything else (neutrals, success, warning, danger, info) is the design system's default.
 
 ### Typography
 
-Figtree, the design system's typeface, self-hosted.
+Figtree, the design system's typeface, self-hosted from `app/assets/fonts/figtree/` (SIL Open Font
+License). Latin subset, weights 400, 500, 600 and 700.
+
+## Design system files
+
+Vendored at a pinned version, never loaded from a CDN at runtime:
+
+| File | From |
+| --- | --- |
+| `app/assets/tailwind/rfg-theme.css` | `tokens/theme.css`, imported with `theme(static)` so every token is emitted (the components read them as CSS variables) |
+| `vendor/javascript/rfg-*.js` | `dist/standalone/<name>.mjs`, pinned in `config/importmap.rb`, imported in `application.js` |
+
+Current version: **0.1.3**. To upgrade, change the version in the URL in each file's header and
+download again. Don't edit them by hand: SkillRx-specific values go in `application.css`.
+
+One local workaround: `--radius-pill` is overridden in `application.css`, because v0.1.3's
+`theme.css` points it at a Tailwind variable that doesn't exist (pills and avatars were square).
+Fixed upstream in rubyforgood/designsystem `cc75653`; remove the override on the next upgrade.
 
 ## App shell
 
-*Pending, see `previews/shell.html`.*
+**Grouped rail** (option A, decided 2026-11-24). `layouts/application.html.erb`,
+`layouts/_sidebar.html.erb`, `controllers/shell_controller.js`,
+`app/assets/tailwind/components/sidebar.css`. Follows the global design.md's "Sidebar rules".
+
+- **At `lg` (1024px) and up:** fixed 256px rail on the left. **Below `lg`:** a top bar with the logo
+  and a menu button that opens the rail as a drawer. Escape or the backdrop closes it; focus moves
+  into it on open and back to the button on close.
+- **Order:** Topics, Beacons, Administration (Providers, Regions, Languages, Tags, Users, Import
+  reports, Jobs). Contributors see Topics only. Same information architecture as before the
+  migration.
+- **Icons on the top level only**; Administration's items are indented, without icons.
+- **The current page** is marked with `aria-current="page"` by `nav_link_to`, for its own path and
+  everything under it (`/topics/3/edit` marks Topics).
+- **Administration starts open**, as in the chosen preview, and can be collapsed. It's the only
+  group, and its seven items fit without scrolling, so collapsing it by default would only add a
+  click to every admin task. (Human Essentials collapses its groups because it has four, holding 34
+  items.)
+- **Account strip at the bottom:** avatar, email, role, and an account menu holding **Sign out**.
+  Signing out is not destructive, so it isn't red.
+- **Footer:** "Built by Ruby For Good volunteers", at the end of the page, not fixed to the window.
+  It shares the account strip's 64px height and top border, so the two rules meet as one line.
+- **Skip link** to `#main-content`, first in the tab order.
 
 ## Screens
 

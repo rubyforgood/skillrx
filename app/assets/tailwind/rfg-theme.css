@@ -1,0 +1,51 @@
+/*
+ * Default token values — Tailwind v4 @theme block.
+ *
+ * This is the SHIPPED DEFAULT, inherited from Human Essentials (indigo brand, Figtree, a 4px
+ * spacing scale). It is a Local choice, not a requirement — see tokens/README.md for which parts
+ * of this are load-bearing rules and which are just this palette's specific answer to them.
+ *
+ * Swap this file's values (not its structure) to retheme. The role names on the left
+ * (--color-brand-*, --color-success, …) are what design.md's component rules refer to; as long as
+ * something is bound to each role, the rest of the system doesn't care what it resolves to.
+ */
+
+@theme {
+  /* Brand — indigo. design.md's rule: one scale, used for primary actions, active nav, focus
+     rings, and current-page indication. The specific hue is this default's choice, not the rule. */
+  --color-brand-50:  oklch(0.97 0.02 275);
+  --color-brand-100: oklch(0.93 0.04 275);
+  --color-brand-600: oklch(0.55 0.18 275);
+  --color-brand-700: oklch(0.47 0.18 275);
+
+  /* Neutrals — Tailwind's slate, unmodified. The rule (headings/body/meta text each get one
+     step, consistently) is portable; using slate specifically is not. */
+  --color-neutral-50:  var(--color-slate-50);
+  --color-neutral-100: var(--color-slate-100);
+  --color-neutral-200: var(--color-slate-200);
+  --color-neutral-500: var(--color-slate-500);
+  --color-neutral-700: var(--color-slate-700);
+  --color-neutral-900: var(--color-slate-900);
+
+  /* Semantic tones — one meaning each, portable rule; these four hues are this default's answer.
+     Text/icon usage sits at the -700 step (or equivalent ≥4.5:1-on-white step in a different
+     palette) — see tokens/README.md's contrast note before changing a hue. */
+  --color-success: var(--color-emerald-600);
+  --color-warning: var(--color-amber-600);
+  --color-danger:  var(--color-rose-600);
+  --color-info:    var(--color-sky-600);
+
+  /* Typography. One typeface, self-hosted, no CDN request — that's the rule. Figtree is the
+     default face. */
+  --font-sans: "Figtree", ui-sans-serif, system-ui, -apple-system, "Segoe UI", sans-serif;
+
+  /* Spacing, radius, elevation — Tailwind's default 4px scale, unmodified. The portable rules:
+     depth comes from a hairline border, not a shadow; shadow is reserved for exactly two
+     elevations (surface, overlay) rather than a continuous scale. */
+  --radius-surface: var(--radius-2xl);  /* cards, dialogs */
+  --radius-control: var(--radius-lg);   /* buttons, inputs, menus */
+  --radius-pill:    var(--radius-full); /* pills, avatars */
+
+  --shadow-surface: var(--shadow-sm);
+  --shadow-overlay: var(--shadow-xl);
+}

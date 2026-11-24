@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
   <head>
     <title><%= content_for(:title) || "SkillRx" %></title>
     <meta name="viewport" content="width=device-width,initial-scale=1">
@@ -26,28 +26,31 @@
     <%= javascript_importmap_tags %>
   </head>
 
-  <body class="bg-gray-50">
-    <div class="flex">
-      <div class="w-64 fixed left-0 top-0 h-full z-40 ease-in-out duration-300 -translate-x-full md:translate-none">
-        <%= render "layouts/sidebar" %>
-      </div>
+  <%# The app shell: docs/design/design.md, "App shell". %>
+  <body class="shell" data-controller="shell" data-action="keydown->shell#keydown">
+    <a href="#main-content" class="shell-skip-link">Skip to main content</a>
 
-      <div class="flex-1 md:ml-64 flex flex-col min-h-screen relative">
-        <div class="flex-1 overflow-y-auto main-content">
-          <%= render "shared/flash" %>
-          <%= yield %>
-        </div>
-      </div>
+    <header class="shell-topbar">
+      <button type="button" class="shell-menu-button" aria-label="Open navigation" aria-expanded="false"
+              aria-controls="shell-rail" data-shell-target="openButton" data-action="shell#openDrawer">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M4 6h16M4 12h16M4 18h16"/></svg>
+      </button>
+      <%= link_to root_path do %><%= image_tag("skill.svg", alt: "SkillRx home", class: "h-8") %><% end %>
+    </header>
+
+    <div class="shell-backdrop" data-action="click->shell#closeDrawer"></div>
+    <aside id="shell-rail" class="shell-rail" data-shell-target="drawer">
+      <%= render "layouts/sidebar" %>
+    </aside>
+
+    <div class="shell-main">
+      <main id="main-content" class="shell-content" tabindex="-1">
+        <%= render "shared/flash" %>
+        <%= yield %>
+      </main>
+      <footer class="shell-colophon">
+        <p>Built by <a href="https://rubyforgood.org">Ruby For Good</a> volunteers</p>
+      </footer>
     </div>
-
-    <!-- Fixed footer that spans full width -->
-    <footer class="fixed bottom-0 left-0 right-0 bg-white border-t border-gray-200 z-30">
-      <div class="flex justify-center items-center text-gray-600 text-sm px-4 py-3 md:pl-64">
-        <!-- Center content -->
-        <div class="flex items-center space-x-1">
-          <p class="text-black-800">Built with <span class="text-red-500 animate-pulse">❤️</span> by Ruby for Good</p>
-        </div>
-      </div>
-    </footer>
   </body>
 </html>

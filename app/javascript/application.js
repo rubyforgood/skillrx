@@ -2,3 +2,7 @@
 import "@hotwired/turbo-rails"
 import "@rails/request.js"
 import "controllers"
+// Ruby For Good design system components (docs/design/design.md)
+import "rfg-avatar"
+import "rfg-button"
+import "rfg-menu"

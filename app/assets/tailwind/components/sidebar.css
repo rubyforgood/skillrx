@@ -1,7 +1,68 @@
-.sidebar__link {
-    @apply hover:bg-gray-100 flex items-center px-4 py-3 gap-3 rounded-lg;
+/* The app shell: docs/design/design.md, "App shell" (option A, grouped rail, chosen 2026-11-24).
+   Fixed rail at `lg` and up; below that, a top bar with a button that opens the rail as a drawer. */
+
+.shell { @apply min-h-screen bg-neutral-50 text-neutral-900; font-family: var(--font-sans); }
+
+.shell-skip-link {
+  @apply sr-only;
+  &:focus { @apply not-sr-only fixed top-2 left-2 z-[60] rounded-control bg-white px-4 py-2 font-semibold text-brand-700 shadow-overlay; }
 }
 
-.sidebar__logout-button {
-    @apply py-3 px-4 w-full text-white bg-red-600 hover:bg-red-700 font-medium rounded-lg flex justify-center items-center gap-2 cursor-pointer;
+.shell-topbar {
+  @apply sticky top-0 z-30 flex h-16 items-center gap-3 border-b border-neutral-200 bg-white px-4 lg:hidden;
+}
+.shell-menu-button {
+  @apply inline-flex size-10 items-center justify-center rounded-control text-neutral-700 hover:bg-neutral-100 cursor-pointer;
+  & svg { @apply size-6; }
+}
+
+.shell-rail {
+  @apply fixed inset-y-0 left-0 z-50 w-64 -translate-x-full border-r border-neutral-200 bg-white transition-transform duration-200
+         lg:z-20 lg:translate-x-0 lg:transition-none;
+  &[data-open] { @apply translate-x-0 shadow-overlay; }
+}
+.shell-backdrop { @apply hidden; }
+.shell-rail[data-open] ~ .shell-backdrop, .shell-backdrop:has(+ .shell-rail[data-open]) {
+  @apply fixed inset-0 z-40 block bg-neutral-900/40 lg:hidden;
+}
+.shell-rail-inner { @apply flex h-full flex-col; }
+
+.shell-logo { @apply flex h-16 shrink-0 items-center border-b border-neutral-200 px-5; }
+.shell-logo-link { @apply rounded-control; }
+
+.shell-nav { @apply flex-1 overflow-y-auto px-3 py-4; }
+/* 16px between top-level entries, 4px from a group header to its first item, 2px inside a group
+   (design.md, "Sidebar rules"). */
+.shell-nav-list { @apply m-0 flex list-none flex-col gap-4 p-0; }
+.shell-nav-sublist { @apply m-0 mt-1 flex list-none flex-col gap-0.5 p-0; }
+
+.shell-nav-link, .shell-nav-group {
+  @apply flex w-full items-center gap-2.5 rounded-control px-2.5 py-2 text-left text-[15px] font-medium text-neutral-700
+         no-underline hover:bg-neutral-100 cursor-pointer;
+  & svg { @apply size-5 shrink-0; }
+}
+.shell-nav-link[aria-current="page"] { @apply bg-brand-50 font-semibold text-brand-700; }
+.shell-nav-sublist .shell-nav-link { @apply pl-10 text-sm font-normal; }
+.shell-nav-sublist .shell-nav-link[aria-current="page"] { @apply font-semibold; }
+.shell-chevron { @apply ml-auto transition-transform; }
+.shell-nav-group[aria-expanded="false"] .shell-chevron { @apply -rotate-90; }
+.shell-external { @apply ml-auto !size-4 text-neutral-500; }
+
+/* The account strip and the page footer share one height and a full-bleed top border, so their
+   rules meet as one line (design.md, "the bottom strip"). */
+.shell-account { @apply flex h-16 shrink-0 items-center gap-2.5 border-t border-neutral-200 px-4 text-sm; }
+.shell-account-who { @apply min-w-0 flex-1; }
+.shell-account-email { @apply truncate font-semibold; }
+.shell-account-role { @apply text-[13px] text-neutral-500; }
+
+.shell-main { @apply flex min-h-screen flex-col lg:ml-64; }
+.shell-content { @apply flex-1 outline-none; }
+.shell-colophon {
+  @apply flex h-16 shrink-0 items-center justify-center border-t border-neutral-200 bg-white text-[13px] text-neutral-500;
+  & a { @apply text-neutral-700 underline underline-offset-2 hover:text-neutral-900; }
+}
+
+.shell-nav-link:focus-visible, .shell-nav-group:focus-visible, .shell-menu-button:focus-visible,
+.shell-logo-link:focus-visible, .shell-colophon a:focus-visible {
+  @apply outline-2 outline-offset-2 outline-brand-600;
 }

@@ -1,6 +1,31 @@
 @import "tailwindcss";
+/* Ruby For Good design system tokens, vendored from @rubyforgood/design-system@0.1.3
+   (tokens/theme.css). See docs/design/design.md. */
+@import "./rfg-theme.css" theme(static);
 @import "./components/sidebar.css";
 @import "./components/tom-select.css";
+
+/* SkillRx's Local answers to the design system's token roles (docs/design/design.md, "Color").
+   `static` so every token is emitted even when no utility class uses it: the Web Components read
+   them as CSS variables from inside their shadow roots, where Tailwind can't see the usage. */
+@theme static {
+  /* Brand: the SkillRx logo blue. 600 on white is 7.6:1, 700 on brand-50 is 8.6:1. */
+  --color-brand-50: #eef6fb;
+  --color-brand-100: #d5e8f4;
+  --color-brand-600: #055889;
+  --color-brand-700: #044a72;
+
+  /* Fixes a bug in design system v0.1.3's theme.css, which sets this to var(--radius-full), a
+     variable Tailwind v4 doesn't have, so pills and avatars were square. Fixed upstream in
+     rubyforgood/designsystem cc75653; delete this line when upgrading to a release with it. */
+  --radius-pill: calc(infinity * 1px);
+}
+
+/* Figtree, self-hosted (SIL Open Font License, app/assets/fonts/figtree/OFL.txt). */
+@font-face { font-family: "Figtree"; font-weight: 400; font-display: swap; src: url("figtree/figtree-latin-400-normal.woff2") format("woff2"); }
+@font-face { font-family: "Figtree"; font-weight: 500; font-display: swap; src: url("figtree/figtree-latin-500-normal.woff2") format("woff2"); }
+@font-face { font-family: "Figtree"; font-weight: 600; font-display: swap; src: url("figtree/figtree-latin-600-normal.woff2") format("woff2"); }
+@font-face { font-family: "Figtree"; font-weight: 700; font-display: swap; src: url("figtree/figtree-latin-700-normal.woff2") format("woff2"); }
 
 /* Form Styles */
 .form-label {

@@ -1,92 +1,69 @@
-
-<div class="w-full h-full bg-white shadow-lg overflow-y-auto border-r-1 border-gray-200 flex flex-col">
-  <div class="p-6 border-b-1 border-gray-200">
-    <div class="flex justify-start items-center">
-      <div class="text-xl font-bold text-gray-800">
-        <%= link_to(root_path, class: "hover:opacity-80 transition-opacity duration-200 no-underline block cursor-pointer") do %>
-          <%= image_tag("skill.svg", alt: "SkillRx", class: "h-16") %>
-        <% end %>
-      </div>
-    </div>
+<%# The app's navigation rail (docs/design/design.md, "App shell"). Icons mark the top level only;
+    items inside a group are indented instead. Administration starts open, as previewed: it is the
+    only group, and its seven items fit without scrolling. %>
+<div class="shell-rail-inner">
+  <div class="shell-logo">
+    <%= link_to root_path, class: "shell-logo-link" do %>
+      <%= image_tag("skill.svg", alt: "SkillRx home", class: "h-9") %>
+    <% end %>
   </div>
 
-  <nav class="sidebar-nav px-4 py-2 flex-1">
-    <ul class="list-none p-0">
-      <li class="mb-2">
-        <%= link_to topics_path, class: "sidebar__link #{active_link_class(topics_path)}" do %>
-          <span class="text-lg">🏷️</span>
+  <nav class="shell-nav" aria-label="Main">
+    <ul class="shell-nav-list" role="list">
+      <li>
+        <%= nav_link_to topics_path do %>
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" aria-hidden="true"><path d="M4 6h16M4 12h16M4 18h10"/></svg>
           <span>Topics</span>
         <% end %>
       </li>
 
       <% if Current.user.is_admin? %>
-        <li class="mt-6 mb-4">
-          <div class="px-4 py-2 text-xs font-semibold border-b-1 border-gray-200 text-gray-500 tracking-wider">Administration</div>
-        </li>
-
-        <li class="mb-2">
-          <%= link_to regions_path, class: "sidebar__link #{active_link_class(regions_path)}" do %>
-            <span class="text-lg">🌍</span>
-            <span>Regions</span>
+        <li>
+          <%= nav_link_to beacons_path do %>
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" aria-hidden="true"><path d="M5 12a7 7 0 0 1 14 0M8.5 12a3.5 3.5 0 0 1 7 0"/><circle cx="12" cy="12" r="1"/><path d="M12 13v7"/></svg>
+            <span>Beacons</span>
           <% end %>
         </li>
 
-        <li class="mb-2">
-          <%= link_to providers_path, class: "sidebar__link #{active_link_class(providers_path)}" do %>
-            <span class="text-lg">🏥</span>
-            <span>Providers</span>
-          <% end %>
-        </li>
-
-        <li class="mb-2">
-          <%= link_to languages_path, class: "sidebar__link #{active_link_class(languages_path)}" do %>
-            <span class="text-lg">🌐</span>
-            <span>Languages</span>
-          <% end %>
-        </li>
-
-        <li class="mb-2">
-          <%= link_to tags_path, class: "sidebar__link #{active_link_class(tags_path)}" do %>
-            <span class="text-lg">🏷️</span>
-            <span>Tags</span>
-          <% end %>
-        </li>
-
-        <li class="mb-2">
-          <%= link_to users_path, class: "sidebar__link #{active_link_class(users_path)}" do %>
-            <span class="text-lg">👥</span>
-            <span>Users</span>
-          <% end %>
-        </li>
-
-        <li class="mb-2">
-          <%= link_to beacons_path, class: "sidebar__link #{active_link_class(beacons_path)}" do %>
-            <span class="text-lg">📡</span>
-            <span>Beacon Management</span>
-          <% end %>
-        </li>
-
-        <li class="mb-2">
-          <%= link_to import_reports_path, class: "sidebar__link #{active_link_class(import_reports_path)}" do %>
-            <span class="text-lg">📊</span>
-            <span>Import Reports</span>
-          <% end %>
-        </li>
-
-        <li class="mb-2">
-          <%= link_to "/jobs", class: "sidebar__link #{active_link_class("/jobs")}", target: "_blank" do %>
-            <span class="text-lg">🛠️</span>
-            <span>Jobs</span>
-          <% end %>
+        <li>
+          <button type="button" class="shell-nav-group" aria-expanded="true" aria-controls="nav-administration"
+                  data-action="shell#toggleGroup">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" aria-hidden="true"><circle cx="12" cy="12" r="3"/><path d="M12 2v3M12 19v3M4.2 4.2l2.1 2.1M17.7 17.7l2.1 2.1M2 12h3M19 12h3M4.2 19.8l2.1-2.1M17.7 6.3l2.1-2.1"/></svg>
+            <span>Administration</span>
+            <svg class="shell-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="m6 9 6 6 6-6"/></svg>
+          </button>
+          <ul id="nav-administration" class="shell-nav-sublist" role="list">
+            <li><%= nav_link_to "Providers", providers_path %></li>
+            <li><%= nav_link_to "Regions", regions_path %></li>
+            <li><%= nav_link_to "Languages", languages_path %></li>
+            <li><%= nav_link_to "Tags", tags_path %></li>
+            <li><%= nav_link_to "Users", users_path %></li>
+            <li><%= nav_link_to "Import reports", import_reports_path %></li>
+            <li>
+              <%= link_to "/jobs", class: "shell-nav-link", target: "_blank", rel: "noopener" do %>
+                Jobs <span class="sr-only">(opens in a new tab)</span>
+                <svg class="shell-external" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M14 4h6v6M20 4l-9 9M18 14v5a1 1 0 0 1-1 1H5a1 1 0 0 1-1-1V7a1 1 0 0 1 1-1h5"/></svg>
+              <% end %>
+            </li>
+          </ul>
         </li>
       <% end %>
     </ul>
   </nav>
 
-  <div class="p-6 border-t-1 border-gray-200">
-    <%= button_to session_path, method: :delete, class: "sidebar__logout-button" do %>
-      <span class="text-lg">↗</span>
-      <span>Log out</span>
-    <% end %>
+  <div class="shell-account">
+    <rfg-avatar name="<%= Current.user.email %>"></rfg-avatar>
+    <div class="shell-account-who">
+      <div class="shell-account-email"><%= Current.user.email %></div>
+      <div class="shell-account-role"><%= Current.user.is_admin? ? "Administrator" : "Contributor" %></div>
+    </div>
+    <rfg-menu label="Account">
+      <rfg-button slot="trigger" variant="ghost" size="xs" aria-label="Account menu">
+        <svg slot="icon" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><circle cx="5" cy="12" r="1.8"/><circle cx="12" cy="12" r="1.8"/><circle cx="19" cy="12" r="1.8"/></svg>
+      </rfg-button>
+      <%= form_with url: session_path, method: :delete, class: "contents" do %>
+        <button type="submit" role="menuitem">Sign out</button>
+      <% end %>
+    </rfg-menu>
   </div>
 </div>

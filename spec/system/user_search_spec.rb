@@ -11,16 +11,16 @@ RSpec.describe "User search", type: :system do
   end
 
   it "shows by default the users from most to least recently added" do
-    expect(page).to have_text(/#{rosemary.email}.+#{martin.email}.+#{admin.email}/m)
+    expect(find("main")).to have_text(/#{rosemary.email}.+#{martin.email}.+#{admin.email}/m)
   end
 
   context "when searching by email" do
     it "only displays users matching the search" do
       fill_in "search[email]", with: "mar"
 
-      expect(page).to have_text(rosemary.email)
-      expect(page).to have_text(martin.email)
-      expect(page).not_to have_text(admin.email)
+      expect(find("main")).to have_text(rosemary.email)
+      expect(find("main")).to have_text(martin.email)
+      expect(find("main")).not_to have_text(admin.email)
     end
   end
 
@@ -28,22 +28,22 @@ RSpec.describe "User search", type: :system do
     it "only displays users matching the search" do
       select "Admin", from: "search_is_admin"
 
-      expect(page).to have_text(admin.email)
-      expect(page).not_to have_text(rosemary.email)
-      expect(page).not_to have_text(martin.email)
+      expect(find("main")).to have_text(admin.email)
+      expect(find("main")).not_to have_text(rosemary.email)
+      expect(find("main")).not_to have_text(martin.email)
 
       select "Contributor", from: "search_is_admin"
 
-      expect(page).to have_text(rosemary.email)
-      expect(page).to have_text(martin.email)
-      expect(page).not_to have_text(admin.email)
+      expect(find("main")).to have_text(rosemary.email)
+      expect(find("main")).to have_text(martin.email)
+      expect(find("main")).not_to have_text(admin.email)
     end
   end
 
   context "when sorting" do
     it "displays users in the selected order" do
       select "By least recently added", from: "search_order"
-      expect(page).to have_text(/#{admin.email}.+#{martin.email}.+#{rosemary.email}/m)
+      expect(find("main")).to have_text(/#{admin.email}.+#{martin.email}.+#{rosemary.email}/m)
     end
   end
 end
