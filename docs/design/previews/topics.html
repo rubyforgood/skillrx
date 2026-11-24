@@ -1,0 +1,180 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>SkillRx topics list: preview</title>
+<!-- Preview only: the design system's published tokens and components (v0.1.4) from jsDelivr. -->
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@rubyforgood/design-system@0.1.4/tokens/tokens.css">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fontsource/figtree@5.3.0/400.css">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fontsource/figtree@5.3.0/500.css">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fontsource/figtree@5.3.0/600.css">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fontsource/figtree@5.3.0/700.css">
+<script type="module">
+  const V = "https://cdn.jsdelivr.net/npm/@rubyforgood/design-system@0.1.4/dist/standalone/";
+  for (const c of ["button", "page-header", "status-pill", "table", "filter-bar", "pagination", "menu", "avatar"]) import(V + c + ".mjs");
+</script>
+<style>
+  :root { --color-brand-50: #eef6fb; --color-brand-100: #d5e8f4; --color-brand-600: #055889; --color-brand-700: #044a72; }
+  * { box-sizing: border-box; }
+  body { margin: 0; font-family: var(--font-sans); color: var(--color-neutral-900); background: var(--color-neutral-50); }
+  a { color: var(--color-brand-700); }
+  .sr-only { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; }
+  .chooser { position: sticky; top: 0; z-index: 50; background: #111827; color: #fff; padding: 10px 16px; display: flex; flex-wrap: wrap; gap: 8px 16px; align-items: center; font-size: 14px; }
+  .chooser b { font-weight: 600; margin-right: 4px; }
+  .chooser button { font: inherit; background: #374151; color: #fff; border: 0; border-radius: 6px; padding: 6px 10px; cursor: pointer; }
+  .chooser button[aria-pressed="true"] { background: #fff; color: #111827; font-weight: 600; }
+  .variant { display: none; } .variant.on { display: block; }
+  .today img { display: block; max-width: 100%; margin: 0 auto; }
+  .notes { max-width: 1040px; margin: 0 auto; padding: 32px 16px 64px; line-height: 1.55; }
+  .notes h2 { margin: 28px 0 8px; font-size: 20px; }
+  .notes table { border-collapse: collapse; width: 100%; font-size: 14px; }
+  .notes th, .notes td { text-align: left; vertical-align: top; border-top: 1px solid var(--color-neutral-200); padding: 8px; }
+
+  /* shell (as built) */
+  .app { display: grid; grid-template-columns: 256px 1fr; min-height: 760px; border-bottom: 1px solid var(--color-neutral-200); }
+  .rail { background: #fff; border-right: 1px solid var(--color-neutral-200); padding: 0; }
+  .logo { height: 64px; display: flex; align-items: center; padding: 0 20px; border-bottom: 1px solid var(--color-neutral-200); }
+  .logo img { height: 36px; }
+  .nav { padding: 16px 12px; display: flex; flex-direction: column; gap: 4px; font-size: 15px; }
+  .nav a { padding: 8px 10px; border-radius: var(--radius-control); color: var(--color-neutral-700); text-decoration: none; font-weight: 500; }
+  .nav a[aria-current] { background: var(--color-brand-50); color: var(--color-brand-700); font-weight: 600; }
+  .content { padding: 24px 32px; display: flex; flex-direction: column; gap: 20px; min-width: 0; }
+
+  .toolbar { display: flex; flex-wrap: wrap; align-items: end; gap: 12px 16px; }
+  .field { display: flex; flex-direction: column; gap: 6px; font-size: 14px; }
+  .field label { font-weight: 500; color: var(--color-neutral-700); }
+  .field input, .field select { font: inherit; font-size: 15px; min-height: 40px; padding: 0 12px; border: 1px solid var(--color-neutral-500); border-radius: var(--radius-control); background: #fff; color: var(--color-neutral-900); }
+  .field input[type=search] { width: 320px; }
+  .surface { background: #fff; border: 1px solid var(--color-neutral-200); border-radius: var(--radius-surface); box-shadow: var(--shadow-surface); overflow: hidden; }
+  .surface-head { display: flex; justify-content: space-between; align-items: center; gap: 16px; padding: 16px 16px 4px; flex-wrap: wrap; }
+  .surface-head h2 { margin: 0; font-size: 16px; }
+  .surface-head .count { color: var(--color-neutral-500); font-size: 14px; font-weight: 400; margin-left: 6px; }
+  table.data { width: 100%; border-collapse: collapse; font-size: 14px; }
+  table.data caption { text-align: left; }
+  table.data th[scope=col] { font-weight: 600; color: var(--color-neutral-500); font-size: 13px; text-align: left; border-bottom: 1px solid var(--color-neutral-200); white-space: nowrap; }
+  table.data th[scope=row] { font-weight: 400; text-align: left; }
+  table.data td, table.data th[scope=row] { border-bottom: 1px solid var(--color-neutral-100); }
+  table.data .title { font-weight: 600; }
+  .meta { color: var(--color-neutral-500); font-size: 13px; }
+  .desc { color: var(--color-neutral-700); max-width: 34ch; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; }
+  .uid { font-family: ui-monospace, monospace; font-size: 13px; color: var(--color-neutral-500); white-space: nowrap; }
+  td.numeric, th.numeric { text-align: right; }
+  td.actions { text-align: right; white-space: nowrap; width: 1%; }
+  td.actions .row { display: inline-flex; gap: 4px; }
+  .foot { padding: 12px 16px; }
+  .icon-btn { display: inline-flex; width: 32px; height: 32px; align-items: center; justify-content: center; border-radius: var(--radius-control); color: var(--color-neutral-700); text-decoration: none; }
+  .icon-btn:hover { background: var(--color-neutral-100); }
+  .icon-btn svg { width: 18px; height: 18px; }
+</style>
+</head>
+<body>
+<div class="chooser" role="group" aria-label="Preview options">
+  <span><b>Row actions:</b>
+    <button data-v="today" aria-pressed="false">Today</button>
+    <button data-v="a" aria-pressed="true">A: title links, Edit button (recommended)</button>
+    <button data-v="b" aria-pressed="false">B: ⋯ menu</button>
+    <button data-v="c" aria-pressed="false">C: icon buttons</button>
+  </span>
+</div>
+
+<div class="variant today" data-v="today"><img src="today-topics.png" alt="SkillRx topics list as it looks today" width="1280"></div>
+
+<template id="screen">
+  <div class="app">
+    <aside class="rail"><div class="logo"><img src="/skill-icon.svg" alt="SkillRx"></div>
+      <nav class="nav" aria-label="Main"><a href="#" aria-current="page">Topics</a><a href="#">Beacons</a><a href="#">Administration</a></nav></aside>
+    <main class="content">
+      <rfg-page-header heading="Topics" subtitle="Educational topics and the documents in them">
+        <rfg-button slot="actions" variant="primary" href="#">Add new topic</rfg-button>
+      </rfg-page-header>
+
+      <form class="toolbar" role="search" aria-label="Topics" onsubmit="return false">
+        <div class="field"><label for="q-%">Search</label><input id="q-%" type="search" placeholder="Title, description or UID"></div>
+        <rfg-filter-bar>
+          <div slot="fields" class="field"><label for="l-%">Language</label><select id="l-%"><option>Any language</option><option>English</option><option>Spanish</option></select></div>
+          <div slot="fields" class="field"><label for="t-%">Tags</label><select id="t-%"><option>Any tag</option></select></div>
+          <div slot="fields" class="field"><label for="y-%">Year published</label><select id="y-%"><option>Any year</option><option>2026</option></select></div>
+          <div slot="fields" class="field"><label for="m-%">Month published</label><select id="m-%"><option>Any month</option><option>January</option></select></div>
+          <div slot="fields" class="field"><label for="s-%">State</label><select id="s-%"><option>Any state</option><option>Active</option><option>Archived</option></select></div>
+          <div slot="fields" class="field"><label for="o-%">Sort</label><select id="o-%"><option>Newest first</option><option>Oldest first</option></select></div>
+          <rfg-button slot="actions" variant="ghost" href="#">Clear filters</rfg-button>
+        </rfg-filter-bar>
+      </form>
+
+      <div class="surface">
+        <rfg-table>
+          <table class="data">
+            <caption class="sr-only">Topics from Ministry of Health</caption>
+            <thead><tr>
+              <th scope="col">Title</th><th scope="col">Description</th><th scope="col">Language</th><th scope="col">UID</th>
+              <th scope="col" class="numeric">Documents</th><th scope="col">State</th><th scope="col" class="ACTIONS-HEAD"><span class="sr-only">Actions</span></th>
+            </tr></thead>
+            <tbody><tr data-rows=""></tr></tbody>
+          </table>
+        </rfg-table>
+        <div class="foot"><rfg-pagination total="42" page="1" page-size="25" entry-name="topic"></rfg-pagination></div>
+      </div>
+    </main>
+  </div>
+</template>
+
+<div class="variant on" data-v="a"><div class="slot" data-actions="a"></div></div>
+<div class="variant" data-v="b"><div class="slot" data-actions="b"></div></div>
+<div class="variant" data-v="c"><div class="slot" data-actions="c"></div></div>
+
+<div class="notes">
+  <h2>What this decides</h2>
+  <p>How a row in a SkillRx list offers its actions. Topics comes first because it's the screen everyone starts on; whatever you choose here is used on every list (beacons, providers, regions, languages, tags, users, import reports).</p>
+
+  <h2>The options</h2>
+  <table>
+    <tr><th></th><th>What it is</th><th>Who does this</th><th>Cost</th></tr>
+    <tr><td><b>A: title links, Edit button</b> (recommended)</td><td>The topic's title is the link to view it. Edit is a quiet button at the end of the row, named for its row ("Edit Introduction to English") for screen readers.</td><td>GitHub (issues, repositories), Shopify Polaris index tables, Linear.</td><td>Two actions, one of them the title itself, so nothing hides behind a menu. Archive and delete stay on the topic's page, one click further, which is where they are today.</td></tr>
+    <tr><td><b>B: ⋯ menu</b></td><td>View, Edit, Archive and Delete in a menu at the end of the row.</td><td>IBM Carbon's overflow menu, Salesforce row actions, Google Drive.</td><td>Every action is one click from the list, including archive and delete, but every action is now two clicks, and none is visible until you open the menu.</td></tr>
+    <tr><td><b>C: icon buttons</b></td><td>An eye and a pencil, with tooltips and accessible names.</td><td>Atlassian Jira, many admin templates.</td><td>Compact, but icons have to be learned, and need a tooltip each (more to build and test).</td></tr>
+  </table>
+  <p><b>Why A:</b> SkillRx's list has two row actions, View and Edit, and the same two on every row. A menu earns its place when there are more actions, or when they vary from row to row; neither is true here. Making the title the link is what people expect from a list, and it removes the bright blue and gray button pair from every row, which is most of what makes today's table busy.</p>
+
+  <h2>What changes, whichever you pick</h2>
+  <p>These follow the design system's rules, so they aren't choices:</p>
+  <ul>
+    <li><b>The page header</b> is the design system's: title, one line saying what the page is, and the main action ("Add new topic", sentence case) at the right. The icon tile, breadcrumb ("Dashboard / Topics": there's no dashboard) and gradients go.</li>
+    <li><b>Search stays a visible field</b> and still filters as you type. <b>The other six filters fold behind a "Filters" button</b>, so the table starts near the top of the page instead of 875px down. <b>When any filter is set, that section starts open</b>, so a filtered list never looks like the whole list. (The design system's filter bar doesn't do this yet: it always starts closed. That's a small fix there, for every app, and I'd make it as part of this.)</li>
+    <li><b>Filter options say what they mean:</b> "Any language" instead of "Select language", "Newest first" / "Oldest first" instead of "desc" / "asc", and months by name instead of 1 to 12.</li>
+    <li><b>The Provider column goes.</b> The list only ever shows one provider's topics (it's in the heading), so the column repeated the same name on every row, and that name wrapped onto four lines. It's in the table's caption for screen readers.</li>
+    <li><b>The purple banner above the table goes</b>, along with "Total: 42" and "42 topics found", which said the same thing twice. The count is in the pagination line.</li>
+    <li><b>Long descriptions stop at two lines</b> instead of being cut at 60 characters mid-word. The full text is on the topic's page.</li>
+    <li><b>State is a status pill:</b> green for active, gray for archived.</li>
+  </ul>
+  <p><b>Not changed:</b> what the filters do, the provider switcher for people who work with more than one provider (it moves next to the heading), and pagination.</p>
+</div>
+
+<script>
+  const rows = [
+    ["Introduction to English", "Nov 23, 2026", "Learn the basics of English", "English", "d290f1ee-6c54", 0, "Active"],
+    ["Hand hygiene in the clinic", "Oct 2, 2026", "When and how to wash hands between patients, with the five moments for hand hygiene and the steps for handrub and handwash.", "Spanish", "8c1b44aa-91e0", 4, "Active"],
+    ["Neonatal resuscitation basics", "Mar 14, 2025", "The first minute after birth: drying, warming, airway, and when to start ventilation.", "English", "5f0e2c13-7a2d", 12, "Archived"],
+  ];
+  const kebab = '<svg slot="icon" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><circle cx="5" cy="12" r="1.8"/><circle cx="12" cy="12" r="1.8"/><circle cx="19" cy="12" r="1.8"/></svg>';
+  const actions = {
+    a: (t) => `<rfg-button size="xs" variant="ghost" href="#" aria-label="Edit ${t}">Edit</rfg-button>`,
+    b: (t) => `<rfg-menu label="Actions for ${t}"><rfg-button slot="trigger" size="xs" variant="ghost" aria-label="Actions for ${t}">${kebab}</rfg-button><a role="menuitem" href="#">View</a><a role="menuitem" href="#">Edit</a><button role="menuitem">Archive</button><button role="menuitem">Delete</button></rfg-menu>`,
+    c: (t) => `<span class="row"><a class="icon-btn" href="#" aria-label="View ${t}" title="View"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><path d="M2 12s3.5-7 10-7 10 7 10 7-3.5 7-10 7S2 12 2 12z"/><circle cx="12" cy="12" r="3"/></svg></a><a class="icon-btn" href="#" aria-label="Edit ${t}" title="Edit"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><path d="M4 20h4L19 9l-4-4L4 16z"/></svg></a></span>`,
+  };
+  const tpl = document.getElementById("screen").innerHTML;
+  document.querySelectorAll(".slot").forEach((el, i) => {
+    const kind = el.dataset.actions;
+    const body = rows.map(([t, d, desc, lang, uid, n, st]) =>
+      `<tr><th scope="row">${kind === "a" ? `<a class="title" href="#">${t}</a>` : `<span class="title">${t}</span>`}<div class="meta">Published ${d}</div></th>` +
+      `<td><span class="desc">${desc}</span></td><td>${lang}</td><td class="uid">${uid}</td><td class="numeric">${n}</td>` +
+      `<td><rfg-status-pill tone="${st === "Active" ? "success" : "neutral"}">${st}</rfg-status-pill></td><td class="actions">${actions[kind](t)}</td></tr>`).join("");
+    el.innerHTML = tpl.replaceAll("-%", "-" + i).replace(/<tr data-rows="?"?><\/tr>/, body);
+  });
+  document.querySelectorAll(".chooser button").forEach((b) => b.addEventListener("click", () => {
+    document.querySelectorAll(".variant").forEach((el) => el.classList.toggle("on", el.dataset.v === b.dataset.v));
+    document.querySelectorAll(".chooser button").forEach((x) => x.setAttribute("aria-pressed", x === b));
+  }));
+</script>
+</body>
+</html>
