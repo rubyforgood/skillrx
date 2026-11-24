@@ -24,7 +24,7 @@ workers without an internet connection.
 
 ## Status
 
-Migration started 2026-11-24 on branch `skillsrxdesign`. **Done:** tokens, font, app shell. **Next:** screens, then the public home page and sign-in.
+Migration started 2026-11-24 on branch `skillsrxdesign`. **Done:** tokens, font, app shell, form controls, sign-in and password pages. **Next:** the home page, then the signed-in screens.
 
 Baseline, measured 2026-11-24 before any change:
 
@@ -99,6 +99,31 @@ Fixed upstream in rubyforgood/designsystem `cc75653`; remove the override on the
 - **Footer:** "Built by Ruby For Good volunteers", at the end of the page, not fixed to the window.
   It shares the account strip's 64px height and top border, so the two rules meet as one line.
 - **Skip link** to `#main-content`, first in the tab order.
+
+## Forms
+
+Every text field, select and textarea uses `.form-input`, `.form-select` or `.form-textarea`
+(`app/assets/tailwind/application.css`), wrapped in `<rfg-field label="…">` for its label, required
+marker and error message.
+
+- **Border: `neutral-500`, 4.76:1 on white**, so a field's edge meets WCAG 1.4.11's 3:1 (decided
+  2026-11-24). Material 3's outlined field and IBM Carbon do the same. The design system's own
+  components used `neutral-200` (1.23:1); fixed upstream too.
+- **Focus:** a 2px `brand-600` outline, 1px out from the border.
+- **Placeholder text is not a label.** Use the label, and hint text for examples.
+
+## Sign-in
+
+`layouts/session.html.erb`: **a centered card** (option B, decided 2026-11-24). Logo, one card with
+the form, a link back to the home page, on `neutral-50`. Follows GitHub, Stripe, Linear and
+Atlassian: only people with an account sign in, so the page doesn't explain SkillRx. Used by sign
+in, forgot password and choose a new password.
+
+- **Messages** (wrong password, reset link sent) are an `<rfg-callout>` inside the card above the
+  form: `danger` for problems (`role="alert"`), `success` otherwise. Not a toast in the corner, where
+  someone looking at the form won't see it.
+- **No "Remember me".** Every sign-in already lasts until you sign out (see decisions.md).
+- **Contact:** `contact@skillrx.org`, everywhere.
 
 ## Screens
 

@@ -50,9 +50,9 @@ RSpec.describe "User Login", type: :system do
 
   context "forgotten password" do
     it "allows users to reset password" do
-      click_on("Forgot password?")
-      expect(page).to have_text("Input your email and we will send you reset password link")
-      expect(page).to have_link("Login", href: new_session_path)
+      click_on("Forgot your password?")
+      expect(page).to have_text("Enter your email address and we'll send you a link to reset your password.")
+      expect(page).to have_link("Sign in", href: new_session_path)
     end
   end
 

@@ -13,3 +13,5 @@ pin "tom-select" # Local vendor file with ES module wrapper
 pin "rfg-avatar", to: "rfg-avatar.js"
 pin "rfg-button", to: "rfg-button.js"
 pin "rfg-menu", to: "rfg-menu.js"
+pin "rfg-callout", to: "rfg-callout.js"
+pin "rfg-field", to: "rfg-field.js"

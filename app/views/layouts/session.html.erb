@@ -1,10 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
   <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title><%= content_for(:title) || "Skillrx" %></title>
-
+    <title><%= content_for(:title) || "SkillRx" %></title>
     <meta name="viewport" content="width=device-width,initial-scale=1">
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="mobile-web-app-capable" content="yes">
@@ -13,16 +10,28 @@
 
     <%= yield :head %>
 
-    <%# Enable PWA manifest for installable apps (make sure to enable in config/routes.rb too!) %>
-    <%#= tag.link rel: "manifest", href: pwa_manifest_path(format: :json) %>
+    <link rel="icon" href="/favicon.ico" type="image/x-icon" sizes="any">
+    <link rel="icon" href="/favicon-32x32.png" type="image/png" sizes="32x32">
+    <link rel="icon" href="/skill-icon.svg" type="image/svg+xml">
+    <link rel="apple-touch-icon" href="/apple-touch-icon.png">
 
-    <%# Includes all stylesheet files in app/assets/stylesheets %>
-    <%= stylesheet_link_tag :app, "data-turbo-track": "reload" %>
+    <%= stylesheet_link_tag "tailwind", "data-turbo-track": "reload" %>
+    <%= stylesheet_link_tag "application", "data-turbo-track": "reload" %>
     <%= javascript_importmap_tags %>
   </head>
-  <body style="background: #f8f9fa;">
-    <!-- Start content here -->
-    <%= yield %>
-    <!-- End content -->
+
+  <%# Sign-in and password pages: a centered card (docs/design/design.md, "Sign-in"). %>
+  <body>
+    <main class="auth">
+      <%= link_to root_path, class: "auth-logo" do %>
+        <%= image_tag("skill.svg", alt: "SkillRx home") %>
+      <% end %>
+
+      <div class="auth-card">
+        <%= yield %>
+      </div>
+
+      <p class="auth-foot"><%= link_to "Back to the SkillRx home page", root_path %></p>
+    </main>
   </body>
 </html>

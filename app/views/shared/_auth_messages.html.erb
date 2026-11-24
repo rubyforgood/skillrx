@@ -1,0 +1,9 @@
+<%# Messages on the sign-in and password pages, shown inside the card above the form, where the
+    person is already looking. A problem is an alert (announced at once); anything else is a
+    polite status. %>
+<% if flash[:alert].present? %>
+  <rfg-callout tone="danger" class="mt-5 block"><%= flash[:alert] %></rfg-callout>
+<% end %>
+<% if flash[:notice].present? %>
+  <rfg-callout tone="success" class="mt-5 block"><%= flash[:notice] %></rfg-callout>
+<% end %>

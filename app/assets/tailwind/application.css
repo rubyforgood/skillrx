@@ -28,19 +28,24 @@
 @font-face { font-family: "Figtree"; font-weight: 700; font-display: swap; src: url("figtree/figtree-latin-700-normal.woff2") format("woff2"); }
 
 /* Form Styles */
+/* Form controls (docs/design/design.md, "Forms"). One look for every text field, select and
+   textarea in the app. The border is neutral-500 (4.76:1 on white) so a field's edge meets WCAG
+   1.4.11's 3:1, like Material 3's outlined field and IBM Carbon. Decided 2026-11-24. */
 .form-label {
-  @apply block text-sm font-semibold text-gray-700 mb-2;
+  @apply mb-1.5 block text-sm font-medium text-neutral-700;
 }
 
 .form-input,
 .form-select,
 .form-textarea {
-  @apply w-full px-4 py-3 border-2 border-gray-200 rounded-lg text-sm transition-all duration-200 bg-gray-50;
+  @apply block min-h-10 w-full rounded-control border border-neutral-500 bg-white px-3 py-2 text-[15px] text-neutral-900
+         placeholder:text-neutral-500;
 }
 
 .form-select {
   appearance: none;
   padding-right: 2.5rem;
+  background: #fff url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 20 20' fill='none' stroke='%2362748e' stroke-width='1.6' stroke-linecap='round' stroke-linejoin='round'%3e%3cpath d='m6 8 4 4 4-4'/%3e%3c/svg%3e") no-repeat right 0.625rem center / 1.25rem;
 }
 
 .form-textarea {
@@ -50,13 +55,7 @@
 .form-input:focus,
 .form-select:focus,
 .form-textarea:focus {
-  @apply outline-none border-blue-500 ring-4 ring-blue-500/10 bg-white;
-}
-
-.form-input:hover:not(:focus),
-.form-select:hover:not(:focus),
-.form-textarea:hover:not(:focus) {
-  @apply border-gray-300;
+  @apply outline-2 outline-offset-1 outline-brand-600;
 }
 
 .form-required {
@@ -64,7 +63,7 @@
 }
 
 .form-help-text {
-  @apply mt-2 text-xs text-gray-500;
+  @apply mt-1.5 text-sm text-neutral-500;
 }
 
 .form-grid {
@@ -462,3 +461,18 @@ nav.pagy a.current {
       box-shadow: 0 0 0 6px rgba(16, 185, 129, 0);
     }
 }
+
+/* Sign-in and password pages: docs/design/design.md, "Sign-in". A centered card, as GitHub,
+   Stripe, Linear and Atlassian do. */
+.auth { @apply flex min-h-screen flex-col items-center justify-center gap-6 bg-neutral-50 px-4 py-12; font-family: var(--font-sans); }
+.auth-logo img { @apply h-14; }
+.auth-card { @apply w-full max-w-md rounded-surface border border-neutral-200 bg-white p-8 shadow-surface; }
+.auth-card h1 { @apply m-0 text-2xl font-bold tracking-tight text-neutral-900; }
+.auth-lede { @apply mt-1 mb-0 text-neutral-500; }
+.auth-form { @apply mt-6 flex flex-col gap-5; }
+.auth-row { @apply flex justify-end text-sm; }
+.auth-form rfg-button { @apply w-full; }
+.auth-help { @apply m-0 text-center text-sm text-neutral-500; }
+.auth a, .auth-help a { @apply font-medium text-brand-700 underline underline-offset-2 hover:text-brand-600; }
+.auth-foot { @apply text-sm; }
+.auth a:focus-visible { @apply rounded-sm outline-2 outline-offset-2 outline-brand-600; }
