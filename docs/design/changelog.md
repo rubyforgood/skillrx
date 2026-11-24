@@ -10,7 +10,7 @@ year. Write PENDING, commit, then fill in the hash in the next commit.
 | `ceed409` | Sign-in and password pages: centered card, `<rfg-field>` labels, messages as callouts in the card, no "Remember me" (it did nothing), contact@skillrx.org. Form controls app-wide: neutral-500 border (4.76:1), brand focus outline. Vendored callout and field. axe clean on both pages. |
 | `ddb398d` | Home page: same sections restyled (solid brand hero, one accent color, no entrance animation), numbers section and module counts removed, footer links named, mobile menu, plain-link primary actions, contact@skillrx.org. `home_controller.js` replaced by CSS smooth scroll. |
 | `c97df6e` | Onboarding docs: `onboarding-maintainers.md` and `guide-for-users.md`. WCAG audit after shell, sign-in and home: 3 violations on 38 elements (from 4 on 83), measured with the setup the maintainer doc gives. |
-| `PENDING` | Upgraded to design system 0.1.4; removed the `--radius-pill` workaround (avatar still round, measured). Fixed `spec/support/system_helpers.rb`, which filled sign-in by placeholder text: `ceed409` removed the placeholders and broke 47 system specs, because that checkpoint ran only the login and request specs. Full suite now 516, 0 failures. **Rule from this:** run the full suite at every checkpoint. |
+| `d92044f` | Upgraded to design system 0.1.4; removed the `--radius-pill` workaround (avatar still round, measured). Fixed `spec/support/system_helpers.rb`, which filled sign-in by placeholder text: `ceed409` removed the placeholders and broke 47 system specs, because that checkpoint ran only the login and request specs. Full suite now 516, 0 failures. **Rule from this:** run the full suite at every checkpoint. |
 
 ### Baseline WCAG audit, before any change
 
