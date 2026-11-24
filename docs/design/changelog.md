@@ -7,7 +7,7 @@ year. Write PENDING, commit, then fill in the hash in the next commit.
 | --- | --- |
 | `b533583` | Set up the migration: `docs/design/` (spec, decision log, this log), the audit adapter (`bin/design/targets.js`, `route-targets.rb`: 28 screens, two roles, measured), `wcag-audit.js` running end to end, and the first preview (`docs/design/previews/shell.html`). No app code changed. |
 | `6373a2d` | App shell (option A): grouped rail, mobile drawer (new: phones had no navigation), skip link, account menu with Sign out, footer no longer fixed. Design system tokens, SkillRx blue, self-hosted Figtree, `<html lang="en">`. Three components vendored (avatar, button, menu). WCAG audit: 4 violations on 83 elements → 3 on 58; none in the shell. Specs: 516, 0 failures (3 specs updated for the account menu and the email now shown in the rail). |
-| `PENDING` | Sign-in and password pages: centered card, `<rfg-field>` labels, messages as callouts in the card, no "Remember me" (it did nothing), contact@skillrx.org. Form controls app-wide: neutral-500 border (4.76:1), brand focus outline. Vendored callout and field. axe clean on both pages. |
+| `ceed409` | Sign-in and password pages: centered card, `<rfg-field>` labels, messages as callouts in the card, no "Remember me" (it did nothing), contact@skillrx.org. Form controls app-wide: neutral-500 border (4.76:1), brand focus outline. Vendored callout and field. axe clean on both pages. |
 
 ### Baseline WCAG audit, before any change
 
