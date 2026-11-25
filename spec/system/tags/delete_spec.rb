@@ -11,10 +11,10 @@ RSpec.describe "Deleting a Tag", type: :system do
 
   context "as an Admin" do
     it "deletes a tag" do
-      click_button "Delete this tag"
-      expect(page).to have_content("Are you sure you want to delete this tag?")
+      click_button "Delete", exact: true
+      expect(page).to have_content("Delete this tag?")
 
-      click_button "Delete"
+      click_button "Delete tag"
       expect(page).to have_content("Tag was successfully destroyed.")
 
       expect(page).to have_content("Tags")

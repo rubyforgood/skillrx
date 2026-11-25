@@ -24,7 +24,7 @@ RSpec.describe "Updating a Tag", type: :system do
       enter_and_choose_tag("Rhinopharyngitis")
       find("body").click
 
-      click_button "Update Tag"
+      click_button "Save tag"
       visit(tag_path(tag))
       expect(page).to have_text("Common Cold")
       expect(page).to have_text("Nasopharyngitis")
