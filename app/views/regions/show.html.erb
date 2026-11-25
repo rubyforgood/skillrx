@@ -2,9 +2,9 @@
 
 <div class="page">
   <%= render "shared/page_header", title: @region.name do %>
-    <%= link_to "Edit", edit_region_path(@region), class: "button button-primary" %>
-    <%= button_to "Delete", @region, method: :delete, class: "button button-ghost text-danger", form_class: "contents",
+    <%= button_to "Delete", @region, method: :delete, class: "button button-ghost-danger", form_class: "contents",
           data: { turbo_confirm: "Delete #{@region.name}? Its beacons are deleted too. This can't be undone.", confirm_button: "Delete region" } %>
+    <%= link_to "Edit", edit_region_path(@region), class: "button button-secondary" %>
   <% end %>
   <p class="back-link"><%= link_to "Back to regions", regions_path %></p>
 

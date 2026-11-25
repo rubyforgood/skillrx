@@ -2,11 +2,11 @@
 
 <div class="page">
   <%= render "shared/page_header", title: @user.email, subtitle: @user.is_admin? ? "Administrator" : "Contributor" do %>
-    <%= link_to "Edit", edit_user_path(@user), class: "button button-primary" %>
     <% if Current.user.is_admin? && Current.user != @user %>
-      <%= button_to "Delete", @user, method: :delete, class: "button button-ghost text-danger", form_class: "contents",
+      <%= button_to "Delete", @user, method: :delete, class: "button button-ghost-danger", form_class: "contents",
             data: { turbo_confirm: "Delete #{@user.email}? They won't be able to sign in. This can't be undone.", confirm_button: "Delete user" } %>
     <% end %>
+    <%= link_to "Edit", edit_user_path(@user), class: "button button-secondary" %>
   <% end %>
   <p class="back-link"><%= link_to "Back to users", users_path %></p>
 

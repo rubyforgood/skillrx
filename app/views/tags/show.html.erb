@@ -2,10 +2,10 @@
 
 <div class="page">
   <%= render "shared/page_header", title: @tag.name do %>
-    <%= link_to "Edit", edit_tag_path(@tag), class: "button button-primary", data: { turbo: false } %>
     <div id="<%= "delete_tag_#{@tag.id}" %>" class="contents">
-      <%= button_to "Delete", @tag, method: :delete, class: "button button-ghost text-danger", form_class: "contents" %>
+      <%= button_to "Delete", @tag, method: :delete, class: "button button-ghost-danger", form_class: "contents" %>
     </div>
+    <%= link_to "Edit", edit_tag_path(@tag), class: "button button-secondary", data: { turbo: false } %>
   <% end %>
   <p class="back-link"><%= link_to "Back to tags", tags_path %></p>
 

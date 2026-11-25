@@ -7,6 +7,6 @@
     <input type="hidden" name="topic[document_signed_ids][]" value="<%= signed_id %>">
   <% end %>
 
-  <button type="button" id="remove-button-<%= blob_counter %>" class="button button-ghost button-sm"
+  <button type="button" id="remove-button-<%= blob_counter %>" class="button button-ghost-danger button-sm"
           aria-label="Remove <%= display_name %>" data-action="click->upload#removeFile" data-signed-id="<%= signed_id %>">Remove</button>
 </li>

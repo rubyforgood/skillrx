@@ -35,7 +35,7 @@
                 <td class="actions-col">
                   <span class="row-actions">
                     <%= link_to "Edit", edit_provider_path(provider), class: "button button-ghost button-sm", aria: { label: "Edit #{provider.name}" } %>
-                    <%= button_to "Delete", provider, method: :delete, class: "button button-ghost button-sm text-danger", form_class: "contents",
+                    <%= button_to "Delete", provider, method: :delete, class: "button button-ghost-danger button-sm", form_class: "contents",
                           aria: { label: "Delete #{provider.name}" },
                           data: { turbo_confirm: provider_delete_warning(provider, topic_counts.fetch(provider.id, 0)), confirm_button: "Delete provider" } %>
                   </span>

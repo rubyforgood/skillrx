@@ -69,4 +69,16 @@ const SIGNED_OUT = [
   ["500", "/500.html"],
 ];
 
-module.exports = { BASE, PASSWORD, targets, signIn, visit, RUNS, SECONDARY, ADMIN, PRIMARY, SIGNED_OUT };
+// How button-audit.js reads a button's variant (app/assets/tailwind/application.css, "Buttons"),
+// first match wins. ` text-danger ` reads the pre-audit `button-ghost text-danger` combination,
+// which design.md rejects, as the ghost-danger it was trying to be.
+const BUTTON_VARIANTS = [
+  [" button-primary ", "primary"],
+  [" button-danger ", "danger"],
+  [" button-ghost-danger ", "ghost-danger"],
+  [" text-danger ", "ghost-danger"],
+  [" button-secondary ", "secondary"],
+  [" button-ghost ", "ghost"],
+];
+
+module.exports = { BASE, PASSWORD, targets, signIn, visit, RUNS, SECONDARY, ADMIN, PRIMARY, SIGNED_OUT, BUTTON_VARIANTS };

@@ -2,17 +2,18 @@
 
 <div class="page">
   <%= render "shared/page_header", title: @topic.title do %>
-    <%= link_to "Edit", edit_topic_path(@topic), class: "button button-primary" %>
+    <%# Record page: no primary. Delete first, Edit last (docs/design/design.md, "Buttons"). %>
+    <% if Current.user.is_admin? %>
+      <div id="delete_topic_<%= @topic.id %>" class="contents">
+        <%= button_to "Delete", @topic, method: :delete, class: "button button-ghost-danger", form_class: "contents" %>
+      </div>
+    <% end %>
     <% if @topic.archived? %>
       <%= button_to "Unarchive", unarchive_topic_path(@topic), method: :put, class: "button button-secondary", form_class: "contents" %>
     <% else %>
       <%= button_to "Archive", archive_topic_path(@topic), method: :put, class: "button button-secondary", form_class: "contents" %>
     <% end %>
-    <% if Current.user.is_admin? %>
-      <div id="delete_topic_<%= @topic.id %>" class="contents">
-        <%= button_to "Delete", @topic, method: :delete, class: "button button-ghost text-danger", form_class: "contents" %>
-      </div>
-    <% end %>
+    <%= link_to "Edit", edit_topic_path(@topic), class: "button button-secondary" %>
   <% end %>
 
   <p class="back-link"><%= link_to "Back to topics", topics_path(search: params[:search]&.permit!) %></p>

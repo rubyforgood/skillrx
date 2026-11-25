@@ -2,7 +2,7 @@
 
 <div class="page">
   <%= render "shared/page_header", title: @beacon.name do %>
-    <%= link_to "Edit", edit_beacon_path(@beacon), class: "button button-primary", data: { turbo: false } %>
+    <%= link_to "Edit", edit_beacon_path(@beacon), class: "button button-secondary", data: { turbo: false } %>
   <% end %>
   <p class="back-link"><%= link_to "Back to beacons", beacons_path %></p>
 
@@ -73,7 +73,7 @@
             <%= button_to "Regenerate key", regenerate_key_beacon_path(@beacon), method: :post, class: "button button-secondary", form_class: "contents",
                   data: { turbo_confirm: "The current key stops working at once. The beacon won't sync until it has the new key.", confirm_button: "Regenerate key" } %>
             <% unless @beacon.revoked? %>
-              <%= button_to "Revoke key", revoke_key_beacon_path(@beacon), method: :post, class: "button button-ghost text-danger", form_class: "contents",
+              <%= button_to "Revoke key", revoke_key_beacon_path(@beacon), method: :post, class: "button button-ghost-danger", form_class: "contents",
                     data: { turbo_confirm: "The beacon stops syncing at once and can't get new content until you regenerate a key.", confirm_button: "Revoke key" } %>
             <% end %>
           </div>

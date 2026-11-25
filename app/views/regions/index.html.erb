@@ -25,7 +25,7 @@
                 <td class="actions-col">
                   <span class="row-actions">
                     <%= link_to "Edit", edit_region_path(region), class: "button button-ghost button-sm", aria: { label: "Edit #{region.name}" } %>
-                    <%= button_to "Delete", region, method: :delete, class: "button button-ghost button-sm text-danger", form_class: "contents",
+                    <%= button_to "Delete", region, method: :delete, class: "button button-ghost-danger button-sm", form_class: "contents",
                           aria: { label: "Delete #{region.name}" },
                           data: { turbo_confirm: "Delete #{region.name}? Its beacons are deleted too. This can't be undone.", confirm_button: "Delete region" } %>
                   </span>

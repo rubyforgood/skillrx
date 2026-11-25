@@ -285,3 +285,43 @@ helper text".
   fact a beacon's manifest holds only the providers and topics chosen on it
   (`Beacons::ManifestBuilder#build_providers`, `#topics`), so blank means no content. The form and
   page now say so. The old app made the same claim; it predates this migration.
+
+## 2026-11-25: Buttons conform to the design system's rules
+
+Asked: "why are the delete buttons red, what is the rule for destructive buttons? do a button audit
+make sure they conform."
+
+### Why they were red, and the rule
+
+They were `button-ghost` plus a `text-danger` class: red at rest. The design system's rule is the
+opposite: **a destructive action with no fill is neutral at rest and red only on hover and focus**
+(`ghost_danger`), because repeated red says nothing the word doesn't, and the confirmation is what
+protects people. It also names this exact construction (ghost plus a red text color) as the thing
+not to do. **Filled red is only for the button that carries out the destruction, in the
+confirmation.**
+
+### Measured
+
+`button-audit.js` (page headers), before: **7 findings on 4 record pages.** Edit was a primary placed
+first on the topic, provider, region and tag pages (a right-aligned header puts the primary last),
+and on three of them Delete took the last slot, the `/product_drives` mistake design.md describes.
+After: 0.
+
+`button-rules-audit.js` (new; every button on every screen as both roles, 149 buttons on 42 visits):
+**17 findings against the old buttons, 0 after.** It checks variants, red-at-rest, filled danger
+outside confirmations, row actions, one primary, form action order, heights and links that change
+data.
+
+### What changed
+
+- `.button-ghost-danger`: neutral at rest, rose on hover and focus. Used for every Delete, Remove and
+  Revoke outside a confirmation, including Remove on a topic's documents.
+- Record pages have no primary: Delete first, Edit last as secondary. Rejected: keeping Edit as the
+  primary, which design.md's "not every page needs a primary" argues against for pages whose job is
+  to be read.
+
+### Upstream
+
+`button-audit.js` read variants from Human Essentials' Tailwind class strings, so on SkillRx every
+button read "unknown". It now takes an optional `BUTTON_VARIANTS` adapter export, and checks the
+destructive-action-in-the-last-slot case it didn't.

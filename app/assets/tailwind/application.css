@@ -173,6 +173,12 @@ nav.pagy a:focus-visible { @apply outline-2 outline-offset-2 outline-brand-600; 
 .button-secondary { @apply border-neutral-500 bg-white text-neutral-900 hover:bg-neutral-50; }
 .button-ghost { @apply bg-transparent text-neutral-700 hover:bg-neutral-100 hover:text-neutral-900; }
 .button-danger { @apply bg-danger text-white hover:brightness-95; }
+/* A destructive action with no fill (design.md, "Buttons"): neutral at rest, red only on hover
+   and focus. Repeated down a table, a red Delete on every row says nothing the word doesn't; the
+   confirmation is what protects people, not the color. Filled red (.button-danger) is for the
+   button that actually carries out the destruction, in the confirmation. */
+.button-ghost-danger { @apply bg-transparent text-neutral-700; }
+.button-ghost-danger:hover, .button-ghost-danger:focus-visible { @apply bg-rose-50 text-rose-700; }
 .button:focus-visible { @apply outline-2 outline-offset-2 outline-brand-600; }
 
 /* A white panel holding a table (or a form). */
@@ -283,7 +289,7 @@ rfg-table { @apply relative block; }
 .dropzone:focus-within { @apply outline-2 outline-offset-2 outline-brand-600; }
 .inline-confirm { @apply flex basis-full flex-wrap items-center gap-2 rounded-control border border-danger/40 bg-danger/5 p-3; }
 .inline-confirm p { @apply m-0 w-full text-sm text-neutral-900; }
-.text-danger { color: var(--color-rose-700); } /* text uses the tone's 700 step (design system tokens) */
+.text-danger { color: var(--color-rose-700); } /* red text (an error message), at the tone's 700 step; never on a button */
 
 /* Counts in a strip (beacons by status). */
 .stats { @apply m-0 grid grid-cols-2 gap-3 sm:grid-cols-3 lg:grid-cols-6; }

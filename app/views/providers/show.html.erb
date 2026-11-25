@@ -2,9 +2,9 @@
 
 <div class="page">
   <%= render "shared/page_header", title: @provider.name, subtitle: @provider.provider_type.presence do %>
-    <%= link_to "Edit", edit_provider_path(@provider), class: "button button-primary" %>
-    <%= button_to "Delete", @provider, method: :delete, class: "button button-ghost text-danger", form_class: "contents",
+    <%= button_to "Delete", @provider, method: :delete, class: "button button-ghost-danger", form_class: "contents",
           data: { turbo_confirm: provider_delete_warning(@provider), confirm_button: "Delete provider" } %>
+    <%= link_to "Edit", edit_provider_path(@provider), class: "button button-secondary" %>
   <% end %>
   <p class="back-link"><%= link_to "Back to providers", providers_path %></p>
 

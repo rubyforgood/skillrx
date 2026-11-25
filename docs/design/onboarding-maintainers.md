@@ -93,6 +93,8 @@ npm install --no-save --prefix /tmp/rfg-audit playwright@1.55.0
 npx --prefix /tmp/rfg-audit playwright install chromium
 npm install --no-save --prefix /tmp/axe axe-core
 NODE_PATH=/tmp/rfg-audit/node_modules node bin/design/wcag-audit.js
+NODE_PATH=/tmp/rfg-audit/node_modules node bin/design/button-audit.js        # page headers
+NODE_PATH=/tmp/rfg-audit/node_modules node bin/design/button-rules-audit.js  # every other button
 ```
 
 It visits every screen in `bin/design/route-targets.rb`, which reads the routes, so a new screen is

@@ -152,6 +152,34 @@ in, forgot password and choose a new password.
 - **Footer links have text** (GitHub, LinkedIn, Email). They were icon-only with no name, a WCAG
   failure.
 
+## Buttons
+
+From the design system's "Buttons" and "Where a button goes" (decided there, applied here 2026-11-25).
+Checked on every screen by `bin/design/button-audit.js` (page headers) and
+`bin/design/button-rules-audit.js` (everything else).
+
+| Variant | Class | Looks like | Use for |
+| --- | --- | --- | --- |
+| Primary | `.button-primary` | Filled brand blue | The one action a page or form is for: Add a topic, Save topic |
+| Secondary | `.button-secondary` | White, gray border | Every other action: Edit, Archive, Regenerate key |
+| Ghost | `.button-ghost` | No border, tinted on hover | Row actions, Cancel, Clear filters |
+| Ghost danger | `.button-ghost-danger` | Gray at rest, **red on hover and focus** | Delete, Remove, Revoke: anywhere they appear |
+| Danger | `.button-danger` | Filled red | **Only** the button that carries out a destruction, inside its confirmation |
+
+**Why Delete isn't red until you point at it.** A destructive button that's red at rest shouts, and
+down a table it shouts on every row, saying nothing the word doesn't already say. What protects
+people is the confirmation, not the color: every Delete asks first, and the button that actually
+deletes, in that confirmation, is filled red. (The design system: "a repeated destructive control
+shouldn't shout at rest".)
+
+Placement:
+- **Page header, right-aligned: the primary goes last.** At most three actions and one primary.
+- **Record pages have no primary** (their job is to be read): Delete first, then other actions, Edit
+  last, as secondary. A destructive action never takes the last slot, where the main action belongs.
+- **Form actions, left-aligned: the primary goes first.** `[Save topic] Cancel`.
+- **Row actions are ghost and small** (32px); everything else is 40px, the same height as a field.
+- **Anything that changes data is a button in a form** (`button_to`), never a link.
+
 ## Row actions
 
 The rule for every table (decided 2026-11-25, see decisions.md):
