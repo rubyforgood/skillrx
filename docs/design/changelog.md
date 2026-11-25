@@ -17,6 +17,7 @@ year. Write PENDING, commit, then fill in the hash in the next commit.
 | `44f5095` | Providers, regions, languages: lists with name links and inline Edit/Delete, record pages, forms on form_field (submit labels "Add provider"/"Save provider" and so on). Regions show the real provider count (was "1 provider" on every row). The provider delete confirmation warns how many topics would be orphaned. 514 examples, 0 failures. |
 | `611522c` | Tags: list with search and sort in the filter bar (two controls, so inline), name links, cognate chips, topic counts; tag page with its topics and cognates; in-place delete confirmation saying how many topics lose the tag; form on form_field. |
 | `82417d3` | Users: list (avatar, email link, role pill, providers, inline filters), user page (access and record), form on form_field with an Administrator checkbox and existing-providers-only. Delete now confirms (it used `data-confirm`, which Turbo ignores: one click deleted). Seeds: no duplicate provider link. |
+| `PENDING` | Import reports (list with status filter, report page with errors and summary), static error pages (400, 404, 406, 422, 500) in SkillRx's look. Retired 69 unused legacy CSS rules, `animations.css` and the dropdown-arrow partial; pagination's current page back on the brand color. **Migration complete:** WCAG audit 0 violations on 36 pages (from 4 kinds on 83 elements); 42 screen visits at 390px clean; 514 examples, 0 failures. |
 
 ### Baseline WCAG audit, before any change
 

@@ -55,8 +55,32 @@ administrator or a contributor. To **sign out**, select the **⋯** button next 
 - The "Built with ❤️" banner no longer covers the bottom of every page. It's at the end of the page
   now.
 
-**Being updated screen by screen.** The topics, beacons and administration pages are next. This
-guide will be updated as they change.
+## Lists, records and forms
+
+Every list works the same way:
+- **Search** sits above the list and filters as you type. On Topics, the other filters are behind
+  **Filters**, which opens on its own when a filter is set, so you can always tell the list is
+  filtered. **Clear filters** shows everything again.
+- **Click a name** to open the record (a topic, beacon, provider and so on). **Edit** is at the end of
+  each row.
+- **Topics show active topics** unless you choose **Archived** or **Any state** in the State filter.
+
+On a record's page, the main action (Edit) is at the top right. Archive is there for topics, and
+Delete (shown in red) for administrators.
+
+**Deleting always asks first**, in the page: nothing is deleted with one click. For a topic or tag
+the question appears where the Delete button was; elsewhere a box opens. **Cancel** is selected, so
+pressing Enter by mistake does nothing, and **Escape** cancels.
+
+Forms mark required fields with a red **\***. If something's missing when you save, a list of
+what to fix appears at the top, and each field says what's wrong with it.
+
+## Beacons
+
+Each beacon shows one status: **Synced**, **Syncing**, **Needs update**, **Error**, **Never synced**,
+or **Revoked**. The counts at the top add them up. When you provision a beacon or regenerate its
+key, the full key appears **once**, with a **Copy key** button: copy it into the beacon then, because
+SkillRx can't show it again.
 
 ## Something wrong?
 

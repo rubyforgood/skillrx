@@ -24,7 +24,18 @@ workers without an internet connection.
 
 ## Status
 
-Migration started 2026-11-24 on branch `skillsrxdesign`. **Done:** tokens, font, app shell, form controls, sign-in and password pages, home page. **Done:** Topics, Beacons, Providers, Regions, Languages, Tags, Users. **Next:** Import reports, error pages.
+Migration started 2026-11-24 on branch `skillsrxdesign`. **Every screen is migrated** (2026-11-25): app
+shell, sign-in and password pages, home page, Topics, Beacons, Providers, Regions, Languages, Tags,
+Users, Import reports, and the static error pages. See "Not migrated" for what's deliberately left.
+
+After, measured 2026-11-25:
+
+| | |
+| --- | --- |
+| WCAG audit | `bin/design/wcag-audit.js`: **0 violations, 36 pages** (was 4 kinds on 83 elements) |
+| Every screen, both roles, at 390px | 42 visits: no sideways scroll, no template errors, no N+1 warnings, no old classes |
+| Specs | 514 examples, 0 failures |
+| Hand-written CSS | 69 unused legacy rules and `animations.css` removed |
 
 Baseline, measured 2026-11-24 before any change:
 
@@ -201,7 +212,14 @@ The rule for every table (decided 2026-11-25, see decisions.md):
 
 ## Not migrated
 
-*What is deliberately left as it is, and why. Every entry needs a reason.*
+What is deliberately left as it is, and why.
+
+| What | Why |
+| --- | --- |
+| **Jobs** (`/jobs`) | Mission Control's own engine UI, opened in a new tab. Restyling a gem's views means maintaining a fork of them. |
+| **Emails** (`app/views/*_mailer`) | Email clients need inline styles and tables; a separate piece of work. |
+| **The JSON API** (`/api/v1`) | No UI. |
+| **`registrations#new`, `topics/tags#index`** | Routed, but no controller exists; both 500. For the app's maintainers (onboarding-maintainers.md). |
 
 ## Onboarding
 
