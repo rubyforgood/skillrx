@@ -1,4 +1,5 @@
-/* Tom Select Tailwind Styles, used for Tags management */
+/* TomSelect (the tags fields), on the design system's tokens: the same border, focus outline and
+   chips as the other form fields (docs/design/design.md, "Forms"). */
 
 /* Hide the original select element */
 .ts-wrapper .ts-control + select,
@@ -16,8 +17,8 @@ select[data-select-tags-target="tagList"] {
 
 .ts-wrapper.single .ts-control,
 .ts-wrapper.multi .ts-control {
-    @apply w-full px-3.5 py-2.5 border border-gray-300 rounded-lg text-sm bg-white transition-all duration-200;
-    min-height: 42px;
+    @apply w-full rounded-control border border-neutral-500 bg-white px-3 py-1.5 text-[15px];
+    min-height: 2.5rem;
 }
 
 .ts-wrapper.multi .ts-control {
@@ -26,12 +27,12 @@ select[data-select-tags-target="tagList"] {
 }
 
 .ts-wrapper .ts-control:focus-within {
-    @apply border-blue-500 outline-none ring-4 ring-blue-500/10;
+    @apply outline-2 outline-offset-1 outline-brand-600;
 }
 
 .ts-wrapper.single .ts-control:hover:not(:focus-within),
 .ts-wrapper.multi .ts-control:hover:not(:focus-within) {
-    @apply border-gray-400 bg-gray-50;
+    @apply bg-white;
 }
 
 .ts-wrapper .ts-control > input {
@@ -41,22 +42,23 @@ select[data-select-tags-target="tagList"] {
 }
 
 .ts-wrapper .ts-control > input::placeholder {
-    @apply text-gray-400;
+    @apply text-neutral-500;
 }
 
 /* Selected items (tags/badges) */
 .ts-wrapper.multi .ts-control > div {
-    @apply inline-flex items-center gap-1.5 px-2.5 py-1 bg-blue-500 text-white text-sm rounded-md;
+    /* Chips match the design system's combobox and tag input: brand-50 with brand-700 text (8.6:1). */
+    @apply inline-flex items-center gap-1 rounded-pill bg-brand-50 py-0.5 pr-1 pl-2.5 text-sm text-brand-700;
     max-width: 100%;
 }
 
 .ts-wrapper.multi .ts-control > div.active {
-    @apply bg-blue-600;
+    @apply bg-brand-100;
 }
 
 /* Remove button */
 .ts-wrapper .ts-control .remove {
-    @apply inline-flex items-center justify-center ml-1 text-white/80 hover:text-white cursor-pointer;
+    @apply ml-0.5 inline-flex size-5 cursor-pointer items-center justify-center rounded-pill text-brand-700 no-underline hover:bg-brand-100;
     font-size: 1.125rem;
     line-height: 1;
     padding: 0;
@@ -65,12 +67,12 @@ select[data-select-tags-target="tagList"] {
 }
 
 .ts-wrapper .ts-control .remove:hover {
-    @apply text-white;
+    @apply text-brand-700;
 }
 
 /* Dropdown */
 .ts-dropdown {
-    @apply absolute z-50 w-full mt-1 bg-white border border-gray-200 rounded-lg shadow-lg overflow-hidden;
+    @apply absolute z-50 mt-1 w-full overflow-hidden rounded-control border border-neutral-200 bg-white shadow-overlay;
     max-height: 280px;
     overflow-y: auto;
 }
@@ -81,12 +83,12 @@ select[data-select-tags-target="tagList"] {
 
 /* Dropdown options */
 .ts-dropdown .option {
-    @apply px-3.5 py-2 text-sm text-gray-700 cursor-pointer transition-colors duration-150;
+    @apply cursor-pointer px-3 py-2 text-[15px] text-neutral-900;
 }
 
 .ts-dropdown .option:hover,
 .ts-dropdown .option.active {
-    @apply bg-blue-500 text-white;
+    @apply bg-brand-50 text-brand-700;
 }
 
 .ts-dropdown .option.selected {
@@ -95,19 +97,19 @@ select[data-select-tags-target="tagList"] {
 
 /* No results message */
 .ts-dropdown .no-results {
-    @apply px-3.5 py-2 text-sm text-gray-500 italic;
+    @apply px-3 py-2 text-sm text-neutral-500;
 }
 
 /* Loading state */
 .ts-wrapper.loading::after {
     content: "";
-    @apply absolute right-3 top-1/2 w-4 h-4 border-2 border-gray-300 border-t-blue-500 rounded-full animate-spin;
+    @apply absolute right-3 top-1/2 w-4 h-4 border-2 border-neutral-200 border-t-brand-600 rounded-full animate-spin;
     margin-top: -0.5rem;
 }
 
 /* Disabled state */
 .ts-wrapper.disabled .ts-control {
-    @apply bg-gray-100 text-gray-500 cursor-not-allowed border-gray-200;
+    @apply cursor-not-allowed border-neutral-200 bg-neutral-100 text-neutral-500;
 }
 
 /* Single select caret */
@@ -116,16 +118,16 @@ select[data-select-tags-target="tagList"] {
     @apply absolute right-3 top-1/2 w-0 h-0;
     border-left: 5px solid transparent;
     border-right: 5px solid transparent;
-    border-top: 5px solid #6b7280;
+    border-top: 5px solid var(--color-neutral-500);
     margin-top: -2.5px;
     pointer-events: none;
 }
 
 .ts-wrapper.single.input-active .ts-control::after {
-    border-top-color: #3b82f6;
+    border-top-color: var(--color-brand-600);
 }
 
 /* Focus visible for accessibility */
 .ts-wrapper .ts-control:focus-visible {
-    @apply outline-none ring-4 ring-blue-500/10;
+    @apply outline-2 outline-offset-1 outline-brand-600;
 }

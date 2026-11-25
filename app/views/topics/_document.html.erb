@@ -1,13 +1,12 @@
 <%# locals: (signed_id:, display_name:, blob_path:, blob_counter:, hidden_input:) %>
-
-<div class="my-2" data-signed-id="<%= signed_id %>" data-upload-target="fileItem">
-  <%= link_to display_name, blob_path, title: display_name, class: "no-underline hover:underline" %>
+<li class="document" data-signed-id="<%= signed_id %>" data-upload-target="fileItem">
+  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><path d="M14 3H6a1 1 0 0 0-1 1v16a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1V8z"/><path d="M14 3v5h5"/></svg>
+  <%= link_to display_name, blob_path, class: "document-name" %>
 
   <% if hidden_input %>
     <input type="hidden" name="topic[document_signed_ids][]" value="<%= signed_id %>">
   <% end %>
 
-  <button id="remove-button-<%= blob_counter %>" class="ml-2 rounded bg-indigo-700 text-white cursor-pointer" data-action="click->upload#removeFile" data-signed-id="<%= signed_id %>">
-    <span class="button-span w-5 h-5 flex items-center justify-center">X</span>
-  </button>
-</div>
+  <button type="button" id="remove-button-<%= blob_counter %>" class="button button-ghost button-sm"
+          aria-label="Remove <%= display_name %>" data-action="click->upload#removeFile" data-signed-id="<%= signed_id %>">Remove</button>
+</li>

@@ -24,7 +24,7 @@ workers without an internet connection.
 
 ## Status
 
-Migration started 2026-11-24 on branch `skillsrxdesign`. **Done:** tokens, font, app shell, form controls, sign-in and password pages, home page. **Topics list done.** **Next:** the topic form and page, then Beacons and the admin screens.
+Migration started 2026-11-24 on branch `skillsrxdesign`. **Done:** tokens, font, app shell, form controls, sign-in and password pages, home page. **Topics done** (list, page, add, edit, delete). **Next:** Beacons, then the admin screens.
 
 Baseline, measured 2026-11-24 before any change:
 
@@ -172,6 +172,28 @@ The rule for every table (decided 2026-11-25, see decisions.md):
 - **Below the table:** "Showing 1–25 of 42 topics" and pagy's page links, restyled.
 - **Long text:** two lines, then "…" (`.clamp-2`); the full text is on the record's page.
 - **No results:** "No topics match these filters", with a link to clear them.
+
+## Forms, record pages and confirmation
+
+- **Fields:** `form_field f, :attr, label:, required:, optional:, hint:` (`app/helpers/form_helper.rb`)
+  renders the label, a red `*` (`<abbr title="required">`) or "(optional)", the hint, the control and
+  its error, wired with `aria-describedby`, `aria-invalid` and `aria-required`. Server-rendered, so
+  labels never wait for JavaScript. It fixed the topic form's year and month labels, which pointed at
+  ids that didn't exist (the audit's "select has no accessible name").
+- **Layout:** a white panel (`.surface`) holding `.form-card` sections, each with an `h2`; two-column
+  `.form-grid` for short fields; actions in `.form-actions` at the bottom: the primary button first,
+  then Cancel.
+- **Errors:** `shared/_errors`, at the top of the form, `role="alert"`: "Fix these 2 problems to save
+  the topic" and the list; each field shows its own message too.
+- **Messages after an action** (`shared/_flash`): `<rfg-callout>` at the top of the page, success or
+  danger.
+- **Record pages:** page header with the actions (primary Edit first, then secondary, then a quiet
+  red Delete), a "Back to …" link, then panels; details in a `<dl class="details">`.
+- **Confirming:** every `data-turbo-confirm` opens the app's own dialog (`shared/_confirm_dialog`,
+  `confirm_dialog.js`), never the browser's `confirm()`. Cancel has focus. Topics and tags keep their
+  two-step delete, now an `.inline-confirm` panel in place of the button.
+- **Red text** uses the 700 step (`rose-700`): `--color-danger` (600) is for fills.
+- **TomSelect** (the tags fields) uses the same border, focus outline and chips as everything else.
 
 ## Screens
 

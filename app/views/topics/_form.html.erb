@@ -1,161 +1,83 @@
-<%= form_for topic do |f| %>
-  <div>
-    <%= render "shared/errors", errors: errors.presence || [], resource_name: topic.class.name %>
+<%# The topic form (docs/design/design.md, "Forms"): one column of fields in sections, required
+    fields marked, each field's hint and error wired to it, and the actions at the bottom. %>
+<%# The upload controller is on the form: its targets include the Save button in the actions bar. %>
+<%= form_for topic, html: { class: "surface", novalidate: true, data: { controller: "upload", upload_topic_id_value: topic.id } } do |f| %>
+  <div class="form-card">
+    <%= render "shared/errors", errors: errors.presence || [], resource_name: "topic" %>
 
-    <div class="form-grid">
+    <section class="form-section" aria-labelledby="topic-details-heading">
+      <h2 id="topic-details-heading">Details</h2>
 
-      <!-- Topic Title -->
-      <div class="form-grid-full">
-        <%= f.label :title, class: "form-label" do %>
-          Topic Title
-          <span class="form-required">*</span>
-        <% end %>
-        <%= f.text_field :title,
-            placeholder: "Enter a clear, descriptive title",
-            class: "form-input" %>
-        <p class="form-help-text">Choose a title that clearly describes the educational content.</p>
-      </div>
-
-      <!-- Description -->
-      <div class="form-grid-full">
-        <%= f.label :description, class: "form-label" %>
-        <%= f.text_area :description,
-            placeholder: "Provide a detailed description of this educational topic...",
-            rows: 4,
-            class: "form-textarea" %>
-        <p class="form-help-text">Describe the learning objectives and content covered in this topic.</p>
-      </div>
-
-      <!-- Provider (Admin Only) -->
-      <% if Current.user.is_admin? %>
-        <div>
-          <%= f.label :provider, class: "form-label" do %>
-            Provider
-            <span class="form-required">*</span>
-          <% end %>
-          <div style="position:relative;">
-            <%= f.collection_select :provider_id, Provider.all, :id, :name,
-                { prompt: "Select Provider" },
-                class: "form-select" %>
-            <%= render "shared/dropdown_arrow" %>
-          </div>
-          <p class="form-help-text">Choose the healthcare provider associated with this content.</p>
-        </div>
+      <%= form_field f, :title, label: "Title", required: true, hint: "A clear title that says what the topic covers." do %>
+        <%= f.text_field :title, class: "form-input" %>
       <% end %>
 
-      <!-- Publishing Year -->
-      <div>
-        <%= f.label :publishing_year, class: "form-label" do %>
-          Publishing Year
-          <span class="form-required">*</span>
+      <%= form_field f, :description, label: "Description", optional: true, hint: "What someone will learn from this topic." do %>
+        <%= f.text_area :description, rows: 4, class: "form-textarea" %>
+      <% end %>
+
+      <div class="form-grid">
+        <% if Current.user.is_admin? %>
+          <%= form_field f, :provider_id, label: "Provider", required: true do %>
+            <%= f.collection_select :provider_id, Provider.order(:name), :id, :name, { prompt: "Choose a provider" }, class: "form-select" %>
+          <% end %>
         <% end %>
-        <div style="position:relative;">
-          <%= f.select :published_at_year, options_for_select((2016..Date.today.year).to_a.reverse, topic.published_at_year || Date.today.year),
-            { prompt: "Select year of publishing" },
-            class: "form-select" %>
-          <%= render "shared/dropdown_arrow" %>
-        </div>
-      </div>
-      <!-- Publishing Month -->
-      <div>
-        <%= f.label :publishing_month, class: "form-label" do %>
-          Publishing Month
-          <span class="form-required">*</span>
+
+        <%= form_field f, :language_id, label: "Language", required: true do %>
+          <%= f.collection_select :language_id, Language.order(:name), :id, ->(l) { l.name.upcase_first },
+                { selected: topic.language&.id || Language.first&.id }, class: "form-select" %>
         <% end %>
-        <div style="position:relative;">
-          <%= f.select :published_at_month, options_for_select((1..12).to_a, topic.published_at_month || Date.today.month),
-            { prompt: "Select month of publishing" },
-            class: "form-select" %>
-          <%= render "shared/dropdown_arrow" %>
-        </div>
+
+        <%= form_field f, :published_at_year, label: "Year published", required: true do %>
+          <%= f.select :published_at_year, options_for_select((2016..Date.today.year).to_a.reverse.map(&:to_s), (topic.published_at_year || Date.today.year).to_s),
+                {}, class: "form-select" %>
+        <% end %>
+
+        <%= form_field f, :published_at_month, label: "Month published", required: true do %>
+          <%= f.select :published_at_month, options_for_select((1..12).map { |m| [Date::MONTHNAMES[m], m.to_s] }, (topic.published_at_month || Date.today.month).to_s),
+                {}, class: "form-select" %>
+        <% end %>
       </div>
 
-      <!-- Language -->
-      <div>
-        <%= f.label :language, class: "form-label" do %>
-          Language
-          <span class="form-required">*</span>
-        <% end %>
-        <div style="position:relative;">
-          <%= f.collection_select :language_id,
-                                  Language.all,
-                                  :id,
-                                  :name,
-                                  { prompt: "Select language", selected: topic.language&.id || Language.first.id },
-                                  class: "form-select" %>
-          <%= render "shared/dropdown_arrow" %>
-        </div>
-      </div>
       <div data-controller="select-tags">
-        <%= f.label :tag_list, class: "form-label" %>
-        <%= f.select :tag_list,
-                    options_from_collection_for_select(
-                      ActsAsTaggableOn::Tag.all&.order(name: :asc),
-                      :name,
-                      :name,
-                      topic.tag_list
-                    ),
-                    { prompt: "Start typing and press Enter to add a new tag", include_blank: true },
-                    multiple: true,
-                    data: { "allow-new": "true", "allow-clear": "true", "select-tags-target": "tagList" }
-        %>
-        <p class="form-help-text">
-          Add relevant tags to help users discover this content. You can select existing tags or create new ones.
-          <% if topic.persisted? %>
-            For any tag you add or remove, its cognates are also added or removed.
-          <% end %>
-        </p>
-      </div>
-
-      <!-- Documents Upload -->
-      <div class="form-grid-full" data-controller="upload" <% if topic.persisted? %> data-upload-topic-id-value="<%= topic.id %>" <% end %>>
-
-        <div data-upload-target="filesContainer" style="margin-bottom: 1rem;">
-          <% if topic.documents_blobs.present? %>
-            <%= render partial: "topics/document_list", locals: { blobs: topic.documents_blobs, hidden_input: false } %>
-          <% end %>
-        </div>
-
-        <% topic.documents.each do |document| %>
-          <%= f.hidden_field :documents, multiple: true, value: document.signed_id, data: { upload_target: "hiddenField" } %>
+        <%= form_field f, :tag_list, label: "Tags", optional: true, for_id: "topic_tag_list",
+              hint: "Type to find a tag, or press Enter to add a new one.#{" Adding or removing a tag adds or removes its cognates too." if topic.persisted?}" do %>
+          <%= f.select :tag_list,
+                options_from_collection_for_select(ActsAsTaggableOn::Tag.order(name: :asc), :name, :name, topic.tag_list),
+                { include_blank: true }, multiple: true, placeholder: "Add tags",
+                data: { "allow-new": "true", "allow-clear": "true", "select-tags-target": "tagList" } %>
         <% end %>
-
-        <label for="documents" class="mt-2 flex justify-center rounded-lg border border-dashed border-gray-900/25 px-6 py-10 cursor-pointer hover:border-gray-900/50 transition-colors">
-          <div class="text-center">
-            <svg viewBox="0 0 24 24" fill="currentColor" data-slot="icon" aria-hidden="true" class="mx-auto size-12 text-gray-300">
-              <path d="M1.5 6a2.25 2.25 0 0 1 2.25-2.25h16.5A2.25 2.25 0 0 1 22.5 6v12a2.25 2.25 0 0 1-2.25 2.25H3.75A2.25 2.25 0 0 1 1.5 18V6ZM3 16.06V18c0 .414.336.75.75.75h16.5A.75.75 0 0 0 21 18v-1.94l-2.69-2.689a1.5 1.5 0 0 0-2.12 0l-.88.879.97.97a.75.75 0 1 1-1.06 1.06l-5.16-5.159a1.5 1.5 0 0 0-2.12 0L3 16.061Zm10.125-7.81a1.125 1.125 0 1 1 2.25 0 1.125 1.125 0 0 1-2.25 0Z" clip-rule="evenodd" fill-rule="evenodd" />
-            </svg>
-            <div class="mt-4 flex justify-center text-sm/6 text-gray-600">
-              <span class="font-semibold text-indigo-600 hover:text-indigo-500">Upload a file</span>
-              <%= f.file_field :documents,
-                multiple: true,
-                class: "sr-only",
-                id: "documents",
-                accept: Topic::CONTENT_TYPES.join(","),
-                data: { upload_target: "filesInput",
-                action: "change->upload#uploadFile" }
-              %>
-            </div>
-            <p class="text-xs/5 text-gray-600">Images, PDFs or audio files</p>
-          </div>
-        </label>
-
-
-        <div class="flex justify-between items-center pt-8 border-t border-gray-100 mt-8">
-          <div class="flex gap-4">
-            <%= f.submit "Save Topic", data: { upload_target: "submitButton" }, class: "bg-gradient-green text-white font-semibold py-3 px-8 rounded-lg border-0 cursor-pointer text-sm shadow-md transition-all hover:-translate-y-0.5" %>
-            <%= link_to "Back to Topics", topics_path,
-              class: "bg-gray-100 text-gray-500 font-semibold py-3 px-8 rounded-lg no-underline text-sm transition-all hover:bg-gray-200" %>
-          </div>
-
-          <% if topic.persisted? %>
-            <div class="text-gray-500 text-xs">
-              Last updated: <%= topic.updated_at.strftime("%B %d, %Y at %I:%M %p") %>
-            </div>
-          <% end %>
-        </div>
       </div>
-    </div>
+    </section>
 
+    <section class="form-section" aria-labelledby="topic-documents-heading">
+      <h2 id="topic-documents-heading">Documents</h2>
+
+      <ul class="documents" data-upload-target="filesContainer">
+        <% if topic.documents_blobs.present? %>
+          <%= render partial: "topics/document_list", locals: { blobs: topic.documents_blobs, hidden_input: false } %>
+        <% end %>
+      </ul>
+
+      <% topic.documents.each do |document| %>
+        <%= f.hidden_field :documents, multiple: true, value: document.signed_id, data: { upload_target: "hiddenField" } %>
+      <% end %>
+
+      <label for="documents" class="dropzone">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" aria-hidden="true"><path d="M12 16V4m0 0-4 4m4-4 4 4M4 16v3a1 1 0 0 0 1 1h14a1 1 0 0 0 1-1v-3"/></svg>
+        <span class="dropzone-action">Choose files to upload</span>
+        <span class="dropzone-hint" id="documents_hint">Images, PDFs or audio files</span>
+        <%= f.file_field :documents, multiple: true, class: "sr-only", id: "documents", accept: Topic::CONTENT_TYPES.join(","),
+              aria: { describedby: "documents_hint" }, data: { upload_target: "filesInput", action: "change->upload#uploadFile" } %>
+      </label>
+    </section>
+  </div>
+
+  <div class="form-actions">
+    <%= f.submit "Save topic", class: "button button-primary", data: { upload_target: "submitButton" } %>
+    <%= link_to "Cancel", topic.persisted? ? topic_path(topic) : topics_path, class: "button button-ghost" %>
+    <% if topic.persisted? %>
+      <span class="form-meta">Last updated <%= topic.updated_at.strftime("%b %-d, %Y at %-l:%M %p") %></span>
+    <% end %>
   </div>
 <% end %>

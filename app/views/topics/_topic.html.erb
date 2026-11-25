@@ -1,90 +1,56 @@
-<div class="bg-white rounded-xl shadow-lg p-8 mb-8">
-  <!-- Topic Content -->
-  <% if @topic.description.present? %>
-    <div class="mb-8">
-      <h3 class="text-xl font-semibold text-gray-800 mb-4">Description</h3>
-      <div class="text-gray-600 leading-relaxed">
-        <%= simple_format(@topic.description) %>
-      </div>
-    </div>
-  <% end %>
-
-  <!-- Documents Section -->
-  <% if @topic.documents.any? %>
-    <div class="mb-8">
-      <h3 class="text-xl font-semibold text-gray-800 mb-4">Documents</h3>
-      <div class="grid gap-4">
-        <% @topic.documents.each do |document| %>
-          <div class="flex items-center gap-4 p-4 bg-gray-50 border border-gray-200 rounded-lg">
-            <div class="bg-blue-500 text-white p-2 rounded-md flex items-center justify-center">
-              <svg class="icon-size-md" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/>
-              </svg>
-            </div>
-            <div class="flex-1">
-              <%= link_to document.filename, rails_blob_path(document, disposition: "inline"),
-                  class: "text-blue-600 no-underline font-medium hover:underline" %>
-              <div class="text-sm text-gray-500 mt-1">
-                <%= number_to_human_size(document.byte_size) %>
-              </div>
-            </div>
-            <div>
-              <%= link_to rails_blob_path(document, disposition: "attachment"),
-                  class: "bg-green-500 text-white py-2 px-4 rounded-md no-underline text-sm font-medium hover:bg-green-600 transition-colors" do %>
-                Download
-              <% end %>
-            </div>
-          </div>
+<div class="grid-2">
+  <div class="stack">
+    <section class="surface" aria-labelledby="topic-about">
+      <div class="surface-head"><h2 id="topic-about">About this topic</h2>
+        <rfg-status-pill tone="<%= @topic.archived? ? "neutral" : "success" %>"><%= @topic.archived? ? "Archived" : "Active" %></rfg-status-pill></div>
+      <div class="surface-body">
+        <% if @topic.description.present? %>
+          <div class="prose-text"><%= @topic.description %></div>
+        <% else %>
+          <p class="muted m-0">No description.</p>
         <% end %>
       </div>
-    </div>
-  <% end %>
+    </section>
 
-  <!-- Topic Details -->
-  <div class="border-t border-gray-200 pt-8">
-    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
-
-      <!-- Language -->
-      <% if @topic.language.present? %>
-        <div>
-          <div class="text-sm font-semibold text-gray-700 mb-2">Language</div>
-          <div class="text-gray-500"><%= @topic.language.name %></div>
-        </div>
+    <section class="surface" aria-labelledby="topic-documents">
+      <div class="surface-head"><h2 id="topic-documents">Documents</h2><span class="muted text-sm"><%= pluralize(@topic.documents.size, "file") %></span></div>
+      <% if @topic.documents.any? %>
+        <ul class="documents documents--list">
+          <% @topic.documents.each do |document| %>
+            <li class="document">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><path d="M14 3H6a1 1 0 0 0-1 1v16a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1V8z"/><path d="M14 3v5h5"/></svg>
+              <%= link_to document.filename, rails_blob_path(document, disposition: "inline"), class: "document-name" %>
+              <span class="muted text-sm"><%= number_to_human_size(document.byte_size) %></span>
+              <%= link_to "Download", rails_blob_path(document, disposition: "attachment"), class: "button button-ghost button-sm",
+                    aria: { label: "Download #{document.filename}" } %>
+            </li>
+          <% end %>
+        </ul>
+      <% else %>
+        <div class="surface-body"><p class="muted m-0">No documents yet. <%= link_to "Add some", edit_topic_path(@topic) %>.</p></div>
       <% end %>
-
-      <!-- Provider -->
-      <% if @topic.provider.present? %>
-        <div>
-          <div class="text-sm font-semibold text-gray-700 mb-2">Provider</div>
-          <div class="text-gray-500"><%= @topic.provider.name %></div>
-        </div>
-      <% end %>
-
-      <!-- Created Date -->
-      <div>
-        <div class="text-sm font-semibold text-gray-700 mb-2">Created</div>
-        <div class="text-gray-500"><%= @topic.created_at.strftime("%B %d, %Y") %></div>
-      </div>
-
-      <!-- Last Updated -->
-      <div>
-        <div class="text-sm font-semibold text-gray-700 mb-2">Last Updated</div>
-        <div class="text-gray-500"><%= @topic.updated_at.strftime("%B %d, %Y") %></div>
-      </div>
-    </div>
+    </section>
   </div>
 
-  <!-- Tags -->
-  <% if @topic.tags.any? %>
-    <div class="border-t border-gray-200 pt-8 mt-8">
-      <div class="text-sm font-semibold text-gray-700 mb-4">Tags</div>
-      <div class="flex flex-wrap gap-2">
-        <% @topic.tags.each do |tag| %>
-          <span class="bg-blue-100 text-blue-800 py-1.5 px-3 rounded-full text-xs font-medium">
-            <%= tag.name %>
-          </span>
-        <% end %>
-      </div>
+  <section class="surface" aria-labelledby="topic-facts">
+    <div class="surface-head"><h2 id="topic-facts">Details</h2></div>
+    <div class="surface-body">
+      <dl class="details details--stacked">
+        <dt>Language</dt><dd><%= @topic.language&.name&.upcase_first || "—" %></dd>
+        <dt>Provider</dt><dd><%= @topic.provider&.name || "—" %></dd>
+        <dt>Published</dt><dd><%= @topic.published_at&.strftime("%B %Y") || "—" %></dd>
+        <dt>UID</dt><dd class="font-mono text-sm break-all"><%= @topic.uid.presence || "—" %></dd>
+        <dt>Tags</dt>
+        <dd>
+          <% if @topic.tags.any? %>
+            <ul class="chips"><% @topic.tags.each do |tag| %><li class="chip"><%= tag.name %></li><% end %></ul>
+          <% else %>
+            <span class="muted">None</span>
+          <% end %>
+        </dd>
+        <dt>Added</dt><dd><%= @topic.created_at.strftime("%b %-d, %Y") %></dd>
+        <dt>Last updated</dt><dd><%= @topic.updated_at.strftime("%b %-d, %Y") %></dd>
+      </dl>
     </div>
-  <% end %>
+  </section>
 </div>

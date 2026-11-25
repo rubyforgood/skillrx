@@ -11,6 +11,7 @@ export default class extends Controller {
 
   uploadFile(event) {
     event.preventDefault();
+    const label = this.submitButtonTarget.value;
 
     this.submitButtonTarget.disabled = true;
     this.submitButtonTarget.classList.add("disabled:opacity-75");
@@ -45,7 +46,7 @@ export default class extends Controller {
 
         this.submitButtonTarget.disabled = false;
         this.submitButtonTarget.classList.remove("disabled:opacity-75");
-        this.submitButtonTarget.value = "Save Topic";
+        this.submitButtonTarget.value = label;
       });
   }
 

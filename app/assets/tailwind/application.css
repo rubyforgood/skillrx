@@ -583,3 +583,74 @@ rfg-table { @apply relative block; }
 .provider-switch { @apply mb-4 flex flex-wrap items-end gap-3; }
 .provider-switch .form-label { @apply mb-0 self-center; }
 .provider-switch .form-select { @apply w-72 max-w-full; }
+
+/* ---- Forms, record pages, messages, confirmation (docs/design/design.md) ------------------ */
+.flash { @apply block; }
+.page > .flash, main > .flash { @apply mx-4 mt-4 sm:mx-8; }
+
+.form-field { @apply flex flex-col; }
+.form-field .form-label { @apply mb-1.5; }
+.form-field .form-help-text { @apply mt-0 mb-1.5; }
+.form-required { @apply ml-0.5 text-danger no-underline; }
+.form-optional { @apply font-normal text-neutral-500; }
+.form-error { @apply mt-1.5 mb-0 flex gap-1.5 text-sm text-neutral-700; }
+.form-error::before { content: "!"; @apply inline-flex size-4 shrink-0 translate-y-0.5 items-center justify-center rounded-full bg-danger text-[11px] font-bold text-white; }
+.form-field--invalid :is(.form-input, .form-select, .form-textarea) { @apply border-danger; }
+
+.form-card { @apply flex flex-col gap-6 p-6; }
+.form-section { @apply flex flex-col gap-5 border-t border-neutral-200 pt-6 first:border-t-0 first:pt-0; }
+.form-section > h2 { @apply m-0 text-base font-semibold text-neutral-900; }
+.form-grid { @apply grid gap-5 sm:grid-cols-2; }
+.form-grid .form-field--full { @apply sm:col-span-2; }
+.form-actions { @apply flex flex-wrap items-center gap-3 border-t border-neutral-200 px-6 py-4; }
+.form-actions .form-meta { @apply ml-auto text-sm text-neutral-500; }
+.form-page { @apply max-w-3xl; }
+
+.error-summary { @apply rounded-control border border-danger/40 bg-danger/5 p-4; }
+.error-summary:focus { @apply outline-2 outline-offset-2 outline-danger; }
+.error-summary h2 { @apply m-0 mb-1.5 text-base font-semibold text-neutral-900; }
+.error-summary ul { @apply m-0 list-disc pl-5 text-sm text-neutral-700; }
+
+/* A record's details: a two-column list of label and value (design.md: "A record's details are a
+   <dl>"). */
+.surface-body { @apply p-6; }
+.surface-head { @apply flex flex-wrap items-center justify-between gap-3 border-b border-neutral-200 px-6 py-4; }
+.surface-head h2 { @apply m-0 text-base font-semibold text-neutral-900; }
+.details { @apply m-0 grid gap-x-8 gap-y-4 sm:grid-cols-[12rem_1fr]; }
+.details dt { @apply text-sm font-medium text-neutral-500; }
+.details dd { @apply m-0 min-w-0 break-words text-neutral-900; }
+.prose-text { @apply m-0 max-w-[70ch] whitespace-pre-line text-neutral-900; }
+.chips { @apply m-0 flex list-none flex-wrap gap-1.5 p-0; }
+.chip { @apply inline-flex items-center rounded-pill bg-neutral-100 px-2.5 py-0.5 text-sm text-neutral-700; }
+.chip a { @apply text-neutral-700 no-underline hover:underline; }
+.muted { @apply text-neutral-500; }
+.stack { @apply flex flex-col gap-5; }
+.grid-2 { @apply grid gap-5 lg:grid-cols-[2fr_1fr]; }
+.grid-2 > * { @apply min-w-0; }
+
+.confirm-dialog { @apply m-auto w-full max-w-md rounded-surface border border-neutral-200 bg-white p-0 shadow-overlay; }
+.confirm-dialog::backdrop { @apply bg-neutral-900/40; }
+.confirm-dialog form { @apply flex flex-col gap-3 p-6; }
+.confirm-dialog h2 { @apply m-0 text-lg font-semibold text-neutral-900; }
+.confirm-dialog p { @apply m-0 text-neutral-700; }
+.confirm-dialog-actions { @apply mt-3 flex justify-end gap-2; }
+
+.back-link { @apply -mt-3 m-0 text-sm; }
+.back-link a { @apply text-brand-700 underline-offset-2 hover:underline; }
+.back-link a::before { content: "← "; }
+.details--stacked { @apply gap-y-1 sm:grid-cols-1; }
+.details--stacked dd { @apply mb-3 last:mb-0; }
+.documents { @apply m-0 flex list-none flex-col p-0; }
+.documents:empty { @apply hidden; }
+.document { @apply flex items-center gap-3 border-b border-neutral-100 px-1 py-2.5 last:border-b-0; }
+.documents--list .document { @apply px-6; }
+.document svg { @apply size-5 shrink-0 text-neutral-500; }
+.document-name { @apply min-w-0 flex-1 truncate text-brand-700 underline-offset-2 hover:underline; }
+.dropzone { @apply flex cursor-pointer flex-col items-center gap-1 rounded-control border border-dashed border-neutral-500 bg-neutral-50 px-6 py-8 text-center hover:bg-neutral-100; }
+.dropzone svg { @apply size-7 text-neutral-500; }
+.dropzone-action { @apply font-semibold text-brand-700; }
+.dropzone-hint { @apply text-sm text-neutral-500; }
+.dropzone:focus-within { @apply outline-2 outline-offset-2 outline-brand-600; }
+.inline-confirm { @apply flex basis-full flex-wrap items-center gap-2 rounded-control border border-danger/40 bg-danger/5 p-3; }
+.inline-confirm p { @apply m-0 w-full text-sm text-neutral-900; }
+.text-danger { color: var(--color-rose-700); } /* text uses the tone's 700 step (design system tokens) */

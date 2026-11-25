@@ -48,7 +48,7 @@ RSpec.describe "Upload Management", type: :system do
         end
         expect(page).to have_text("logo_ruby_for_good.png")
         expect(page).to have_text("skillrx_sidebar.png")
-        click_button("Save Topic")
+        click_button("Save topic")
         find_link { |l| l["data-testid"] == "#{topic.id}" }.click
         expect(page).to have_text("skillrx_sidebar.png")
       end
@@ -61,7 +61,7 @@ RSpec.describe "Upload Management", type: :system do
           end
           expect(page).to have_text("logo_ruby_for_good.png")
           expect(page).to have_text("skillrx_sidebar.png")
-          click_link("Back to Topics")
+          click_link("Cancel"); visit topics_path
           find_link { |l| l["data-testid"] == "#{topic.id}" }.click
           expect(page).to have_text("logo_ruby_for_good.png")
           expect(page).not_to have_text("skillrx_sidebar.png")
@@ -76,8 +76,8 @@ RSpec.describe "Upload Management", type: :system do
           end
           expect(page).to have_text("logo_ruby_for_good.png")
           expect(page).to have_text("file_text_test.txt")
-          click_button("Save Topic")
-          expect(page).to have_text("View")
+          click_button("Save topic")
+          expect(page).to have_css("h1", text: "Topics")
           find_link { |l| l["data-testid"] == "#{topic.id}" }.click
           expect(page).not_to have_text("file_text_test.txt")
         end
@@ -89,8 +89,8 @@ RSpec.describe "Upload Management", type: :system do
         expect(page).to have_text("logo_ruby_for_good.png")
         click_button("remove-button-1")
         expect(page).not_to have_text("logo_ruby_for_good.png")
-        click_button("Save Topic")
-        expect(page).to have_text("View")
+        click_button("Save topic")
+        expect(page).to have_css("h1", text: "Topics")
         find_link { |l| l["data-testid"] == "#{topic.id}" }.click
         expect(page).not_to have_text("logo_ruby_for_good.png")
       end
@@ -99,8 +99,8 @@ RSpec.describe "Upload Management", type: :system do
         expect(page).to have_text("logo_ruby_for_good.png")
         click_button("remove-button-1")
         expect(page).not_to have_text("logo_ruby_for_good.png")
-        click_link("Back to Topics")
-        expect(page).to have_text("View")
+        click_link("Cancel"); visit topics_path
+        expect(page).to have_css("h1", text: "Topics")
         find_link { |l| l["data-testid"] == "#{topic.id}" }.click
         expect(page).to have_text("logo_ruby_for_good.png")
       end

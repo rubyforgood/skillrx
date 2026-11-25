@@ -1,0 +1,12 @@
+<%# The app's confirmation dialog: confirm_dialog.js opens it for any data-turbo-confirm. Cancel has
+    focus, so pressing Enter by reflex doesn't delete anything; Escape cancels. %>
+<dialog id="confirm-dialog" class="confirm-dialog" aria-labelledby="confirm-dialog-title" aria-describedby="confirm-dialog-message">
+  <form method="dialog">
+    <h2 id="confirm-dialog-title">Are you sure?</h2>
+    <p id="confirm-dialog-message" data-confirm-message></p>
+    <div class="confirm-dialog-actions">
+      <button value="cancel" class="button button-secondary" data-confirm-cancel>Cancel</button>
+      <button value="accept" class="button button-danger" data-confirm-accept>Confirm</button>
+    </div>
+  </form>
+</dialog>

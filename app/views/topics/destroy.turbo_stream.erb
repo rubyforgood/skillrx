@@ -1,14 +1,8 @@
+<%# Shown in place of the Delete button: the app confirms, not the browser. %>
 <%= turbo_stream.update "delete_topic_#{@topic.id}" do %>
-  <div class="confirmation-dialog mt-4">
-    <h5>Destroying a topic is permanent. Are you sure you want to delete this topic?</h5>
-
-    <div class="mt-4 hstack gap-3">
-      <div>
-        <%= button_to "Confirm Delete", topic_path(@topic, confirmed: true),  method: :delete, class: "btn btn-danger" %>
-      </div>
-      <div>
-        <%= link_to "Cancel", topic_path(@topic), class: "btn btn-secondary" %>
-      </div>
-    </div>
+  <div class="inline-confirm" role="alert">
+    <p>Deleting this topic is permanent, and removes it from every beacon at the next sync.</p>
+    <%= button_to "Delete topic", topic_path(@topic, confirmed: true), method: :delete, class: "button button-danger", form_class: "contents" %>
+    <%= link_to "Cancel", topic_path(@topic), class: "button button-ghost" %>
   </div>
 <% end %>
