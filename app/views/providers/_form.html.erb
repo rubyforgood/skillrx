@@ -1,104 +1,39 @@
-<%= form_with(model: provider, local: true) do |form| %>
-  <div class="space-y-6">
-    <%= render "shared/errors", errors: provider.errors.full_messages, resource_name: provider.class.name %>
+<%= form_with(model: provider, local: true, html: { class: "surface", novalidate: true }) do |form| %>
+  <div class="form-card">
+    <%= render "shared/errors", errors: provider.errors.full_messages, resource_name: "provider" %>
 
-    <!-- File name prefix uneditable notice -->
-    <% if @provider.topics? %>
-      <div id="file-name-prefix-uneditable-notice" class="bg-blue-50 border border-blue-200 rounded-lg p-4">
-        <div class="flex">
-          <div class="flex-shrink-0">
-            <svg class="h-5 w-5 text-blue-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/>
-            </svg>
-          </div>
-          <div class="ml-3">
-            <p class="text-sm text-blue-700 m-0">
-              There are topics associated with this provider, so the file names are established and the file name prefix can't be edited.
-            </p>
-          </div>
-        </div>
-      </div>
+    <%= form_field form, :name, label: "Name", required: true, hint: "The organization's official name." do %>
+      <%= form.text_field :name, autofocus: true, class: "form-input" %>
     <% end %>
 
+    <%= form_field form, :provider_type, label: "Type", required: true, hint: "For example, government, hospital or NGO." do %>
+      <%= form.text_field :provider_type, class: "form-input" %>
+    <% end %>
 
-    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-
-      <!-- Provider Name -->
-      <div>
-        <%= form.label :name, class: "input-label" do %>
-          Provider Name
-          <span class="text-red-500">*</span>
-        <% end %>
-        <%= form.text_field :name,
-            placeholder: "e.g., Johns Hopkins, Mayo Clinic",
-            autofocus: true,
-            class: "input-field bg-gray-50" %>
-        <p class="help-text">The official name of the healthcare provider or organization.</p>
+    <% if @provider.topics? %>
+      <div id="file-name-prefix-uneditable-notice">
+        <rfg-callout tone="info">This provider has topics, so their file names are set and the prefix can't change.</rfg-callout>
       </div>
-
-      <!-- Provider Type -->
-      <div>
-        <%= form.label :provider_type, class: "input-label" do %>
-          Provider Type
-          <span class="text-red-500">*</span>
-        <% end %>
-        <%= form.text_field :provider_type,
-            placeholder: "e.g., Hospital, Clinic, Health System",
-            class: "input-field bg-gray-50" %>
-        <p class="help-text">The type or category of healthcare provider.</p>
-      </div>
-
-      <!-- File name prefix -->
-      <% if @provider.topics? %>
-        <div>
-          <%= form.label :file_name_prefix, class: "input-label" do %>
-            File name prefix
-          <% end %>
-          <%= form.text_field :file_name_prefix,
-              disabled: true,
-              value: @provider.file_name_prefix,
-              class: "input-field bg-gray-50"
-          %>
-          <p class="help-text">The prefix to use for this provider's uploads.</p>
-        </div>
-      <% else %>
-        <div>
-          <%= form.label :file_name_prefix, class: "input-label" do %>
-            File name prefix
-          <% end %>
-          <%= form.text_field :file_name_prefix,
-              placeholder: "e.g., 123_who_guidelines",
-              class: "input-field bg-gray-50" %>
-          <p class="help-text">The prefix to use for this provider's uploads.</p>
-        </div>
+      <%= form_field form, :file_name_prefix, label: "File name prefix", hint: "Added to the start of this provider's uploaded file names." do %>
+        <%= form.text_field :file_name_prefix, disabled: true, value: @provider.file_name_prefix, class: "form-input" %>
       <% end %>
+    <% else %>
+      <%= form_field form, :file_name_prefix, label: "File name prefix", optional: true, hint: "Added to the start of this provider's uploaded file names. For example, 123_who_guidelines." do %>
+        <%= form.text_field :file_name_prefix, class: "form-input" %>
+      <% end %>
+    <% end %>
 
-      <!-- Regions -->
-      <div>
-        <%= form.label :region, class: "input-label" do %>
-          Associated Regions
-        <% end %>
-        <%= form.collection_select :region_ids, Region.order(:name), :id, :name,
-            { include_hidden: false },
-            multiple: true,
-            class: "input-field bg-gray-50 min-h-[120px]" %>
-        <p class="help-text">Select one or more regions this provider serves. Hold Ctrl/Cmd to select multiple.</p>
-      </div>
-    </div>
-
-    <div class="flex justify-between items-center pt-8 border-t border-gray-100 mt-8">
-      <div class="flex gap-4">
-        <%= form.submit (provider.persisted? ? "Update Provider" : "Create Provider"),
-            class: "bg-gradient-green text-white font-semibold py-3 px-8 rounded-lg border-0 cursor-pointer text-sm shadow-green transition-all hover:-translate-y-0.5" %>
-        <%= link_to "Cancel", providers_path,
-            class: "bg-gray-100 text-gray-500 font-semibold py-3 px-8 rounded-lg no-underline text-sm transition-all hover:bg-gray-200" %>
-      </div>
-
-      <% if provider.persisted? %>
-        <div class="text-gray-500 text-xs">
-          Last updated: <%= provider.updated_at.strftime("%B %d, %Y at %I:%M %p") %>
-        </div>
+    <div data-controller="select-tags">
+      <%= form_field form, :region_ids, label: "Regions", optional: true, hint: "Where this provider's topics are used." do %>
+        <%= form.collection_select :region_ids, Region.order(:name), :id, :name, { include_hidden: false }, multiple: true, placeholder: "Choose regions",
+              data: { "allow-new": "false", "allow-clear": "true", "select-tags-target": "tagList" } %>
       <% end %>
     </div>
+  </div>
+
+  <div class="form-actions">
+    <%= form.submit provider.persisted? ? "Save provider" : "Add provider", class: "button button-primary" %>
+    <%= link_to "Cancel", provider.persisted? ? provider_path(provider) : providers_path, class: "button button-ghost" %>
+    <% if provider.persisted? %><span class="form-meta">Last updated <%= provider.updated_at.strftime("%b %-d, %Y") %></span><% end %>
   </div>
 <% end %>

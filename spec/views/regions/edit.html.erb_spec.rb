@@ -16,7 +16,7 @@ RSpec.describe "regions/edit", type: :view do
 
     assert_select "form[action=?][method=?]", region_path(region), "post" do
       assert_select "input[name=?]", "region[name]"
-      assert_select "input[type='submit'][value='Update Region']"
+      assert_select "input[type='submit'][value='Save region']"
     end
   end
 end

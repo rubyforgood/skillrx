@@ -24,7 +24,7 @@ workers without an internet connection.
 
 ## Status
 
-Migration started 2026-11-24 on branch `skillsrxdesign`. **Done:** tokens, font, app shell, form controls, sign-in and password pages, home page. **Topics and Beacons done.** **Next:** the admin screens (providers, regions, languages, tags, users, import reports).
+Migration started 2026-11-24 on branch `skillsrxdesign`. **Done:** tokens, font, app shell, form controls, sign-in and password pages, home page. **Done:** Topics, Beacons, Providers, Regions, Languages. **Next:** Tags, Users, Import reports.
 
 Baseline, measured 2026-11-24 before any change:
 

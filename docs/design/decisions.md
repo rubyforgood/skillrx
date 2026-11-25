@@ -235,3 +235,18 @@ Asked, choosing between options: "Counts by sync status" and "Yes, real values".
   last synced ("3 days ago", exact time on hover). Region and language sit under the name, so the
   table fits at 1280px.
 - **The new key panel** shows the full key once, with Copy; the flash just says to copy it.
+
+## 2026-11-25: Providers, regions and languages: name links, Edit and Delete inline
+
+Following the row-action rule: each list's name links to the record (no View button), which leaves
+two settled actions, **Edit** and **Delete**, so they stay visible. Languages has no delete route, so
+just Edit. Deleting confirms in the app's dialog.
+
+### Found while migrating
+
+- **The regions list said "1 provider" on every row**, a hardcoded placeholder. It shows the real
+  count, which the controller already loaded.
+- **Deleting a provider leaves its topics orphaned:** they keep a `provider_id` that no longer exists
+  and vanish from every list (measured: 13 of 13 topics on the seeded clinic). No foreign key or
+  `dependent:` option prevents it. Not changed here, because what should happen (block, reassign,
+  delete) is the app's decision; the confirmation now says how many topics are affected.

@@ -122,6 +122,9 @@ for a few minutes.
 
 ## Open items
 
+- **Deleting a provider orphans its topics** (no foreign key or `dependent:`). The delete
+  confirmation says how many; the app should decide whether to block it, reassign or delete them.
+
 - Beacons are hidden from contributors in the nav, but `/beacons` doesn't stop them (see
   `decisions.md`). An authorization question for the app's maintainers.
 - `registrations#new` and `topics/tags#index` are routed but have no controller; both 500.

@@ -666,3 +666,7 @@ rfg-table { @apply relative block; }
 .new-key p { @apply m-0 text-sm text-neutral-700; }
 .new-key-row { @apply mt-1 flex flex-wrap items-center gap-2; }
 .new-key code { @apply min-w-0 flex-1 rounded-control border border-neutral-200 bg-white px-3 py-2 font-mono text-sm break-all; }
+.row-actions { @apply inline-flex items-center gap-1; }
+.people { @apply m-0 flex list-none flex-col p-0; }
+.people li { @apply flex items-center gap-3 border-b border-neutral-100 px-6 py-3 last:border-b-0; }
+.people a { @apply font-medium text-brand-700 underline-offset-2 hover:underline; }

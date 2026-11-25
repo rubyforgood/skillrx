@@ -12,7 +12,7 @@ RSpec.describe "languages/edit", type: :view do
 
     assert_select "form[action=?][method=?]", language_path(language), "post" do
       assert_select "input[name=?]", "language[name]"
-      assert_select "input[type='submit'][value='Update Language']"
+      assert_select "input[type='submit'][value='Save language']"
     end
   end
 end

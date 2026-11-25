@@ -10,7 +10,7 @@ RSpec.describe "languages/new", type: :view do
 
     assert_select "form[action=?][method=?]", languages_path, "post" do
       assert_select "input[name=?]", "language[name]"
-      assert_select "input[type='submit'][value='Create Language']"
+      assert_select "input[type='submit'][value='Add language']"
     end
   end
 end
