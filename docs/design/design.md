@@ -79,7 +79,7 @@ Vendored at a pinned version, never loaded from a CDN at runtime:
 | `app/assets/tailwind/rfg-theme.css` | `tokens/theme.css`, imported with `theme(static)` so every token is emitted (the components read them as CSS variables) |
 | `vendor/javascript/rfg-*.js` | `dist/standalone/<name>.mjs`, pinned in `config/importmap.rb`, imported in `application.js` |
 
-Current version: **0.1.5** (upgraded 2026-11-25). To upgrade, change the version in the URL in each file's header and
+Current version: **0.1.6** (upgraded 2026-11-25). To upgrade, change the version in the URL in each file's header and
 download again. Don't edit them by hand: SkillRx-specific values go in `application.css`.
 
 ## App shell
@@ -206,8 +206,8 @@ The rule for every table (decided 2026-11-25, see decisions.md):
   `<span>`, and a slotted element must be the component's direct child.
 - **Tables:** `<rfg-table>` around a `<table class="data-table">` with a caption (visually hidden
   when the heading already says it), `<th scope="row">` for the name, `.numeric` for counts. 16px
-  from the panel's edges to the first and last column. `rfg-table` is `position: relative`, so a
-  visually hidden header label can't widen the page (it did: 744px at a 390px viewport).
+  from the panel's edges to the first and last column. `<rfg-table>` keeps a visually hidden header label
+  inside the table (design system 0.1.6; before, it widened the page: 744px at a 390px viewport).
 - **Below the table:** "Showing 1–25 of 42 topics" and pagy's page links, restyled.
 - **Long text:** two lines, then "…" (`.clamp-2`); the full text is on the record's page.
 - **No results:** "No topics match these filters", with a link to clear them.

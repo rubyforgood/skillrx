@@ -1,5 +1,5 @@
 @import "tailwindcss";
-/* Ruby For Good design system tokens, vendored from @rubyforgood/design-system@0.1.5
+/* Ruby For Good design system tokens, vendored from @rubyforgood/design-system@0.1.6
    (tokens/theme.css). See docs/design/design.md. */
 @import "./rfg-theme.css" theme(static);
 @import "./components/sidebar.css";
@@ -187,10 +187,6 @@ nav.pagy a:focus-visible { @apply outline-2 outline-offset-2 outline-brand-600; 
 /* Tables. 16px from the panel's edges to the first and last column, so the title's left edge and
    the Edit button's right edge sit the same distance in. Cell padding itself comes from
    <rfg-table>. */
-/* Positioned, so a visually hidden header label (sr-only is position: absolute) is measured
-   against the table, not the page. Without it the hidden "Actions" label widened the page on a
-   phone and it scrolled sideways (measured: 744px at a 390px viewport). */
-rfg-table { @apply relative block; }
 .data-table { @apply w-full border-collapse text-sm; }
 .data-table tbody th[scope="row"] { @apply min-w-56; }
 .data-table thead th { @apply border-b border-neutral-200 text-left text-[13px] font-semibold whitespace-nowrap text-neutral-500; }
