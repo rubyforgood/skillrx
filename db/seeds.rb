@@ -99,7 +99,7 @@ end
 
 me = users.last
 Provider.all.each do |provider|
-  provider.users << me
+  provider.users << me unless provider.users.include?(me)
 end
 
 10.times do

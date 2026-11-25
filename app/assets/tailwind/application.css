@@ -670,3 +670,7 @@ rfg-table { @apply relative block; }
 .people { @apply m-0 flex list-none flex-col p-0; }
 .people li { @apply flex items-center gap-3 border-b border-neutral-100 px-6 py-3 last:border-b-0; }
 .people a { @apply font-medium text-brand-700 underline-offset-2 hover:underline; }
+.row-person { @apply inline-flex items-center gap-2.5; }
+.checkbox-field { @apply flex items-start gap-3; }
+.checkbox-field input[type="checkbox"] { @apply mt-0.5 size-5 shrink-0 cursor-pointer accent-brand-600; }
+.checkbox-field label { @apply cursor-pointer font-medium text-neutral-900; }

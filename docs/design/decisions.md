@@ -250,3 +250,18 @@ just Edit. Deleting confirms in the app's dialog.
   and vanish from every list (measured: 13 of 13 topics on the seeded clinic). No foreign key or
   `dependent:` option prevents it. Not changed here, because what should happen (block, reassign,
   delete) is the app's decision; the confirmation now says how many topics are affected.
+
+## 2026-11-25: Users
+
+Following the same rules: email links to the user, Edit inline; role as a pill (Administrator in the
+brand tone, Contributor neutral); search plus two filters, shown inline.
+
+### Found while migrating
+
+- **Deleting a user had no confirmation at all.** The button used `data-confirm`, which Turbo
+  ignores, so one click deleted the user. It now confirms in the app's dialog, and you can't delete
+  yourself from your own page.
+- **The Providers field accepted typed new values** (`allow-new: true`), which were submitted as
+  provider ids and failed. Existing providers only now.
+- **The seeds linked me@mail.com to the same provider twice**, so it was listed twice. Fixed in
+  `db/seeds.rb`.

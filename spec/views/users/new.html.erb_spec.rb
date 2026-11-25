@@ -13,7 +13,7 @@ RSpec.describe "users/new", type: :view do
       assert_select "input[name=?]", "user[password]"
       assert_select "input[name=?]", "user[is_admin]"
       assert_select "input[name=?]", "user[provider_ids][]"
-      assert_select "input[type='submit'][value='Create User']"
+      assert_select "input[type='submit'][value='Add user']"
     end
   end
 end
