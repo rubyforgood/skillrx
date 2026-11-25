@@ -112,7 +112,7 @@ class TopicsController < ApplicationController
   helper_method :search_params
 
   def topics_title
-    current_provider.present? ? "#{current_provider.name}/topics" : "Topics"
+    current_provider.present? ? "Topics from #{current_provider.name}" : "Topics"
   end
   helper_method :topics_title
 end

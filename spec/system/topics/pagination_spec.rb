@@ -16,7 +16,7 @@ RSpec.describe "Topics pagination", type: :system do
   end
 
   it "preserves search filters when paginating" do
-    select "archived", from: "search_state"
+    select_filter "Archived", from: "search_state"
 
     # Ensure only archived topics are visible
     expect(page).to have_text("Archived Topic", count: 20)

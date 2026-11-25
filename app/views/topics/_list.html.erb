@@ -1,89 +1,30 @@
+<%# Row actions (docs/design/design.md, "Row actions"): the title links to the topic, and Edit is
+    the one button. Archive and delete are on the topic's page. A table whose rows can reach three
+    actions, or whose actions vary by state or role, uses a ⋯ menu on every row instead. %>
 <tbody>
-  <% if @topics.any? %>
-    <% @topics.each do |topic| %>
-      <tr class="border-b border-gray-100 transition-all hover:bg-gray-50">
-        <!-- Title -->
-        <td class="table-cell">
-          <div class="flex flex-col items-center gap-1">
-            <div class="font-semibold text-gray-900 text-sm"><%= topic.title %></div>
-            <div class="text-gray-500 text-xs">Published <%= topic.published_at&.strftime('%b %d, %Y') %></div>
-          </div>
-        </td>
-
-        <!-- Description -->
-        <td class="hide-mobile table-cell text-gray-700 text-sm">
-          <% if topic.description.present? %>
-            <%= truncate(topic.description, length: 60, omission: '…') %>
-          <% else %>
-            <span class="text-gray-400 italic">No description</span>
-          <% end %>
-        </td>
-
-        <!-- UID -->
-        <td class="hide-mobile table-cell text-gray-500 font-mono text-xs">
-          <%= topic.uid.present? ? truncate(topic.uid, length: 12, omission: '…') : '-' %>
-        </td>
-
-        <!-- Language -->
-        <td class="table-cell">
-          <span class="bg-indigo-100 text-indigo-900 py-1 px-2 rounded-md text-xs font-semibold">
-            <%= topic.language.name %>
-          </span>
-        </td>
-
-        <!-- Provider -->
-        <td class="hide-mobile table-cell text-gray-700 text-sm">
-          <%= topic.provider.name %>
-        </td>
-
-        <!-- Documents count -->
-        <td class="table-cell">
-          <span class="bg-gradient-amber text-white py-1 px-2 rounded-md text-xs font-bold">
-            <%= topic.documents.size %>
-          </span>
-        </td>
-
-        <!-- State -->
-        <td class="table-cell">
-          <% if topic.active? %>
-            <span class="bg-green-100 text-green-800 py-1 px-2 rounded-full text-xs font-semibold">Active</span>
-          <% else %>
-            <span class="bg-red-100 text-red-800 py-1 px-2 rounded-full text-xs font-semibold">Archived</span>
-          <% end %>
-        </td>
-
-  <!-- Actions -->
-  <td class="actions-col table-cell text-right">
-          <div class="flex gap-2 justify-end">
-            <%= link_to topic_path(topic, search: search_params), class: "btn-view", data: { turbo: false } do %>
-              <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/>
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"/>
-              </svg>
-              <span>View</span>
-            <% end %>
-            <%= link_to edit_topic_path(topic), class: "btn-edit", data: { testid: topic.id, turbo: false } do %>
-              <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"/>
-              </svg>
-              <span>Edit</span>
-            <% end %>
-          </div>
-        </td>
-      </tr>
-    <% end %>
+  <% topics.each do |topic| %>
+    <tr>
+      <th scope="row">
+        <%= link_to topic.title, topic_path(topic, search: search_params), class: "row-title", data: { turbo: false } %>
+        <div class="row-meta">Published <%= topic.published_at&.strftime("%b %-d, %Y") %></div>
+      </th>
+      <td>
+        <% if topic.description.present? %>
+          <span class="clamp-2"><%= topic.description %></span>
+        <% else %>
+          <span class="text-neutral-500">No description</span>
+        <% end %>
+      </td>
+      <td><%= topic.language.name.upcase_first %></td>
+      <td class="uid"><% if topic.uid.present? %><span title="<%= topic.uid %>"><%= truncate(topic.uid, length: 9, omission: "…") %></span><% else %>—<% end %></td>
+      <td class="numeric"><%= topic.documents.size %></td>
+      <td>
+        <rfg-status-pill tone="<%= topic.active? ? "success" : "neutral" %>"><%= topic.active? ? "Active" : "Archived" %></rfg-status-pill>
+      </td>
+      <td class="actions-col">
+        <%= link_to "Edit", edit_topic_path(topic), class: "button button-ghost button-sm",
+                    aria: { label: "Edit #{topic.title}" }, data: { testid: topic.id, turbo: false } %>
+      </td>
+    </tr>
   <% end %>
 </tbody>
-
-<% unless @topics.any? %>
-  <!-- Empty state -->
-  <div class="empty-state">
-    <div class="text-gray-400">
-      <svg class="w-12 h-12 mx-auto mb-4 text-gray-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1" d="M7 7h.01M7 3h5c.512 0 1.024.195 1.414.586l7 7a2 2 0 010 2.828l-7 7a2 2 0 01-2.828 0l-7-7A1.994 1.994 0 013 12V7a4 4 0 014-4z"/>
-      </svg>
-      <p class="text-base font-medium text-gray-500 m-0">No topics found</p>
-      <p class="text-sm text-gray-400 mt-2 m-0">Try adjusting your search filters or create a new topic.</p>
-    </div>
-  </div>
-<% end %>

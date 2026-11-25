@@ -90,13 +90,20 @@ RSpec.describe "Topics search", type: :system do
 
     context "when searching by language" do
       it "only displays topics matching the search" do
-        select "Spanish", from: "search_language_id"
+        select_filter "Spanish", from: "search_language_id"
 
         expect(page).to have_text(spanish_active_topic.title)
         expect(page).not_to have_text(english_active_topic.title)
         expect(page).not_to have_text(english_archived_topic.title)
 
-        select "English", from: "search_language_id"
+        select_filter "English", from: "search_language_id"
+
+        # State stays Active while other filters change (decided 2026-11-25, docs/design/decisions.md).
+        expect(page).to have_text(english_active_topic.title)
+        expect(page).not_to have_text(english_archived_topic.title)
+        expect(page).not_to have_text(spanish_active_topic.title)
+
+        select_filter "Any state", from: "search_state"
 
         expect(page).to have_text(english_active_topic.title)
         expect(page).to have_text(english_archived_topic.title)
@@ -106,13 +113,13 @@ RSpec.describe "Topics search", type: :system do
 
     context "when searching by year" do
       it "only displays topics matching the search" do
-        select "2025", from: "search_year"
+        select_filter "2025", from: "search_year"
 
         expect(page).to have_text(spanish_active_topic.title)
         expect(page).to have_text(english_active_topic.title)
         expect(page).not_to have_text(english_archived_topic.title)
 
-        select "2023", from: "search_year"
+        select_filter "2023", from: "search_year"
 
         expect(page).not_to have_text(english_archived_topic.title)
         expect(page).not_to have_text(spanish_active_topic.title)
@@ -122,13 +129,14 @@ RSpec.describe "Topics search", type: :system do
 
     context "when searching by month" do
       it "only displays topics matching the search" do
-        select "2", from: "search_month"
+        select_filter "Any state", from: "search_state"
+        select_filter "February", from: "search_month"
 
         expect(page).to have_text(spanish_active_topic.title)
         expect(page).to have_text(english_archived_topic.title)
         expect(page).not_to have_text(english_active_topic.title)
 
-        select "3", from: "search_month"
+        select_filter "March", from: "search_month"
 
         expect(page).to have_text(english_active_topic.title)
         expect(page).not_to have_text(english_archived_topic.title)
@@ -138,13 +146,13 @@ RSpec.describe "Topics search", type: :system do
 
     context "when searching by state" do
       it "only displays topics matching the search" do
-        select "active", from: "search_state"
+        select_filter "Active", from: "search_state"
 
         expect(page).to have_text(spanish_active_topic.title)
         expect(page).to have_text(english_active_topic.title)
         expect(page).not_to have_text(english_archived_topic.title)
 
-        select "archived", from: "search_state"
+        select_filter "Archived", from: "search_state"
 
         expect(page).to have_text(english_archived_topic.title)
         expect(page).not_to have_text(spanish_active_topic.title)
@@ -154,6 +162,7 @@ RSpec.describe "Topics search", type: :system do
 
     context "when searching by tags" do
       it "only displays topics matching the search" do
+        open_filters
         enter_and_choose_tag(tag_name)
 
         expect(page).to have_text(english_topic_tagged.title)
@@ -164,7 +173,7 @@ RSpec.describe "Topics search", type: :system do
 
     context "when sorting" do
       it "displays users in the selected order" do
-        select "asc", from: "search_order"
+        select_filter "Oldest first", from: "search_order"
 
         expect(page).to have_text(/#{spanish_active_topic.title}.+#{english_active_topic.title}/m)
       end
@@ -224,13 +233,20 @@ RSpec.describe "Topics search", type: :system do
 
       context "when searching by language" do
         it "only displays topics matching the search" do
-          select "Spanish", from: "search_language_id"
+          select_filter "Spanish", from: "search_language_id"
 
           expect(page).to have_text(spanish_active_topic.title)
           expect(page).not_to have_text(english_active_topic.title)
           expect(page).not_to have_text(english_archived_topic.title)
 
-          select "English", from: "search_language_id"
+          select_filter "English", from: "search_language_id"
+
+          # State stays Active while other filters change (decided 2026-11-25, docs/design/decisions.md).
+          expect(page).to have_text(english_active_topic.title)
+          expect(page).not_to have_text(english_archived_topic.title)
+          expect(page).not_to have_text(spanish_active_topic.title)
+
+          select_filter "Any state", from: "search_state"
 
           expect(page).to have_text(english_active_topic.title)
           expect(page).to have_text(english_archived_topic.title)
@@ -240,13 +256,13 @@ RSpec.describe "Topics search", type: :system do
 
       context "when searching by year" do
         it "only displays topics matching the search" do
-          select "2025", from: "search_year"
+          select_filter "2025", from: "search_year"
 
           expect(page).to have_text(spanish_active_topic.title)
           expect(page).to have_text(english_active_topic.title)
           expect(page).not_to have_text(english_archived_topic.title)
 
-          select "2023", from: "search_year"
+          select_filter "2023", from: "search_year"
 
           expect(page).not_to have_text(english_archived_topic.title)
           expect(page).not_to have_text(spanish_active_topic.title)
@@ -256,13 +272,14 @@ RSpec.describe "Topics search", type: :system do
 
       context "when searching by month" do
         it "only displays topics matching the search" do
-          select "2", from: "search_month"
+          select_filter "Any state", from: "search_state"
+        select_filter "February", from: "search_month"
 
           expect(page).to have_text(spanish_active_topic.title)
           expect(page).to have_text(english_archived_topic.title)
           expect(page).not_to have_text(english_active_topic.title)
 
-          select "3", from: "search_month"
+          select_filter "March", from: "search_month"
 
           expect(page).to have_text(english_active_topic.title)
           expect(page).not_to have_text(english_archived_topic.title)
@@ -272,13 +289,13 @@ RSpec.describe "Topics search", type: :system do
 
       context "when searching by state" do
         it "only displays topics matching the search" do
-          select "active", from: "search_state"
+          select_filter "Active", from: "search_state"
 
           expect(page).to have_text(spanish_active_topic.title)
           expect(page).to have_text(english_active_topic.title)
           expect(page).not_to have_text(english_archived_topic.title)
 
-          select "archived", from: "search_state"
+          select_filter "Archived", from: "search_state"
 
           expect(page).to have_text(english_archived_topic.title)
           expect(page).not_to have_text(spanish_active_topic.title)
@@ -288,7 +305,8 @@ RSpec.describe "Topics search", type: :system do
 
       context "when searching by tags" do
         it "only displays topics matching the search" do
-          enter_and_choose_tag(tag_name)
+          open_filters
+        enter_and_choose_tag(tag_name)
 
           expect(page).to have_text(english_topic_tagged.title)
           expect(page).not_to have_text(spanish_active_topic.title)
@@ -298,7 +316,7 @@ RSpec.describe "Topics search", type: :system do
 
       context "when sorting" do
         it "displays users in the selected order" do
-          select "asc", from: "search_order"
+          select_filter "Oldest first", from: "search_order"
           expect(page).to have_text(/#{spanish_active_topic.title}.+#{english_active_topic.title}/m)
         end
       end

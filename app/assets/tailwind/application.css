@@ -1,5 +1,5 @@
 @import "tailwindcss";
-/* Ruby For Good design system tokens, vendored from @rubyforgood/design-system@0.1.4
+/* Ruby For Good design system tokens, vendored from @rubyforgood/design-system@0.1.5
    (tokens/theme.css). See docs/design/design.md. */
 @import "./rfg-theme.css" theme(static);
 @import "./components/sidebar.css";
@@ -150,27 +150,14 @@
 }
 
 /* Pagy */
-nav.pagy {
-  @apply flex items-center justify-center my-4;
-}
-
-nav.pagy a {
-  @apply px-4 py-2 border border-gray-300 bg-gray-100 text-gray-700 font-medium text-sm transition-colors duration-200 rounded-none;
-  margin-left: -1px;
-}
-
-nav.pagy a:first-child {
-  @apply rounded-l-lg;
-  margin-left: 0;
-}
-
-nav.pagy a:last-child {
-  @apply rounded-r-lg;
-}
-
-nav.pagy a.gap {
-  @apply border-l-2 border-r-2 bg-white;
-}
+/* Pagination (pagy's series nav). Matches the design system's pagination: plain page links, the
+   current page filled with the brand color, "…" gaps unlinked. */
+nav.pagy { @apply m-0 flex flex-wrap items-center gap-1; }
+nav.pagy a { @apply inline-flex min-h-8 min-w-8 items-center justify-center rounded-control px-2 text-sm font-medium text-neutral-700 no-underline; }
+nav.pagy a[href]:hover { @apply bg-neutral-100 text-neutral-900; }
+nav.pagy a[aria-current="page"], nav.pagy a[aria-disabled="true"] { @apply text-neutral-500; }
+nav.pagy a.gap { @apply pointer-events-none; }
+nav.pagy a:focus-visible { @apply outline-2 outline-offset-2 outline-brand-600; }
 
 /* Layout Utilities */
 .page-container {
@@ -379,9 +366,6 @@ nav.pagy a.gap {
   @apply bg-green-50 border border-green-200 text-green-700 p-4 rounded-lg mb-8;
 }
 
-nav.pagy a:hover:not(.current):not(.gap) {
-  @apply bg-blue-800 text-white border-blue-800;
-}
 
 nav.pagy a.current {
   @apply bg-blue-600 text-white border-blue-600 font-semibold;
@@ -536,3 +520,66 @@ nav.pagy a.current {
 
 .site a:focus-visible, .site button:focus-visible { @apply outline-2 outline-offset-2 outline-brand-600; }
 .site-hero a:focus-visible { @apply outline-white; }
+
+/* ---- Signed-in screens (docs/design/design.md, "Screens") ---------------------------------- */
+
+/* A screen's content column. */
+.page { @apply flex flex-col gap-5 px-4 py-6 sm:px-8; }
+
+/* Page header: the page's only <h1> (shared/_page_header). With a subtitle the actions top-align,
+   so the button isn't dragged down to the subtitle's line; without one they sit on the h1. */
+.page-header { @apply flex flex-wrap items-end justify-between gap-x-6 gap-y-3; }
+.page-header--with-subtitle { @apply items-start; }
+.page-header h1 { @apply m-0 text-2xl font-bold tracking-tight text-neutral-900; }
+.page-header p { @apply m-0 mt-1 text-neutral-500; }
+.page-header-actions { @apply flex flex-wrap items-center gap-2; }
+
+/* Buttons for links and server-rendered forms, matching <rfg-button>'s variants. 40px, the same
+   height as form controls, so a button beside a field lines up; sm is 32px, for table rows. */
+.button { @apply inline-flex min-h-10 cursor-pointer items-center justify-center gap-1.5 rounded-control border border-transparent
+                 px-3.5 text-sm font-medium whitespace-nowrap no-underline; }
+.button-sm { @apply min-h-8 px-2.5 text-[13px]; }
+.button-primary { @apply bg-brand-600 text-white hover:bg-brand-700; }
+.button-secondary { @apply border-neutral-500 bg-white text-neutral-900 hover:bg-neutral-50; }
+.button-ghost { @apply bg-transparent text-neutral-700 hover:bg-neutral-100 hover:text-neutral-900; }
+.button-danger { @apply bg-danger text-white hover:brightness-95; }
+.button:focus-visible { @apply outline-2 outline-offset-2 outline-brand-600; }
+
+/* A white panel holding a table (or a form). */
+.surface { @apply overflow-hidden rounded-surface border border-neutral-200 bg-white shadow-surface; }
+
+/* Tables. 16px from the panel's edges to the first and last column, so the title's left edge and
+   the Edit button's right edge sit the same distance in. Cell padding itself comes from
+   <rfg-table>. */
+/* Positioned, so a visually hidden header label (sr-only is position: absolute) is measured
+   against the table, not the page. Without it the hidden "Actions" label widened the page on a
+   phone and it scrolled sideways (measured: 744px at a 390px viewport). */
+rfg-table { @apply relative block; }
+.data-table { @apply w-full border-collapse text-sm; }
+.data-table tbody th[scope="row"] { @apply min-w-56; }
+.data-table thead th { @apply border-b border-neutral-200 text-left text-[13px] font-semibold whitespace-nowrap text-neutral-500; }
+.data-table tbody th, .data-table tbody td { @apply border-b border-neutral-100 text-left align-top; }
+.data-table tbody tr:last-child > * { @apply border-b-0; }
+.data-table tbody th { @apply font-normal; }
+.data-table :is(th, td):first-child { padding-left: 1rem !important; }
+.data-table :is(th, td):last-child { padding-right: 1rem !important; }
+.data-table .numeric { @apply text-right tabular-nums; }
+.data-table .uid { @apply font-mono text-[13px] whitespace-nowrap text-neutral-500; }
+.data-table .actions-col { @apply w-px text-right whitespace-nowrap; }
+.data-table .actions-col .button { @apply -my-1.5; }
+.row-title { @apply font-semibold text-brand-700 underline-offset-2 hover:underline; }
+.row-title:focus-visible { @apply rounded-sm outline-2 outline-offset-2 outline-brand-600; }
+.row-meta { @apply mt-1 text-[13px] text-neutral-500; }
+.clamp-2 { @apply line-clamp-2 max-w-[38ch] text-neutral-700; }
+
+.table-foot { @apply flex flex-wrap items-center justify-between gap-3 border-t border-neutral-200 px-4 py-3; }
+.table-count { @apply m-0 text-sm text-neutral-500; }
+.table-count strong { @apply font-semibold text-neutral-900; }
+.empty { @apply border-t border-neutral-100 px-4 py-12 text-center text-neutral-500; }
+.empty p { @apply m-0; }
+.empty-title { @apply mb-1 font-semibold text-neutral-900; }
+.empty a { @apply text-brand-700 underline underline-offset-2; }
+
+.provider-switch { @apply mb-4 flex flex-wrap items-end gap-3; }
+.provider-switch .form-label { @apply mb-0 self-center; }
+.provider-switch .form-select { @apply w-72 max-w-full; }

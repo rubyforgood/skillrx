@@ -150,3 +150,63 @@ The hero card (a topic, "Hand hygiene in the clinic", with two documents "Availa
 illustrates what SkillRx holds. It replaced today's "Cardiology updates, 75% complete", which showed
 learner progress, a feature SkillRx's admin app doesn't have. It's hidden from screen readers
 (`aria-hidden`), since it isn't content.
+
+## 2026-11-25: Row actions: the title links, Edit is the button; a ⋯ menu at three or more
+
+Asked: "to keep it consistent, go with A, but convert the whole table to B, the menu option if there
+are more than 3 actions." Chosen from `previews/topics.html`. Confirmed separately: the menu starts
+at **three or more**, the design system's own threshold, not four.
+
+### The rule, for every SkillRx table
+
+- **Two settled actions stay visible.** The record's name in the first column is the link to view
+  it, and the other action (Edit) is a button at the end of the row, named for its row ("Edit Hand
+  hygiene in the clinic") for screen readers. GitHub, Shopify Polaris and Linear do this.
+- **If any row in a table can reach three actions, every row in that table gets a ⋯ menu.** Never
+  menus on some rows and buttons on others.
+- **If which actions appear depends on state or role, use the menu whatever the count.** For example
+  Archive/Unarchive switches with state, and Delete is administrators only.
+
+### Topics
+
+Two actions: the title (view) and Edit, the same on every row. **Archive and Unarchive** (everyone)
+and **Delete** (administrators) stay on the topic's own page, as they were. If they ever move into
+the list, the rule above makes it a menu.
+
+### Rejected
+
+- **B, a ⋯ menu on every row now:** two clicks for every action, and nothing visible, to hold two
+  actions that never vary. The design system calls a menu holding two settled actions a mistake.
+- **C, icon buttons:** need learning and a tooltip each.
+
+## 2026-11-25: The topics list's State filter defaults to Active, and stays that way
+
+Asked: "Active by default", choosing between two options.
+
+### What was actually wrong
+
+Three bugs on `main`, found building the filter bar, all measured:
+- **Every filter showed its blank option, even on a filtered list.** `_search.html.erb` read
+  `params.dig(:search, …)`, but it's rendered with `params: search_params`, already unwrapped, so
+  every lookup was nil. The search box lost its text on reload too.
+- **Year, month and state compared the URL's text with numbers and symbols** (`"2026"` with `2026`,
+  `"archived"` with `:archived`), so even the right lookup would never have matched.
+- **With no filters the list showed active topics only** (`search_params` defaults to
+  `state: :active`), while the State filter said "Select state". **Using any other filter brought
+  archived topics back**, because the filter's blank option meant "any state".
+
+### What it does now
+
+State's options are **Active** (first, the default), **Archived**, and **Any state**. It shows what
+the list is doing, and it stays Active as other filters change: archived topics appear only when
+someone chooses them. Filters keep their values after a reload, and a filtered list opens its
+Filters panel.
+
+Rejected: keeping today's behavior honestly (State showing "Active" before filtering and "Any
+state" after). It would have kept a list that changes what it includes without being asked.
+
+### Specs changed
+
+`search_spec.rb`'s language test expected archived topics after choosing a language; it now expects
+them only after "Any state". The month tests choose "Any state" first, so they still cover archived
+topics.

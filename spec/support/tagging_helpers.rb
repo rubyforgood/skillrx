@@ -14,6 +14,9 @@ module TaggingHelpers
       tag_input = find(".ts-control input")
       tag_input.click
       tag_input.fill_in(with: tag_name)
+      # Wait for TomSelect to show the match before pressing Enter, as a person would. Pressed
+      # earlier, Enter submits the form instead and nothing is chosen.
+      expect(page).to have_css(".ts-dropdown .option, .ts-dropdown .create", text: tag_name, wait: 5)
       tag_input.send_keys(:enter)
     end
   end

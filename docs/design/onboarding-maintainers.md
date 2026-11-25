@@ -65,7 +65,7 @@ mkdir -p public/design-previews && cp docs/design/previews/* public/design-previ
 Components are vendored as standalone files (Lit bundled in), at a pinned version:
 
 ```bash
-V=https://cdn.jsdelivr.net/npm/@rubyforgood/design-system@0.1.4
+V=https://cdn.jsdelivr.net/npm/@rubyforgood/design-system@0.1.5
 curl -fo /tmp/x.mjs $V/dist/standalone/modal.mjs
 # add the four-line provenance header (copy it from any vendor/javascript/rfg-*.js), then:
 #   vendor/javascript/rfg-modal.js
@@ -113,6 +113,12 @@ for a few minutes.
   (`<ul <%= "hidden" if x %>>`). Use `tag.ul hidden: x` instead.
 - **Tailwind only emits theme variables it sees used,** and the components read them from inside
   shadow roots where Tailwind can't see. That's why the theme is imported with `theme(static)`.
+
+- **Filters fold behind a button in two shadow roots.** In system specs use `select_filter "X",
+  from: "search_y"` and `open_filters` (`spec/support/system_helpers.rb`); they wait for Turbo to
+  settle, then open the panel with a script, since Selenium loses track of nested shadow roots.
+- **Wait for TomSelect's option before pressing Enter** (`enter_and_choose_tag` does). Pressed
+  early, Enter submits the form and nothing is chosen.
 
 ## Open items
 

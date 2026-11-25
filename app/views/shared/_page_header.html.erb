@@ -1,0 +1,13 @@
+<%# The page header (design system design.md, "Page header"; docs/design/design.md). Server-rendered
+    rather than <rfg-page-header>, which draws its <h1> only once JavaScript runs, so the heading
+    would appear late and push the page down. Same layout: the page's only <h1>, an optional
+    subtitle, and actions at the right. Usage: render "shared/page_header", with title: and an
+    optional subtitle:, and a block holding the actions. %>
+<% actions = yield if block_given? %>
+<header class="page-header <%= "page-header--with-subtitle" if local_assigns[:subtitle].present? %>">
+  <div class="page-header-titles">
+    <h1><%= title %></h1>
+    <% if local_assigns[:subtitle].present? %><p><%= subtitle %></p><% end %>
+  </div>
+  <% if actions.present? %><div class="page-header-actions"><%= actions %></div><% end %>
+</header>

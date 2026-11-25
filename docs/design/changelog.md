@@ -11,6 +11,7 @@ year. Write PENDING, commit, then fill in the hash in the next commit.
 | `ddb398d` | Home page: same sections restyled (solid brand hero, one accent color, no entrance animation), numbers section and module counts removed, footer links named, mobile menu, plain-link primary actions, contact@skillrx.org. `home_controller.js` replaced by CSS smooth scroll. |
 | `c97df6e` | Onboarding docs: `onboarding-maintainers.md` and `guide-for-users.md`. WCAG audit after shell, sign-in and home: 3 violations on 38 elements (from 4 on 83), measured with the setup the maintainer doc gives. |
 | `d92044f` | Upgraded to design system 0.1.4; removed the `--radius-pill` workaround (avatar still round, measured). Fixed `spec/support/system_helpers.rb`, which filled sign-in by placeholder text: `ceed409` removed the placeholders and broke 47 system specs, because that checkpoint ran only the login and request specs. Full suite now 516, 0 failures. **Rule from this:** run the full suite at every checkpoint. |
+| `PENDING` | Topics list on the design system: page header, filter bar (search visible, filters folded and open when set), table with row-title links and a row-named Edit, status pills, pagy restyled. Upgraded to design system 0.1.5. Fixed three bugs on `main`: filters never showed their values, year/month/state never matched the URL, and filtering by anything brought archived topics back (State now defaults to Active). 516 examples, 0 failures. |
 
 ### Baseline WCAG audit, before any change
 

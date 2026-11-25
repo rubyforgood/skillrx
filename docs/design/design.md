@@ -24,7 +24,7 @@ workers without an internet connection.
 
 ## Status
 
-Migration started 2026-11-24 on branch `skillsrxdesign`. **Done:** tokens, font, app shell, form controls, sign-in and password pages, home page. **Next:** the signed-in screens.
+Migration started 2026-11-24 on branch `skillsrxdesign`. **Done:** tokens, font, app shell, form controls, sign-in and password pages, home page. **Topics list done.** **Next:** the topic form and page, then Beacons and the admin screens.
 
 Baseline, measured 2026-11-24 before any change:
 
@@ -68,7 +68,7 @@ Vendored at a pinned version, never loaded from a CDN at runtime:
 | `app/assets/tailwind/rfg-theme.css` | `tokens/theme.css`, imported with `theme(static)` so every token is emitted (the components read them as CSS variables) |
 | `vendor/javascript/rfg-*.js` | `dist/standalone/<name>.mjs`, pinned in `config/importmap.rb`, imported in `application.js` |
 
-Current version: **0.1.4** (upgraded 2026-11-24). To upgrade, change the version in the URL in each file's header and
+Current version: **0.1.5** (upgraded 2026-11-25). To upgrade, change the version in the URL in each file's header and
 download again. Don't edit them by hand: SkillRx-specific values go in `application.css`.
 
 ## App shell
@@ -140,6 +140,38 @@ in, forgot password and choose a new password.
   sticky header (`scroll-margin-top`).
 - **Footer links have text** (GitHub, LinkedIn, Email). They were icon-only with no name, a WCAG
   failure.
+
+## Row actions
+
+The rule for every table (decided 2026-11-25, see decisions.md):
+
+- **The first column's name links to the record.** No separate View button.
+- **Up to two settled actions stay visible** as small ghost buttons (`.button .button-ghost
+  .button-sm`) at the end of the row, each named for its row (`aria-label="Edit <title>"`).
+- **Three or more on any row, or a set that varies by state or role:** a ⋯ menu (`<rfg-menu>`) on
+  every row of that table.
+- **Archiving and deleting** happen on the record's own page unless a list needs them; deleting is
+  confirmed in the app's own dialog, not the browser's `confirm()`.
+
+## Lists and filters
+
+- **Page header:** `shared/_page_header` (server-rendered: `<rfg-page-header>` draws its `<h1>` only
+  after JavaScript runs, so the heading would arrive late and push the page down). One primary
+  action, sentence case.
+- **Filters:** `<rfg-filter-bar>` inside the list's `form_for`, so its controls keep submitting into
+  the list's Turbo frame. Search goes in the `search` slot and stays visible; three or more other
+  filters fold behind "Filters", which starts open when one is set.
+- **Filter options say what they mean:** "Any language", month names, "Newest first". A select's
+  first option is its default. Option values are strings, to match the URL.
+- **Write slotted elements as plain HTML**, not `link_to`: in development Herb wraps ERB output in a
+  `<span>`, and a slotted element must be the component's direct child.
+- **Tables:** `<rfg-table>` around a `<table class="data-table">` with a caption (visually hidden
+  when the heading already says it), `<th scope="row">` for the name, `.numeric` for counts. 16px
+  from the panel's edges to the first and last column. `rfg-table` is `position: relative`, so a
+  visually hidden header label can't widen the page (it did: 744px at a 390px viewport).
+- **Below the table:** "Showing 1–25 of 42 topics" and pagy's page links, restyled.
+- **Long text:** two lines, then "…" (`.clamp-2`); the full text is on the record's page.
+- **No results:** "No topics match these filters", with a link to clear them.
 
 ## Screens
 

@@ -1,120 +1,61 @@
-<div class="card-elevated overflow-hidden">
-  <div class="bg-gradient-to-br from-sky-50 to-cyan-50 p-6 border-b border-sky-200">
-    <div class="flex-center-sm">
-      <div class="bg-gradient-to-br from-sky-500 to-sky-600 text-white p-2 rounded-lg">
-        <svg class="icon-size-md" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
-        </svg>
-      </div>
-      <h3 class="text-lg font-semibold text-sky-900 m-0">Search & Filter Topics</h3>
+<%# `params` here is the controller's search_params, already unwrapped from params[:search]. It
+    used to be read as params.dig(:search, …), which is always nil, so every filter showed its blank
+    option even on a filtered list. Values are compared as strings, because the URL's are.
+
+    State's first option is Active, because with no filters the list shows active topics only
+    (search_params defaults to state: active). "Any state" (blank) shows both. %>
+<% current = params.to_h.with_indifferent_access %>
+<%# Search stays visible; the other filters fold behind "Filters", which starts open when any of
+    them is set (<rfg-filter-bar>, design system 0.1.5). The form wraps the bar, so the controls
+    keep submitting into the topic list's Turbo frame as they did. %>
+<%= form_for :search, url: topics_path, method: :get, html: { role: "search", "aria-label": "Topics" },
+      data: { controller: "topics", topics_target: "searchForm", turbo_frame: "topic-list", turbo_action: "advance" } do |f| %>
+  <rfg-filter-bar>
+    <div slot="search">
+      <%= f.label :query, "Search", class: "form-label" %>
+      <%= f.search_field :query, value: current[:query].to_s, placeholder: "Title, description or UID",
+            class: "form-input", data: { action: "input->topics#searchTopics" } %>
     </div>
-  </div>
-  <div class="card-body-sm">
-    <%= form_for :search, url: topics_path, method: :get, data: { controller: "topics", topics_target: "searchForm", turbo_frame: "topic-list", turbo_action: "advance" } do |f| %>
-      <div id="topics-search-grid" class="form-grid-auto items-start">
-        <!-- Query -->
-        <div class="form-grid-full">
-          <%= f.label :query, class: "input-label" %>
-          <%= f.text_field :query,
-                value: params.dig(:search, :query),
-                placeholder: "Search by title, description or UID…",
-                class: "input-field",
-                data: { action: "input->topics#searchTopics" } %>
-        </div>
 
-        <!-- Language & Tags -->
-        <div class="min-w-0 col-span-full">
-          <div class="grid grid-cols-[repeat(auto-fit,minmax(220px,1fr))] gap-4 items-start">
-            <div class="relative">
-              <%= f.label :language_id, "Language", class: "input-label" %>
-              <div class="relative">
-                <%= f.select :language_id,
-                             options_from_collection_for_select(languages, :id, :name, params.dig(:search, :language_id)),
-                             { prompt: "Select language" },
-                             class: "select-field",
-                             data: { action: "change->topics#searchTopics" } %>
-                <%= render "shared/dropdown_arrow" %>
-              </div>
-            </div>
+    <div slot="fields">
+      <%= f.label :language_id, "Language", class: "form-label" %>
+      <%= f.select :language_id, options_from_collection_for_select(languages, :id, ->(l) { l.name.upcase_first }, current[:language_id].to_s),
+            { prompt: "Any language" }, class: "form-select", data: { action: "change->topics#searchTopics" } %>
+    </div>
 
-            <div data-controller="select-tags" class="relative">
-              <%= f.label :tag_list, "Tags", class: "input-label" %>
-              <%= f.select :tag_list,
-                           options_for_select(Tag.order(:name).pluck(:name), Array(params.dig(:search, :tag_list))),
-                           { include_hidden: false },
-                           multiple: true,
-                           id: "search_tag_list",
-                           placeholder: "Select tags...",
-                           data: { "select-tags-target": "tagList", "allow-clear": "true", "allow-new": "false", action: "change->topics#searchTopics" } %>
-            </div>
-          </div>
-        </div>
+    <div slot="fields" data-controller="select-tags">
+      <%= f.label :tag_list, "Tags", class: "form-label", for: "search_tag_list" %>
+      <%= f.select :tag_list, options_for_select(Tag.order(:name).pluck(:name), Array(current[:tag_list])),
+            { include_hidden: false }, multiple: true, id: "search_tag_list", placeholder: "Any tag",
+            data: { "select-tags-target": "tagList", "allow-clear": "true", "allow-new": "false", action: "change->topics#searchTopics" } %>
+    </div>
 
-        <!-- Year -->
-        <div class="min-w-0 relative">
-          <%= f.label :year, class: "input-label" %>
-          <div class="relative">
-            <%= f.select :year,
-                         options_for_select((Date.today.year-10..Date.today.year).to_a, params.dig(:search, :year)),
-                         { prompt: "Select year" },
-                         class: "select-field",
-                         data: { action: "change->topics#searchTopics" } %>
-            <%= render "shared/dropdown_arrow" %>
-          </div>
-        </div>
+    <div slot="fields">
+      <%= f.label :year, "Year published", class: "form-label" %>
+      <%= f.select :year, options_for_select((Date.today.year - 10..Date.today.year).map(&:to_s).reverse, current[:year].to_s),
+            { prompt: "Any year" }, class: "form-select", data: { action: "change->topics#searchTopics" } %>
+    </div>
 
-        <!-- Month -->
-        <div class="min-w-0 relative">
-          <%= f.label :month, class: "input-label" %>
-          <div class="relative">
-            <%= f.select :month,
-                         options_for_select((1..12).to_a, params.dig(:search, :month)),
-                         { prompt: "Select month" },
-                         class: "select-field",
-                         data: { action: "change->topics#searchTopics" },
-                         onchange: "this.form.requestSubmit()" %>
-            <%= render "shared/dropdown_arrow" %>
-          </div>
-        </div>
+    <div slot="fields">
+      <%= f.label :month, "Month published", class: "form-label" %>
+      <%= f.select :month, options_for_select((1..12).map { |m| [Date::MONTHNAMES[m], m.to_s] }, current[:month].to_s),
+            { prompt: "Any month" }, class: "form-select", data: { action: "change->topics#searchTopics" } %>
+    </div>
 
-        <!-- State -->
-        <div class="min-w-0 relative">
-          <%= f.label :state, class: "input-label" %>
-          <div class="relative">
-            <%= f.select :state,
-                         options_for_select(Topic::STATES.index_with(&:itself), params.dig(:search, :state)),
-                         { prompt: "Select state" },
-                         class: "select-field",
-                         data: { action: "change->topics#searchTopics" },
-                         onchange: "this.form.requestSubmit()" %>
-            <%= render "shared/dropdown_arrow" %>
-          </div>
-        </div>
+    <div slot="fields">
+      <%= f.label :state, "State", class: "form-label" %>
+      <%= f.select :state, options_for_select(Topic::STATES.map { |s| [s.to_s.capitalize, s.to_s] } + [["Any state", ""]], current[:state].to_s),
+            {}, class: "form-select", data: { action: "change->topics#searchTopics" } %>
+    </div>
 
-        <!-- Order -->
-        <div class="min-w-0 relative">
-          <%= f.label :order, class: "input-label" %>
-          <div class="relative">
-            <%= f.select :order,
-                         options_for_select(%w[desc asc].map { |o| [o, o] }, params.dig(:search, :order)),
-                         {},
-                         class: "select-field",
-                         data: { action: "change->topics#searchTopics" } %>
-            <%= render "shared/dropdown_arrow" %>
-          </div>
-        </div>
-      </div>
+    <div slot="fields">
+      <%= f.label :order, "Sort", class: "form-label" %>
+      <%= f.select :order, options_for_select([["Newest first", "desc"], ["Oldest first", "asc"]], current[:order].to_s),
+            {}, class: "form-select", data: { action: "change->topics#searchTopics" } %>
+    </div>
 
-      <!-- Clear Button -->
-      <div class="mt-5 flex justify-end">
-        <%= link_to topics_path,
-            class: "bg-gray-500 text-white py-2.5 px-5 rounded-lg no-underline font-semibold text-sm inline-flex items-center gap-2 transition-all shadow-sm hover:bg-gray-600 hover:-translate-y-0.5 hover:shadow-md" do %>
-          <svg class="icon-size" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
-          </svg>
-          <span>Clear Filters</span>
-        <% end %>
-      </div>
-    <% end %>
-  </div>
-</div>
+    <%# Plain HTML, not link_to: in development Herb wraps ERB output in a <span>, and a slotted
+        element must be the filter bar's direct child. %>
+    <a slot="actions" class="button button-ghost" href="<%= topics_path %>">Clear filters</a>
+  </rfg-filter-bar>
+<% end %>
