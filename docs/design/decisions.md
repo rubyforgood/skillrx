@@ -210,3 +210,28 @@ state" after). It would have kept a list that changes what it includes without b
 `search_spec.rb`'s language test expected archived topics after choosing a language; it now expects
 them only after "Any state". The month tests choose "Any state" first, so they still cover archived
 topics.
+
+## 2026-11-25: Beacons: status from what beacons report; real values in the list
+
+Asked, choosing between options: "Counts by sync status" and "Yes, real values".
+
+### What was actually wrong
+
+- **The summary's "Online now" was always 0, and "Offline" was everything.** It counted
+  `b[:online]`, an attribute beacons don't have. SkillRx has no definition of "online".
+- **Five list columns showed placeholder words**, "current manifest", "latest manifest",
+  "is up date?", "last seen at" and "last sync at", in every row.
+- **On a beacon's page, "Files included" and "Topics included" were swapped.**
+- **The provisioning and regenerate messages repeated the full API key** in the flash, beside the
+  panel that shows it.
+
+### What it does now
+
+- **One status per beacon:** Revoked if its key is revoked, otherwise the sync status it reported:
+  Synced, Syncing, Needs update, Error, or Never synced (`BeaconsHelper`).
+- **The summary counts beacons by that status.** No "online" threshold is invented. Rejected: online
+  meaning "seen in the last 24 hours" or "last hour", which would need the field team to confirm.
+- **The list shows real values:** status, content version reported against the latest, last seen and
+  last synced ("3 days ago", exact time on hover). Region and language sit under the name, so the
+  table fits at 1280px.
+- **The new key panel** shows the full key once, with Copy; the flash just says to copy it.

@@ -12,7 +12,7 @@ RSpec.describe "beacons/index", type: :view do
     end
 
     it "renders the provision new beacon link" do
-      assert_select "a", text: /Provision New Beacon/
+      assert_select "a", text: /Provision a beacon/
     end
   end
 
@@ -29,33 +29,29 @@ RSpec.describe "beacons/index", type: :view do
       assert_select "table tbody tr", count: 2
     end
 
-    it "shows Active status for active beacons" do
-      assert_select "td span", text: "Active"
+    it "shows each active beacon's sync status" do
+      assert_select "td rfg-status-pill", text: "Never synced"
     end
 
     it "shows Revoked status for revoked beacons" do
-      assert_select "td span", text: "Revoked"
+      assert_select "td rfg-status-pill", text: "Revoked"
     end
 
     it "renders each beacon name" do
-      assert_select "td", text: /#{active_beacon.name}/
-      assert_select "td", text: /#{revoked_beacon.name}/
+      assert_select "th[scope=row]", text: /#{active_beacon.name}/
+      assert_select "th[scope=row]", text: /#{revoked_beacon.name}/
     end
 
-    it "shows the active count in the header" do
-      assert_select "span.text-green-600", text: "1"
+    # Counts by status (docs/design/decisions.md, 2026-11-25). The factory's beacons have never
+    # synced, so the active one counts there.
+    it "counts beacons by status" do
+      assert_select "dd[data-stat=total]", text: "2"
+      assert_select "dd[data-stat=never]", text: "1"
+      assert_select "dd[data-stat=revoked]", text: "1"
     end
 
-    it "shows the revoked count in the header" do
-      assert_select "span.text-red-600", text: "1"
-    end
-
-    it "shows the total beacon count in the summary" do
-      assert_select "p.text-3xl", text: "2"
-    end
-
-    it "renders the Status column header without text wrapping" do
-      assert_select "th.whitespace-nowrap", text: /Status/
+    it "renders the Status column header" do
+      assert_select "th[scope=col]", text: /Status/
     end
   end
 end

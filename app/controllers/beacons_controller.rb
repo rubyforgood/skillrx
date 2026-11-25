@@ -5,7 +5,7 @@ class BeaconsController < ApplicationController
   before_action :prepare_associations, only: %i[new edit]
 
   def index
-    @beacons = Beacon.order(created_at: :desc)
+    @beacons = Beacon.includes(:region, :language).order(created_at: :desc)
   end
 
   def new
@@ -16,7 +16,7 @@ class BeaconsController < ApplicationController
     success, @beacon, api_key = Beacons::Creator.new.call(beacon_params)
 
     if success
-      flash[:notice] = "Beacon was successfully provisioned. API Key: #{api_key}"
+      flash[:notice] = "Beacon provisioned. Copy its API key below."
       redirect_to beacon_path(@beacon, api_key: api_key)
     else
       prepare_associations
@@ -39,7 +39,7 @@ class BeaconsController < ApplicationController
 
   def regenerate_key
     _, api_key = Beacons::KeyRegenerator.new.call(@beacon)
-    flash[:notice] = "API key has been successfully regenerated. API Key: #{api_key}"
+    flash[:notice] = "API key regenerated. Copy the new key below."
     redirect_to beacon_path(@beacon, api_key: api_key)
 
     rescue => StandardError

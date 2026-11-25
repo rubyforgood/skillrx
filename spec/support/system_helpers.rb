@@ -6,14 +6,19 @@ module SystemHelpers
     click_button "Sign in"
   end
 
+  # Waits until no Turbo visit or frame load is in progress (Turbo marks them with aria-busy), so
+  # the next step acts on the page that will stay, not one about to be swapped out.
+  def wait_for_turbo
+    expect(page).to have_no_css("html[aria-busy], turbo-frame[aria-busy]", visible: :all, wait: 5)
+  end
+
   # Opens the folded "Filters" panel of <rfg-filter-bar>, the way a person would, if it's closed,
   # and waits until `field` is visible. The button is inside two shadow roots (the bar's, then its
   # disclosure's), which Selenium's nested shadow_root finds lose track of, so it's clicked from a
   # script. Retried, because a Turbo visit can swap in a new page (with Filters closed) just after
   # the old one's panel was opened.
   def open_filters(field = "search_language_id")
-    # Let any Turbo visit or frame load finish first: Turbo marks them with aria-busy.
-    expect(page).to have_no_css("html[aria-busy], turbo-frame[aria-busy]", visible: :all, wait: 5)
+    wait_for_turbo
     page.document.synchronize(Capybara.default_max_wait_time * 2) do
       page.execute_script(<<~JS)
         const bar = document.querySelector("rfg-filter-bar");

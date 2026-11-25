@@ -60,7 +60,7 @@ RSpec.describe "Topics search", type: :system do
   context "when the user is an admin" do
     let(:user) { create(:user, :admin, email: "admin@mail.com") }
 
-    before { click_link("Topics") }
+    before { click_link("Topics"); wait_for_turbo }
 
     it "shows all topics from first provider" do
       expect(page).to have_text(english_active_topic.title)
@@ -198,6 +198,7 @@ RSpec.describe "Topics search", type: :system do
       before do
         user.update(provider_ids: [ provider_1.id ])
         click_link("Topics")
+        wait_for_turbo
       end
 
       it "doesn't have a dropdown menu to change the provider" do
@@ -326,6 +327,7 @@ RSpec.describe "Topics search", type: :system do
       before do
         user.update(provider_ids: [ provider_1.id, provider_2.id ])
         click_link("Topics")
+        wait_for_turbo
       end
 
       it "only shows topics from its first associated provider" do

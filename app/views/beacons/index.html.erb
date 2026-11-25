@@ -1,44 +1,10 @@
-<% content_for :title, "Beacon Management" %>
+<% content_for :title, "Beacons" %>
 
-<div class="bg-gradient-page page-container">
-  <div class="content-wrapper">
+<div class="page">
+  <%= render "shared/page_header", title: "Beacons", subtitle: "Devices in the field that serve SkillRx content offline" do %>
+    <%= link_to "Provision a beacon", new_beacon_path, class: "button button-primary", data: { turbo: false } %>
+  <% end %>
 
-    <!-- Header Section -->
-    <div class="section-spacing">
-      <div class="flex-between-wrap mb-6">
-        <div class="min-w-0 flex-1">
-          <div class="flex items-center gap-4 mb-2">
-            <div class="bg-gradient-green text-white p-3 rounded-xl flex-shrink-0">
-              <svg class="icon-size-lg" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8.111 16.404a5.5 5.5 0 017.778 0M12 20h.01m-7.08-7.071c3.904-3.905 10.236-3.905 14.141 0M1.394 9.393c5.857-5.857 15.355-5.857 21.213 0"></path>
-              </svg>
-            </div>
-            <h1 class="text-4xl font-bold text-gray-800 m-0 min-w-0">Beacon Management</h1>
-          </div>
-          <p class="text-gray-500 m-0 text-base">Monitor system beacons deployed in the field</p>
-        </div>
-
-        <div class="flex items-center gap-3">
-          <div class="text-right mr-4">
-            <div class="text-sm text-gray-600">
-              Active: <span class="font-semibold text-green-600"><%= @beacons.count { |b| !b.revoked? } %></span> /
-              Revoked: <span class="font-semibold text-red-600"><%= @beacons.count { |b| b.revoked? } %></span>
-            </div>
-          </div>
-
-          <%= link_to new_beacon_path, class: "bg-gradient-green text-white py-3.5 px-7 rounded-xl no-underline font-semibold text-sm inline-flex items-center gap-2 shadow-green transition-all hover:-translate-y-0.5", data: {turbo: false } do %>
-            <svg class="icon-size" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"></path>
-            </svg>
-            <span>Provision New Beacon</span>
-          <% end %>
-        </div>
-      </div>
-    </div>
-
-    <%= render "summary" %>
-
-    <%= render "beacon_list" %>
-
-  </div>
+  <%= render "summary" %>
+  <%= render "beacon_list" %>
 </div>

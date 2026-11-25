@@ -654,3 +654,15 @@ rfg-table { @apply relative block; }
 .inline-confirm { @apply flex basis-full flex-wrap items-center gap-2 rounded-control border border-danger/40 bg-danger/5 p-3; }
 .inline-confirm p { @apply m-0 w-full text-sm text-neutral-900; }
 .text-danger { color: var(--color-rose-700); } /* text uses the tone's 700 step (design system tokens) */
+
+/* Counts in a strip (beacons by status). */
+.stats { @apply m-0 grid grid-cols-2 gap-3 sm:grid-cols-3 lg:grid-cols-6; }
+.stat { @apply rounded-surface border border-neutral-200 bg-white px-4 py-3; }
+.stat dt { @apply text-sm text-neutral-500; }
+.stat dd { @apply m-0 mt-0.5 text-2xl font-semibold tabular-nums text-neutral-900; }
+.button-row { @apply flex flex-wrap gap-2; }
+.new-key { @apply flex flex-col gap-2 rounded-surface border border-warning/50 bg-warning/10 p-5; }
+.new-key h2 { @apply m-0 text-base font-semibold text-neutral-900; }
+.new-key p { @apply m-0 text-sm text-neutral-700; }
+.new-key-row { @apply mt-1 flex flex-wrap items-center gap-2; }
+.new-key code { @apply min-w-0 flex-1 rounded-control border border-neutral-200 bg-white px-3 py-2 font-mono text-sm break-all; }

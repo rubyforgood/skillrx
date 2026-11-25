@@ -172,6 +172,7 @@ government.topics.where(state: :active).limit(3).each_with_index do |topic, i|
 end
 
 # Beacons in each state: synced and online, outdated, in error, never seen, and revoked.
+# Content versions: the latest manifest is 4; a synced beacon reports 4, an outdated or failing one 3.
 [
   ["Kisumu district hospital", english, Region.first, "synced", 5.minutes.ago, nil],
   ["Mobile clinic van 2", english, Region.second, "outdated", 3.days.ago, nil],
@@ -185,6 +186,7 @@ end
                           sync_status: status, last_seen_at: seen, last_sync_at: seen, revoked_at: revoked,
                           last_sync_error: (status == "error" ? "Manifest checksum mismatch: expected 9f2c, got 4b1a" : nil))
   beacon.providers << (language == spanish ? government : [government, clinic].sample)
+  beacon.update!(manifest_version: 4, reported_manifest_version: { "synced" => "4", "outdated" => "3", "error" => "3" }[status])
 end
 
 # Import reports: one completed, one with errors, one still running.
