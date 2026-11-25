@@ -82,6 +82,8 @@ or **Revoked**. The counts at the top add them up. When you provision a beacon o
 key, the full key appears **once**, with a **Copy key** button: copy it into the beacon then, because
 SkillRx can't show it again.
 
+**A beacon gets only the providers and topics chosen on it.** If none are chosen, it has no content.
+
 ## Something wrong?
 
 If something doesn't work the way it did, or you can't find something, email

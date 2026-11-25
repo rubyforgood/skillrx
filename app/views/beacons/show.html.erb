@@ -46,13 +46,13 @@
             <dd>
               <% if @beacon.providers.any? %>
                 <ul class="chips"><% @beacon.providers.each do |provider| %><li class="chip"><%= provider.name %></li><% end %></ul>
-              <% else %>All providers<% end %>
+              <% else %><span class="muted">None</span><% end %>
             </dd>
             <dt>Topics</dt>
             <dd>
               <% if @beacon.topics.any? %>
                 <ul class="chips"><% @beacon.topics.each do |topic| %><li class="chip"><%= link_to topic.title, topic_path(topic) %></li><% end %></ul>
-              <% else %>All topics in its language and region<% end %>
+              <% else %><span class="muted">None. This beacon has no content until topics are added.</span><% end %>
             </dd>
           </dl>
         </div>

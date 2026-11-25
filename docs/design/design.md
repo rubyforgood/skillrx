@@ -210,6 +210,23 @@ The rule for every table (decided 2026-11-25, see decisions.md):
 
 *Each screen is migrated after its preview is chosen. Listed here as they are.*
 
+## Subtitles and helper text
+
+Asked 2026-11-25: "make them more utilitarian and plain language." The rule:
+
+- **A subtitle earns its place by saying something the heading doesn't** that you need right now:
+  which provider's topics you're looking at ("From Community health clinic"), or what happens next
+  ("You'll get its API key after you save. It's shown only once."). A description of what the page
+  is ("Educational topics and the documents in them") is dropped. Edit pages keep the record's name.
+- **A field hint says only what you need to fill it in:** a format or example ("For example,
+  Kampala central clinic."), a limit ("Up to 72 characters."), or a consequence ("With none chosen,
+  the beacon has no content."). A hint that restates the label is dropped.
+- **An empty state says what to do next** ("Add a provider before adding topics."), not what the
+  page is for.
+- **Every claim is checked against the code.** The sweep found two false ones carried over from
+  before the migration: "Minimum 8 characters" (no such validation) and "leave blank for all
+  providers/topics" (a beacon gets only what's chosen on it; `Beacons::ManifestBuilder`).
+
 ## Not migrated
 
 What is deliberately left as it is, and why.

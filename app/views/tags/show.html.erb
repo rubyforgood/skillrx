@@ -21,7 +21,7 @@
           <dd>
             <% if @tag.cognates_tags.any? %>
               <ul class="chips"><% @tag.cognates_tags.each do |cognate| %><li class="chip"><%= link_to cognate.name, tag_path(cognate), data: { turbo: false } %></li><% end %></ul>
-              <p class="form-help-text mt-2 mb-0">Tags that mean the same thing. Adding one to a topic adds the others.</p>
+              <p class="form-help-text mt-2 mb-0">Tagging a topic with this tag also adds these.</p>
             <% else %><span class="muted">None</span><% end %>
           </dd>
         </dl>

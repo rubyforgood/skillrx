@@ -8,11 +8,11 @@
     <section class="form-section" aria-labelledby="topic-details-heading">
       <h2 id="topic-details-heading">Details</h2>
 
-      <%= form_field f, :title, label: "Title", required: true, hint: "A clear title that says what the topic covers." do %>
+      <%= form_field f, :title, label: "Title", required: true do %>
         <%= f.text_field :title, class: "form-input" %>
       <% end %>
 
-      <%= form_field f, :description, label: "Description", optional: true, hint: "What someone will learn from this topic." do %>
+      <%= form_field f, :description, label: "Description", optional: true do %>
         <%= f.text_area :description, rows: 4, class: "form-textarea" %>
       <% end %>
 
@@ -41,7 +41,7 @@
 
       <div data-controller="select-tags">
         <%= form_field f, :tag_list, label: "Tags", optional: true, for_id: "topic_tag_list",
-              hint: "Type to find a tag, or press Enter to add a new one.#{" Adding or removing a tag adds or removes its cognates too." if topic.persisted?}" do %>
+              hint: "Type to find a tag, or press Enter to add a new one.#{" Adding or removing a tag also adds or removes its cognates." if topic.persisted?}" do %>
           <%= f.select :tag_list,
                 options_from_collection_for_select(ActsAsTaggableOn::Tag.order(name: :asc), :name, :name, topic.tag_list),
                 { include_blank: true }, multiple: true, placeholder: "Add tags",
@@ -66,7 +66,7 @@
       <label for="documents" class="dropzone">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" aria-hidden="true"><path d="M12 16V4m0 0-4 4m4-4 4 4M4 16v3a1 1 0 0 0 1 1h14a1 1 0 0 0 1-1v-3"/></svg>
         <span class="dropzone-action">Choose files to upload</span>
-        <span class="dropzone-hint" id="documents_hint">Images, PDFs or audio files</span>
+        <span class="dropzone-hint" id="documents_hint">PDF, image or audio files</span>
         <%= f.file_field :documents, multiple: true, class: "sr-only", id: "documents", accept: Topic::CONTENT_TYPES.join(","),
               aria: { describedby: "documents_hint" }, data: { upload_target: "filesInput", action: "change->upload#uploadFile" } %>
       </label>

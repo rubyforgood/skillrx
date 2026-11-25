@@ -2,7 +2,7 @@
   <div class="form-card">
     <%= render "shared/errors", errors: provider.errors.full_messages, resource_name: "provider" %>
 
-    <%= form_field form, :name, label: "Name", required: true, hint: "The organization's official name." do %>
+    <%= form_field form, :name, label: "Name", required: true do %>
       <%= form.text_field :name, autofocus: true, class: "form-input" %>
     <% end %>
 
@@ -12,19 +12,19 @@
 
     <% if @provider.topics? %>
       <div id="file-name-prefix-uneditable-notice">
-        <rfg-callout tone="info">This provider has topics, so their file names are set and the prefix can't change.</rfg-callout>
+        <rfg-callout tone="info">The prefix can't be changed because this provider has topics.</rfg-callout>
       </div>
-      <%= form_field form, :file_name_prefix, label: "File name prefix", hint: "Added to the start of this provider's uploaded file names." do %>
+      <%= form_field form, :file_name_prefix, label: "File name prefix", hint: "Added to the start of uploaded file names." do %>
         <%= form.text_field :file_name_prefix, disabled: true, value: @provider.file_name_prefix, class: "form-input" %>
       <% end %>
     <% else %>
-      <%= form_field form, :file_name_prefix, label: "File name prefix", optional: true, hint: "Added to the start of this provider's uploaded file names. For example, 123_who_guidelines." do %>
+      <%= form_field form, :file_name_prefix, label: "File name prefix", optional: true, hint: "Added to the start of uploaded file names, for example 123_who_guidelines. Can't be changed once the provider has topics." do %>
         <%= form.text_field :file_name_prefix, class: "form-input" %>
       <% end %>
     <% end %>
 
     <div data-controller="select-tags">
-      <%= form_field form, :region_ids, label: "Regions", optional: true, hint: "Where this provider's topics are used." do %>
+      <%= form_field form, :region_ids, label: "Regions", optional: true, hint: "A beacon in one of these regions can be given this provider's topics." do %>
         <%= form.collection_select :region_ids, Region.order(:name), :id, :name, { include_hidden: false }, multiple: true, placeholder: "Choose regions",
               data: { "allow-new": "false", "allow-clear": "true", "select-tags-target": "tagList" } %>
       <% end %>

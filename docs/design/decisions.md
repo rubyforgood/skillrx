@@ -265,3 +265,23 @@ brand tone, Contributor neutral); search plus two filters, shown inline.
   provider ids and failed. Existing providers only now.
 - **The seeds linked me@mail.com to the same provider twice**, so it was listed twice. Fixed in
   `db/seeds.rb`.
+
+## 2026-11-25: Plain, utilitarian subtitles and helper text
+
+Asked: "do a sweep of all subtitles and helper text, make them more utilitarian and plain language,
+for example -- Educational topics and the documents in them -- is not helpful to the user."
+
+Swept every page subtitle, field hint, form lede and empty state (inventoried with grep, not by
+memory). List pages lose their descriptive subtitles; Topics' subtitle now names the provider being
+shown. Hints keep only formats, limits and consequences. The rule is in design.md, "Subtitles and
+helper text".
+
+### Two false claims, found by checking each line against the code
+
+- **The user form said passwords need at least 8 characters.** There's no such validation
+  (`has_secure_password` only caps them at 72). It now says "Up to 72 characters."
+- **The beacon form said to leave providers and topics blank to include everything**, and the beacon
+  page showed "All providers" and "All topics in its language and region" when none were chosen. In
+  fact a beacon's manifest holds only the providers and topics chosen on it
+  (`Beacons::ManifestBuilder#build_providers`, `#topics`), so blank means no content. The form and
+  page now say so. The old app made the same claim; it predates this migration.

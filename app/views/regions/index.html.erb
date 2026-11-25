@@ -1,7 +1,7 @@
 <% content_for :title, "Regions" %>
 
 <div class="page">
-  <%= render "shared/page_header", title: "Regions", subtitle: "Where providers work and beacons are deployed" do %>
+  <%= render "shared/page_header", title: "Regions" do %>
     <%= link_to "Add a region", new_region_path, class: "button button-primary", data: { turbo: false } %>
   <% end %>
 
@@ -33,7 +33,7 @@
               </tr>
             <% end %>
           <% else %>
-            <tr><td colspan="3" class="empty"><p class="empty-title">No regions yet</p><p>Add the places where beacons are deployed.</p></td></tr>
+            <tr><td colspan="3" class="empty"><p class="empty-title">No regions yet</p><p>Add a region before provisioning beacons.</p></td></tr>
           <% end %>
         </tbody>
       </table>

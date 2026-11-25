@@ -8,7 +8,7 @@
 
     <div data-controller="select-tags">
       <%= form_field form, :cognates_list, label: "Cognates", optional: true, for_id: "tag_cognates_list",
-            hint: "Tags that mean the same thing, such as a translation. Adding one to a topic adds the others. Type to find a tag, or press Enter to add a new one." do %>
+            hint: "Tags that mean the same thing, such as translations. Tagging a topic with one adds the others. Type to find a tag, or press Enter to add a new one." do %>
         <%= form.select :cognates_list, options_from_collection_for_select(tag.all_available_tags, :name, :name, tag.cognates_list),
               { include_blank: true }, multiple: true, placeholder: "Add cognates", data: { "allow-clear": "true", "select-tags-target": "tagList" } %>
       <% end %>

@@ -5,14 +5,14 @@
 
     <section class="form-section" aria-labelledby="beacon-basics">
       <h2 id="beacon-basics">Beacon</h2>
-      <%= form_field form, :name, label: "Name", required: true, hint: "Where it's deployed, so it's easy to recognize. For example, Kampala central clinic." do %>
+      <%= form_field form, :name, label: "Name", required: true, hint: "Use its location, for example Kampala central clinic." do %>
         <%= form.text_field :name, class: "form-input" %>
       <% end %>
     </section>
 
     <section class="form-section" aria-labelledby="beacon-content-heading">
       <h2 id="beacon-content-heading">Content</h2>
-      <p class="form-help-text -mt-3">Which topics this beacon serves. Leave providers and topics blank to include everything in its language and region.</p>
+      <p class="form-help-text -mt-3">The beacon gets only the topics you choose here. Choosing a language and region narrows the lists.</p>
 
       <div class="form-grid">
         <%= form_field form, :language_id, label: "Language", required: true do %>
@@ -29,17 +29,17 @@
       </div>
 
       <div data-controller="select-tags" data-select-tags-dropdown-parent-value="body">
-        <%= form_field form, :provider_ids, label: "Providers", optional: true, hint: "Only topics from these providers." do %>
+        <%= form_field form, :provider_ids, label: "Providers", optional: true, hint: "Only providers working in the beacon's region are listed." do %>
           <%= form.select :provider_ids, options_from_collection_for_select(@providers, :id, :name, beacon.provider_ids),
-                { include_blank: true }, multiple: true, placeholder: "All providers",
+                { include_blank: true }, multiple: true, placeholder: "Choose providers",
                 data: { "allow-new": "false", "allow-clear": "true", "select-tags-target": "tagList", "dropdown-parent": "body", "beacon-form-target": "providersSelect" } %>
         <% end %>
       </div>
 
       <div data-controller="select-tags" data-select-tags-dropdown-parent-value="body">
-        <%= form_field form, :topic_ids, label: "Topics", optional: true, hint: "Only these topics." do %>
+        <%= form_field form, :topic_ids, label: "Topics", optional: true, hint: "Only active topics in the beacon's language are listed. With none chosen, the beacon has no content." do %>
           <%= form.select :topic_ids, options_from_collection_for_select(@topics, :id, :title, beacon.topic_ids),
-                { include_blank: true }, multiple: true, placeholder: "All topics",
+                { include_blank: true }, multiple: true, placeholder: "Choose topics",
                 data: { "allow-new": "false", "allow-clear": "true", "select-tags-target": "tagList", "dropdown-parent": "body", "beacon-form-target": "topicsSelect" } %>
         <% end %>
       </div>

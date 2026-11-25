@@ -1,7 +1,7 @@
 <%= form_with(model: language, local: true, html: { class: "surface", novalidate: true }) do |f| %>
   <div class="form-card">
     <%= render "shared/errors", errors: language.errors.full_messages, resource_name: "language" %>
-    <%= form_field f, :name, label: "Name", required: true, hint: "As speakers write it. For example, English or Kiswahili." do %>
+    <%= form_field f, :name, label: "Name", required: true, hint: "For example, English or Kiswahili." do %>
       <%= f.text_field :name, autofocus: true, class: "form-input" %>
     <% end %>
   </div>

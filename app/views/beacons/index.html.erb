@@ -1,7 +1,7 @@
 <% content_for :title, "Beacons" %>
 
 <div class="page">
-  <%= render "shared/page_header", title: "Beacons", subtitle: "Devices in the field that serve SkillRx content offline" do %>
+  <%= render "shared/page_header", title: "Beacons" do %>
     <%= link_to "Provision a beacon", new_beacon_path, class: "button button-primary", data: { turbo: false } %>
   <% end %>
 

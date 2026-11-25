@@ -1,7 +1,7 @@
 <% content_for :title, "Import reports" %>
 
 <div class="page">
-  <%= render "shared/page_header", title: "Import reports", subtitle: "Each bulk import of topics and documents, and what went wrong" %>
+  <%= render "shared/page_header", title: "Import reports" %>
 
   <%= form_with url: import_reports_path, method: :get, local: true, html: { role: "search", "aria-label": "Import reports" }, data: { controller: "search", search_target: "search" } do |f| %>
     <rfg-filter-bar>

@@ -11,7 +11,7 @@
         <%= form.password_field :password, autocomplete: "new-password", class: "form-input" %>
       <% end %>
     <% else %>
-      <%= form_field form, :password, label: "Password", required: true, hint: "At least 8 characters. Share it with them securely; they can change it from the sign-in page." do %>
+      <%= form_field form, :password, label: "Password", required: true, hint: "Up to 72 characters. They can change it from the sign-in page." do %>
         <%= form.password_field :password, autocomplete: "new-password", class: "form-input" %>
       <% end %>
     <% end %>
@@ -20,14 +20,14 @@
       <%= form.check_box :is_admin, aria: { describedby: "user_is_admin_hint" } %>
       <div>
         <%= form.label :is_admin, "Administrator" %>
-        <p id="user_is_admin_hint" class="form-help-text m-0">Can see every provider's topics, beacons and the administration pages, including users.</p>
+        <p id="user_is_admin_hint" class="form-help-text m-0">Can manage every provider's topics, plus beacons, users and the other administration pages.</p>
       </div>
     </div>
 
     <%# Existing providers only: allow-new was true, which let someone type a name that was then
         submitted as a provider id and failed. %>
     <div data-controller="select-tags">
-      <%= form_field form, :provider_ids, label: "Providers", optional: true, hint: "The providers whose topics this person can see and edit." do %>
+      <%= form_field form, :provider_ids, label: "Providers", optional: true, hint: "They can see and edit topics from these providers." do %>
         <%= form.select :provider_ids, options_from_collection_for_select(Provider.order(:name), :id, :name, user.providers.ids),
               { include_blank: false }, multiple: true, placeholder: "Choose providers",
               data: { "allow-new": "false", "allow-clear": "true", "select-tags-target": "tagList" } %>

@@ -1,7 +1,7 @@
 <% content_for :title, "Topics" %>
 
 <div class="page">
-  <%= render "shared/page_header", title: "Topics", subtitle: "Educational topics and the documents in them" do %>
+  <%= render "shared/page_header", title: "Topics", subtitle: (provider = try(:current_provider)).present? ? "From #{provider.name}" : nil do %>
     <%= link_to "Add new topic", new_topic_path, class: "button button-primary", data: { turbo: false } %>
   <% end %>
 

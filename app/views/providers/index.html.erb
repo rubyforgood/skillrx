@@ -1,7 +1,7 @@
 <% content_for :title, "Providers" %>
 
 <div class="page">
-  <%= render "shared/page_header", title: "Providers", subtitle: "Organizations whose topics SkillRx distributes" do %>
+  <%= render "shared/page_header", title: "Providers" do %>
     <%= link_to "Add a provider", new_provider_path, class: "button button-primary", data: { turbo: false } %>
   <% end %>
 
@@ -43,7 +43,7 @@
               </tr>
             <% end %>
           <% else %>
-            <tr><td colspan="4" class="empty"><p class="empty-title">No providers yet</p><p>Add the first organization whose topics SkillRx will distribute.</p></td></tr>
+            <tr><td colspan="4" class="empty"><p class="empty-title">No providers yet</p><p>Add a provider before adding topics.</p></td></tr>
           <% end %>
         </tbody>
       </table>

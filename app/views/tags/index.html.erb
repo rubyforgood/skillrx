@@ -1,7 +1,7 @@
 <% content_for :title, "Tags" %>
 
 <div class="page">
-  <%= render "shared/page_header", title: "Tags", subtitle: "Words that help people find topics, and the tags that mean the same thing" %>
+  <%= render "shared/page_header", title: "Tags" %>
 
   <%= form_for :search, url: tags_path, method: :get, html: { role: "search", "aria-label": "Tags" },
         data: { controller: "search", search_target: "search", turbo_frame: "tag-list", turbo_action: "advance" } do |f| %>
