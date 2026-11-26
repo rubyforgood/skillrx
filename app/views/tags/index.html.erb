@@ -11,13 +11,15 @@
         <%= f.label :name, "Search", class: "form-label" %>
         <%= f.search_field :name, value: current[:name], placeholder: "Tag name", class: "form-input", data: { action: "input->search#submit" } %>
       </div>
-      <div slot="fields">
+      <%# Sort isn't a filter, so it's at the row's end (docs/design/decisions.md, 2026-11-26). With
+          it gone, Search is the only thing to clear, and the search box has its own ×, so no
+          Clear filters: two ways to undo one thing is one too many. %>
+      <div slot="end" class="w-48">
         <%= f.label :order, "Sort", class: "form-label" %>
-        <%= f.select :order, options_for_select([["Name", "name"], ["Most recently added", "desc"], ["Least recently added", "asc"],
-              ["Highest number of taggings", "most_tagged"], ["Lowest number of taggings", "least_tagged"]], current[:order].to_s),
+        <%= f.select :order, options_for_select([["Name (A–Z)", "name"], ["Newest first", "desc"], ["Oldest first", "asc"],
+              ["Most used", "most_tagged"], ["Least used", "least_tagged"]], current[:order].to_s),
               {}, class: "form-select", data: { action: "change->search#submit" } %>
       </div>
-      <a slot="actions" class="button button-ghost" href="<%= tags_path %>">Clear filters</a>
     </rfg-filter-bar>
   <% end %>
 

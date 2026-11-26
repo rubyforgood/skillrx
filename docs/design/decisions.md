@@ -399,3 +399,43 @@ can edit, and narrows it like any other filter.
 517 examples, 0 failures (search specs 5 runs in a row clean); WCAG 0; button audits 0 and 0; no
 sideways scroll at 390px; Provider and Search bottoms aligned at 1280px (both 151px). No Bullet
 warnings on the list.
+
+## 2026-11-26: Sort moves out of the filters; the row stays put
+
+**Asked:** "when the filter button is triggered, it drops all the filters to the line below and
+search stays above in the middle of the line, it looks pretty wonky." Then: "move sort out and log
+the reason for the decision."
+
+### Why it looked wonky
+Provider sat outside `<rfg-filter-bar>` (its always-visible slot held one field), aligned to the
+bar's bottom edge. Opening Filters made the bar taller, so Provider dropped to the panel's last line
+and the panel started under Search.
+
+### Fixed upstream (design system 0.1.7)
+The `search` slot now takes several fields, so Provider and Search share the first row and the panel
+opens below the whole row from its left edge. Measured at 1280px: Provider, Search and Sort tops are
+110px before and after opening; at 390px, no sideways scroll.
+
+### Why sort moved out
+- **Sort isn't a filter.** A filter changes which topics are listed; sort only changes their order.
+  Folded among the filters, it counted toward the panel's six fields, and at 1280px the sixth wrapped
+  onto a line by itself.
+- **Clear filters reset it.** Someone who chose "Oldest first" and clears a language filter still
+  wants oldest first. Now Clear filters keeps the sort and resets everything else.
+- **It's where people look for it:** at the far end of the row, as on GitHub, Gmail and Shopify Polaris.
+- Applied to every list with a sort (Topics, Tags, Users), so it's one rule. Tags drops Clear filters:
+  with Sort out, the only thing left to clear is Search, which has its own ×, and the design system
+  says a bar shouldn't offer two ways to undo one thing.
+
+### Also changed
+- **Clear filters is a submit button.** As a link it was drawn with the page, so after changing Sort
+  it carried the old order. As a button it sends the current sort; the server redirects with the sort
+  kept and the rest dropped.
+- **Sort options say the order:** "Newest first" and "Oldest first" everywhere; on Tags "Name (A–Z)",
+  "Most used" and "Least used".
+- **Two specs waited on the wrong page.** Tags and Users specs chose a sort right after clicking the
+  nav link; Topics (where sign-in lands) now has a visible Sort with the same id, so they picked that
+  one. They now wait for the page's heading first.
+
+### Measured
+518 examples, 0 failures (the three list specs twice more, clean); WCAG 0; button audits 0 and 0.

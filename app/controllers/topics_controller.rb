@@ -5,6 +5,8 @@ class TopicsController < ApplicationController
   before_action :set_topic, only: [ :show, :edit, :update, :destroy, :archive, :unarchive ]
 
   def index
+    return redirect_clearing_filters(:topics_path, provider: "all") if params[:clear]
+
     topics = list_scope.includes(:language, :documents_attachments)
     topics = topics.includes(:provider) if all_providers?
     @pagy, @topics = pagy(topics.search_with_params(search_params))
@@ -75,7 +77,7 @@ class TopicsController < ApplicationController
     @provider_filter ||= begin
       choice = params[:provider].presence || cookies.signed[:topics_provider].presence || "all"
       choice = "all" unless choice == "all" || provider_scope.exists?(id: choice)
-      # Not on a Turbo prefetch: hovering a link (Clear filters) must not change what's remembered.
+      # Not on a Turbo prefetch: hovering a link that carries provider= must not change what's remembered.
       if params[:provider].present? && request.headers["X-Sec-Purpose"] != "prefetch"
         cookies.signed[:topics_provider] = { value: choice, expires: 1.year }
         cookies.signed[:current_provider_id] = choice.to_i unless choice == "all"
@@ -137,10 +139,14 @@ class TopicsController < ApplicationController
     )
   end
 
+  # With no State in the request, the list shows active topics. Checked by key, not by whether
+  # search[] is present, so Clear filters can keep the sort order (search[order]) and still reset
+  # State to Active. "Any state" sends state="" and shows both.
   def search_params
-    return { state: :active } unless params[:search].present?
-
-    params.require(:search).permit(:query, :state, :language_id, :year, :month, :order, tag_list: [])
+    @search_params ||= begin
+      search = params[:search].present? ? params.require(:search).permit(:query, :state, :language_id, :year, :month, :order, tag_list: []) : ActionController::Parameters.new.permit!
+      search.key?(:state) ? search : search.merge(state: "active")
+    end
   end
   helper_method :search_params
 

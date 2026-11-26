@@ -18,12 +18,13 @@
         <%= f.select :is_admin, options_for_select([["Any role", ""], ["Admin", "true"], ["Contributor", "false"]], current[:is_admin].to_s),
               {}, class: "form-select", data: { action: "change->search#submit" } %>
       </div>
-      <div slot="fields">
+      <%# Sort isn't a filter: at the row's end, kept by Clear filters (docs/design/decisions.md, 2026-11-26). %>
+      <button slot="actions" type="submit" name="clear" value="1" class="button button-ghost" data-turbo-frame="_top">Clear filters</button>
+      <div slot="end" class="w-40">
         <%= f.label :order, "Sort", class: "form-label" %>
-        <%= f.select :order, options_for_select([["By most recently added", "desc"], ["By least recently added", "asc"]], current[:order].to_s),
+        <%= f.select :order, options_for_select([["Newest first", "desc"], ["Oldest first", "asc"]], current[:order].to_s),
               {}, class: "form-select", data: { action: "change->search#submit" } %>
       </div>
-      <a slot="actions" class="button button-ghost" href="<%= users_path %>">Clear filters</a>
     </rfg-filter-bar>
   <% end %>
 

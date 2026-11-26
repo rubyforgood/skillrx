@@ -350,10 +350,26 @@ RSpec.describe "Topics search", type: :system do
         expect(page).to have_select("Provider", selected: provider_2.name)
         expect(page).not_to have_text(english_active_topic.title)
 
-        click_link("Clear filters")
+        click_button("Clear filters")
         wait_for_turbo
         expect(page).to have_select("Provider", selected: "All providers")
         expect(page).to have_text(english_active_topic.title)
+      end
+
+      it "keeps the sort order when filters are cleared, because sort isn't a filter" do
+        select "Oldest first", from: "search_order"
+        wait_for_turbo
+        select_filter "Spanish", from: "search_language_id"
+        wait_for_turbo
+        expect(page).not_to have_text(english_active_topic.title)
+
+        click_button("Clear filters")
+        wait_for_turbo
+        expect(page).to have_select("Sort", selected: "Oldest first")
+        # The cleared filters are folded away again (none is set), so look past visibility.
+        expect(page).to have_select("search_language_id", selected: "Any language", visible: :all)
+        expect(page).to have_select("search_state", selected: "Active", visible: :all)
+        expect(page).to have_text(/#{spanish_active_topic.title}.+#{english_active_topic.title}/m)
       end
 
       context "when switching to another provider" do

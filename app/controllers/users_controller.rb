@@ -5,6 +5,8 @@ class UsersController < ApplicationController
   before_action :set_user, only: %i[ show edit update destroy ]
 
   def index
+    return redirect_clearing_filters(:users_path) if params[:clear]
+
     @pagy, @users = pagy(User.includes(:providers).search_with_params(user_search_params))
 
     respond_to do |format|

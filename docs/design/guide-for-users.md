@@ -60,7 +60,8 @@ administrator or a contributor. To **sign out**, select the **⋯** button next 
 Every list works the same way:
 - **Search** sits above the list and filters as you type. On Topics, the other filters are behind
   **Filters**, which opens on its own when a filter is set, so you can always tell the list is
-  filtered. **Clear filters** shows everything again.
+  filtered. **Clear filters** shows everything again, in the same order: **Sort** is at the right end of the
+  row, and clearing filters doesn't change it.
 - **Click a name** to open the record (a topic, beacon, provider and so on). **Edit** is at the end of
   each row.
 - **Topics show active topics** unless you choose **Archived** or **Any state** in the State filter.

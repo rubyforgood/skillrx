@@ -8,6 +8,8 @@ RSpec.describe "User search", type: :system do
   before do
     login_as(admin)
     click_link("Users")
+    # Topics, where sign-in lands, also has a visible Sort (search_order): wait for the Users page.
+    expect(page).to have_css("h1", text: "Users")
   end
 
   it "shows by default the users from most to least recently added" do
@@ -42,7 +44,7 @@ RSpec.describe "User search", type: :system do
 
   context "when sorting" do
     it "displays users in the selected order" do
-      select "By least recently added", from: "search_order"
+      select "Oldest first", from: "search_order"
       expect(find("main")).to have_text(/#{admin.email}.+#{martin.email}.+#{rosemary.email}/m)
     end
   end

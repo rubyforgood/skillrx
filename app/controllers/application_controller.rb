@@ -21,6 +21,17 @@ class ApplicationController < ActionController::Base
   end
   helper_method :current_provider
 
+  # "Clear filters" is a submit button in a list's form (name="clear"), not a link, so it sends the
+  # current sort: a link's address is drawn with the page, and changing Sort only reloads the list.
+  # Redirect to the list with the sort kept and every filter dropped (sort isn't a filter:
+  # docs/design/decisions.md, 2026-11-26). `extra` adds params, such as Topics' provider=all.
+  def redirect_clearing_filters(path_helper, **extra)
+    order = params.dig(:search, :order).presence
+    query = extra
+    query = query.merge(search: { order: }) if order
+    redirect_to public_send(path_helper, query)
+  end
+
   def non_contributor_redirect_path
     topics_path
   end

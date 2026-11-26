@@ -79,7 +79,7 @@ Vendored at a pinned version, never loaded from a CDN at runtime:
 | `app/assets/tailwind/rfg-theme.css` | `tokens/theme.css`, imported with `theme(static)` so every token is emitted (the components read them as CSS variables) |
 | `vendor/javascript/rfg-*.js` | `dist/standalone/<name>.mjs`, pinned in `config/importmap.rb`, imported in `application.js` |
 
-Current version: **0.1.6** (upgraded 2026-11-25). To upgrade, change the version in the URL in each file's header and
+Current version: **0.1.7** (upgraded 2026-11-26). To upgrade, change the version in the URL in each file's header and
 download again. Don't edit them by hand: SkillRx-specific values go in `application.css`.
 
 ## App shell
@@ -207,8 +207,19 @@ The rule for every table (decided 2026-11-25, see decisions.md):
   after JavaScript runs, so the heading would arrive late and push the page down). One primary
   action, sentence case.
 - **Filters:** `<rfg-filter-bar>` inside the list's `form_for`, so its controls keep submitting into
-  the list's Turbo frame. Search goes in the `search` slot and stays visible; three or more other
-  filters fold behind "Filters", which starts open when one is set.
+  the list's Turbo frame. One row: the always-visible fields (`search` slot: Search, and Topics'
+  Provider), then "Filters" (three or more filters fold behind it, and it starts open when one is
+  set), then Clear filters, then **Sort at the far end** (`end` slot). Opening Filters never moves
+  the row; the panel opens below it from the left edge (design system 0.1.7).
+- **Sort is not a filter** (decided 2026-11-26): it changes the order, not which records are listed.
+  So it never folds, and **Clear filters keeps it**. On Topics, Tags and Users. Tags, left with only
+  Search, has no Clear filters: the search box has its own ×.
+- **Clear filters is a submit button** (`name="clear"`, `data-turbo-frame="_top"`), not a link: a
+  link's address is drawn with the page, and changing Sort reloads only the list, so a link sent
+  the old sort. The controller redirects to the list with the sort kept and the filters dropped
+  (`redirect_clearing_filters`).
+- **Sort options say the order:** "Newest first", "Oldest first"; on Tags also "Name (A–Z)",
+  "Most used", "Least used" (were "Highest number of taggings", "By most recently added" and so on).
 - **Filter options say what they mean:** "Any language", month names, "Newest first". A select's
   first option is its default. Option values are strings, to match the URL.
 - **Write slotted elements as plain HTML**, not `link_to`: in development Herb wraps ERB output in a

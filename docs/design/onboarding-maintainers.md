@@ -65,7 +65,7 @@ mkdir -p public/design-previews && cp docs/design/previews/* public/design-previ
 Components are vendored as standalone files (Lit bundled in), at a pinned version:
 
 ```bash
-V=https://cdn.jsdelivr.net/npm/@rubyforgood/design-system@0.1.6
+V=https://cdn.jsdelivr.net/npm/@rubyforgood/design-system@0.1.7
 curl -fo /tmp/x.mjs $V/dist/standalone/modal.mjs
 # add the four-line provenance header (copy it from any vendor/javascript/rfg-*.js), then:
 #   vendor/javascript/rfg-modal.js

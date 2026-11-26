@@ -9,6 +9,8 @@ RSpec.describe "Tag search", type: :system do
   before do
     login_as(admin)
     click_link("Tags")
+    # Topics, where sign-in lands, also has a visible Sort (search_order): wait for the Tags page.
+    expect(page).to have_css("h1", text: "Tags")
   end
 
   it "shows by default the tags in alphabetical order" do
@@ -27,28 +29,28 @@ RSpec.describe "Tag search", type: :system do
 
   context "when sorting by most recently added" do
     it "displays tags in the selected order" do
-      select "Most recently added", from: "search_order"
+      select "Newest first", from: "search_order"
       expect(page).to have_text(/#{tag_2.name}.+#{tag_3.name}.+#{tag_1.name}/m)
     end
   end
 
   context "when sorting by least recently added" do
     it "displays tags in the selected order" do
-      select "Least recently added", from: "search_order"
+      select "Oldest first", from: "search_order"
       expect(page).to have_text(/#{tag_1.name}.+#{tag_3.name}.+#{tag_2.name}/m)
     end
   end
 
   context "when sorting by highest number of taggings" do
     it "displays tags in the selected order" do
-      select "Highest number of taggings", from: "search_order"
+      select "Most used", from: "search_order"
       expect(page).to have_text(/#{tag_3.name}.+#{tag_1.name}.+#{tag_2.name}/m)
     end
   end
 
   context "when sorting by lowest number of taggings" do
     it "displays tags in the selected order" do
-      select "Lowest number of taggings", from: "search_order"
+      select "Least used", from: "search_order"
       expect(page).to have_text(/#{tag_2.name}.+#{tag_1.name}.+#{tag_3.name}/m)
     end
   end
