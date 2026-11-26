@@ -1,0 +1,339 @@
+<title>Topics provider switcher</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<style>
+  /* Layout: a chooser bar, then one mock of the SkillRx topics screen per option, then the reasoning.
+     Single light look on purpose: it previews SkillRx, which is light only. */
+  :root {
+    --brand-50: #eef6fb; --brand-100: #d5e8f4; --brand-600: #055889; --brand-700: #044a72;
+    --n-50: #f8fafc; --n-100: #f1f5f9; --n-200: #e2e8f0; --n-300: #cbd5e1; --n-500: #64748b; --n-700: #334155; --n-900: #0f172a;
+    --ok-bg: #e8f5ee; --ok-fg: #166534; --warn: #b45309;
+    --font: "Figtree", ui-sans-serif, system-ui, -apple-system, "Segoe UI", sans-serif;
+    --radius: 8px; color-scheme: light;
+  }
+  * { box-sizing: border-box; }
+  body { margin: 0; font-family: var(--font); color: var(--n-900); background: var(--n-100); font-size: 14px; }
+  .wrap { max-width: 1240px; margin: 0 auto; padding-block: 0 64px; padding-left: max(16px, env(safe-area-inset-left, 0px)); padding-right: max(16px, env(safe-area-inset-right, 0px)); }
+  button { font: inherit; }
+  :focus-visible { outline: 2px solid var(--brand-600); outline-offset: 2px; }
+
+  .chooser { position: sticky; top: env(safe-area-inset-top, 0px); z-index: 20; background: var(--n-900); color: #fff; margin: 0 calc(-1 * max(16px, env(safe-area-inset-left, 0px))) 24px; padding: 10px max(16px, env(safe-area-inset-left, 0px)); display: flex; flex-wrap: wrap; gap: 8px 16px; align-items: center; }
+  body::before { content: ""; position: fixed; inset: 0 0 auto; height: env(safe-area-inset-top, 0px); z-index: 10; background: var(--n-900); }
+  .chooser .grp { display: flex; flex-wrap: wrap; gap: 6px; align-items: center; }
+  .chooser b { font-weight: 600; margin-right: 4px; }
+  .chooser button { background: #374151; color: #fff; border: 0; border-radius: 6px; padding: 6px 10px; cursor: pointer; }
+  .chooser button[aria-pressed="true"] { background: #fff; color: var(--n-900); font-weight: 600; }
+
+  h1.doc { font-size: 26px; margin: 8px 0 6px; text-wrap: balance; }
+  .lede { color: var(--n-700); max-width: 72ch; line-height: 1.55; margin: 0 0 20px; }
+
+  /* the mock app */
+  .stage { display: flex; justify-content: center; overflow-x: auto; }
+  .app { container-type: inline-size; width: 100%; max-width: 1180px; background: var(--n-50); border: 1px solid var(--n-200); border-radius: 12px; overflow: hidden; box-shadow: 0 1px 3px rgb(15 23 42 / .08); }
+  .stage.phone .app { max-width: 390px; }
+  .grid { display: grid; grid-template-columns: 232px minmax(0, 1fr); min-height: 620px; }
+  @container (max-width: 700px) { .grid { grid-template-columns: minmax(0, 1fr); } .rail { display: none; } .topbar { display: flex !important; } }
+  .topbar { display: none; height: 56px; align-items: center; gap: 12px; padding: 0 16px; background: #fff; border-bottom: 1px solid var(--n-200); }
+  .rail { background: #fff; border-right: 1px solid var(--n-200); display: flex; flex-direction: column; }
+  .logo { height: 60px; display: flex; align-items: center; padding: 0 18px; border-bottom: 1px solid var(--n-200); font-weight: 800; color: var(--brand-600); letter-spacing: .02em; }
+  .nav { padding: 14px 10px; display: flex; flex-direction: column; gap: 2px; font-size: 15px; }
+  .nav a { padding: 8px 10px; border-radius: var(--radius); color: var(--n-700); text-decoration: none; font-weight: 500; }
+  .nav a.cur { background: var(--brand-50); color: var(--brand-700); font-weight: 600; }
+  .nav .sub { padding-left: 24px; font-size: 14px; font-weight: 400; }
+  .nav .gh { margin-top: 12px; }
+  .ws { margin: 12px 10px 0; }
+  .ws-label { font-size: 12px; color: var(--n-500); font-weight: 600; padding: 0 2px 4px; }
+
+  .content { padding: 24px 28px; display: flex; flex-direction: column; gap: 16px; min-width: 0; }
+  @container (max-width: 700px) { .content { padding: 20px 16px; } }
+  .ph { display: flex; flex-wrap: wrap; justify-content: space-between; align-items: flex-start; gap: 12px 16px; }
+  .ph h2 { margin: 0; font-size: 24px; }
+  .ph .sub { margin: 4px 0 0; color: var(--n-500); font-size: 15px; }
+  .btn { display: inline-flex; align-items: center; gap: 6px; min-height: 40px; padding: 0 16px; border-radius: var(--radius); border: 1px solid transparent; font-weight: 600; cursor: pointer; white-space: nowrap; }
+  .btn-primary { background: var(--brand-600); color: #fff; }
+  .btn-ghost { background: transparent; color: var(--n-700); padding: 0 10px; }
+  .btn-ghost:hover { background: var(--n-100); }
+  .btn-secondary { background: #fff; color: var(--n-900); border-color: var(--n-300); }
+
+  .toolbar { display: flex; flex-wrap: wrap; align-items: flex-end; gap: 12px; }
+  .field { display: flex; flex-direction: column; gap: 6px; min-width: 0; }
+  .field label { font-weight: 500; color: var(--n-700); }
+  .input, .select { min-height: 40px; padding: 0 12px; border: 1px solid var(--n-500); border-radius: var(--radius); background: #fff; color: var(--n-900); font: inherit; font-size: 15px; display: flex; align-items: center; justify-content: space-between; gap: 8px; }
+  .input { width: 320px; max-width: 100%; color: var(--n-500); }
+  .select { width: 260px; max-width: 100%; }
+  .select::after { content: ""; width: 8px; height: 8px; border-right: 1.5px solid var(--n-700); border-bottom: 1.5px solid var(--n-700); transform: translateY(-2px) rotate(45deg); flex: none; }
+  @container (max-width: 700px) { .input, .select, .toolbar .field { width: 100%; } }
+  .inline-row { display: flex; align-items: center; gap: 12px; flex-wrap: wrap; }
+  .inline-row label { font-weight: 500; color: var(--n-700); }
+
+  .ann { position: relative; outline: 2px dashed #e11d48; outline-offset: 4px; border-radius: 4px; }
+  .tag { display: inline-block; background: #e11d48; color: #fff; font-size: 12px; font-weight: 700; border-radius: 999px; padding: 1px 8px; margin-left: 6px; vertical-align: middle; }
+
+  /* scope switcher (option A and C) */
+  .scope { position: relative; display: inline-block; }
+  .scope-btn { display: inline-flex; align-items: center; gap: 8px; min-height: 36px; padding: 0 10px 0 12px; border: 1px solid var(--n-300); border-radius: var(--radius); background: #fff; color: var(--n-900); cursor: pointer; font-size: 15px; max-width: 100%; }
+  .scope-btn:hover { background: var(--n-50); }
+  .scope-btn .k { color: var(--n-500); }
+  .scope-btn strong { font-weight: 600; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+  .scope-btn .chev { width: 8px; height: 8px; border-right: 1.5px solid var(--n-700); border-bottom: 1.5px solid var(--n-700); transform: translateY(-2px) rotate(45deg); flex: none; margin-left: 2px; }
+  .ws .scope, .ws .scope-btn { width: 100%; }
+  .ws .scope-btn { justify-content: space-between; }
+  .menu { position: absolute; left: 0; top: calc(100% + 6px); z-index: 5; min-width: 280px; background: #fff; border: 1px solid var(--n-200); border-radius: 10px; box-shadow: 0 10px 30px rgb(15 23 42 / .15); padding: 6px; }
+  .menu .mh { font-size: 12px; font-weight: 600; color: var(--n-500); padding: 6px 10px 4px; }
+  .menu button { display: flex; width: 100%; align-items: center; gap: 10px; padding: 8px 10px; border: 0; background: none; border-radius: 6px; text-align: left; cursor: pointer; color: var(--n-900); }
+  .menu button:hover { background: var(--n-100); }
+  .menu .chk { width: 16px; color: var(--brand-600); font-weight: 700; }
+  .menu .count { margin-left: auto; color: var(--n-500); font-variant-numeric: tabular-nums; }
+  .menu .filter { margin: 2px 4px 6px; }
+  .menu .filter .input { width: 100%; min-height: 36px; }
+
+  .surface { background: #fff; border: 1px solid var(--n-200); border-radius: 12px; overflow: hidden; }
+  .tablewrap { overflow-x: auto; }
+  table { width: 100%; border-collapse: collapse; font-size: 14px; }
+  th { text-align: left; font-weight: 600; color: var(--n-500); font-size: 13px; padding: 10px 16px; border-bottom: 1px solid var(--n-200); white-space: nowrap; }
+  td { padding: 12px 16px; border-bottom: 1px solid var(--n-100); vertical-align: top; }
+  td a { color: var(--brand-700); font-weight: 600; text-decoration: none; }
+  .meta { color: var(--n-500); font-size: 13px; margin-top: 2px; }
+  .pill { display: inline-block; background: var(--ok-bg); color: var(--ok-fg); font-size: 12px; font-weight: 600; border-radius: 999px; padding: 2px 10px; }
+  .num { text-align: right; font-variant-numeric: tabular-nums; }
+  @container (max-width: 700px) { .hide-sm { display: none; } }
+
+  /* notes */
+  .notes { margin-top: 28px; display: grid; gap: 20px; }
+  .card { background: #fff; border: 1px solid var(--n-200); border-radius: 12px; padding: 20px 22px; line-height: 1.55; min-width: 0; }
+  .card h3 { margin: 0 0 8px; font-size: 18px; text-wrap: balance; }
+  .card p, .card li { max-width: 78ch; }
+  .card ul { padding-left: 20px; margin: 8px 0; }
+  .cmp { overflow-x: auto; }
+  .cmp table { min-width: 720px; }
+  .cmp td, .cmp th { border-top: 1px solid var(--n-200); border-bottom: 0; font-size: 14px; }
+  .cmp th { color: var(--n-900); font-size: 14px; white-space: normal; }
+  .rec { background: var(--brand-50); }
+  code { font-size: 13px; background: var(--n-100); padding: 1px 5px; border-radius: 4px; }
+  .variant[hidden] { display: none !important; }
+  @media (prefers-reduced-motion: reduce) { * { transition: none !important; } }
+</style>
+
+<div class="wrap">
+  <div class="chooser" role="group" aria-label="Preview options">
+    <div class="grp"><b>Option</b>
+      <button type="button" data-v="today" aria-pressed="false">Today</button>
+      <button type="button" data-v="a" aria-pressed="true">A: in the page header (recommended)</button>
+      <button type="button" data-v="b">B: first field in the toolbar</button>
+      <button type="button" data-v="c">C: switcher in the rail</button>
+    </div>
+    <div class="grp"><b>Width</b>
+      <button type="button" data-w="desk" aria-pressed="true">Desktop</button>
+      <button type="button" data-w="phone" aria-pressed="false">Phone</button>
+    </div>
+  </div>
+
+  <h1 class="doc">Topics: where the provider switcher goes</h1>
+  <p class="lede">The topics list shows one provider's topics at a time. People who work with more than one provider
+    (every administrator, and contributors with several) choose which one. Today that choice sits below the search and
+    filters, with its label beside the dropdown instead of above it. Each option below is the same screen with the
+    same data; only the provider control moves. Menus in A and C open when you select them.</p>
+
+  <div class="stage" id="stage">
+    <div class="app">
+      <div class="topbar"><span aria-hidden="true">☰</span><span class="logo" style="border:0;padding:0;height:auto">SKILL RX</span></div>
+      <div class="grid">
+        <aside class="rail">
+          <div class="logo">SKILL RX</div>
+          <div class="variant" data-only="c">
+            <div class="ws">
+              <div class="ws-label" id="ws-l">Provider</div>
+              <div class="scope">
+                <button type="button" class="scope-btn" aria-haspopup="menu" aria-expanded="false" aria-labelledby="ws-l ws-v"><strong id="ws-v">Provided by the government</strong><span class="chev" aria-hidden="true"></span></button>
+              </div>
+            </div>
+          </div>
+          <nav class="nav" aria-label="Main (preview)">
+            <a class="cur" href="#a">Topics</a>
+            <a href="#a">Beacons</a>
+            <a class="gh" href="#a">Administration</a>
+            <a class="sub" href="#a">Providers</a>
+            <a class="sub" href="#a">Regions</a>
+            <a class="sub" href="#a">Languages</a>
+            <a class="sub" href="#a">Tags</a>
+            <a class="sub" href="#a">Users</a>
+            <a class="sub" href="#a">Import reports</a>
+            <a class="sub" href="#a">Jobs</a>
+          </nav>
+        </aside>
+
+        <main class="content">
+          <!-- page header -->
+          <div class="ph">
+            <div style="min-width:0">
+              <h2>Topics</h2>
+              <p class="sub variant" data-only="today">From Provided by the government</p>
+              <div class="variant" data-only="a" style="margin-top:8px">
+                <div class="scope">
+                  <button type="button" class="scope-btn" aria-haspopup="menu" aria-expanded="false"><span class="k">Provider:</span><strong>Provided by the government</strong><span class="chev" aria-hidden="true"></span></button>
+                </div>
+              </div>
+            </div>
+            <button class="btn btn-primary" type="button">Add new topic</button>
+          </div>
+
+          <!-- toolbar -->
+          <div class="toolbar">
+            <div class="field variant" data-only="b">
+              <label for="b-prov">Provider</label>
+              <div class="select" id="b-prov" role="combobox" aria-expanded="false" tabindex="0">Provided by the government</div>
+            </div>
+            <div class="field">
+              <label>Search</label>
+              <div class="input">Title, description or UID</div>
+            </div>
+            <button class="btn btn-ghost" type="button">› Filters</button>
+            <button class="btn btn-ghost" type="button">Clear filters</button>
+          </div>
+
+          <div class="variant" data-only="today">
+            <div class="inline-row ann">
+              <label>Switch provider</label>
+              <div class="select">Provided by the government</div>
+            </div>
+            <div style="margin-top:10px;color:#be123c;font-size:13px;font-weight:600">Label beside the field, not above it · below the filters it scopes · a third row</div>
+          </div>
+
+          <div class="surface">
+            <div class="tablewrap">
+              <table>
+                <thead><tr><th>Title</th><th class="hide-sm">Description</th><th>Language</th><th class="num hide-sm">Documents</th><th class="hide-sm">State</th><th></th></tr></thead>
+                <tbody>
+                  <tr><td><a href="#a">Introduction to English</a><div class="meta">Published Nov 24, 2026</div></td><td class="hide-sm">Learn the basics of English</td><td>English</td><td class="num hide-sm">2</td><td class="hide-sm"><span class="pill">Active</span></td><td>Edit</td></tr>
+                  <tr><td><a href="#a">Hand hygiene in the clinic</a><div class="meta">Published Nov 22, 2026</div></td><td class="hide-sm">When and how to wash hands between patients</td><td>Spanish</td><td class="num hide-sm">2</td><td class="hide-sm"><span class="pill">Active</span></td><td>Edit</td></tr>
+                  <tr><td><a href="#a">Managing childhood diarrhea</a><div class="meta">Published Oct 31, 2026</div></td><td class="hide-sm">Oral rehydration, zinc, and the danger signs</td><td>English</td><td class="num hide-sm">2</td><td class="hide-sm"><span class="pill">Active</span></td><td>Edit</td></tr>
+                  <tr><td><a href="#a">Vacunación infantil</a><div class="meta">Published Oct 9, 2026</div></td><td class="hide-sm">El calendario de vacunación</td><td>Spanish</td><td class="num hide-sm">0</td><td class="hide-sm"><span class="pill">Active</span></td><td>Edit</td></tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </main>
+      </div>
+    </div>
+  </div>
+
+  <section class="notes">
+    <div class="card">
+      <h3>What's wrong today</h3>
+      <ul>
+        <li><strong>The label is in the code, but not where labels go.</strong> "Switch provider" is a real
+          <code>&lt;label for="provider_id"&gt;</code>, so screen readers announce it. But every other field on the page
+          has its label above it, and this one sits to the left at desktop width and jumps above at phone width. The
+          design system puts labels above fields so the eye reads one column.</li>
+        <li><strong>It's worded as an action, not a name.</strong> A label names the value in the field ("Provider"). "Switch
+          provider" describes what you'd do, and reads oddly once you've chosen.</li>
+        <li><strong>The dropdown doesn't contain the provider it shows.</strong> The current provider is the prompt text, and
+          the list holds only the others. You can't see the full set, and you can't tell which one is current once
+          it's open.</li>
+        <li><strong>It's in the wrong place in the hierarchy.</strong> The provider decides which topics exist on this page.
+          Search and filters narrow those topics down. The broader choice sits below the narrower ones, on its own row,
+          so the controls run Search → Filters → Provider → table, three bands that don't line up.</li>
+        <li><strong>It's said twice.</strong> The subtitle says "From Provided by the government" and the dropdown says it again
+          one row down.</li>
+      </ul>
+    </div>
+
+    <div class="card">
+      <h3>The rule that decides it: scope before filters</h3>
+      <p>Provider isn't a filter. It's remembered across visits (a cookie), it decides which provider a new topic belongs
+        to by default, and "Clear filters" doesn't and shouldn't reset it. Products separate "which set of things am I in"
+        from "narrow this set down": the first sits with the title, the second sits in the toolbar. GitHub puts the
+        repository and branch above the file list, Google Analytics puts the property at the top of every report,
+        Stripe and Vercel put the account or team in a switcher, and Shopify's Polaris keeps saved views above the
+        filters. None of them put the scope inside or below the filter row.</p>
+    </div>
+
+    <div class="card cmp">
+      <h3>The options</h3>
+      <table>
+        <thead><tr><th style="width:20%">Option</th><th>What it is</th><th style="width:18%">Who does this</th><th style="width:30%">Cost</th></tr></thead>
+        <tbody>
+          <tr class="rec"><td><strong>A: in the page header</strong> (recommended)</td>
+            <td>A "Provider: <em>name</em> ▾" button replaces the subtitle under "Topics". It opens a menu of every provider,
+              with a check on the current one. The toolbar is left with search, Filters and Clear filters on one row.</td>
+            <td>GitHub branch and repository pickers, Google Analytics, Grafana dashboards, Atlassian project pickers.</td>
+            <td>One new small control (a menu). The provider stops being a form field, so it no longer needs a field
+              label: the visible "Provider:" is part of the button's name.</td></tr>
+          <tr><td><strong>B: first field in the toolbar</strong></td>
+            <td>Provider becomes the first field in the toolbar, labeled above like Search, so everything sits on one row.</td>
+            <td>Polaris index filters, Jira issue search, many admin tables.</td>
+            <td>Cheapest: a CSS and label change. But it makes the scope look like a filter, so people will expect
+              Clear filters to reset it. It also crowds the row: at desktop the row is full before Filters.</td></tr>
+          <tr><td><strong>C: switcher in the rail</strong></td>
+            <td>A provider switcher at the top of the navigation, like a workspace or team switcher.</td>
+            <td>Linear and Slack workspaces, Vercel and Netlify teams, Stripe accounts.</td>
+            <td>Says "this changes the whole app", which isn't true: only Topics uses it. Beacons and the
+              Administration pages would sit under a provider switcher that does nothing to them. Hidden in the drawer
+              on phones.</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="card">
+      <h3>Why A</h3>
+      <ul>
+        <li><strong>Scope sits with the title, filters sit with the list.</strong> "Topics · Provider: Provided by the
+          government" reads as what you're looking at; the row below is how you narrow it.</li>
+        <li><strong>The toolbar becomes one row</strong> at desktop: Search, Filters, Clear filters, with labels above, the
+          same as every other list in SkillRx.</li>
+        <li><strong>It's said once.</strong> The button replaces the "From …" subtitle.</li>
+        <li><strong>The menu shows every provider</strong> with a check on the current one, which fixes the missing-option
+          bug. With more than about seven providers it gets a filter box at the top, as the design system's combobox does.</li>
+        <li><strong>People with one provider see plain text</strong> ("Provider: Community health clinic"), not a control
+          that can't change anything.</li>
+        <li><strong>Built from what's there:</strong> <code>&lt;rfg-menu&gt;</code> with a secondary <code>&lt;rfg-button&gt;</code>
+          trigger. Choosing an item submits the same form to the same endpoint, so the controller doesn't change.
+          Without JavaScript the menu items are still buttons in a form.</li>
+      </ul>
+    </div>
+  </section>
+</div>
+
+<script>
+  const providers = [["Provided by the government", 14], ["Community health clinic", 6], ["Ministry of Health", 22]];
+  let current = providers[0][0];
+  const $$ = (s, r = document) => [...r.querySelectorAll(s)];
+
+  function show(v) {
+    $$(".chooser [data-v]").forEach(b => b.setAttribute("aria-pressed", String(b.dataset.v === v)));
+    $$(".variant").forEach(el => { el.hidden = el.dataset.only !== v; });
+    closeMenus();
+  }
+  function width(w) {
+    $$(".chooser [data-w]").forEach(b => b.setAttribute("aria-pressed", String(b.dataset.w === w)));
+    document.getElementById("stage").classList.toggle("phone", w === "phone");
+  }
+  function closeMenus() {
+    $$(".menu").forEach(m => m.remove());
+    $$(".scope-btn").forEach(b => b.setAttribute("aria-expanded", "false"));
+  }
+  function openMenu(btn) {
+    closeMenus();
+    const m = document.createElement("div");
+    m.className = "menu"; m.setAttribute("role", "menu");
+    m.innerHTML = '<div class="mh">Show topics from</div>' + providers.map(([n, c]) =>
+      `<button type="button" role="menuitemradio" aria-checked="${n === current}"><span class="chk" aria-hidden="true">${n === current ? "✓" : ""}</span>${n}<span class="count">${c}</span></button>`).join("");
+    btn.after(m); btn.setAttribute("aria-expanded", "true");
+    m.querySelector('[aria-checked="true"]').focus();
+    m.addEventListener("click", e => {
+      const item = e.target.closest("button"); if (!item) return;
+      current = item.textContent.replace(/\d+$/, "").replace("✓", "").trim();
+      $$(".scope-btn strong").forEach(s => { s.textContent = current; });
+      closeMenus(); btn.focus();
+    });
+  }
+  document.addEventListener("click", e => {
+    const v = e.target.closest("[data-v]"); if (v) return show(v.dataset.v);
+    const w = e.target.closest("[data-w]"); if (w) return width(w.dataset.w);
+    const s = e.target.closest(".scope-btn");
+    if (s) return s.getAttribute("aria-expanded") === "true" ? closeMenus() : openMenu(s);
+    if (e.target.closest('a[href="#a"]')) e.preventDefault();
+    if (!e.target.closest(".menu")) closeMenus();
+  });
+  document.addEventListener("keydown", e => { if (e.key === "Escape") closeMenus(); });
+  show("a");
+</script>
