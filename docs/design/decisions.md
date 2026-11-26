@@ -325,3 +325,32 @@ data.
 `button-audit.js` read variants from Human Essentials' Tailwind class strings, so on SkillRx every
 button read "unknown". It now takes an optional `BUTTON_VARIANTS` adapter export, and checks the
 destructive-action-in-the-last-slot case it didn't.
+
+## 2026-11-25: rail without icons, one spacing rhythm
+
+**Asked:** remove the icons from the side nav; the spacing between Topics, Beacons and
+Administration didn't look right.
+
+### Why it looked wrong
+The rail used global design.md's Local numbers: 16px between top-level entries, 2px inside a
+group. In Human Essentials the top level is mostly collapsed groups, so 16px separates sections.
+Here, Topics and Beacons are plain links, so 16px pulled two sibling rows apart while the seven
+Administration rows sat 2px apart: two spacing systems in one short list.
+
+### Industry practice
+GitHub, Linear, Stripe and Vercel keep rail rows 32 to 40px tall and 0 to 4px apart, and mark a
+new section with a larger gap or a heading, not by spacing every top-level row apart.
+
+### Changed
+- Icons removed from Topics, Beacons and Administration. Kept: the group chevron (it says the row
+  opens), the external-link mark on Jobs (it says it leaves the app), the account menu's dots.
+- 2px between every row; 12px above the Administration group; 2px from its header to its first item.
+- Administration's items indent 24px (was 40px, which lined up with text after an icon).
+
+### Measured
+Rows at 1280px: Topics 80, Beacons 121 (2px gap), Administration 173 (12px gap), Providers 214
+(2px gap), then 2px apart to Jobs.
+
+### Upstream
+Not changed yet. Global design.md's spacing table (16px between top-level entries) is labeled
+Local; whether it should say "16px between sections, 2px between rows" is a design-system decision.

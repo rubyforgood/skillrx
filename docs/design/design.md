@@ -94,7 +94,16 @@ download again. Don't edit them by hand: SkillRx-specific values go in `applicat
 - **Order:** Topics, Beacons, Administration (Providers, Regions, Languages, Tags, Users, Import
   reports, Jobs). Contributors see Topics only. Same information architecture as before the
   migration.
-- **Icons on the top level only**; Administration's items are indented, without icons.
+- **No icons** (decided 2026-11-25). With three top-level entries there is nothing for an icon to
+  help you scan, and icons on Topics and Beacons said little the word didn't. Hierarchy comes from
+  type and indent: top level 15px medium, Administration's items 14px regular, indented 14px past
+  the parent's text. Global design.md's rule 1 ("icons on exactly one level, never more") still
+  holds: zero levels is allowed. Its Local default (icons on the top level) is the part we drop.
+- **Spacing: one 2px rhythm** between every row, top level or nested, with 12px above the
+  Administration group so it reads as its own section. Global design.md's Local table puts 16px
+  between top-level entries; that suits Human Essentials, where the top level is mostly collapsed
+  groups, but between two plain links it reads as two unrelated blocks. GitHub, Linear, Stripe and
+  Vercel all keep rail rows 0 to 4px apart and separate sections with a larger gap or a heading.
 - **The current page** is marked with `aria-current="page"` by `nav_link_to`, for its own path and
   everything under it (`/topics/3/edit` marks Topics).
 - **Administration starts open**, as in the chosen preview, and can be collapsed. It's the only

@@ -33,3 +33,4 @@ signed in, plus 5 signed out). Exit 1: **4 distinct violations, 83 elements.**
 | `html-has-lang` (serious) | 25 | 25 | `<html>` in `layouts/application.html.erb` has no `lang` |
 | `link-name` (serious) | 10 | 6 | Footer's icon-only LinkedIn/GitHub/email links |
 | `select-name` (critical) | 6 | 2 | The topic form's published year and month selects have no label |
+| PENDING | Rail: icons removed from top-level items; one 2px row rhythm with 12px above the Administration group (was 16px between top-level entries); sub-items indented 24px. |

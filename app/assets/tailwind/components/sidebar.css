@@ -31,10 +31,11 @@
 .shell-logo-link { @apply rounded-control; }
 
 .shell-nav { @apply flex-1 overflow-y-auto px-3 py-4; }
-/* 16px between top-level entries, 4px from a group header to its first item, 2px inside a group
-   (design.md, "Sidebar rules"). */
-.shell-nav-list { @apply m-0 flex list-none flex-col gap-4 p-0; }
-.shell-nav-sublist { @apply m-0 mt-1 flex list-none flex-col gap-0.5 p-0; }
+/* One rhythm: 2px between every row, top level or nested, like GitHub, Linear, Stripe and Vercel.
+   A group gets 12px above it to read as its own section. (docs/design/design.md, "App shell".) */
+.shell-nav-list { @apply m-0 flex list-none flex-col gap-0.5 p-0; }
+.shell-nav-list > li:has(> .shell-nav-group) { @apply mt-3; }
+.shell-nav-sublist { @apply m-0 mt-0.5 flex list-none flex-col gap-0.5 p-0; }
 
 .shell-nav-link, .shell-nav-group {
   @apply flex w-full items-center gap-2.5 rounded-control px-2.5 py-2 text-left text-[15px] font-medium text-neutral-700
@@ -42,7 +43,7 @@
   & svg { @apply size-5 shrink-0; }
 }
 .shell-nav-link[aria-current="page"] { @apply bg-brand-50 font-semibold text-brand-700; }
-.shell-nav-sublist .shell-nav-link { @apply pl-10 text-sm font-normal; }
+.shell-nav-sublist .shell-nav-link { @apply pl-6 text-sm font-normal; }
 .shell-nav-sublist .shell-nav-link[aria-current="page"] { @apply font-semibold; }
 .shell-chevron { @apply ml-auto transition-transform; }
 .shell-nav-group[aria-expanded="false"] .shell-chevron { @apply -rotate-90; }

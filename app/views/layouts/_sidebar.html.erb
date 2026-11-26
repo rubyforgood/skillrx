@@ -1,6 +1,6 @@
-<%# The app's navigation rail (docs/design/design.md, "App shell"). Icons mark the top level only;
-    items inside a group are indented instead. Administration starts open, as previewed: it is the
-    only group, and its seven items fit without scrolling. %>
+<%# The app's navigation rail (docs/design/design.md, "App shell"). Text only, no icons: with three
+    top-level entries, hierarchy is shown by weight and indent. Administration starts open, as
+    previewed: it is the only group, and its seven items fit without scrolling. %>
 <div class="shell-rail-inner">
   <div class="shell-logo">
     <%= link_to root_path, class: "shell-logo-link" do %>
@@ -12,7 +12,6 @@
     <ul class="shell-nav-list" role="list">
       <li>
         <%= nav_link_to topics_path do %>
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" aria-hidden="true"><path d="M4 6h16M4 12h16M4 18h10"/></svg>
           <span>Topics</span>
         <% end %>
       </li>
@@ -20,7 +19,6 @@
       <% if Current.user.is_admin? %>
         <li>
           <%= nav_link_to beacons_path do %>
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" aria-hidden="true"><path d="M5 12a7 7 0 0 1 14 0M8.5 12a3.5 3.5 0 0 1 7 0"/><circle cx="12" cy="12" r="1"/><path d="M12 13v7"/></svg>
             <span>Beacons</span>
           <% end %>
         </li>
@@ -28,7 +26,6 @@
         <li>
           <button type="button" class="shell-nav-group" aria-expanded="true" aria-controls="nav-administration"
                   data-action="shell#toggleGroup">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" aria-hidden="true"><circle cx="12" cy="12" r="3"/><path d="M12 2v3M12 19v3M4.2 4.2l2.1 2.1M17.7 17.7l2.1 2.1M2 12h3M19 12h3M4.2 19.8l2.1-2.1M17.7 6.3l2.1-2.1"/></svg>
             <span>Administration</span>
             <svg class="shell-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="m6 9 6 6 6-6"/></svg>
           </button>
