@@ -220,6 +220,22 @@ The rule for every table (decided 2026-11-25, see decisions.md):
 - **Below the table:** "Showing 1–25 of 42 topics" and pagy's page links, restyled.
 - **Long text:** two lines, then "…" (`.clamp-2`); the full text is on the record's page.
 - **No results:** "No topics match these filters", with a link to clear them.
+- **Provider on Topics** (decided 2026-11-26, preview `previews/topics-provider.html`, option D): a
+  filter, first in the toolbar, labeled above like the others, shown only to people with more than
+  one provider. "All providers" is its first option and the default; every provider is listed,
+  including the chosen one. Under All, a **Provider column** follows Title, as plain text: pills are
+  for status, and an open-ended list of names can't each get a color. Choosing one provider hides
+  the column (every row would say the same thing) and makes it the default on the topic form.
+  - **Remembered between visits** (a cookie, as before), so the field is named `provider`, outside
+    `search[…]`. **Clear filters** links with `provider=all`, resetting it like any other filter.
+  - **The cookie isn't written on a Turbo prefetch**, and Clear filters has
+    `data-turbo-prefetch="false"`: hovering a link must not change what's remembered. Found by a
+    spec that failed when the pointer crossed Clear filters.
+  - **The topics list has no Turbo preview** (`turbo-cache-control: no-preview`): a cached preview
+    showed the filters from an earlier visit until the page arrived.
+  - **The topic form shows Provider to anyone with more than one** (it was administrators only),
+    because a contributor's new topic used to go to the provider chosen on the list, which can now be All.
+    A provider outside the person's own is refused (404).
 
 ## Forms, record pages and confirmation
 
@@ -251,9 +267,8 @@ The rule for every table (decided 2026-11-25, see decisions.md):
 
 Asked 2026-11-25: "make them more utilitarian and plain language." The rule:
 
-- **A subtitle earns its place by saying something the heading doesn't** that you need right now:
-  which provider's topics you're looking at ("From Community health clinic"), or what happens next
-  ("You'll get its API key after you save. It's shown only once."). A description of what the page
+- **A subtitle earns its place by saying something the heading doesn't** that you need right now,
+  such as what happens next ("You'll get its API key after you save. It's shown only once."). A description of what the page
   is ("Educational topics and the documents in them") is dropped. Edit pages keep the record's name.
 - **A field hint says only what you need to fill it in:** a format or example ("For example,
   Kampala central clinic."), a limit ("Up to 72 characters."), or a consequence ("With none chosen,

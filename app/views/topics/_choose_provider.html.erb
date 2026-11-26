@@ -1,7 +1,0 @@
-<%# For people who work with more than one provider: the list shows one provider's topics at a time. %>
-<%= form_for :provider, url: provider_settings_path, method: :put, html: { class: "provider-switch" },
-      data: { controller: "topics", topics_target: "chooseForm", turbo_frame: "topics", turbo_action: "advance" } do |f| %>
-  <label for="provider_id" class="form-label">Switch provider</label>
-  <%= f.select :id, options_from_collection_for_select(providers, :id, :name),
-        { prompt: current_provider.present? ? current_provider.name : "Choose a provider" }, class: "form-select", data: { action: "change->topics#chooseProvider" }, id: "provider_id" %>
-<% end %>

@@ -4,6 +4,8 @@ RSpec.describe "Creating a Topic", type: :system do
   describe "there is a create topic button" do
     let!(:english) { create(:language, name: "English") }
     let!(:provider) { create(:provider) }
+    # The Provider field appears only to someone with more than one to choose from.
+    let!(:other_provider) { create(:provider) }
     let!(:tag_name) { "tag1" }
 
     before do

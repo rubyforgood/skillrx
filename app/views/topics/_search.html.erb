@@ -5,11 +5,22 @@
     State's first option is Active, because with no filters the list shows active topics only
     (search_params defaults to state: active). "Any state" (blank) shows both. %>
 <% current = params.to_h.with_indifferent_access %>
-<%# Search stays visible; the other filters fold behind "Filters", which starts open when any of
-    them is set (<rfg-filter-bar>, design system 0.1.5). The form wraps the bar, so the controls
-    keep submitting into the topic list's Turbo frame as they did. %>
+<%# Provider comes first and stays visible: it's the filter people change most, and it decides
+    what the others narrow. It's shown only to people with more than one provider, and named
+    `provider` (not search[…]) because it's remembered between visits; see provider_filter in the
+    controller. Search stays visible too; the other filters fold behind "Filters", which starts open
+    when any of them is set (<rfg-filter-bar>, design system 0.1.5). The form wraps the bar, so the
+    controls keep submitting into the topic list's Turbo frame as they did. %>
 <%= form_for :search, url: topics_path, method: :get, html: { role: "search", "aria-label": "Topics" },
       data: { controller: "topics", topics_target: "searchForm", turbo_frame: "topic-list", turbo_action: "advance" } do |f| %>
+  <div class="list-toolbar">
+  <% if choosing_provider? %>
+    <div class="list-toolbar-field">
+      <label for="provider_id" class="form-label">Provider</label>
+      <%= select_tag :provider, options_for_select([ [ "All providers", "all" ] ] + provider_choices.map { |p| [ p.name, p.id.to_s ] }, provider_filter),
+            id: "provider_id", class: "form-select", data: { action: "change->topics#searchTopics" } %>
+    </div>
+  <% end %>
   <rfg-filter-bar>
     <div slot="search">
       <%= f.label :query, "Search", class: "form-label" %>
@@ -56,6 +67,7 @@
 
     <%# Plain HTML, not link_to: in development Herb wraps ERB output in a <span>, and a slotted
         element must be the filter bar's direct child. %>
-    <a slot="actions" class="button button-ghost" href="<%= topics_path %>">Clear filters</a>
+    <a slot="actions" class="button button-ghost" href="<%= topics_path(provider: "all") %>" data-turbo-prefetch="false">Clear filters</a>
   </rfg-filter-bar>
+  </div>
 <% end %>

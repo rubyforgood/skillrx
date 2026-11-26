@@ -9,13 +9,12 @@ RSpec.describe "topics/index", type: :view do
   before(:each) do
     def view.search_params = {}
     def view.topics_title = "Topics"
+    def view.all_providers? = false
 
     # Allow the original render method to work normally
     allow(view).to receive(:render).and_call_original
     # But stub specifically the search partial render
     allow(view).to receive(:render).with("search", any_args).and_return("")
-
-    assign(:available_providers, [])
   end
 
   context "when there are no topics" do

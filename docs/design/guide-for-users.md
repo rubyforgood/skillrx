@@ -64,6 +64,10 @@ Every list works the same way:
 - **Click a name** to open the record (a topic, beacon, provider and so on). **Edit** is at the end of
   each row.
 - **Topics show active topics** unless you choose **Archived** or **Any state** in the State filter.
+- **If you work with more than one provider,** Topics shows all of them, with a **Provider** column.
+  Choose one in the **Provider** field to see only its topics; SkillRx remembers your choice next
+  time. **Clear filters** shows all providers again. When you add a topic, choose its provider in
+  the form.
 
 On a record's page, the main action (Edit) is at the top right. Archive is there for topics, and
 Delete (shown in red) for administrators.

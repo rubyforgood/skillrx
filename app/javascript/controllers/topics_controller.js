@@ -2,7 +2,7 @@ import { Controller } from "@hotwired/stimulus"
 import { useDebounce } from "stimulus-use"
 
 export default class extends Controller {
-  static targets = [ "searchForm", "chooseForm" ]
+  static targets = [ "searchForm" ]
   static debounces = [ "search" ]
 
   connect() {
@@ -11,9 +11,5 @@ export default class extends Controller {
 
   searchTopics() {
     this.searchFormTarget.requestSubmit()
-  }
-
-  chooseProvider() {
-    this.chooseFormTarget.requestSubmit()
   }
 }

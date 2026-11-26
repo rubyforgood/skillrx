@@ -57,8 +57,21 @@ describe "Topics", type: :request do
         cookies.signed[:current_provider_id] = current_provider.id
       end
 
-      it "creates a Topic for the current provider" do
+      it "creates a Topic for the provider chosen in the form, when it's one of the user's" do
         post topics_url, params: { topic: topic_params }
+
+        expect(response).to redirect_to(topics_url)
+        expect(Topic.last.provider).to eq(provider)
+      end
+
+      it "refuses a provider that isn't the user's" do
+        post topics_url, params: { topic: topic_params.merge(provider_id: create(:provider).id) }
+
+        expect(response).to have_http_status(:not_found)
+      end
+
+      it "creates a Topic for the current provider when the form doesn't name one" do
+        post topics_url, params: { topic: topic_params.except(:provider_id) }
 
         expect(response).to redirect_to(topics_url)
         topic = Topic.last

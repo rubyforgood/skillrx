@@ -212,9 +212,11 @@ nav.pagy a:focus-visible { @apply outline-2 outline-offset-2 outline-brand-600; 
 .empty-title { @apply mb-1 font-semibold text-neutral-900; }
 .empty a { @apply text-brand-700 underline underline-offset-2; }
 
-.provider-switch { @apply mb-4 flex flex-wrap items-end gap-3; }
-.provider-switch .form-label { @apply mb-0 self-center; }
-.provider-switch .form-select { @apply w-72 max-w-full; }
+/* A list's toolbar: a lead field that never folds (Topics' Provider), then the filter bar, on one
+   row with bottoms aligned, so every label sits above its control. Wraps on narrow screens. */
+.list-toolbar { @apply flex flex-wrap items-end gap-3; }
+.list-toolbar-field { @apply w-80 max-w-full sm:w-64; }
+.list-toolbar > rfg-filter-bar { @apply min-w-0 flex-1 basis-80; }
 
 /* ---- Forms, record pages, messages, confirmation (docs/design/design.md) ------------------ */
 .flash { @apply block; }

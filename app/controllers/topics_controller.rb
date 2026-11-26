@@ -5,17 +5,18 @@ class TopicsController < ApplicationController
   before_action :set_topic, only: [ :show, :edit, :update, :destroy, :archive, :unarchive ]
 
   def index
-    @pagy, @topics = pagy(scope.includes(:documents_attachments).search_with_params(search_params))
-    @available_providers = other_available_providers
-    @languages = scope.map(&:language).uniq.sort_by(&:name)
+    topics = list_scope.includes(:language, :documents_attachments)
+    topics = topics.includes(:provider) if all_providers?
+    @pagy, @topics = pagy(topics.search_with_params(search_params))
+    @languages = Language.where(id: visible_topics.select(:language_id)).order(:name)
   end
 
   def new
-    @topic = scope.new
+    @topic = current_provider.topics.new
   end
 
   def create
-    @topic = scope.new(topic_params.except(:document_signed_ids))
+    @topic = current_provider.topics.new(topic_params.except(:document_signed_ids))
 
     case mutator.create
     in [ :ok, _topic ]
@@ -66,10 +67,46 @@ class TopicsController < ApplicationController
 
   private
 
-  def other_available_providers
-    return [] unless provider_scope.any?
+  # The provider filter (docs/design/design.md, "Topics"). "all", or one provider's id, from the
+  # `provider` param when the list form sends it, otherwise the choice remembered in a cookie.
+  # Choosing one provider also makes it the default for a new topic (current_provider).
+  # Clear filters links with provider=all, so it resets this like any other filter.
+  def provider_filter
+    @provider_filter ||= begin
+      choice = params[:provider].presence || cookies.signed[:topics_provider].presence || "all"
+      choice = "all" unless choice == "all" || provider_scope.exists?(id: choice)
+      # Not on a Turbo prefetch: hovering a link (Clear filters) must not change what's remembered.
+      if params[:provider].present? && request.headers["X-Sec-Purpose"] != "prefetch"
+        cookies.signed[:topics_provider] = { value: choice, expires: 1.year }
+        cookies.signed[:current_provider_id] = choice.to_i unless choice == "all"
+      end
+      choice
+    end
+  end
+  helper_method :provider_filter
 
-    provider_scope.where.not(id: current_provider.id)
+  def provider_choices
+    @provider_choices ||= provider_scope.order(:name).to_a
+  end
+  helper_method :provider_choices
+
+  # Show the field, and the Provider column under "All providers", only to people with more than one.
+  def choosing_provider?
+    provider_choices.size > 1
+  end
+  helper_method :choosing_provider?
+
+  def all_providers?
+    choosing_provider? && provider_filter == "all"
+  end
+  helper_method :all_providers?
+
+  def visible_topics
+    Topic.where(provider_id: provider_scope.select(:id))
+  end
+
+  def list_scope
+    provider_filter == "all" ? visible_topics : visible_topics.where(provider_id: provider_filter)
   end
 
   def topic_params
@@ -87,10 +124,6 @@ class TopicsController < ApplicationController
 
   def set_topic
     @topic = Topic.find(params[:id])
-  end
-
-  def scope
-    @scope ||= current_provider.topics.includes(:language)
   end
 
   def mutator
@@ -112,7 +145,10 @@ class TopicsController < ApplicationController
   helper_method :search_params
 
   def topics_title
-    current_provider.present? ? "Topics from #{current_provider.name}" : "Topics"
+    return "Topics from all providers" if all_providers?
+
+    provider = provider_choices.find { |p| p.id.to_s == provider_filter } || provider_choices.first
+    provider ? "Topics from #{provider.name}" : "Topics"
   end
   helper_method :topics_title
 end

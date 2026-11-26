@@ -22,8 +22,9 @@ class Topics::Sanitizer
     return params if params["provider_id"].blank?
 
     params.tap do |p|
+      # Anyone may choose among their own providers (contributors with more than one get the field
+      # too, now that the list can show all of them); find raises for a provider outside their scope.
       p["provider_id"] = provider_scope.find(p["provider_id"]).id
-      p["provider_id"] = provider.id if provider && !Current.user.is_admin?
     end
   end
 

@@ -8,6 +8,7 @@
         <%= link_to topic.title, topic_path(topic, search: search_params), class: "row-title", data: { turbo: false } %>
         <div class="row-meta">Published <%= topic.published_at&.strftime("%b %-d, %Y") %></div>
       </th>
+      <% if all_providers? %><td class="whitespace-nowrap"><%= topic.provider.name %></td><% end %>
       <td>
         <% if topic.description.present? %>
           <span class="clamp-2"><%= topic.description %></span>

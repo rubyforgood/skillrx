@@ -17,9 +17,10 @@
       <% end %>
 
       <div class="form-grid">
-        <% if Current.user.is_admin? %>
+        <%# Anyone with more than one provider chooses; it starts on the provider last chosen on the list. %>
+        <% if provider_choices.size > 1 %>
           <%= form_field f, :provider_id, label: "Provider", required: true do %>
-            <%= f.collection_select :provider_id, Provider.order(:name), :id, :name, { prompt: "Choose a provider" }, class: "form-select" %>
+            <%= f.collection_select :provider_id, provider_choices, :id, :name, { prompt: "Choose a provider" }, class: "form-select" %>
           <% end %>
         <% end %>
 

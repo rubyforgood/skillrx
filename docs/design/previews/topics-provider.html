@@ -147,7 +147,7 @@
             <div class="ws">
               <div class="ws-label" id="ws-l">Provider</div>
               <div class="scope">
-                <button type="button" class="scope-btn" aria-haspopup="menu" aria-expanded="false" aria-labelledby="ws-l ws-v"><strong id="ws-v">Provided by the government</strong><span class="chev" aria-hidden="true"></span></button>
+                <button type="button" class="scope-btn" aria-haspopup="menu" aria-expanded="false" aria-labelledby="ws-l ws-v"><strong id="ws-v">Ministry of Health</strong><span class="chev" aria-hidden="true"></span></button>
               </div>
             </div>
           </div>
@@ -170,10 +170,10 @@
           <div class="ph">
             <div style="min-width:0">
               <h2>Topics</h2>
-              <p class="sub variant" data-only="today">From Provided by the government</p>
+              <p class="sub variant" data-only="today">From Ministry of Health</p>
               <div class="variant" data-only="a" style="margin-top:8px">
                 <div class="scope">
-                  <button type="button" class="scope-btn" aria-haspopup="menu" aria-expanded="false"><span class="k">Provider:</span><strong>Provided by the government</strong><span class="chev" aria-hidden="true"></span></button>
+                  <button type="button" class="scope-btn" aria-haspopup="menu" aria-expanded="false"><span class="k">Provider:</span><strong>Ministry of Health</strong><span class="chev" aria-hidden="true"></span></button>
                 </div>
               </div>
             </div>
@@ -187,12 +187,12 @@
               <select class="select real" id="d-prov">
                 <option value="all">All providers</option>
                 <option>Community health clinic</option>
-                <option>Provided by the government</option>
+                <option>Ministry of Health</option>
               </select>
             </div>
             <div class="field variant" data-only="b">
               <label for="b-prov">Provider</label>
-              <div class="select" id="b-prov" role="combobox" aria-expanded="false" tabindex="0">Provided by the government</div>
+              <div class="select" id="b-prov" role="combobox" aria-expanded="false" tabindex="0">Ministry of Health</div>
             </div>
             <div class="field">
               <label>Search</label>
@@ -205,7 +205,7 @@
           <div class="variant" data-only="today">
             <div class="inline-row ann">
               <label>Switch provider</label>
-              <div class="select">Provided by the government</div>
+              <div class="select">Ministry of Health</div>
             </div>
             <div style="margin-top:10px;color:#be123c;font-size:13px;font-weight:600">Label beside the field, not above it · below the filters it scopes · a third row</div>
           </div>
@@ -215,9 +215,9 @@
               <table>
                 <thead><tr><th>Title</th><th class="pcol">Provider</th><th class="hide-sm">Description</th><th>Language</th><th class="num hide-sm">Documents</th><th class="hide-sm">State</th><th></th></tr></thead>
                 <tbody>
-                  <tr><td><a href="#a">Introduction to English</a><div class="meta">Published Nov 24, 2026</div></td><td class="pcol" data-p="Provided by the government">Provided by the government</td><td class="hide-sm">Learn the basics of English</td><td>English</td><td class="num hide-sm">2</td><td class="hide-sm"><span class="pill">Active</span></td><td>Edit</td></tr>
+                  <tr><td><a href="#a">Introduction to English</a><div class="meta">Published Nov 24, 2026</div></td><td class="pcol" data-p="Ministry of Health">Ministry of Health</td><td class="hide-sm">Learn the basics of English</td><td>English</td><td class="num hide-sm">2</td><td class="hide-sm"><span class="pill">Active</span></td><td>Edit</td></tr>
                   <tr><td><a href="#a">Hand hygiene in the clinic</a><div class="meta">Published Nov 22, 2026</div></td><td class="pcol" data-p="Community health clinic">Community health clinic</td><td class="hide-sm">When and how to wash hands between patients</td><td>Spanish</td><td class="num hide-sm">2</td><td class="hide-sm"><span class="pill">Active</span></td><td>Edit</td></tr>
-                  <tr><td><a href="#a">Managing childhood diarrhea</a><div class="meta">Published Oct 31, 2026</div></td><td class="pcol" data-p="Provided by the government">Provided by the government</td><td class="hide-sm">Oral rehydration, zinc, and the danger signs</td><td>English</td><td class="num hide-sm">2</td><td class="hide-sm"><span class="pill">Active</span></td><td>Edit</td></tr>
+                  <tr><td><a href="#a">Managing childhood diarrhea</a><div class="meta">Published Oct 31, 2026</div></td><td class="pcol" data-p="Ministry of Health">Ministry of Health</td><td class="hide-sm">Oral rehydration, zinc, and the danger signs</td><td>English</td><td class="num hide-sm">2</td><td class="hide-sm"><span class="pill">Active</span></td><td>Edit</td></tr>
                   <tr><td><a href="#a">Vacunación infantil</a><div class="meta">Published Oct 9, 2026</div></td><td class="pcol" data-p="Community health clinic">Community health clinic</td><td class="hide-sm">El calendario de vacunación</td><td>Spanish</td><td class="num hide-sm">0</td><td class="hide-sm"><span class="pill">Active</span></td><td>Edit</td></tr>
                 </tbody>
               </table>
@@ -268,7 +268,7 @@
         <li><strong>It's in the wrong place in the hierarchy.</strong> The provider decides which topics exist on this page.
           Search and filters narrow those topics down. The broader choice sits below the narrower ones, on its own row,
           so the controls run Search → Filters → Provider → table, three bands that don't line up.</li>
-        <li><strong>It's said twice.</strong> The subtitle says "From Provided by the government" and the dropdown says it again
+        <li><strong>It's said twice.</strong> The subtitle says "From Ministry of Health" and the dropdown says it again
           one row down.</li>
       </ul>
     </div>
@@ -330,7 +330,7 @@
 </div>
 
 <script>
-  const providers = [["Provided by the government", 14], ["Community health clinic", 6], ["Ministry of Health", 22]];
+  const providers = [["Ministry of Health", 14], ["Community health clinic", 6], ["Ministry of Health", 22]];
   let current = providers[0][0];
   const $$ = (s, r = document) => [...r.querySelectorAll(s)];
 

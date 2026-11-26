@@ -330,11 +330,30 @@ RSpec.describe "Topics search", type: :system do
         wait_for_turbo
       end
 
-      it "only shows topics from its first associated provider" do
+      it "shows active topics from all its providers, with a Provider column" do
+        expect(page).to have_select("Provider", selected: "All providers")
         expect(page).to have_text(english_active_topic.title)
         expect(page).to have_text(spanish_active_topic.title)
+        expect(page).to have_text(other_provider_topic.title)
         expect(page).not_to have_text(english_archived_topic.title)
-        expect(page).not_to have_text(other_provider_topic.title)
+        expect(page).to have_css("th", text: "Provider")
+      end
+
+      it "remembers the chosen provider, and Clear filters goes back to all" do
+        select provider_2.name, from: "provider_id"
+        wait_for_turbo
+        expect(page).not_to have_text(english_active_topic.title)
+        expect(page).not_to have_css("th", text: "Provider")
+
+        click_link("Topics")
+        wait_for_turbo
+        expect(page).to have_select("Provider", selected: provider_2.name)
+        expect(page).not_to have_text(english_active_topic.title)
+
+        click_link("Clear filters")
+        wait_for_turbo
+        expect(page).to have_select("Provider", selected: "All providers")
+        expect(page).to have_text(english_active_topic.title)
       end
 
       context "when switching to another provider" do

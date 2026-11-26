@@ -34,3 +34,4 @@ signed in, plus 5 signed out). Exit 1: **4 distinct violations, 83 elements.**
 | `link-name` (serious) | 10 | 6 | Footer's icon-only LinkedIn/GitHub/email links |
 | `select-name` (critical) | 6 | 2 | The topic form's published year and month selects have no label |
 | `2c2f96f` | Rail: icons removed from top-level items; one 2px row rhythm with 12px above the Administration group (was 16px between top-level entries); sub-items indented 24px. |
+| PENDING | Topics: provider is a filter (option D), first in the toolbar and labeled above, with All providers as the default and a Provider column under All. Topic form shows Provider to anyone with more than one. Clear filters resets it; hovering no longer does (Turbo prefetch); no stale preview. Seed provider renamed Ministry of Health. 517 examples, 0 failures. |

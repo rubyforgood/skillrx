@@ -354,3 +354,48 @@ Rows at 1280px: Topics 80, Beacons 121 (2px gap), Administration 173 (12px gap),
 ### Upstream
 Not changed yet. Global design.md's spacing table (16px between top-level entries) is labeled
 Local; whether it should say "16px between sections, 2px between rows" is a design-system decision.
+
+## 2026-11-26: Topics' provider becomes a filter, with All providers
+
+**Asked:** search, filters and "Switch provider" didn't flow; why wasn't "Switch provider" a label
+above its field; isn't provider a filter; why no "All"; would All need a column? Then: "Provided by
+the government feels so wordy", fine-tune the copy and build D.
+
+### What was wrong
+"Switch provider" was a real `<label>`, but beside its field at desktop width and above it on phones,
+on a third row below the filters it decides. It named an action, not a value. The dropdown left out
+the current provider (it was the prompt text), and the subtitle repeated it.
+
+### Options (preview `previews/topics-provider.html`)
+- **A: scope switcher in the page header** (GitHub branch picker, Google Analytics property). My
+  first recommendation, on the grounds that provider is a scope, not a filter.
+- **B: first field in the toolbar.**
+- **C: switcher at the top of the rail** (Linear, Vercel). Rejected: only Topics uses it.
+- **D: provider filter with All providers and a Provider column.** Chosen.
+
+### Why D
+For administrators the provider was only ever a filter. Its one other job was choosing the provider
+of a contributor's new topic, which a form field does better. One-at-a-time was how it was first
+built (`ee3452c`), not a requirement. With All, someone with several providers sees everything they
+can edit, and narrows it like any other filter.
+
+### Copy
+- Field label **Provider** (was "Switch provider": an action, not the value).
+- Options **All providers**, then each provider by name.
+- Subtitle "From …" removed: the field says it.
+- The table caption, read by screen readers, says "Topics from all providers" or "Topics from <name>".
+- Seed provider **Ministry of Health** (was "Provided by the government": a sentence, not a name,
+  and it repeated "provider" next to the label). It's seed data only; real providers name
+  themselves, and the app never rewrites their names.
+
+### Found while building
+- Turbo prefetches a link on hover, and the request for Clear filters saved "All". Hovering reset
+  the remembered provider. Fixed in two places (the server ignores prefetches, the link doesn't
+  prefetch).
+- Turbo's cached preview of `/topics` showed the old filters, and sometimes stayed. The list now
+  opts out of previews.
+
+### Measured
+517 examples, 0 failures (search specs 5 runs in a row clean); WCAG 0; button audits 0 and 0; no
+sideways scroll at 390px; Provider and Search bottoms aligned at 1280px (both 151px). No Bullet
+warnings on the list.

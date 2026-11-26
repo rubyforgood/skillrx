@@ -1,56 +1,54 @@
 <% content_for :title, "Topics" %>
+<%# No cached preview: the list's filters are remembered on the server, so a preview from an
+    earlier visit would show the old filters until the page arrived. %>
+<% content_for :head do %><meta name="turbo-cache-control" content="no-preview"><% end %>
 
 <div class="page">
-  <%= render "shared/page_header", title: "Topics", subtitle: (provider = try(:current_provider)).present? ? "From #{provider.name}" : nil do %>
+  <%= render "shared/page_header", title: "Topics" do %>
     <%= link_to "Add new topic", new_topic_path, class: "button button-primary", data: { turbo: false } %>
   <% end %>
 
   <%= render "search", languages: @languages, params: search_params %>
 
-  <%= turbo_frame_tag "topics" do %>
-    <% if @available_providers.any? %>
-      <%= render "choose_provider", providers: @available_providers %>
-    <% end %>
+  <%= turbo_frame_tag "topic-list" do %>
+    <div class="surface">
+      <%# Below its natural width the table scrolls inside <rfg-table>; the page never scrolls sideways. %>
+      <rfg-table>
+        <table class="data-table">
+          <caption class="sr-only"><%= topics_title %></caption>
+          <thead>
+            <tr>
+              <th scope="col">Title</th>
+              <% if all_providers? %><th scope="col">Provider</th><% end %>
+              <th scope="col">Description</th>
+              <th scope="col">Language</th>
+              <th scope="col">UID</th>
+              <th scope="col" class="numeric">Documents</th>
+              <th scope="col">State</th>
+              <th scope="col" class="actions-col"><span class="sr-only">Actions</span></th>
+            </tr>
+          </thead>
+          <%= render "list", topics: @topics, params: search_params %>
+        </table>
+      </rfg-table>
 
-    <%= turbo_frame_tag "topic-list" do %>
-      <div class="surface">
-        <%# Below its natural width the table scrolls inside <rfg-table>; the page never scrolls sideways. %>
-        <rfg-table>
-          <table class="data-table">
-            <caption class="sr-only"><%= topics_title %></caption>
-            <thead>
-              <tr>
-                <th scope="col">Title</th>
-                <th scope="col">Description</th>
-                <th scope="col">Language</th>
-                <th scope="col">UID</th>
-                <th scope="col" class="numeric">Documents</th>
-                <th scope="col">State</th>
-                <th scope="col" class="actions-col"><span class="sr-only">Actions</span></th>
-              </tr>
-            </thead>
-            <%= render "list", topics: @topics, params: search_params %>
-          </table>
-        </rfg-table>
-
-        <% if @topics.none? %>
-          <div class="empty">
-            <p class="empty-title">No topics match these filters</p>
-            <p>Try fewer filters, or <%= link_to "clear them", topics_path, data: { turbo_frame: "_top" } %>.</p>
-          </div>
-        <% end %>
-
-        <div class="table-foot">
-          <p class="table-count">
-            <% if @pagy.count.zero? %>
-              No topics
-            <% else %>
-              Showing <strong><%= @pagy.from %>–<%= @pagy.to %></strong> of <strong><%= @pagy.count %></strong> <%= "topic".pluralize(@pagy.count) %>
-            <% end %>
-          </p>
-          <%= render "shared/pagination", pagy: @pagy %>
+      <% if @topics.none? %>
+        <div class="empty">
+          <p class="empty-title">No topics match these filters</p>
+          <p>Try fewer filters, or <%= link_to "clear them", topics_path, data: { turbo_frame: "_top" } %>.</p>
         </div>
+      <% end %>
+
+      <div class="table-foot">
+        <p class="table-count">
+          <% if @pagy.count.zero? %>
+            No topics
+          <% else %>
+            Showing <strong><%= @pagy.from %>–<%= @pagy.to %></strong> of <strong><%= @pagy.count %></strong> <%= "topic".pluralize(@pagy.count) %>
+          <% end %>
+        </p>
+        <%= render "shared/pagination", pagy: @pagy %>
       </div>
-    <% end %>
+    </div>
   <% end %>
 </div>
