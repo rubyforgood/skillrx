@@ -110,6 +110,9 @@
   .rec { background: var(--brand-50); }
   code { font-size: 13px; background: var(--n-100); padding: 1px 5px; border-radius: 4px; }
   .variant[hidden] { display: none !important; }
+  select.real { appearance: none; background-image: linear-gradient(45deg, transparent 50%, var(--n-700) 50%), linear-gradient(135deg, var(--n-700) 50%, transparent 50%); background-position: calc(100% - 18px) 50%, calc(100% - 13px) 50%; background-size: 5px 5px; background-repeat: no-repeat; padding-right: 32px; display: block; }
+  .pcol { white-space: nowrap; color: var(--n-700); }
+  .no-pcol .pcol { display: none; }
   @media (prefers-reduced-motion: reduce) { * { transition: none !important; } }
 </style>
 
@@ -117,7 +120,8 @@
   <div class="chooser" role="group" aria-label="Preview options">
     <div class="grp"><b>Option</b>
       <button type="button" data-v="today" aria-pressed="false">Today</button>
-      <button type="button" data-v="a" aria-pressed="true">A: in the page header (recommended)</button>
+      <button type="button" data-v="d" aria-pressed="true">D: provider filter with All (recommended)</button>
+      <button type="button" data-v="a" aria-pressed="false">A: in the page header</button>
       <button type="button" data-v="b">B: first field in the toolbar</button>
       <button type="button" data-v="c">C: switcher in the rail</button>
     </div>
@@ -127,7 +131,7 @@
     </div>
   </div>
 
-  <h1 class="doc">Topics: where the provider switcher goes</h1>
+  <h1 class="doc">Topics: where the provider choice goes</h1>
   <p class="lede">The topics list shows one provider's topics at a time. People who work with more than one provider
     (every administrator, and contributors with several) choose which one. Today that choice sits below the search and
     filters, with its label beside the dropdown instead of above it. Each option below is the same screen with the
@@ -178,6 +182,14 @@
 
           <!-- toolbar -->
           <div class="toolbar">
+            <div class="field variant" data-only="d">
+              <label for="d-prov">Provider</label>
+              <select class="select real" id="d-prov">
+                <option value="all">All providers</option>
+                <option>Community health clinic</option>
+                <option>Provided by the government</option>
+              </select>
+            </div>
             <div class="field variant" data-only="b">
               <label for="b-prov">Provider</label>
               <div class="select" id="b-prov" role="combobox" aria-expanded="false" tabindex="0">Provided by the government</div>
@@ -201,12 +213,12 @@
           <div class="surface">
             <div class="tablewrap">
               <table>
-                <thead><tr><th>Title</th><th class="hide-sm">Description</th><th>Language</th><th class="num hide-sm">Documents</th><th class="hide-sm">State</th><th></th></tr></thead>
+                <thead><tr><th>Title</th><th class="pcol">Provider</th><th class="hide-sm">Description</th><th>Language</th><th class="num hide-sm">Documents</th><th class="hide-sm">State</th><th></th></tr></thead>
                 <tbody>
-                  <tr><td><a href="#a">Introduction to English</a><div class="meta">Published Nov 24, 2026</div></td><td class="hide-sm">Learn the basics of English</td><td>English</td><td class="num hide-sm">2</td><td class="hide-sm"><span class="pill">Active</span></td><td>Edit</td></tr>
-                  <tr><td><a href="#a">Hand hygiene in the clinic</a><div class="meta">Published Nov 22, 2026</div></td><td class="hide-sm">When and how to wash hands between patients</td><td>Spanish</td><td class="num hide-sm">2</td><td class="hide-sm"><span class="pill">Active</span></td><td>Edit</td></tr>
-                  <tr><td><a href="#a">Managing childhood diarrhea</a><div class="meta">Published Oct 31, 2026</div></td><td class="hide-sm">Oral rehydration, zinc, and the danger signs</td><td>English</td><td class="num hide-sm">2</td><td class="hide-sm"><span class="pill">Active</span></td><td>Edit</td></tr>
-                  <tr><td><a href="#a">Vacunación infantil</a><div class="meta">Published Oct 9, 2026</div></td><td class="hide-sm">El calendario de vacunación</td><td>Spanish</td><td class="num hide-sm">0</td><td class="hide-sm"><span class="pill">Active</span></td><td>Edit</td></tr>
+                  <tr><td><a href="#a">Introduction to English</a><div class="meta">Published Nov 24, 2026</div></td><td class="pcol" data-p="Provided by the government">Provided by the government</td><td class="hide-sm">Learn the basics of English</td><td>English</td><td class="num hide-sm">2</td><td class="hide-sm"><span class="pill">Active</span></td><td>Edit</td></tr>
+                  <tr><td><a href="#a">Hand hygiene in the clinic</a><div class="meta">Published Nov 22, 2026</div></td><td class="pcol" data-p="Community health clinic">Community health clinic</td><td class="hide-sm">When and how to wash hands between patients</td><td>Spanish</td><td class="num hide-sm">2</td><td class="hide-sm"><span class="pill">Active</span></td><td>Edit</td></tr>
+                  <tr><td><a href="#a">Managing childhood diarrhea</a><div class="meta">Published Oct 31, 2026</div></td><td class="pcol" data-p="Provided by the government">Provided by the government</td><td class="hide-sm">Oral rehydration, zinc, and the danger signs</td><td>English</td><td class="num hide-sm">2</td><td class="hide-sm"><span class="pill">Active</span></td><td>Edit</td></tr>
+                  <tr><td><a href="#a">Vacunación infantil</a><div class="meta">Published Oct 9, 2026</div></td><td class="pcol" data-p="Community health clinic">Community health clinic</td><td class="hide-sm">El calendario de vacunación</td><td>Spanish</td><td class="num hide-sm">0</td><td class="hide-sm"><span class="pill">Active</span></td><td>Edit</td></tr>
                 </tbody>
               </table>
             </div>
@@ -217,6 +229,30 @@
   </div>
 
   <section class="notes">
+    <div class="card">
+      <h3>D: provider as a filter, with All providers (revised recommendation)</h3>
+      <ul>
+        <li><strong>It's the first filter, labeled above like the others.</strong> Search, Provider, Filters and Clear filters
+          share one row and one label style. It stays visible rather than folding into Filters, because it changes the
+          most and it decides the rest.</li>
+        <li><strong>All providers is the first option</strong> and the default for anyone with more than one provider. Every
+          provider is in the list, including the current one.</li>
+        <li><strong>A Provider column appears only when All is chosen.</strong> With one provider chosen, every row would say
+          the same thing. Try switching the field above: the column comes and goes.</li>
+        <li><strong>Plain text, not a badge.</strong> The design system keeps pills for status (Active, Archived), where color
+          means something. Provider is a name with no state, and colored badges for an open-ended list of providers
+          would run out of distinguishable colors and fail "never color alone". GitHub's repository column, Jira's
+          project column and Linear's team column are all plain text.</li>
+        <li><strong>Clear filters resets it to All providers,</strong> like every other filter. The last choice is still
+          remembered between visits, as today.</li>
+        <li><strong>People with one provider don't see the field.</strong></li>
+      </ul>
+      <p><strong>What it changes beyond this page:</strong> today a contributor's new topic is saved under the chosen
+        provider, because the topic form only shows a Provider field to administrators. With All, a contributor who
+        has more than one provider needs that field too (required, defaulting to the provider they last chose).
+        Contributors with one provider see no change.</p>
+    </div>
+
     <div class="card">
       <h3>What's wrong today</h3>
       <ul>
@@ -302,6 +338,7 @@
     $$(".chooser [data-v]").forEach(b => b.setAttribute("aria-pressed", String(b.dataset.v === v)));
     $$(".variant").forEach(el => { el.hidden = el.dataset.only !== v; });
     closeMenus();
+    if (typeof pcol === "function") pcol();
   }
   function width(w) {
     $$(".chooser [data-w]").forEach(b => b.setAttribute("aria-pressed", String(b.dataset.w === w)));
@@ -335,5 +372,10 @@
     if (!e.target.closest(".menu")) closeMenus();
   });
   document.addEventListener("keydown", e => { if (e.key === "Escape") closeMenus(); });
-  show("a");
+  const dp = document.getElementById("d-prov");
+  function pcol() { const v = document.querySelector('.chooser [aria-pressed="true"][data-v]').dataset.v; const all = v === "d" ? dp.value === "all" : false;
+    document.getElementById("stage").classList.toggle("no-pcol", !all);
+    document.querySelectorAll("#stage tbody tr").forEach(tr => { const c = tr.querySelector(".pcol"); tr.hidden = !all && v === "d" && c.dataset.p !== dp.value; }); }
+  dp.addEventListener("change", pcol);
+  show("d");
 </script>
