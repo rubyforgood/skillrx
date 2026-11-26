@@ -22,7 +22,9 @@
       data: { controller: "topics", topics_target: "searchForm", turbo_frame: "topic-list", turbo_action: "advance" } do |f| %>
   <rfg-filter-bar>
     <% if choosing_provider? %>
-      <div slot="search" class="w-full sm:w-64">
+      <%# sm:mr-1 makes the 12px gap to Search 16px, like the panel's columns. Design system main
+          (44128cb) does this in the component; remove this once SkillRx is on the release with it. %>
+      <div slot="search" class="w-full sm:w-64 sm:mr-1">
         <label for="provider_id" class="form-label">Provider</label>
         <%= select_tag :provider, options_for_select([ [ "All providers", "all" ] ] + provider_choices.map { |p| [ p.name, p.id.to_s ] }, provider_filter),
               id: "provider_id", class: "form-select", data: { action: "change->topics#searchTopics" } %>

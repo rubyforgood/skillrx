@@ -32,9 +32,9 @@
 
 .shell-nav { @apply flex-1 overflow-y-auto px-3 py-4; }
 /* One rhythm: 2px between every row, top level or nested, like GitHub, Linear, Stripe and Vercel.
-   A group gets 12px above it to read as its own section. (docs/design/design.md, "App shell".) */
+   No extra space above the Administration group: with three top-level rows, 12px there read as
+   uneven, and the chevron and indented items already show it's a group. (design.md, "App shell".) */
 .shell-nav-list { @apply m-0 flex list-none flex-col gap-0.5 p-0; }
-.shell-nav-list > li:has(> .shell-nav-group) { @apply mt-3; }
 .shell-nav-sublist { @apply m-0 mt-0.5 flex list-none flex-col gap-0.5 p-0; }
 
 .shell-nav-link, .shell-nav-group {

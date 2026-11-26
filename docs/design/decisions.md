@@ -439,3 +439,16 @@ opens below the whole row from its left edge. Measured at 1280px: Provider, Sear
 
 ### Measured
 518 examples, 0 failures (the three list specs twice more, clean); WCAG 0; button audits 0 and 0.
+
+## 2026-11-26: even spacing in the rail and the filter row
+
+**Asked:** "there is not enough padding between the provider and search inputs, also there is
+uneven padding between beacons and admin."
+
+- **Rail:** Topics to Beacons was 2px, Beacons to Administration 14px (the 12px I'd added on
+  2026-11-25 so the group read as a section). With three top-level rows that reads as uneven, not as
+  a section break, and the chevron and indented items already say "group". Now 2px throughout.
+- **Filter row:** Provider to Search was 12px; the panel's columns are 16px. Now 16px, so every field
+  in the bar is the same distance from the next. Fixed in the design system (`44128cb`, with a check
+  that fails at 12px), not yet released; until it is, `sm:mr-1` on the Provider field adds the 4px
+  in SkillRx. Remove it on upgrade.
