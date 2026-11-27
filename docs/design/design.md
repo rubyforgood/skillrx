@@ -306,7 +306,9 @@ The rule for every table (decided 2026-11-25, see decisions.md):
   - **Row metadata is a quiet line, never a card:** `shared/_record_meta` renders "Added · Last
     updated · ID" in 13px gray under the content, as GitHub, Linear and Notion show "created" and
     "edited". It was a "Record" card on the right, stretched to the height of the left column.
-    Preview: `previews/record-page.html`.
+    Dates only by default ("Nov 27, 2026"); users and beacons pass `with_time: true` ("Nov 27,
+    2026 at 3:04 PM"), since when someone joined or a beacon was provisioned can matter to the
+    hour. Preview: `previews/record-page.html`.
   - **Say a fact once:** what's under the name (a provider's type) isn't repeated in Details.
   - **A count links to what it counts** when there's a list for it: "13 topics" opens the topics
     list filtered to the provider, in any state, so the list matches the number.
