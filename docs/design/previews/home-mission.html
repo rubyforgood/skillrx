@@ -1,0 +1,261 @@
+<title>SkillRx mission section</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Figtree:wght@400;500;600;700;800&display=swap">
+<style>
+  /* Layout: a sticky chooser (Today / Recommended, Desktop / Phone), then the bottom of SkillRx's
+     public home page in a browser frame: the features band for context, the mission band, the
+     contact band. Then numbered notes keyed to markers. Single light look on purpose: it previews
+     SkillRx's home page, which is light only. Values are SkillRx's tokens (application.css,
+     rfg-theme.css): logo blue, slate neutrals, 16px surfaces, pill tags. */
+  :root {
+    --brand-50: #eef6fb; --brand-100: #d5e8f4; --brand-600: #055889; --brand-700: #044a72;
+    --n-50: #f8fafc; --n-100: #f1f5f9; --n-200: #e2e8f0; --n-300: #cbd5e1; --n-500: #64748b; --n-700: #334155; --n-900: #0f172a;
+    --mark: #e11d48;
+    --font: "Figtree", ui-sans-serif, system-ui, -apple-system, "Segoe UI", sans-serif;
+    color-scheme: light;
+  }
+  * { box-sizing: border-box; }
+  body { margin: 0; font-family: var(--font); color: var(--n-900); background: var(--n-100); font-size: 14px; }
+  .wrap { max-width: 1240px; margin: 0 auto; padding-block: 0 64px; padding-left: max(16px, env(safe-area-inset-left, 0px)); padding-right: max(16px, env(safe-area-inset-right, 0px)); }
+  button { font: inherit; }
+  :focus-visible { outline: 2px solid var(--brand-600); outline-offset: 2px; }
+
+  .chooser { position: sticky; top: env(safe-area-inset-top, 0px); z-index: 40; background: var(--n-900); color: #fff; margin: 0 calc(-1 * max(16px, env(safe-area-inset-left, 0px))) 24px; padding: 10px max(16px, env(safe-area-inset-left, 0px)); display: flex; flex-wrap: wrap; gap: 8px 20px; align-items: center; }
+  body::before { content: ""; position: fixed; inset: 0 0 auto; height: env(safe-area-inset-top, 0px); z-index: 30; background: var(--n-900); }
+  .chooser .grp { display: flex; flex-wrap: wrap; gap: 6px; align-items: center; }
+  .chooser b { font-weight: 600; margin-right: 4px; }
+  .chooser button { background: #374151; color: #fff; border: 0; border-radius: 6px; padding: 6px 10px; cursor: pointer; }
+  .chooser button[aria-pressed="true"] { background: #fff; color: var(--n-900); font-weight: 600; }
+  .chooser label { display: inline-flex; gap: 6px; align-items: center; cursor: pointer; }
+
+  h1.doc { font-size: 26px; margin: 8px 0 6px; text-wrap: balance; }
+  .lede { color: var(--n-700); max-width: 72ch; line-height: 1.55; margin: 0 0 20px; }
+
+  /* Browser frame; its width is the chosen device */
+  .stage { display: flex; justify-content: center; }
+  .frame { width: 100%; max-width: 1180px; background: #fff; border: 1px solid var(--n-200); border-radius: 12px; overflow: hidden; box-shadow: 0 1px 3px rgb(15 23 42 / .08); container-type: inline-size; }
+  [data-device="phone"] .frame { max-width: 390px; }
+  .chrome { height: 32px; display: flex; align-items: center; gap: 6px; padding: 0 12px; background: var(--n-100); border-bottom: 1px solid var(--n-200); }
+  .chrome i { width: 10px; height: 10px; border-radius: 999px; background: var(--n-300); }
+  .chrome span { margin-left: 10px; font-size: 12px; color: var(--n-500); }
+
+  /* SkillRx home page pieces (site-* classes) */
+  .site-wrap { max-width: 1152px; margin: 0 auto; padding: 0 32px; position: relative; }
+  @container (max-width: 640px) { .site-wrap { padding: 0 16px; } }
+  .band { padding: 72px 0; }
+  @container (max-width: 640px) { .band { padding: 56px 0; } }
+  .band-alt { background: var(--n-50); border-block: 1px solid var(--n-200); }
+  .band h2 { margin: 0 0 8px; font-size: 30px; font-weight: 700; letter-spacing: -0.02em; text-wrap: balance; }
+  .sub { margin: 0 0 40px; max-width: 42rem; font-size: 18px; line-height: 1.55; color: var(--n-500); }
+  .grid-3 { display: grid; gap: 20px; grid-template-columns: repeat(3, minmax(0, 1fr)); }
+  @container (max-width: 860px) { .grid-3 { grid-template-columns: minmax(0, 1fr); } }
+  .feature { border: 1px solid var(--n-200); border-radius: 16px; background: #fff; padding: 24px; }
+  .icon { width: 44px; height: 44px; border-radius: 8px; background: var(--brand-50); color: var(--brand-700); display: grid; place-items: center; margin-bottom: 16px; flex: none; }
+  .icon svg { width: 22px; height: 22px; }
+  .feature h3 { margin: 0 0 6px; font-size: 18px; }
+  .feature p { margin: 0; color: var(--n-700); line-height: 1.55; }
+  .muted { opacity: .45; }
+
+  /* Today's mission band */
+  .m-today { display: grid; gap: 48px; grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  @container (max-width: 1000px) { .m-today { grid-template-columns: minmax(0, 1fr); } }
+  .m-today .sub { margin: 0; }
+  .principles { list-style: none; margin: 24px 0 0; padding: 0; display: grid; gap: 16px; grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  @container (max-width: 640px) { .principles { grid-template-columns: minmax(0, 1fr); } }
+  .principles b { display: block; }
+  .principles span { font-size: 14px; color: var(--n-500); }
+  .subjects-h { margin: 0 0 16px; font-size: 18px; font-weight: 600; }
+  .subject-cards { list-style: none; margin: 0; padding: 0; display: grid; gap: 12px; grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .subject-cards li { border: 1px solid var(--n-200); border-radius: 16px; background: #fff; padding: 20px; font-weight: 600; }
+
+  /* Recommended mission band */
+  .m-rec { max-width: 760px; }
+  .eyebrow-h { font-size: 14px !important; font-weight: 700 !important; letter-spacing: .08em !important; text-transform: uppercase; color: var(--brand-700); margin: 0 0 12px !important; }
+  .statement { margin: 0; font-size: 30px; line-height: 1.3; font-weight: 600; letter-spacing: -0.015em; color: var(--n-900); text-wrap: balance; }
+  @container (max-width: 640px) { .statement { font-size: 24px; } }
+  .facts { list-style: none; margin: 40px 0 0; padding: 0; display: grid; gap: 28px 32px; grid-template-columns: repeat(3, minmax(0, 1fr)); }
+  @container (max-width: 860px) { .facts { grid-template-columns: minmax(0, 1fr); } }
+  .facts li { display: flex; flex-direction: column; }
+  .facts li > div:last-child { display: flex; flex-direction: column; }
+  .facts li .icon { margin-bottom: 12px; }
+  .facts b { font-size: 16px; margin-bottom: 4px; }
+  .facts span { color: var(--n-700); line-height: 1.55; }
+  @container (max-width: 860px) { .facts li { flex-direction: row; gap: 14px; } .facts li .icon { margin: 0; } }
+  .subjects-row { margin-top: 40px; padding-top: 28px; border-top: 1px solid var(--n-200); display: flex; flex-wrap: wrap; align-items: center; gap: 10px 12px; }
+  .subjects-row h3 { margin: 0 8px 0 0; font-size: 14px; font-weight: 600; color: var(--n-700); }
+  .pills { list-style: none; margin: 0; padding: 0; display: flex; flex-wrap: wrap; gap: 8px; }
+  .pills li { border-radius: 999px; background: #fff; border: 1px solid var(--n-200); padding: 4px 12px; font-size: 14px; font-weight: 500; color: var(--n-700); }
+  .confirm { display: inline-block; margin-left: 4px; font-size: 12px; font-weight: 600; color: #b45309; background: #fffbeb; border: 1px dashed #f59e0b; border-radius: 6px; padding: 2px 8px; }
+
+  /* Contact band */
+  .contact { text-align: center; }
+  .contact .sub { margin: 0 auto 32px; }
+  .btn { display: inline-flex; align-items: center; height: 48px; padding: 0 20px; border-radius: 8px; background: var(--brand-600); color: #fff; font-weight: 600; text-decoration: none; }
+  .btn:hover { background: var(--brand-700); }
+  .contact-actions { display: flex; flex-direction: column; align-items: center; gap: 12px; }
+  .addr { margin: 0; font-size: 14px; color: var(--n-500); }
+  .addr span { font-weight: 500; color: var(--n-900); user-select: all; }
+  .strike { text-decoration: line-through; text-decoration-color: var(--mark); text-decoration-thickness: 2px; }
+
+  .mk { position: absolute; z-index: 3; width: 22px; height: 22px; border-radius: 999px; background: var(--mark); color: #fff; font-size: 12px; font-weight: 700; display: grid; place-items: center; box-shadow: 0 0 0 2px #fff; pointer-events: none; }
+  .mk.inline { position: static; display: inline-grid; vertical-align: middle; margin-left: 8px; }
+  .no-marks .mk { display: none; }
+  [data-view="today"] .rec-only, [data-view="rec"] .today-only { display: none !important; }
+
+  .notes { margin-top: 28px; display: grid; gap: 14px; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); }
+  .note { background: #fff; border: 1px solid var(--n-200); border-radius: 12px; padding: 16px 18px; display: flex; flex-direction: column; gap: 6px; }
+  .note h3 { margin: 0; font-size: 15px; display: flex; gap: 10px; align-items: center; }
+  .note h3 .n { width: 22px; height: 22px; border-radius: 999px; background: var(--mark); color: #fff; font-size: 12px; display: grid; place-items: center; flex: none; }
+  .note p { margin: 0; line-height: 1.55; color: var(--n-700); }
+  .note .src { font-size: 13px; color: var(--n-500); }
+</style>
+
+<div class="wrap" id="root" data-view="rec" data-device="desktop">
+  <div class="chooser" role="toolbar" aria-label="Preview options">
+    <div class="grp" role="group" aria-label="Version">
+      <b>Show</b>
+      <button type="button" data-k="view" data-v="today" aria-pressed="false">Today</button>
+      <button type="button" data-k="view" data-v="rec" aria-pressed="true">Recommended</button>
+    </div>
+    <div class="grp" role="group" aria-label="Width">
+      <b>Width</b>
+      <button type="button" data-k="device" data-v="desktop" aria-pressed="true">Desktop</button>
+      <button type="button" data-k="device" data-v="phone" aria-pressed="false">Phone</button>
+    </div>
+    <label><input type="checkbox" id="marks" checked> Numbered markers</label>
+  </div>
+
+  <h1 class="doc">Home page: our mission</h1>
+  <p class="lede">The bottom of SkillRx's public home page, from the features band down. The recommended version leads with the mission as one plain statement, backs it with three facts that don't repeat the features above, shows subjects as labels rather than cards that look clickable, and drops an unchecked claim from the contact band. Wording is a draft for the SkillRx team.</p>
+
+  <div class="stage">
+    <div class="frame">
+      <div class="chrome" aria-hidden="true"><i></i><i></i><i></i><span>skillrx.org</span></div>
+
+      <!-- Features band: unchanged, shown faded for context -->
+      <section class="band muted" aria-label="Features (unchanged)">
+        <div class="site-wrap">
+          <h2>Revolutionizing medical education</h2>
+          <p class="sub">Discover how SkillRx transforms the way healthcare professionals learn and grow.</p>
+          <div class="grid-3">
+            <div class="feature">
+              <div class="icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" aria-hidden="true"><path d="M17.5 19a4.5 4.5 0 1 0-1.4-8.8A6 6 0 1 0 6 16.5"/><path d="m3 3 18 18"/></svg></div>
+              <h3>Offline-first access</h3>
+              <p>Access comprehensive medical education content anytime, anywhere, with no internet connection required.</p>
+            </div>
+            <div class="feature">
+              <div class="icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" aria-hidden="true"><path d="M21 12a9 9 0 1 1-3-6.7L21 8M21 3v5h-5"/></svg></div>
+              <h3>Smart synchronization</h3>
+              <p>Content updates when a connection is available, so what's on the device stays current.</p>
+            </div>
+            <div class="feature">
+              <div class="icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" aria-hidden="true"><rect x="4" y="4" width="16" height="16" rx="2"/><path d="M9 9h6v6H9z"/></svg></div>
+              <h3>Multi-platform ready</h3>
+              <p>Deploy on USB drives, mobile apps or local servers.</p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- Mission band: today -->
+      <section class="band band-alt today-only" aria-labelledby="t-mission">
+        <div class="site-wrap m-today">
+          <div>
+            <h2 id="t-mission">Our mission</h2>
+            <p class="sub">Enabling medical practitioners in resource-constrained areas to maintain competence and improve patient care through accessible continuing education.</p>
+            <ul class="principles" role="list">
+              <li><b>Free access</b><span>Always free and open</span></li>
+              <li><b>Latest research</b><span>Cutting-edge literature</span></li>
+              <li><b>Global reach</b><span>Worldwide accessibility</span></li>
+              <li><b>Adaptable</b><span>Fits local needs</span></li>
+            </ul>
+          </div>
+          <div>
+            <h3 class="subjects-h">Subjects include</h3>
+            <ul class="subject-cards" role="list">
+              <li>Cardiology</li><li>Emergency</li><li>Pharmacy</li><li>Infectious</li>
+            </ul>
+          </div>
+        </div>
+      </section>
+
+      <!-- Mission band: recommended -->
+      <section class="band band-alt rec-only" aria-labelledby="r-mission">
+        <div class="site-wrap">
+          <div class="m-rec">
+            <h2 id="r-mission" class="eyebrow-h">Our mission<span class="mk inline">1</span></h2>
+            <p class="statement">Health workers in places with little or no internet should still be able to keep their training current. SkillRx brings them continuing medical education that works offline.</p>
+          </div>
+          <ul class="facts" role="list">
+            <li>
+              <div class="icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 12v8H4v-8M2 7h20v5H2zM12 22V7M12 7H7.5a2.5 2.5 0 1 1 0-5C11 2 12 7 12 7zm0 0h4.5a2.5 2.5 0 1 0 0-5C13 2 12 7 12 7z"/></svg></div>
+              <div><b>Free for health workers<span class="mk inline">2</span></b><span>No fees, no subscriptions, no account needed to learn from a beacon.</span></div>
+            </li>
+            <li>
+              <div class="icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3l8 3v6c0 4.5-3.4 8.3-8 9-4.6-.7-8-4.5-8-9V6z"/><path d="m9 12 2 2 4-4"/></svg></div>
+              <div><b>From trusted providers</b><span>Ministries of health, hospitals and NGOs publish the topics, so content comes from people who know the field.</span></div>
+            </li>
+            <li>
+              <div class="icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M3 12h18M12 3c2.5 2.7 3.8 5.7 3.8 9s-1.3 6.3-3.8 9c-2.5-2.7-3.8-5.7-3.8-9S9.5 5.7 12 3z"/></svg></div>
+              <div><b>In local languages</b><span>Each beacon carries topics in the language of the region it serves.</span></div>
+            </li>
+          </ul>
+          <div class="subjects-row">
+            <h3>Subjects include</h3>
+            <ul class="pills" role="list">
+              <li>Cardiology</li><li>Emergency medicine</li><li>Pharmacy</li><li>Infectious diseases</li>
+            </ul>
+            <span class="confirm">Confirm against the catalog</span>
+            <span class="mk inline">3</span>
+          </div>
+        </div>
+      </section>
+
+      <!-- Contact band -->
+      <section class="band contact" aria-labelledby="c-head">
+        <div class="site-wrap">
+          <h2 id="c-head">Ready to transform medical education?</h2>
+          <p class="sub today-only">Join thousands of healthcare professionals already using SkillRx to advance their medical knowledge. Have questions? We're here to help you get started.</p>
+          <p class="sub rec-only"><span class="strike">Join thousands of healthcare professionals already using SkillRx to advance their medical knowledge.</span> Have questions, or want SkillRx where you work? We're here to help you get started.<span class="mk inline">4</span></p>
+          <div class="contact-actions">
+            <a class="btn" href="#" onclick="return false">Contact us</a>
+            <p class="addr">or email <span>contact@skillrx.org</span></p>
+          </div>
+        </div>
+      </section>
+    </div>
+  </div>
+
+  <div class="notes">
+    <article class="note">
+      <h3><span class="n">1</span>The mission is the headline</h3>
+      <p>One plain sentence, large and dark, at reading width. Today it sits in the gray used for secondary text, beside a heading. "Our mission" becomes a small label above it.</p>
+      <p class="src">The pattern on Khan Academy, Wikipedia and Doctors Without Borders' about pages.</p>
+    </article>
+    <article class="note">
+      <h3><span class="n">2</span>Three facts, not four slogans</h3>
+      <p>Each says something a reader can check: it's free, providers publish it, it's in local languages. None repeats the features above, and they use the same icon tiles so the two bands look related.</p>
+      <p class="src">Replaces "Always free and open", "Cutting-edge literature", "Worldwide accessibility", "Fits local needs".</p>
+    </article>
+    <article class="note">
+      <h3><span class="n">3</span>Subjects are labels, not cards</h3>
+      <p>Bordered cards look clickable, and these do nothing. Pills read as labels. Full names: "Emergency medicine", "Infectious diseases". Topics need a sign-in, so they can't link for a visitor.</p>
+      <p class="src">The list is typed into the page; the SkillRx team should confirm it.</p>
+    </article>
+    <article class="note">
+      <h3><span class="n">4</span>Drop the unchecked claim</h3>
+      <p>"Thousands of healthcare professionals" isn't a number anyone has checked. Keep the offer of help, or replace the claim with a real figure.</p>
+      <p class="src">Same reason "Get started today" was removed: nobody can sign up.</p>
+    </article>
+  </div>
+</div>
+
+<script>
+  const root = document.getElementById("root");
+  document.querySelectorAll("[data-k]").forEach((b) => b.addEventListener("click", () => {
+    root.dataset[b.dataset.k] = b.dataset.v;
+    document.querySelectorAll(`[data-k="${b.dataset.k}"]`).forEach((x) => x.setAttribute("aria-pressed", String(x === b)));
+  }));
+  document.getElementById("marks").addEventListener("change", (e) => root.classList.toggle("no-marks", !e.target.checked));
+</script>
