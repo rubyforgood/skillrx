@@ -1,7 +1,7 @@
 require "rails_helper"
 
 RSpec.describe "/beacons", type: :request do
-  let(:user) { create(:user, :admin) }
+  let(:user) { create(:user, :admin, email: "admin@skillrx.org") }
   let(:region) { create(:region) }
   let(:language) { create(:language) }
   let(:valid_attributes) do
@@ -11,9 +11,44 @@ RSpec.describe "/beacons", type: :request do
       }
   end
   let(:invalid_attributes) { { name: "" } }
+  let(:beacons_feature_config) { { enabled: false, allowed_emails: [ "admin@skillrx.org" ] } }
 
   before do
+    allow(Rails.application.credentials).to receive(:dig).and_call_original
+    allow(Rails.application.credentials).to receive(:dig)
+      .with(:features, :beacons)
+      .and_return(beacons_feature_config)
     sign_in(user)
+  end
+
+  describe "feature flag gating" do
+    context "when the signed-in admin is not in the beacons allowlist" do
+      let(:user) { create(:user, :admin, email: "other-admin@skillrx.org") }
+
+      it "returns 404 for index" do
+        get beacons_url
+
+        expect(response).to have_http_status(:not_found)
+      end
+
+      it "returns 404 for show" do
+        beacon = create(:beacon)
+
+        get beacon_url(beacon)
+
+        expect(response).to have_http_status(:not_found)
+      end
+    end
+
+    context "when the signed-in user is a contributor (not admin)" do
+      let(:user) { create(:user, email: "contributor@example.com") }
+
+      it "returns 404 for index" do
+        get beacons_url
+
+        expect(response).to have_http_status(:not_found)
+      end
+    end
   end
 
   describe "GET /index" do

@@ -1,6 +1,7 @@
 class BeaconsController < ApplicationController
   include Authentication
 
+  before_action :ensure_beacons_enabled
   before_action :set_beacon, only: %i[show edit update regenerate_key revoke_key]
   before_action :prepare_associations, only: %i[new edit]
 
@@ -81,6 +82,12 @@ class BeaconsController < ApplicationController
   end
 
   private
+
+  def ensure_beacons_enabled
+    return if FeatureFlags.enabled?(:beacons, user: Current.user)
+
+    raise ActiveRecord::RecordNotFound
+  end
 
   def set_beacon
     @beacon = Beacon.find(params[:id])
