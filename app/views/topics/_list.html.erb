@@ -2,26 +2,21 @@
   <% if @topics.any? %>
     <% @topics.each do |topic| %>
       <tr class="border-b border-gray-100 transition-all hover:bg-gray-50">
+        <!-- Published -->
+        <td class="table-cell text-gray-500 font-mono text-xs">
+          <%= topic.published_at&.strftime("%b %d, %Y") %>
+        </td>
+
         <!-- Title -->
         <td class="table-cell">
           <div class="flex flex-col items-center gap-1">
             <div class="font-semibold text-gray-900 text-sm"><%= topic.title %></div>
-            <div class="text-gray-500 text-xs">Published <%= topic.published_at&.strftime('%b %d, %Y') %></div>
           </div>
         </td>
 
-        <!-- Description -->
-        <td class="hide-mobile table-cell text-gray-700 text-sm">
-          <% if topic.description.present? %>
-            <%= truncate(topic.description, length: 60, omission: '…') %>
-          <% else %>
-            <span class="text-gray-400 italic">No description</span>
-          <% end %>
-        </td>
-
-        <!-- UID -->
-        <td class="hide-mobile table-cell text-gray-500 font-mono text-xs">
-          <%= topic.uid.present? ? truncate(topic.uid, length: 12, omission: '…') : '-' %>
+        <!-- Added -->
+        <td class="table-cell text-gray-500 font-mono text-xs">
+          <%= topic.created_at.strftime("%b %d, %Y") %>
         </td>
 
         <!-- Language -->
