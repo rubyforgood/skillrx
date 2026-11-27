@@ -124,6 +124,15 @@ for a few minutes.
 
 ## Open items
 
+- **Home page, to confirm with the SkillRx team** (decisions.md, 2026-11-27, "The mission section
+  leads with the mission"):
+  - The subject list (Cardiology, Emergency medicine, Pharmacy, Infectious diseases) is typed into
+    `home/index.html.erb`. Check it against the real catalog, or replace it with real ones.
+  - "No fees, no subscriptions, no account needed to learn from a beacon." Confirm health workers
+    don't need an account to read a beacon's content.
+  - "Join thousands of healthcare professionals…" was removed on 2026-11-27, reversing the
+    2026-11-24 decision to keep it. Restore it only with a real figure.
+
 - **Deleting a provider orphans its topics** (no foreign key or `dependent:`). The delete
   confirmation says how many; the app should decide whether to block it, reassign or delete them.
 
