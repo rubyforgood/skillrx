@@ -112,6 +112,9 @@ download again. Don't edit them by hand: SkillRx-specific values go in `applicat
   click to every admin task. (Human Essentials collapses its groups because it has four, holding 34
   items.)
 - **Account strip at the bottom:** avatar, email, role, and an account menu holding **Sign out**.
+  The menu's items use `<rfg-menu>`'s item look (8px 12px, 14px medium, gray hover, 8px panel
+  radius). Until 0.1.9 is vendored, `sidebar.css` sets the same values: 0.1.8 gave items none, and
+  "Sign out" was a bare button in a rounded bubble.
   Signing out is not destructive, so it isn't red.
 - **Footer:** "Built by Ruby For Good volunteers", at the end of the page, not fixed to the window.
   It shares the account strip's 64px height and top border, so the two rules meet as one line.
