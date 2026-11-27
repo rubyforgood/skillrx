@@ -90,25 +90,46 @@
     </div>
   </section>
 
+  <%# Mission (docs/design/design.md, "Home page"; decisions.md, 2026-11-27): the mission as one plain
+      statement, three facts that don't repeat the features above (same icon tiles), and subjects as
+      labels. Subjects aren't links: topics need a sign-in. The subject list and "no account needed
+      to learn from a beacon" are to be confirmed by the SkillRx team. %>
   <section id="about" class="site-band site-band-alt" aria-labelledby="about-heading">
-    <div class="site-wrap site-mission">
-      <div>
-        <h2 id="about-heading">Our mission</h2>
-        <p class="site-sub">Enabling medical practitioners in resource-constrained areas to maintain competence and improve patient care through accessible continuing education.</p>
-        <ul class="site-principles" role="list">
-          <li><b>Free access</b><span>Always free and open</span></li>
-          <li><b>Latest research</b><span>Cutting-edge literature</span></li>
-          <li><b>Global reach</b><span>Worldwide accessibility</span></li>
-          <li><b>Adaptable</b><span>Fits local needs</span></li>
-        </ul>
+    <div class="site-wrap">
+      <div class="site-mission">
+        <h2 id="about-heading" class="site-label">Our mission</h2>
+        <p class="site-statement">Health workers in places with little or no internet should still be able to keep their training current. SkillRx brings them continuing medical education that works offline.</p>
       </div>
-      <div>
-        <h3 class="site-subjects-heading">Subjects include</h3>
-        <ul class="site-subjects" role="list">
+      <ul class="site-facts" role="list">
+        <li>
+          <div class="site-feature-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 12v8H4v-8M2 7h20v5H2zM12 22V7M12 7H7.5a2.5 2.5 0 1 1 0-5C11 2 12 7 12 7zm0 0h4.5a2.5 2.5 0 1 0 0-5C13 2 12 7 12 7z"/></svg></div>
+          <div>
+            <h3>Free for health workers</h3>
+            <p>No fees, no subscriptions, no account needed to learn from a beacon.</p>
+          </div>
+        </li>
+        <li>
+          <div class="site-feature-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3l8 3v6c0 4.5-3.4 8.3-8 9-4.6-.7-8-4.5-8-9V6z"/><path d="m9 12 2 2 4-4"/></svg></div>
+          <div>
+            <h3>From trusted providers</h3>
+            <p>Ministries of health, hospitals and NGOs publish the topics, so content comes from people who know the field.</p>
+          </div>
+        </li>
+        <li>
+          <div class="site-feature-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M3 12h18M12 3c2.5 2.7 3.8 5.7 3.8 9s-1.3 6.3-3.8 9c-2.5-2.7-3.8-5.7-3.8-9S9.5 5.7 12 3z"/></svg></div>
+          <div>
+            <h3>In local languages</h3>
+            <p>Each beacon carries topics in the language of the region it serves.</p>
+          </div>
+        </li>
+      </ul>
+      <div class="site-subjects">
+        <h3>Subjects include</h3>
+        <ul role="list">
           <li>Cardiology</li>
-          <li>Emergency</li>
+          <li>Emergency medicine</li>
           <li>Pharmacy</li>
-          <li>Infectious</li>
+          <li>Infectious diseases</li>
         </ul>
       </div>
     </div>
@@ -117,7 +138,7 @@
   <section id="contact" class="site-band site-contact" aria-labelledby="contact-heading">
     <div class="site-wrap">
       <h2 id="contact-heading">Ready to transform medical education?</h2>
-      <p class="site-sub">Join thousands of healthcare professionals already using SkillRx to advance their medical knowledge. Have questions? We're here to help you get started.</p>
+      <p class="site-sub">Have questions, or want SkillRx where you work? We're here to help you get started.</p>
       <%# The button says what it does, like the hero's; the address is plain text beside it, so it can
           be read and copied: a mailto: link does nothing on a computer with no mail app set up. %>
       <div class="site-contact-actions">

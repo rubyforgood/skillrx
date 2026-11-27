@@ -152,6 +152,7 @@ migrated, so a screen is never half converted.
 ### "Join thousands of healthcare professionals" is kept
 
 Asked separately on 2026-11-24, since it's also an unverified figure: kept as is, by decision.
+**Superseded 2026-11-27:** removed with the mission section's redesign (see that entry).
 
 ### The home page's illustration is not real data
 
@@ -461,6 +462,27 @@ uneven padding between beacons and admin."
   in the bar is the same distance from the next. Fixed in the design system (`44128cb`, with a check
   that fails at 12px), not yet released; until it is, `sm:mr-1` on the Provider field adds the 4px
   in SkillRx. Remove it on upgrade.
+
+## 2026-11-27: The mission section leads with the mission
+
+**Asked:** "the our mission section looks odd, make recommendations based on industry std on
+design for this section", then, from `previews/home-mission.html`: "go ahead and build it."
+
+**Before:** the mission statement in subtitle gray beside a heading; four slogans ("Always free and
+open", "Cutting-edge literature", "Worldwide accessibility", "Fits local needs") with no icons,
+unlike the features above; subjects as bordered white cards that looked clickable but weren't, with
+clipped names ("Emergency", "Infectious"); two columns that didn't balance.
+
+**Decision:** the pattern of Khan Academy's, Wikipedia's and Doctors Without Borders' about pages:
+1. **The mission is the headline:** one plain sentence, large and dark, "Our mission" a small label.
+2. **Three checkable facts** (free, from trusted providers, in local languages) in the features'
+   icon tiles, none repeating the features.
+3. **Subjects as pill labels** with full names. Not links: topics need a sign-in.
+4. **The contact band drops "Join thousands of healthcare professionals…"**, an unchecked figure.
+   This reverses the 2026-11-24 decision to keep it, by approving the preview that struck it out.
+
+**To confirm with the SkillRx team:** the subject list (typed into the page; local data is test
+data) and "no account needed to learn from a beacon" (from how beacons work in the app).
 
 ## 2026-11-27: The account row opens the account menu
 

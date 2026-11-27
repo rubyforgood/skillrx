@@ -164,8 +164,15 @@ in, forgot password and choose a new password.
 - **Primary actions are plain links** styled as buttons, so they work before JavaScript loads.
   "Get started today" became **Contact us**: it went to sign-in, where nobody can create an account.
 - **Removed, pending verification:** the numbers section and the subject module counts (see
-  decisions.md for how to restore them). "Join thousands of healthcare professionals…" is kept, by
-  decision.
+  decisions.md for how to restore them), and, since 2026-11-27, "Join thousands of healthcare
+  professionals…".
+- **Mission** (2026-11-27, `previews/home-mission.html`): the mission as one plain statement, large
+  and dark, under a small "Our mission" label (`.site-label`, `.site-statement`); three facts in the
+  features' icon tiles, without cards (`.site-facts`); subjects as pill labels, not cards, since
+  cards look clickable and these aren't links (topics need a sign-in). **To confirm with the SkillRx
+  team:** the subject list, and "no account needed to learn from a beacon".
+- **Contact:** the button says **Contact us**; the address is plain text under it, so it can be
+  copied when a mailto: link does nothing.
 - **Small screens:** a menu button opens the section links (`disclosure_controller.js`); following a
   link closes it. In-page links scroll smoothly unless reduced motion is set, and land below the
   sticky header (`scroll-margin-top`).

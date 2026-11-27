@@ -132,16 +132,23 @@ nav.pagy a:focus-visible { @apply outline-2 outline-offset-2 outline-brand-600; 
 .site-feature-icon svg { @apply size-[22px]; }
 .site-feature h3 { @apply m-0 mb-1.5 text-lg font-semibold; }
 .site-feature p { @apply m-0 text-neutral-700; }
-.site-mission { @apply grid gap-12 lg:grid-cols-2; }
-.site-mission .site-sub { @apply mb-0; }
-.site-principles { @apply m-0 mt-6 grid list-none gap-4 p-0 sm:grid-cols-2; }
-.site-principles b { @apply block; }
-.site-principles span { @apply text-sm text-neutral-500; }
-.site-subjects-heading { @apply m-0 mb-4 text-lg font-semibold; }
-.site-subjects { @apply m-0 grid list-none grid-cols-2 gap-3 p-0; }
-.site-subjects li { @apply rounded-surface border border-neutral-200 bg-white p-5 font-semibold; }
+/* Mission: the statement leads, "Our mission" is a small label above it; then three facts in the
+   features' icon tiles, without cards so the two bands don't read as one list; then subjects as
+   pill labels (not cards: those look clickable). */
+.site-mission { @apply max-w-3xl; }
+.site-band h2.site-label { @apply mb-3 text-sm font-bold tracking-[0.08em] text-brand-700 uppercase; }
+.site-statement { @apply m-0 text-2xl leading-snug font-semibold tracking-tight text-balance text-neutral-900 md:text-3xl; }
+.site-facts { @apply m-0 mt-10 grid list-none gap-x-8 gap-y-7 p-0 md:grid-cols-3; }
+.site-facts li { @apply flex gap-3.5 md:flex-col md:gap-0; }
+.site-facts .site-feature-icon { @apply shrink-0 md:mb-3; }
+.site-facts h3 { @apply m-0 mb-1 text-base font-semibold; }
+.site-facts p { @apply m-0 text-neutral-700; }
+.site-subjects { @apply mt-10 flex flex-wrap items-center gap-x-3 gap-y-2.5 border-t border-neutral-200 pt-7; }
+.site-subjects h3 { @apply m-0 mr-2 text-sm font-semibold text-neutral-700; }
+.site-subjects ul { @apply m-0 flex list-none flex-wrap gap-2 p-0; }
+.site-subjects li { @apply rounded-pill border border-neutral-200 bg-white px-3 py-1 text-sm font-medium text-neutral-700; }
 .site-contact { @apply text-center; }
-.site-contact .site-sub { @apply mx-auto mb-8; }
+.site-contact .site-sub { @apply mx-auto mb-8 text-balance; }
 .site-contact-actions { @apply flex flex-col items-center gap-3; }
 .site-contact-address { @apply m-0 text-sm text-neutral-500; }
 .site-contact-address span { @apply font-medium text-neutral-900; }
