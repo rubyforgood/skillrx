@@ -111,7 +111,14 @@ download again. Don't edit them by hand: SkillRx-specific values go in `applicat
   group, and its seven items fit without scrolling, so collapsing it by default would only add a
   click to every admin task. (Human Essentials collapses its groups because it has four, holding 34
   items.)
-- **Account strip at the bottom:** avatar, email, role, and an account menu holding **Sign out**.
+- **Account strip at the bottom:** avatar, email and role. **The whole row is the account menu's
+  button** (`.shell-account-trigger`, the `<rfg-menu>` trigger), with an up-down chevron, not a
+  small ⋯: in sidebar apps (Slack, Discord, VS Code) your own row opens your account. **The menu
+  names the account first** (email, role), then **Sign out**; anything added later (Settings, Help)
+  goes above Sign out. It opens above the row, 240px wide, above the phone drawer (`z-[55]`). The
+  avatar inside the button is `aria-hidden`, so the button's name is the email and role it shows.
+  Preview: `previews/account-menu.html`. The account stays at the bottom on a phone too (in the
+  drawer): the top-right avatar was considered and dropped (decisions.md, 2026-11-27).
   The menu's items use `<rfg-menu>`'s item look (8px 12px, 14px medium, gray hover, 8px panel
   radius). Until 0.1.9 is vendored, `sidebar.css` sets the same values: 0.1.8 gave items none, and
   "Sign out" was a bare button in a rounded bubble.

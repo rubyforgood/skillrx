@@ -454,6 +454,31 @@ uneven padding between beacons and admin."
   that fails at 12px), not yet released; until it is, `sm:mr-1` on the Provider field adds the 4px
   in SkillRx. Remove it on upgrade.
 
+## 2026-11-27: The account row opens the account menu
+
+**Asked:** "the ellipsis menu near the avatar footer triggers a 'sign out' that is in an odd bubble
+and does not match the design system, fix this. Also why is the avatar in the footer instead of top
+right? make recommendations based on industry std." Then, from `previews/account-menu.html`: "do 1
+and 2, skip 3."
+
+**The bubble:** `<rfg-menu>` 0.1.8 gave items no style and its panel the 16px surface radius. Fixed
+in the design system (main, 3ab5ab4, for 0.1.9); `sidebar.css` carries the same values until then.
+
+**Why the account is at the bottom:** apps with a top bar put it top right (GitHub, Google, Jira);
+apps with only a sidebar put it at the bottom of the sidebar (Slack, Discord, VS Code). SkillRx
+chose a sidebar with no top bar (2026-11-24), as Human Essentials did. Kept there.
+
+**Decision:**
+1. **The whole row is the button**, with an up-down chevron, replacing a 28px ⋯ that usually means
+   "more actions for this item", not "your account".
+2. **The menu names the account** (email and role) before Sign out, as GitHub, Google and Linear do.
+3. ~~On a phone, an avatar at the top right of the top bar.~~ **Skipped.** Common (Google, Apple,
+   GitHub, Atlassian, Material's top app bar), but apps with a sidebar drawer, like Linear and
+   Notion, keep the account in the drawer, and it only saves a tap.
+
+Found on the way: on a phone the menu opened behind the drawer (the popover's z-30 under the
+drawer's z-50). It's z-55 now.
+
 ## 2026-11-27: Validation messages say what to do
 
 **Asked:** "Title can't be blank -- this validation error copy does not sound right, does it match

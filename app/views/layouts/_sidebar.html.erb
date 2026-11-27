@@ -46,19 +46,26 @@
     </ul>
   </nav>
 
-  <div class="shell-account">
-    <rfg-avatar name="<%= Current.user.email %>"></rfg-avatar>
-    <div class="shell-account-who">
-      <div class="shell-account-email"><%= Current.user.email %></div>
-      <div class="shell-account-role"><%= Current.user.is_admin? ? "Administrator" : "Contributor" %></div>
+  <%# The account (docs/design/design.md, "App shell"): the whole row is the menu's trigger, as in
+      Slack, Discord and VS Code, with an up-down chevron for "opens a menu". The menu names the
+      account first, then its actions. The avatar is aria-hidden: the button already says the email.
+      Plain HTML in the trigger, not helpers: in development Herb wraps ERB output in a <span>, and
+      the trigger must be <rfg-menu>'s direct child. docs/design/decisions.md, 2026-11-27. %>
+  <rfg-menu label="Account" placement="top-start" class="shell-account">
+    <button slot="trigger" type="button" class="shell-account-trigger">
+      <rfg-avatar name="<%= Current.user.email %>" aria-hidden="true"></rfg-avatar>
+      <span class="shell-account-who">
+        <span class="shell-account-email"><%= Current.user.email %></span>
+        <span class="shell-account-role"><%= Current.user.is_admin? ? "Administrator" : "Contributor" %></span>
+      </span>
+      <svg class="shell-account-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m7 15 5 5 5-5"/><path d="m7 9 5-5 5 5"/></svg>
+    </button>
+    <div class="shell-account-menu-head">
+      <span class="shell-account-email"><%= Current.user.email %></span>
+      <span class="shell-account-role"><%= Current.user.is_admin? ? "Administrator" : "Contributor" %></span>
     </div>
-    <rfg-menu label="Account">
-      <rfg-button slot="trigger" variant="ghost" size="xs" aria-label="Account menu">
-        <svg slot="icon" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><circle cx="5" cy="12" r="1.8"/><circle cx="12" cy="12" r="1.8"/><circle cx="19" cy="12" r="1.8"/></svg>
-      </rfg-button>
-      <%= form_with url: shell_path(:session), method: :delete, class: "contents" do %>
-        <button type="submit" role="menuitem">Sign out</button>
-      <% end %>
-    </rfg-menu>
-  </div>
+    <%= form_with url: shell_path(:session), method: :delete do %>
+      <button type="submit" role="menuitem">Sign out</button>
+    <% end %>
+  </rfg-menu>
 </div>

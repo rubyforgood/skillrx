@@ -49,11 +49,21 @@
 .shell-nav-group[aria-expanded="false"] .shell-chevron { @apply -rotate-90; }
 
 /* The account strip and the page footer share one height and a full-bleed top border, so their
-   rules meet as one line (design.md, "the bottom strip"). */
-.shell-account { @apply flex h-16 shrink-0 items-center gap-2.5 border-t border-neutral-200 px-4 text-sm; }
-.shell-account-who { @apply min-w-0 flex-1; }
+   rules meet as one line (design.md, "the bottom strip").
+   The whole row is the account menu's trigger: a 64px button, gray on hover and while open. */
+.shell-account { @apply block shrink-0 border-t border-neutral-200; }
+.shell-account-trigger { @apply flex h-16 w-full cursor-pointer items-center gap-2.5 pr-3 pl-4 text-left text-sm text-neutral-900 hover:bg-neutral-50 aria-expanded:bg-neutral-50 focus-visible:outline-2 focus-visible:-outline-offset-2 focus-visible:outline-brand-600; }
+.shell-account-who { @apply flex min-w-0 flex-1 flex-col; }
 .shell-account-email { @apply truncate font-semibold; }
 .shell-account-role { @apply text-[13px] text-neutral-500; }
+.shell-account-chevron { @apply size-4 shrink-0 text-neutral-500; }
+/* The menu says whose account it is, then its actions. It opens above the row and is as wide as
+   the rail less 8px each side (shifted in by the menu's 8px edge padding). Matched with :has()
+   because the panel is portalled to <body>, away from the rail. z-[55]: above the phone drawer (z-50),
+   which the menu opens from; the popover's own z-30 put it behind the drawer. */
+.rfg-popover-panel[role="menu"]:has(.shell-account-menu-head) { @apply z-[55] w-60; }
+.shell-account-menu-head { @apply mb-1 flex flex-col border-b border-neutral-200 px-3 pt-2 pb-2.5 text-sm text-neutral-900; }
+.shell-account-menu-head .shell-account-email { @apply break-all whitespace-normal; }
 
 .shell-main { @apply flex min-h-screen flex-col lg:ml-64; }
 .shell-content { @apply flex-1 outline-none; }
