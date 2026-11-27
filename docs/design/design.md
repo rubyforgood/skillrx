@@ -79,7 +79,7 @@ Vendored at a pinned version, never loaded from a CDN at runtime:
 | `app/assets/tailwind/rfg-theme.css` | `tokens/theme.css`, imported with `theme(static)` so every token is emitted (the components read them as CSS variables) |
 | `vendor/javascript/rfg-*.js` | `dist/standalone/<name>.mjs`, pinned in `config/importmap.rb`, imported in `application.js` |
 
-Current version: **0.1.7** (upgraded 2026-11-26). To upgrade, change the version in the URL in each file's header and
+Current version: **0.1.8** (upgraded 2026-11-27). To upgrade, change the version in the URL in each file's header and
 download again. Don't edit them by hand: SkillRx-specific values go in `application.css`.
 
 ## App shell

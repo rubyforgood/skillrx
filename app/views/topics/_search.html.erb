@@ -5,7 +5,7 @@
     State's first option is Active, because with no filters the list shows active topics only
     (search_params defaults to state: active). "Any state" (blank) shows both. %>
 <% current = params.to_h.with_indifferent_access %>
-<%# The row (<rfg-filter-bar>, design system 0.1.7): Provider and Search always visible, then the
+<%# The row (<rfg-filter-bar>, design system 0.1.8): Provider and Search always visible, then the
     folded filters, Clear filters, and Sort at the far end. The panel opens below the whole row.
 
     Provider is the filter people change most, and it decides what the others narrow. It's shown
@@ -22,9 +22,7 @@
       data: { controller: "topics", topics_target: "searchForm", turbo_frame: "topic-list", turbo_action: "advance" } do |f| %>
   <rfg-filter-bar>
     <% if choosing_provider? %>
-      <%# sm:mr-1 makes the 12px gap to Search 16px, like the panel's columns. Design system main
-          (44128cb) does this in the component; remove this once SkillRx is on the release with it. %>
-      <div slot="search" class="w-full sm:w-64 sm:mr-1">
+      <div slot="search" class="w-full sm:w-64">
         <label for="provider_id" class="form-label">Provider</label>
         <%= select_tag :provider, options_for_select([ [ "All providers", "all" ] ] + provider_choices.map { |p| [ p.name, p.id.to_s ] }, provider_filter),
               id: "provider_id", class: "form-select", data: { action: "change->topics#searchTopics" } %>

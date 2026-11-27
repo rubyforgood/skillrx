@@ -16,13 +16,9 @@
 .jobs-body { @apply flex min-w-0 flex-col gap-5; }
 .jobs-body:empty { @apply hidden; }
 
-/* Tabs: <rfg-page-tabs>. Its link styles are ::slotted rules, and Tailwind's preflight
-   (* { padding: 0; border: 0 solid }) beats ::slotted from the light DOM, so they never applied.
-   The same values are set here until the design system ships its fix (it marks them !important,
-   which does win from inside a shadow root). The strip scrolls sideways on a phone, not the page. */
+/* Tabs: <rfg-page-tabs> (design system 0.1.8, whose tab styles hold under Tailwind's preflight).
+   The strip scrolls sideways on a phone, not the page. */
 .jobs-tabs { @apply -mx-4 overflow-x-auto px-4 sm:mx-0 sm:px-0; }
-.jobs-tabs rfg-page-tabs > a { @apply -mb-px inline-block border-b-2 border-transparent px-1 py-2.5 text-sm font-medium whitespace-nowrap text-neutral-500 no-underline hover:text-neutral-900; }
-.jobs-tabs rfg-page-tabs > a[aria-current="page"] { @apply border-brand-600 text-brand-700; }
 
 .jobs-body a:not(.button, .pagination-previous, .pagination-next) { @apply text-brand-700 underline-offset-2 hover:underline; }
 .jobs-engine a:focus-visible { @apply rounded-sm outline-2 outline-offset-2 outline-brand-600; }
