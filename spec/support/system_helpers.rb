@@ -12,6 +12,19 @@ module SystemHelpers
     expect(page).to have_no_css("html[aria-busy], turbo-frame[aria-busy]", visible: :all, wait: 5)
   end
 
+  # Clicks something that loads a whole new page through Turbo Drive, and waits until that page has
+  # replaced this one. wait_for_turbo alone can't: Turbo marks the page busy a moment after the click,
+  # so checking straight away sees nothing in progress, and the next assertion gets only the default
+  # wait for the whole visit. Under load that wasn't enough (a failure screenshot showed the old,
+  # still-filtered page). The current <body> is marked first; Turbo swaps in a new <body> on every
+  # visit, so the mark is gone exactly when the new page has rendered.
+  def click_and_wait_for_new_page(locator, wait: 15)
+    page.execute_script("document.body.dataset.replacedByNextVisit = 'pending'")
+    click_on(locator)
+    expect(page).to have_no_css("body[data-replaced-by-next-visit]", wait: wait)
+    wait_for_turbo
+  end
+
   # Opens the folded "Filters" panel of <rfg-filter-bar>, the way a person would, if it's closed,
   # and waits until `field` is visible. The button is inside two shadow roots (the bar's, then its
   # disclosure's), which Selenium's nested shadow_root finds lose track of, so it's clicked from a

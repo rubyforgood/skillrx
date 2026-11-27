@@ -350,8 +350,7 @@ RSpec.describe "Topics search", type: :system do
         expect(page).to have_select("Provider", selected: provider_2.name)
         expect(page).not_to have_text(english_active_topic.title)
 
-        click_button("Clear filters")
-        wait_for_turbo
+        click_and_wait_for_new_page("Clear filters")
         expect(page).to have_select("Provider", selected: "All providers")
         expect(page).to have_text(english_active_topic.title)
       end
@@ -363,10 +362,9 @@ RSpec.describe "Topics search", type: :system do
         wait_for_turbo
         expect(page).not_to have_text(english_active_topic.title)
 
-        click_button("Clear filters")
-        wait_for_turbo
-        # Wait for the cleared list first: Sort already says Oldest first before the redirect lands,
-        # so checking it first passed on the old page and raced the rest.
+        # Waits for the new page itself: Sort already says Oldest first on the old page, so any check
+        # made before the redirect lands passes or fails by timing. See click_and_wait_for_new_page.
+        click_and_wait_for_new_page("Clear filters")
         expect(page).to have_text(english_active_topic.title)
         expect(page).to have_select("Sort", selected: "Oldest first")
         # The cleared filters are folded away again (none is set), so look past visibility.
