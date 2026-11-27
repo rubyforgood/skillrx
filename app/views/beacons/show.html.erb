@@ -57,6 +57,7 @@
           </dl>
         </div>
       </section>
+      <%= render "shared/record_meta", record: @beacon, added_label: "Provisioned" %>
     </div>
 
     <div class="stack">
@@ -77,17 +78,6 @@
                     data: { turbo_confirm: "The beacon stops syncing at once and can't get new content until you regenerate a key.", confirm_button: "Revoke key" } %>
             <% end %>
           </div>
-        </div>
-      </section>
-
-      <section class="surface" aria-labelledby="beacon-record">
-        <div class="surface-head"><h2 id="beacon-record">Record</h2></div>
-        <div class="surface-body">
-          <dl class="details details--stacked">
-            <dt>Provisioned</dt><dd><%= @beacon.created_at.strftime("%b %-d, %Y at %-l:%M %p") %></dd>
-            <dt>Last updated</dt><dd><%= @beacon.updated_at.strftime("%b %-d, %Y at %-l:%M %p") %></dd>
-            <dt>ID</dt><dd><%= @beacon.id %></dd>
-          </dl>
         </div>
       </section>
     </div>

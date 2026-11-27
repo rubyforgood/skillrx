@@ -1,0 +1,10 @@
+<%# Row metadata on a record page (docs/design/design.md, "Record pages"): when the row was added and
+    last updated, and its ID, as one quiet line under the content. They describe the database row,
+    not the record, so they don't get a card of their own (decisions.md, 2026-11-27).
+    Locals: record; added_label ("Added" unless given, e.g. "Provisioned"). %>
+<% added_label = local_assigns.fetch(:added_label, "Added") %>
+<p class="record-meta">
+  <span><%= added_label %> <time datetime="<%= record.created_at.iso8601 %>"><%= record.created_at.strftime("%b %-d, %Y") %></time></span>
+  <span>Last updated <time datetime="<%= record.updated_at.iso8601 %>"><%= record.updated_at.strftime("%b %-d, %Y") %></time></span>
+  <span>ID <b><%= record.id %></b></span>
+</p>

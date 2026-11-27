@@ -8,13 +8,13 @@
   <% end %>
   <p class="back-link"><%= link_to "Back to providers", providers_path %></p>
 
-  <div class="grid-2">
-    <div class="stack">
+  <%# One column: a provider has a few facts and a list of people, not enough for a side column.
+      The type is under the name, so it isn't repeated in Details. %>
+  <div class="record-column">
       <section class="surface" aria-labelledby="provider-details">
         <div class="surface-head"><h2 id="provider-details">Details</h2></div>
         <div class="surface-body">
           <dl class="details">
-            <dt>Type</dt><dd><%= @provider.provider_type.presence || "Not specified" %></dd>
             <dt>File name prefix</dt>
             <dd><% if @provider.file_name_prefix.present? %><code class="uid"><%= @provider.file_name_prefix %></code><% else %><span class="muted">None</span><% end %></dd>
             <dt>Regions</dt>
@@ -23,7 +23,8 @@
                 <ul class="chips"><% @provider.regions.each do |region| %><li class="chip"><%= link_to region.name, region_path(region) %></li><% end %></ul>
               <% else %><span class="muted">None</span><% end %>
             </dd>
-            <dt>Topics</dt><dd><%= pluralize(@provider.topics.count, "topic") %></dd>
+            <%# Opens the topics list filtered to this provider, in any state, so the list matches the count. %>
+            <dt>Topics</dt><dd><%= link_to pluralize(@provider.topics.count, "topic"), topics_path(provider: @provider.id, search: { state: "" }) %></dd>
           </dl>
         </div>
       </section>
@@ -40,17 +41,7 @@
           <div class="surface-body"><p class="muted m-0">None yet. To add one, edit the user and choose this provider.</p></div>
         <% end %>
       </section>
-    </div>
 
-    <section class="surface" aria-labelledby="provider-record">
-      <div class="surface-head"><h2 id="provider-record">Record</h2></div>
-      <div class="surface-body">
-        <dl class="details details--stacked">
-          <dt>Added</dt><dd><%= @provider.created_at.strftime("%b %-d, %Y") %></dd>
-          <dt>Last updated</dt><dd><%= @provider.updated_at.strftime("%b %-d, %Y") %></dd>
-          <dt>ID</dt><dd><%= @provider.id %></dd>
-        </dl>
-      </div>
-    </section>
+      <%= render "shared/record_meta", record: @provider %>
   </div>
 </div>

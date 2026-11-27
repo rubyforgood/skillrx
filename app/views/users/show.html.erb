@@ -10,7 +10,7 @@
   <% end %>
   <p class="back-link"><%= link_to "Back to users", users_path %></p>
 
-  <div class="grid-2" id="<%= dom_id @user %>">
+  <div class="record-column" id="<%= dom_id @user %>">
     <section class="surface" aria-labelledby="user-access">
       <div class="surface-head"><h2 id="user-access">Access</h2></div>
       <div class="surface-body">
@@ -28,15 +28,6 @@
       </div>
     </section>
 
-    <section class="surface" aria-labelledby="user-record">
-      <div class="surface-head"><h2 id="user-record">Record</h2></div>
-      <div class="surface-body">
-        <dl class="details details--stacked">
-          <dt>Added</dt><dd><%= @user.created_at.strftime("%b %-d, %Y at %-l:%M %p") %></dd>
-          <dt>Last updated</dt><dd><%= @user.updated_at.strftime("%b %-d, %Y at %-l:%M %p") %></dd>
-          <dt>ID</dt><dd><%= @user.id %></dd>
-        </dl>
-      </div>
-    </section>
+    <%= render "shared/record_meta", record: @user %>
   </div>
 </div>

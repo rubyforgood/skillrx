@@ -259,12 +259,20 @@ nav.pagy a:focus-visible { @apply outline-2 outline-offset-2 outline-brand-600; 
 .details { @apply m-0 grid gap-x-8 gap-y-4 sm:grid-cols-[12rem_1fr]; }
 .details dt { @apply text-sm font-medium text-neutral-500; }
 .details dd { @apply m-0 min-w-0 break-words text-neutral-900; }
+/* A link as a value ("13 topics"), like the people list's links; chips keep their own style. Not
+   `dd > a`: in development Herb wraps ERB output in a <span>. */
+.details dd a:not(.chip a) { @apply font-medium text-brand-700 underline-offset-2 hover:underline; }
 .prose-text { @apply m-0 max-w-[70ch] whitespace-pre-line text-neutral-900; }
 .chips { @apply m-0 flex list-none flex-wrap gap-1.5 p-0; }
 .chip { @apply inline-flex items-center rounded-pill bg-neutral-100 px-2.5 py-0.5 text-sm text-neutral-700; }
 .chip a { @apply text-neutral-700 no-underline hover:underline; }
 .muted { @apply text-neutral-500; }
 .stack { @apply flex flex-col gap-5; }
+/* A record page with no secondary content: one column at reading width. */
+.record-column { @apply flex max-w-3xl flex-col gap-5; }
+/* Row metadata: one quiet line under the content (shared/_record_meta). */
+.record-meta { @apply m-0 flex flex-wrap gap-x-4 gap-y-1 text-[13px] text-neutral-500; }
+.record-meta :is(time, b) { @apply font-medium text-neutral-700; }
 .grid-2 { @apply grid gap-5 lg:grid-cols-[2fr_1fr]; }
 .grid-2 > * { @apply min-w-0; }
 

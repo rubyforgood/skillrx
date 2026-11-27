@@ -300,6 +300,16 @@ The rule for every table (decided 2026-11-25, see decisions.md):
   danger.
 - **Record pages:** page header with the actions (primary Edit first, then secondary, then a quiet
   red Delete), a "Back to …" link, then panels; details in a `<dl class="details">`.
+  - **One column** (`.record-column`, reading width) unless there's real secondary content for a
+    side column (`.grid-2`): the beacon's API key is; three timestamps aren't. Shopify Polaris
+    gives the same rule for its two-column layout.
+  - **Row metadata is a quiet line, never a card:** `shared/_record_meta` renders "Added · Last
+    updated · ID" in 13px gray under the content, as GitHub, Linear and Notion show "created" and
+    "edited". It was a "Record" card on the right, stretched to the height of the left column.
+    Preview: `previews/record-page.html`.
+  - **Say a fact once:** what's under the name (a provider's type) isn't repeated in Details.
+  - **A count links to what it counts** when there's a list for it: "13 topics" opens the topics
+    list filtered to the provider, in any state, so the list matches the number.
 - **Confirming:** every `data-turbo-confirm` opens the app's own dialog (`shared/_confirm_dialog`,
   `confirm_dialog.js`), never the browser's `confirm()`. Cancel has focus. Topics and tags keep their
   two-step delete, now an `.inline-confirm` panel in place of the button.

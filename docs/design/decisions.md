@@ -463,6 +463,21 @@ uneven padding between beacons and admin."
   that fails at 12px), not yet released; until it is, `sm:mr-1` on the Provider field adds the 4px
   in SkillRx. Remove it on upgrade.
 
+## 2026-11-27: Record pages: one column, row metadata as a quiet line
+
+**Asked:** "On the provider's page, the record card looks odd with all of that data stacked, where
+is that coming from and why is it in a separate card on the right." From
+`previews/record-page.html`: "go with A."
+
+**Where it came from:** the migration's record pages put the row's `created_at`, `updated_at` and
+`id` in a "Record" card in a 2:1 side column. It stretched to the left column's height and had the
+same weight as the record's real details. Providers, users and beacons had it.
+
+**Decision (A):** row metadata is one quiet line under the content (`shared/_record_meta`), never a
+card. Providers and users are one column at reading width; beacons keep two columns because the
+API key is real secondary content. Also: a provider's type shows once (under the name), and its
+topic count links to its topics. Option B (contributors in a right column) was not chosen.
+
 ## 2026-11-27: The mission section leads with the mission
 
 **Asked:** "the our mission section looks odd, make recommendations based on industry std on
