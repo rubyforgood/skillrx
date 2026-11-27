@@ -76,10 +76,3 @@
 .shell-logo-link:focus-visible, .shell-colophon a:focus-visible {
   @apply outline-2 outline-offset-2 outline-brand-600;
 }
-
-/* Account menu items. Until design system 0.1.9 (main, 3ab5ab4) is vendored: <rfg-menu> 0.1.8 gives
-   items no look, so "Sign out" was a bare button (no padding, 16px, no hover) in a 16px-radius
-   panel. Same values as 0.1.9's defaults; delete this block when upgrading. The panel is portalled
-   to <body>, so it's matched by its role, not inside .shell-account. */
-body > .rfg-popover-panel[role="menu"] { border-radius: var(--radius-control); }
-.rfg-popover-panel[role="menu"] [role="menuitem"] { @apply block w-full px-3 py-2 text-left text-sm font-medium text-neutral-700 no-underline hover:bg-neutral-100 hover:text-neutral-900 focus-visible:bg-neutral-100 focus-visible:text-neutral-900 focus-visible:outline-2 focus-visible:-outline-offset-2 focus-visible:outline-brand-600; }
