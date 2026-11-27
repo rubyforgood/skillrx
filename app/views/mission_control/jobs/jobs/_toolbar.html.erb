@@ -1,0 +1,17 @@
+<%# Overrides the engine's partial for the app's button variants: Retry all is secondary, Discard
+    all ghost-danger (red on hover; the confirmation protects). Same routes. %>
+<div class="buttons is-right level-right">
+  <% if active_filters? %>
+    <span class="table-count"><%= pluralize(jobs_count, "job") %> found</span>
+  <% end %>
+
+  <% if jobs_status.failed? %>
+    <% target = active_filters? ? "selection" : "all" %>
+
+    <%= button_to "Retry #{target}", application_bulk_retries_path(@application, **jobs_filter_param),
+          method: :post, disabled: jobs_count == 0, class: "button button-secondary" %>
+    <%= button_to "Discard #{target}", application_bulk_discards_path(@application, **jobs_filter_param),
+          method: :post, disabled: jobs_count == 0, class: "button button-ghost-danger",
+          form: { data: { turbo_confirm: "Discard #{pluralize(jobs_count, "job")}? It can't be undone.", confirm_button: "Discard #{pluralize(jobs_count, "job")}" } } %>
+  <% end %>
+</div>

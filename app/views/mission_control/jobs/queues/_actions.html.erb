@@ -1,0 +1,8 @@
+<%# Overrides the engine's partial for the app's button variants (JobsHelper). Same routes. %>
+<div class="buttons is-right">
+  <% if queue.active? %>
+    <%= button_to "Pause", application_queue_pause_path(@application, queue.name), method: :post, class: jobs_button_class %>
+  <% else %>
+    <%= button_to "Resume", application_queue_pause_path(@application, queue.name), method: :delete, class: jobs_button_class %>
+  <% end %>
+</div>

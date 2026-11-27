@@ -1,0 +1,6 @@
+<%# Overrides the engine's partial for the app's button variants (JobsHelper). Same routes. %>
+<div class="buttons is-right">
+  <%= button_to "Retry", application_job_retry_path(@application, job.job_id, params: jobs_filter_param), class: jobs_button_class %>
+  <%= button_to "Discard", application_job_discard_path(@application, job.job_id, params: jobs_filter_param), class: jobs_button_class(:discard),
+        form: { data: { turbo_confirm: "Discard this job? It can't be undone.", confirm_button: "Discard job" } } %>
+</div>

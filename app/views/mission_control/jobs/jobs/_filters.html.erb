@@ -1,0 +1,51 @@
+<%# The engine's filters, unchanged but for Clear, which is a ghost button like the app's Clear
+    filters (it was a bare Bulma .button). Labels and fields are styled in components/jobs.css. %>
+<div class="filter level-left">
+  <%= form_for :filter, url: application_jobs_path(MissionControl::Jobs::Current.application, jobs_status), method: :get,
+    data: { controller: "form", action: "change->form#submit" } do |form| %>
+
+    <div class="field is-grouped is-grouped-multiline">
+      <div class="control">
+        <%= form.label :job_class_name, class: "label" %>
+        <div class="select is-rounded">
+          <%= form.text_field :job_class_name, value: @job_filters[:job_class_name], class: "input", list: "job-classes", placeholder: "Filter by job class...", autocomplete: "off" %>
+        </div>
+      </div>
+
+      <div class="control">
+        <%= form.label :queue_name, class: "label" %>
+        <div class="select is-rounded">
+          <%= form.text_field :queue_name, value: @job_filters[:queue_name], class: "input", list: "queue-names", placeholder: "Filter by queue name...", autocomplete: "off" %>
+        </div>
+      </div>
+
+      <% if jobs_status == "finished" %>
+        <%= render "mission_control/jobs/jobs/date_range_filter", form: form, attribute: :finished_at, label: "Finished" %>
+      <% else %>
+        <%= render "mission_control/jobs/jobs/date_range_filter", form: form, attribute: :enqueued_at, label: "Enqueued" %>
+      <% end %>
+
+      <% if jobs_status == "scheduled" %>
+        <%= render "mission_control/jobs/jobs/date_range_filter", form: form, attribute: :scheduled_at, label: "Scheduled" %>
+      <% end %>
+
+      <%= hidden_field_tag :server_id, MissionControl::Jobs::Current.server.id %>
+
+      <datalist id="job-classes" class="is-hidden">
+        <% job_class_names.each do |job_class_name| %>
+          <option value="<%= job_class_name %>"></option>
+        <% end %>
+      </datalist>
+
+      <datalist id="queue-names" class="is-hidden">
+        <% queue_names.each do |queue_name| %>
+          <option value="<%= queue_name %>"></option>
+        <% end %>
+      </datalist>
+
+      <div class="control is-align-self-flex-end">
+        <%= link_to "Clear", application_jobs_path(MissionControl::Jobs::Current.application, jobs_status, job_class_name: nil, queue_name: nil, finished_at: nil..nil), class: "button button-ghost" %>
+      </div>
+    </div>
+  <% end %>
+</div>

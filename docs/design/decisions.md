@@ -72,6 +72,7 @@ and entry pages, with different needs from the signed-in app.
   not a design one, so it's recorded here and not changed.
 - **Jobs opens in a new tab, as it did**, and now says so: an icon, and "(opens in a new tab)" for
   screen readers (WCAG 3.2.5 advisory, and design.md's link rules).
+  *Superseded 2026-11-26: Jobs renders in the shell and opens in place (see below).*
 - **The mobile drawer is new.** Below the `md` breakpoint the old sidebar was moved off screen with
   no way to open it, so on a phone there was no navigation at all. Below `lg` there is now a top bar
   with a menu button that opens the rail as a drawer (Escape or the backdrop closes it, focus goes in
@@ -452,3 +453,38 @@ uneven padding between beacons and admin."
   in the bar is the same distance from the next. Fixed in the design system (`44128cb`, with a check
   that fails at 12px), not yet released; until it is, `sm:mr-1` on the Provider field adds the 4px
   in SkillRx. Remove it on upgrade.
+
+## 2026-11-26: Jobs in the design system
+
+**Asked:** "migrate the job page to the design system. It looks completely different at the moment."
+
+**Before:** Mission Control Jobs' own layout: Bulma, a "Back to main app" link, no rail, opened in
+a new tab. Listed under "Not migrated" because restyling a gem's views means maintaining a fork.
+
+**Decision:** render it inside the app shell and override as little as possible.
+- **Override the layout, not the pages.** Rails lets an app override an engine's views by path. The
+  layout plus three small partials beside it, and the six partials that hold buttons, are
+  overridden; the page templates render as shipped. That's 10 short files to diff on an upgrade,
+  not ~50. This is how Sidekiq Web, GoodJob and Mission Control are usually brought into an admin
+  area: the host's chrome around them, the engine's content inside.
+- **Style Bulma's class names, don't load Bulma.** `components/jobs.css` maps the ~30 names the
+  templates use onto the app's tokens, scoped to `.jobs-engine`.
+- **Buttons are overridden, not mapped,** so they carry the app's real variants and the button
+  audits check them like any other: row actions ghost at 32px, Discard ghost-danger, confirmations
+  in the app's dialog.
+- **Jobs opens in place**, with no external-link mark: it's no longer a different app.
+
+**Found on the way:**
+- `<rfg-page-tabs>` lost its whole look under Tailwind's preflight: a page's rules beat `::slotted`.
+  Fixed in the design system (`!important` on slotted declarations, with a story under a reset and
+  a check that fails on the old component). Until SkillRx is on that release, `jobs.css` sets the
+  same values from the light DOM.
+- The WCAG audit sorted screens into roles by an `admin/` controller prefix, which SkillRx doesn't
+  use, so every admin screen was visited as a contributor, redirected to Topics, and audited as
+  Topics. It now uses the adapter's `ADMIN` rule: 46 pages audited (was 36), 0 violations.
+- Inside the engine, every URL gets `?server_id=`, the app's own links too. The shell uses
+  `shell_path(:name)`, which drops it.
+
+**Measured:** 528 examples, 0 failures; WCAG 0 on 46 pages; button audits 0 and 0 (175 buttons on
+52 screen visits). No sideways page scroll at 390px.
+

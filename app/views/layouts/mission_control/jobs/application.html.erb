@@ -1,0 +1,28 @@
+<%# Jobs (the Mission Control Jobs engine) inside the SkillRx shell, so it looks and works like every
+    other admin page: the rail, the page header, design-system tabs, buttons and tables. This file
+    overrides the engine's own layout, which loaded Bulma and its own importmap.
+
+    What's overridden: this layout, three partials beside it (_navigation, _flash,
+    _application_selection), and the six small partials that hold the engine's buttons
+    (app/views/mission_control/jobs/: the action partials, _toolbar, _filters), so buttons carry
+    the app's variants. The engine's page templates still render as shipped, with Bulma's class
+    names; components/jobs.css gives those the design system's look, scoped to .jobs-engine.
+    Overriding every template would fork the gem; on a gem upgrade, diff only these files.
+    docs/design/decisions.md, 2026-11-26. %>
+<% content_for :title, "#{page_title} · Jobs" %>
+<% content_for :shell_content do %>
+  <div class="page jobs-engine">
+    <% if action_name == "index" %>
+      <%# shared/page_header's markup, written out: the partial yields for its actions, and inside a
+          layout a bare yield is the page itself, so the list rendered twice. %>
+      <header class="page-header"><div class="page-header-titles"><h1>Jobs</h1></div></header>
+    <% end %>
+    <%= render "layouts/mission_control/jobs/flash" %>
+    <%= render "layouts/mission_control/jobs/application_selection" %>
+    <%= render "layouts/mission_control/jobs/navigation" %>
+    <div class="jobs-body">
+      <%= yield %>
+    </div>
+  </div>
+<% end %>
+<%= render template: "layouts/application" %>

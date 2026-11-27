@@ -1,0 +1,11 @@
+<%# The engine's sections as design-system page tabs: each is its own URL, so links with
+    aria-current, not role="tab". Labels in sentence case ("In progress jobs (0)"; the engine
+    titleizes them). Plain <a>, not link_to: in development Herb wraps ERB output in a <span>,
+    and a slotted link must be the component's direct child. %>
+<div class="jobs-tabs">
+  <rfg-page-tabs label="Job sections">
+    <% navigation_sections.each do |key, (label, url)| %>
+      <a href="<%= url %>"<% if key == current_section %> aria-current="page"<% end %>><%= label.downcase.upcase_first %></a>
+    <% end %>
+  </rfg-page-tabs>
+</div>

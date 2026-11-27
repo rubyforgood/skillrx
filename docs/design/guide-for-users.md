@@ -27,7 +27,6 @@ The menu runs down the left side of every page.
 - **Beacons** (administrators only): the devices in the field that serve SkillRx content offline.
 - **Administration** (administrators only): providers, regions, languages, tags, users, import
   reports and jobs. The group is open to start with; select **Administration** to fold it away.
-  **Jobs** opens in a new tab.
 
 The page you're on is highlighted in blue.
 
@@ -79,6 +78,12 @@ pressing Enter by mistake does nothing, and **Escape** cancels.
 
 Forms mark required fields with a red **\***. If something's missing when you save, a list of
 what to fix appears at the top, and each field says what's wrong with it.
+
+## Jobs
+
+**Jobs** (administrators only) shows SkillRx's background work, such as imports and beacon updates.
+It now opens in the same window, with the menu, like every other page. The tabs along the top show
+each kind of job. A job that failed can be retried or discarded; discarding asks first.
 
 ## Beacons
 

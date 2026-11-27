@@ -47,7 +47,6 @@
 .shell-nav-sublist .shell-nav-link[aria-current="page"] { @apply font-semibold; }
 .shell-chevron { @apply ml-auto transition-transform; }
 .shell-nav-group[aria-expanded="false"] .shell-chevron { @apply -rotate-90; }
-.shell-external { @apply ml-auto !size-4 text-neutral-500; }
 
 /* The account strip and the page footer share one height and a full-bleed top border, so their
    rules meet as one line (design.md, "the bottom strip"). */

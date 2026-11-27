@@ -1,0 +1,6 @@
+<%# Overrides the engine's partial for the app's button variants (JobsHelper). Same route. %>
+<div class="buttons is-right">
+  <% if recurring_task.runnable? %>
+    <%= button_to "Run now", application_recurring_task_path(@application, recurring_task.id), class: jobs_button_class, method: :put %>
+  <% end %>
+</div>

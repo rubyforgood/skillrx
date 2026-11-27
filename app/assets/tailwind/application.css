@@ -4,6 +4,7 @@
 @import "./rfg-theme.css" theme(static);
 @import "./components/sidebar.css";
 @import "./components/tom-select.css";
+@import "./components/jobs.css";
 
 /* SkillRx's Local answers to the design system's token roles (docs/design/design.md, "Color").
    `static` so every token is emitted even when no utility class uses it: the Web Components read

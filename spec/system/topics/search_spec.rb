@@ -365,6 +365,9 @@ RSpec.describe "Topics search", type: :system do
 
         click_button("Clear filters")
         wait_for_turbo
+        # Wait for the cleared list first: Sort already says Oldest first before the redirect lands,
+        # so checking it first passed on the old page and raced the rest.
+        expect(page).to have_text(english_active_topic.title)
         expect(page).to have_select("Sort", selected: "Oldest first")
         # The cleared filters are folded away again (none is set), so look past visibility.
         expect(page).to have_select("search_language_id", selected: "Any language", visible: :all)

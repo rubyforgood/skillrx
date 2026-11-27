@@ -67,8 +67,11 @@ async function audit(page, label, path) {
   // skipped the cache whose staleness rule is the point.
   const routed = allTargets();
   const forRole = (role) => routed
+    // Admin screens by the adapter's ADMIN rule (targets.js), not a controller prefix: SkillRx's
+    // admin controllers aren't under admin/, so they were visited as a contributor, redirected to
+    // Topics, and audited as Topics (found 2026-11-26, when Jobs came back 403).
     .filter((t) => (t.controller.startsWith("partners/") ? "partner"
-      : t.controller.startsWith("admin") ? "super" : "bank") === role)
+      : ADMIN(t.path) ? "super" : "bank") === role)
     .map((t) => [t.path, t.path]);
 
   // Emails come from the seam's RUNS; the role-name classification just above is this audit's

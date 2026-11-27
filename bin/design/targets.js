@@ -34,7 +34,8 @@ function targets() {
 // these six controllers redirect a contributor to /topics. Beacons are visible to both roles.
 const ADMIN_CONTROLLERS = new Set(["users", "regions", "providers", "languages", "tags", "import_reports"]);
 const byPath = (p) => targets().find((t) => t.path === p);
-const ADMIN = (p) => { const t = byPath(p); return !!t && ADMIN_CONTROLLERS.has(t.controller); };
+// Jobs (mission_control/jobs/*) is admin-only too: a contributor gets 403 from JobsController.
+const ADMIN = (p) => { const t = byPath(p); return !!t && (ADMIN_CONTROLLERS.has(t.controller) || t.controller.startsWith("mission_control/")); };
 const SECONDARY = () => false;
 const PRIMARY = (p) => !ADMIN(p);
 

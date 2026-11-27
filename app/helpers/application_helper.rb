@@ -19,6 +19,13 @@ module ApplicationHelper
     end
   end
 
+  # The app's own paths in the shell (logo, rail, sign out), which also renders around the Jobs
+  # engine. There, route helpers are the engine's, so these go through main_app, and the engine's
+  # default_url_options add ?server_id=… to every URL, main_app's too; passing nil drops it.
+  def shell_path(name)
+    main_app.public_send(:"#{name}_path", server_id: nil)
+  end
+
   # A sidebar destination: `nav_link_to "Label", path` or `nav_link_to(path) { ... }`. Current for
   # its own path and everything under it, so /topics/new still shows Topics as where you are.
   # `aria-current` carries both the meaning and the styling; there is no separate active class.

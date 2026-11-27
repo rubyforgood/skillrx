@@ -52,4 +52,29 @@ Rails.application.routes.routes.each do |r|
   targets << {path: path, controller: controller, action: action}
 end
 
+# Jobs: the Mission Control engine's list screens, rendered in the app shell since 2026-11-26. Its
+# routes are the engine's, mounted at /jobs, with the one application's id. Job and worker pages are
+# left out: their ids come and go as jobs run. :status takes every status Solid Queue lists.
+if defined?(MissionControl::Jobs) && (app = MissionControl::Jobs.applications.first)
+  mount = "/jobs"
+  MissionControl::Jobs::Engine.routes.routes.each do |r|
+    next unless r.verb.to_s.include?("GET")
+    path = r.path.spec.to_s.sub("(.:format)", "")
+    next if path.match?(/:(?!application_id|status)[a-z_]+/)
+    next unless path.include?(":application_id") || path == "/" # the rest repeat them without it
+    paths = if path.include?(":status")
+      %w[failed in_progress blocked scheduled finished].map { path.sub(":status", _1) }
+    else
+      [ path ]
+    end
+    paths.each do |one|
+      full = mount + one.sub(":application_id", app.id.to_s)
+      full = mount if full == "#{mount}/"
+      next if seen[full]
+      seen[full] = true
+      targets << { path: full, controller: r.defaults[:controller], action: r.defaults[:action] }
+    end
+  end
+end
+
 puts JSON.generate(targets)

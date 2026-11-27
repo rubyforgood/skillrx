@@ -1,0 +1,6 @@
+<%# Overrides the engine's partial for the app's button variants (JobsHelper). Same routes. %>
+<div class="buttons is-right">
+  <%= button_to "Run now", application_job_dispatch_path(@application, job.job_id), class: jobs_button_class %>
+  <%= button_to "Discard", application_job_discard_path(@application, job.job_id), class: jobs_button_class(:discard),
+        form: { data: { turbo_confirm: "Discard this job? It can't be undone.", confirm_button: "Discard job" } } %>
+</div>

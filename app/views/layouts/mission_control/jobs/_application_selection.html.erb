@@ -1,0 +1,6 @@
+<%# The engine's app and server switcher. SkillRx has one app on one server, so it shows nothing;
+    "Back to main app" isn't needed either, since the rail is on every page. If a second server is
+    added, render the engine's servers partial here. %>
+<% if MissionControl::Jobs.applications.many? || @application&.servers&.many? %>
+  <%= render "layouts/mission_control/jobs/application_selection/servers", application: @application %>
+<% end %>

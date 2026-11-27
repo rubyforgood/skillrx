@@ -1,0 +1,4 @@
+<%# Overrides the engine's partial for the app's button variants (JobsHelper). Same route. %>
+<div class="buttons is-right">
+  <%= button_to "Run now", application_job_dispatch_path(@application, job.job_id), class: jobs_button_class %>
+</div>

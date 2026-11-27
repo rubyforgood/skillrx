@@ -291,13 +291,36 @@ Asked 2026-11-25: "make them more utilitarian and plain language." The rule:
   before the migration: "Minimum 8 characters" (no such validation) and "leave blank for all
   providers/topics" (a beacon gets only what's chosen on it; `Beacons::ManifestBuilder`).
 
+## Jobs
+
+**In the app shell** (decided 2026-11-26; it was the one admin page left in its own look, in a new
+tab). Mission Control Jobs is a gem with its own views, so the rule is: override as little as
+possible, style the rest.
+
+- **Overridden** (diff these on a gem upgrade): `layouts/mission_control/jobs/application.html.erb`
+  (renders inside `layouts/application` through `content_for :shell_content`), `_navigation`,
+  `_flash`, `_application_selection` beside it, and the six partials that hold buttons under
+  `app/views/mission_control/jobs/` (the action partials, `_toolbar`, `_filters`).
+- **Styled, not overridden:** every other engine template. `components/jobs.css` gives the Bulma
+  class names they use the app's look (tables, status tags as pills, headings, fields, pagination),
+  scoped to `.jobs-engine`. Bulma and the engine's importmap aren't loaded; the engine's one Stimulus
+  controller (`form`, filters submit on change) is in `app/javascript/controllers`.
+- **Sections are `<rfg-page-tabs>`**, in sentence case ("In progress jobs", not "In Progress").
+  They scroll sideways on a phone.
+- **Buttons:** row actions (Retry, Run now, Pause) are ghost at 32px and Discard is ghost-danger, as
+  in every other table; on a job's page the action is secondary at 40px (`JobsHelper`). Discards
+  confirm in the app's dialog.
+- **The shell's links use `shell_path(:name)`**: inside the engine, route helpers are the engine's,
+  and its `default_url_options` add `?server_id=` to every URL, `main_app`'s too.
+- **Audited:** `bin/design/route-targets.rb` lists the engine's list screens, so the WCAG and button
+  audits visit them as an administrator.
+
 ## Not migrated
 
 What is deliberately left as it is, and why.
 
 | What | Why |
 | --- | --- |
-| **Jobs** (`/jobs`) | Mission Control's own engine UI, opened in a new tab. Restyling a gem's views means maintaining a fork of them. |
 | **Emails** (`app/views/*_mailer`) | Email clients need inline styles and tables; a separate piece of work. |
 | **The JSON API** (`/api/v1`) | No UI. |
 | **`registrations#new`, `topics/tags#index`** | Routed, but no controller exists; both 500. For the app's maintainers (onboarding-maintainers.md). |

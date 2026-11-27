@@ -34,7 +34,7 @@
               aria-controls="shell-rail" data-shell-target="openButton" data-action="shell#openDrawer">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M4 6h16M4 12h16M4 18h16"/></svg>
       </button>
-      <%= link_to root_path do %><%= image_tag("skill.svg", alt: "SkillRx home", class: "h-8") %><% end %>
+      <%= link_to shell_path(:root) do %><%= image_tag("skill.svg", alt: "SkillRx home", class: "h-8") %><% end %>
     </header>
 
     <div class="shell-backdrop" data-action="click->shell#closeDrawer"></div>
@@ -45,7 +45,7 @@
     <div class="shell-main">
       <main id="main-content" class="shell-content" tabindex="-1">
         <%= render "shared/flash" %>
-        <%= yield %>
+        <%= content_for?(:shell_content) ? yield(:shell_content) : yield %>
       </main>
       <footer class="shell-colophon">
         <p>Built by <a href="https://rubyforgood.org">Ruby For Good</a> volunteers</p>
