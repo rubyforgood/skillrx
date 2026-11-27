@@ -79,7 +79,7 @@ Vendored at a pinned version, never loaded from a CDN at runtime:
 | `app/assets/tailwind/rfg-theme.css` | `tokens/theme.css`, imported with `theme(static)` so every token is emitted (the components read them as CSS variables) |
 | `vendor/javascript/rfg-*.js` | `dist/standalone/<name>.mjs`, pinned in `config/importmap.rb`, imported in `application.js` |
 
-Current version: **0.1.9** (upgraded 2026-11-27). To upgrade, change the version in the URL in each file's header and
+Current version: **0.1.10** (upgraded 2026-11-27). To upgrade, change the version in the URL in each file's header and
 download again. Don't edit them by hand: SkillRx-specific values go in `application.css`.
 
 ## App shell
@@ -119,8 +119,8 @@ download again. Don't edit them by hand: SkillRx-specific values go in `applicat
   avatar inside the button is `aria-hidden`, so the button's name is the email and role it shows.
   Preview: `previews/account-menu.html`. The account stays at the bottom on a phone too (in the
   drawer): the top-right avatar was considered and dropped (decisions.md, 2026-11-27).
-  The menu's items use `<rfg-menu>`'s item look (8px 12px, 14px medium, gray hover, 8px panel
-  radius), from design system 0.1.9; 0.1.8 gave items none, and "Sign out" was a bare button in a
+  The menu's items use `<rfg-menu>`'s item look (8px 12px, 14px regular, gray hover, 8px panel
+  radius), from design system 0.1.9 (regular weight since 0.1.10); 0.1.8 gave items none, and "Sign out" was a bare button in a
   rounded bubble.
   Signing out is not destructive, so it isn't red.
 - **Footer:** "Built by Ruby For Good volunteers", at the end of the page, not fixed to the window.

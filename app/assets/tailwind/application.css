@@ -1,5 +1,5 @@
 @import "tailwindcss";
-/* Ruby For Good design system tokens, vendored from @rubyforgood/design-system@0.1.9
+/* Ruby For Good design system tokens, vendored from @rubyforgood/design-system@0.1.10
    (tokens/theme.css). See docs/design/design.md. */
 @import "./rfg-theme.css" theme(static);
 @import "./components/sidebar.css";

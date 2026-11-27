@@ -5,7 +5,7 @@
     State's first option is Active, because with no filters the list shows active topics only
     (search_params defaults to state: active). "Any state" (blank) shows both. %>
 <% current = params.to_h.with_indifferent_access %>
-<%# The row (<rfg-filter-bar>, design system 0.1.9): Provider and Search always visible, then the
+<%# The row (<rfg-filter-bar>, design system 0.1.10): Provider and Search always visible, then the
     folded filters, Clear filters, and Sort at the far end. The panel opens below the whole row.
 
     Provider is the filter people change most, and it decides what the others narrow. It's shown
