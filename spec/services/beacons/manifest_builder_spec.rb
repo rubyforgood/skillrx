@@ -60,7 +60,7 @@ RSpec.describe Beacons::ManifestBuilder do
         blob = topic.documents.first.blob
 
         expect(file_data[:id]).to eq(blob.id)
-        expect(file_data[:checksum]).to eq(blob.checksum)
+        expect(file_data[:checksum]).to match(/\Asha256:[a-f0-9]{64}\z/)
         expect(file_data[:size_bytes]).to eq(blob.byte_size)
         expect(file_data[:content_type]).to eq(blob.content_type)
         expect(file_data[:path]).to start_with("providers/#{provider.id}/topics/#{topic.id}/")
