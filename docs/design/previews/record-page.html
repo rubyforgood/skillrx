@@ -1,0 +1,254 @@
+<title>SkillRx record page layout</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Figtree:wght@400;500;600;700;800&display=swap">
+<style>
+  /* Layout: a sticky chooser (Today / A / B, Desktop / Phone), then a provider's record page in the
+     SkillRx shell, then numbered notes keyed to markers and a short "where it applies" list. Single
+     light look on purpose: it previews SkillRx, which is light only. Values are SkillRx's tokens:
+     logo blue, slate neutrals, 16px surfaces, 8px controls. */
+  :root {
+    --brand-50: #eef6fb; --brand-100: #d5e8f4; --brand-600: #055889; --brand-700: #044a72;
+    --n-50: #f8fafc; --n-100: #f1f5f9; --n-200: #e2e8f0; --n-300: #cbd5e1; --n-500: #64748b; --n-700: #334155; --n-900: #0f172a;
+    --mark: #e11d48;
+    --font: "Figtree", ui-sans-serif, system-ui, -apple-system, "Segoe UI", sans-serif;
+    color-scheme: light;
+  }
+  * { box-sizing: border-box; }
+  body { margin: 0; font-family: var(--font); color: var(--n-900); background: var(--n-100); font-size: 14px; }
+  .wrap { max-width: 1240px; margin: 0 auto; padding-block: 0 64px; padding-left: max(16px, env(safe-area-inset-left, 0px)); padding-right: max(16px, env(safe-area-inset-right, 0px)); }
+  button { font: inherit; }
+  :focus-visible { outline: 2px solid var(--brand-600); outline-offset: 2px; }
+
+  .chooser { position: sticky; top: env(safe-area-inset-top, 0px); z-index: 40; background: var(--n-900); color: #fff; margin: 0 calc(-1 * max(16px, env(safe-area-inset-left, 0px))) 24px; padding: 10px max(16px, env(safe-area-inset-left, 0px)); display: flex; flex-wrap: wrap; gap: 8px 20px; align-items: center; }
+  body::before { content: ""; position: fixed; inset: 0 0 auto; height: env(safe-area-inset-top, 0px); z-index: 30; background: var(--n-900); }
+  .chooser .grp { display: flex; flex-wrap: wrap; gap: 6px; align-items: center; }
+  .chooser b { font-weight: 600; margin-right: 4px; }
+  .chooser button { background: #374151; color: #fff; border: 0; border-radius: 6px; padding: 6px 10px; cursor: pointer; }
+  .chooser button[aria-pressed="true"] { background: #fff; color: var(--n-900); font-weight: 600; }
+  .chooser label { display: inline-flex; gap: 6px; align-items: center; cursor: pointer; }
+
+  h1.doc { font-size: 26px; margin: 8px 0 6px; text-wrap: balance; }
+  .lede { color: var(--n-700); max-width: 74ch; line-height: 1.55; margin: 0 0 20px; }
+
+  .stage { display: flex; justify-content: center; }
+  .app { width: 100%; max-width: 1180px; background: var(--n-50); border: 1px solid var(--n-200); border-radius: 12px; overflow: hidden; box-shadow: 0 1px 3px rgb(15 23 42 / .08); container-type: inline-size; }
+  [data-device="phone"] .app { max-width: 390px; }
+  .shell { display: grid; grid-template-columns: 232px minmax(0, 1fr); min-height: 560px; }
+  @container (max-width: 700px) { .shell { grid-template-columns: minmax(0, 1fr); } .rail { display: none; } .topbar { display: flex !important; } }
+  .topbar { display: none; height: 56px; align-items: center; gap: 12px; padding: 0 16px; background: #fff; border-bottom: 1px solid var(--n-200); font-weight: 800; color: var(--brand-600); }
+  .rail { background: #fff; border-right: 1px solid var(--n-200); }
+  .logo { height: 60px; display: flex; align-items: center; padding: 0 18px; border-bottom: 1px solid var(--n-200); font-weight: 800; color: var(--brand-600); letter-spacing: .02em; }
+  .nav { padding: 14px 10px; display: flex; flex-direction: column; gap: 2px; font-size: 15px; }
+  .nav span { padding: 8px 10px; border-radius: 8px; color: var(--n-700); font-weight: 500; }
+  .nav .sub { padding-left: 24px; font-size: 14px; font-weight: 400; }
+  .nav .cur { background: var(--brand-50); color: var(--brand-700); font-weight: 600; }
+
+  .page { padding: 28px 32px 40px; display: flex; flex-direction: column; gap: 20px; min-width: 0; position: relative; }
+  @container (max-width: 700px) { .page { padding: 20px 16px 32px; } }
+  .ph { display: flex; flex-wrap: wrap; justify-content: space-between; align-items: flex-start; gap: 12px 16px; }
+  .ph h2 { margin: 0; font-size: 24px; letter-spacing: -0.01em; }
+  .ph .subt { margin: 4px 0 0; color: var(--n-500); font-size: 15px; }
+  .acts { display: flex; gap: 8px; }
+  .btn { display: inline-flex; align-items: center; height: 40px; padding: 0 14px; border-radius: 8px; border: 1px solid transparent; font-weight: 500; background: none; color: var(--n-700); }
+  .btn.sec { border-color: var(--n-500); background: #fff; color: var(--n-900); }
+  .back { margin: -8px 0 0; font-size: 14px; color: var(--brand-700); }
+
+  .grid2 { display: grid; gap: 20px; grid-template-columns: minmax(0, 2fr) minmax(0, 1fr); }
+  .grid2.top { align-items: start; }
+  @container (max-width: 900px) { .grid2 { grid-template-columns: minmax(0, 1fr); } }
+  .stack { display: flex; flex-direction: column; gap: 20px; min-width: 0; }
+  .one { max-width: 760px; display: flex; flex-direction: column; gap: 20px; }
+  .surface { background: #fff; border: 1px solid var(--n-200); border-radius: 16px; box-shadow: 0 1px 2px rgb(15 23 42 / .05); min-width: 0; }
+  .shead { display: flex; justify-content: space-between; align-items: center; padding: 16px 24px; border-bottom: 1px solid var(--n-200); }
+  .shead h3 { margin: 0; font-size: 15px; }
+  .shead .cnt { font-size: 13px; color: var(--n-500); }
+  .sbody { padding: 20px 24px; }
+  dl.details { margin: 0; display: grid; grid-template-columns: 180px minmax(0, 1fr); gap: 16px 24px; align-items: baseline; }
+  @container (max-width: 700px) { dl.details { grid-template-columns: minmax(0, 1fr); gap: 4px; } dl.details dd { margin-bottom: 12px; } }
+  dl.details dt { color: var(--n-500); font-size: 14px; }
+  dl.details dd { margin: 0; font-size: 15px; }
+  dl.stacked { grid-template-columns: minmax(0, 1fr); gap: 4px; }
+  dl.stacked dd { margin-bottom: 14px; }
+  .muted { color: var(--n-500); }
+  .chip { display: inline-block; background: var(--n-100); border-radius: 999px; padding: 2px 10px; font-size: 13px; }
+  a.lnk { color: var(--brand-700); text-decoration: none; font-weight: 500; }
+  a.lnk:hover { text-decoration: underline; }
+  .people { list-style: none; margin: 0; padding: 8px 0; }
+  .people li { display: flex; align-items: center; gap: 10px; padding: 8px 24px; }
+  .av { width: 28px; height: 28px; border-radius: 999px; background: var(--brand-100); color: var(--brand-700); display: grid; place-items: center; font-size: 11px; font-weight: 700; flex: none; }
+  .meta { margin: 0; font-size: 13px; color: var(--n-500); display: flex; flex-wrap: wrap; gap: 4px 14px; }
+  .meta b { font-weight: 500; color: var(--n-700); }
+
+  .mk { position: absolute; z-index: 3; width: 22px; height: 22px; border-radius: 999px; background: var(--mark); color: #fff; font-size: 12px; font-weight: 700; display: grid; place-items: center; box-shadow: 0 0 0 2px #fff; pointer-events: none; }
+  .mk.inline { position: static; display: inline-grid; vertical-align: middle; margin-left: 8px; }
+  .no-marks .mk { display: none; }
+  .v { display: none; }
+  [data-view="today"] .v-today, [data-view="a"] .v-a, [data-view="b"] .v-b { display: contents; }
+
+  .notes { margin-top: 28px; display: grid; gap: 14px; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); }
+  .note { background: #fff; border: 1px solid var(--n-200); border-radius: 12px; padding: 16px 18px; display: flex; flex-direction: column; gap: 6px; }
+  .note h3 { margin: 0; font-size: 15px; display: flex; gap: 10px; align-items: center; }
+  .note h3 .n { width: 22px; height: 22px; border-radius: 999px; background: var(--mark); color: #fff; font-size: 12px; display: grid; place-items: center; flex: none; }
+  .note p { margin: 0; line-height: 1.55; color: var(--n-700); }
+  .note .src { font-size: 13px; color: var(--n-500); }
+  .why { margin-top: 28px; max-width: 78ch; line-height: 1.6; color: var(--n-700); }
+  .why h2 { font-size: 18px; color: var(--n-900); margin: 0 0 8px; }
+  .why p, .why ul { margin: 0 0 12px; }
+  .why code { font-size: 13px; background: #fff; border: 1px solid var(--n-200); border-radius: 4px; padding: 0 4px; }
+  .rec-tag { display: inline-block; font-size: 11px; font-weight: 700; color: #166534; background: #e8f5ee; border-radius: 999px; padding: 1px 8px; margin-left: 6px; vertical-align: middle; }
+</style>
+
+<div class="wrap" id="root" data-view="a" data-device="desktop">
+  <div class="chooser" role="toolbar" aria-label="Preview options">
+    <div class="grp" role="group" aria-label="Version">
+      <b>Show</b>
+      <button type="button" data-k="view" data-v="today" aria-pressed="false">Today</button>
+      <button type="button" data-k="view" data-v="a" aria-pressed="true">A: one column (recommended)</button>
+      <button type="button" data-k="view" data-v="b" aria-pressed="false">B: people on the right</button>
+    </div>
+    <div class="grp" role="group" aria-label="Width">
+      <b>Width</b>
+      <button type="button" data-k="device" data-v="desktop" aria-pressed="true">Desktop</button>
+      <button type="button" data-k="device" data-v="phone" aria-pressed="false">Phone</button>
+    </div>
+    <label><input type="checkbox" id="marks" checked> Numbered markers</label>
+  </div>
+
+  <h1 class="doc">Record page: the "Record" card</h1>
+  <p class="lede">A provider's page today has a right-hand card titled "Record" holding three database fields: when the row was created and last updated, and its ID. It stretches to the height of the left column, so three small facts sit in a tall, mostly empty card with the same weight as the real details. The same card is on the user and beacon pages. Two ways to fix it; A is recommended.</p>
+
+  <div class="stage">
+    <div class="app">
+      <div class="shell">
+        <aside class="rail" aria-hidden="true">
+          <div class="logo">SKILL RX</div>
+          <div class="nav">
+            <span>Topics</span><span>Beacons</span><span>Administration</span>
+            <span class="sub cur">Providers</span><span class="sub">Regions</span><span class="sub">Languages</span>
+            <span class="sub">Tags</span><span class="sub">Users</span><span class="sub">Import reports</span><span class="sub">Jobs</span>
+          </div>
+        </aside>
+        <div>
+          <div class="topbar" aria-hidden="true">☰ <span>SKILL RX</span></div>
+          <div class="page">
+            <div class="ph">
+              <div>
+                <h2>Community health clinic</h2>
+                <p class="subt">ngo<span class="v v-a"><span class="mk inline">4</span></span><span class="v v-b"><span class="mk inline">4</span></span></p>
+              </div>
+              <div class="acts"><span class="btn">Delete</span><span class="btn sec">Edit</span></div>
+            </div>
+            <p class="back">← Back to providers</p>
+
+            <!-- Today -->
+            <div class="v v-today">
+              <div class="grid2">
+                <div class="stack">
+                  <section class="surface"><div class="shead"><h3>Details</h3></div><div class="sbody">
+                    <dl class="details">
+                      <dt>Type</dt><dd>ngo</dd>
+                      <dt>File name prefix</dt><dd class="muted">None</dd>
+                      <dt>Regions</dt><dd><span class="chip">Northeast</span></dd>
+                      <dt>Topics</dt><dd>13 topics</dd>
+                    </dl>
+                  </div></section>
+                  <section class="surface"><div class="shead"><h3>Contributors</h3><span class="cnt">1 person</span></div>
+                    <ul class="people"><li><span class="av">ME</span><a class="lnk" href="#" onclick="return false">me@mail.com</a></li></ul>
+                  </section>
+                </div>
+                <section class="surface"><div class="shead"><h3>Record</h3></div><div class="sbody">
+                  <dl class="details stacked">
+                    <dt>Added</dt><dd>Nov 25, 2026</dd>
+                    <dt>Last updated</dt><dd>Nov 25, 2026</dd>
+                    <dt>ID</dt><dd>4</dd>
+                  </dl>
+                </div></section>
+              </div>
+            </div>
+
+            <!-- A: one column, metadata as a quiet line -->
+            <div class="v v-a">
+              <div class="one">
+                <section class="surface"><div class="shead"><h3>Details</h3></div><div class="sbody">
+                  <dl class="details">
+                    <dt>File name prefix</dt><dd class="muted">None</dd>
+                    <dt>Regions</dt><dd><span class="chip">Northeast</span></dd>
+                    <dt>Topics</dt><dd><a class="lnk" href="#" onclick="return false">13 topics</a><span class="mk inline">3</span></dd>
+                  </dl>
+                </div></section>
+                <section class="surface"><div class="shead"><h3>Contributors</h3><span class="cnt">1 person</span></div>
+                  <ul class="people"><li><span class="av">ME</span><a class="lnk" href="#" onclick="return false">me@mail.com</a></li></ul>
+                </section>
+                <p class="meta"><span>Added <b>Nov 25, 2026</b></span><span>Last updated <b>Nov 25, 2026</b></span><span>ID <b>4</b></span><span class="mk inline" style="margin-left: 0">1</span></p>
+              </div>
+              <span class="mk" style="right: 24px; top: 150px;">2</span>
+            </div>
+
+            <!-- B: two columns, related people on the right -->
+            <div class="v v-b">
+              <div class="grid2 top">
+                <div class="stack">
+                  <section class="surface"><div class="shead"><h3>Details</h3></div><div class="sbody">
+                    <dl class="details">
+                      <dt>File name prefix</dt><dd class="muted">None</dd>
+                      <dt>Regions</dt><dd><span class="chip">Northeast</span></dd>
+                      <dt>Topics</dt><dd><a class="lnk" href="#" onclick="return false">13 topics</a><span class="mk inline">3</span></dd>
+                    </dl>
+                  </div></section>
+                  <p class="meta"><span>Added <b>Nov 25, 2026</b></span><span>Last updated <b>Nov 25, 2026</b></span><span>ID <b>4</b></span><span class="mk inline" style="margin-left: 0">1</span></p>
+                </div>
+                <section class="surface"><div class="shead"><h3>Contributors</h3><span class="cnt">1 person</span></div>
+                  <ul class="people"><li><span class="av">ME</span><a class="lnk" href="#" onclick="return false">me@mail.com</a></li></ul>
+                </section>
+              </div>
+              <span class="mk" style="right: 24px; top: 150px;">2</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="notes">
+    <article class="note">
+      <h3><span class="n">1</span>Timestamps and ID are a quiet line, not a card</h3>
+      <p>"Added", "Last updated" and "ID" describe the database row, not the provider. They go in one small gray line under the content, as GitHub, Linear and Notion show "created" and "edited". Still there for support and audits, without a card of their own.</p>
+      <p class="src">Today: a full card on the right with the same weight as Details.</p>
+    </article>
+    <article class="note">
+      <h3><span class="n">2</span>A side column only for real secondary content</h3>
+      <p><b>A</b> uses one column at reading width: this record has four facts and a list of people, not enough to fill two. <b>B</b> keeps two columns but puts the related people on the right, the way Stripe and Shopify Polaris use a sidebar. Either way cards align to their tops and don't stretch to match.</p>
+      <p class="src">Polaris: use the two-column layout only when there's secondary information to put in it.</p>
+    </article>
+    <article class="note">
+      <h3><span class="n">3</span>"13 topics" links to them</h3>
+      <p>The count opens the topics list filtered to this provider, which the list already supports. A count you can't follow is a dead end.</p>
+      <p class="src">Small extra, same change.</p>
+    </article>
+    <article class="note">
+      <h3><span class="n">4</span>Type is said once</h3>
+      <p>The type showed twice: under the name and as the first row of Details. It stays under the name, where it identifies the provider, and leaves Details. It shows as entered ("ngo"); it's free text, so the app doesn't recase it.</p>
+      <p class="src">Small extra, same change.</p>
+    </article>
+  </div>
+
+  <div class="why">
+    <h2>Where it applies</h2>
+    <ul>
+      <li><b>Providers</b> (<code>providers/show</code>): as previewed.</li>
+      <li><b>Users</b> (<code>users/show</code>): the same Record card beside Access. Same fix: a quiet line under Access.</li>
+      <li><b>Beacons</b> (<code>beacons/show</code>): its right column also holds the API key, which is real secondary content, so the two columns stay; only the Record card becomes the quiet line.</li>
+    </ul>
+    <p>design.md's "Record pages" section would get the rule: row metadata is a quiet line, never its own card.</p>
+  </div>
+</div>
+
+<script>
+  const root = document.getElementById("root");
+  document.querySelectorAll("[data-k]").forEach((b) => b.addEventListener("click", () => {
+    root.dataset[b.dataset.k] = b.dataset.v;
+    document.querySelectorAll(`[data-k="${b.dataset.k}"]`).forEach((x) => x.setAttribute("aria-pressed", String(x === b)));
+  }));
+  document.getElementById("marks").addEventListener("change", (e) => root.classList.toggle("no-marks", !e.target.checked));
+</script>
