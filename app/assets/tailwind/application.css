@@ -142,6 +142,9 @@ nav.pagy a:focus-visible { @apply outline-2 outline-offset-2 outline-brand-600; 
 .site-subjects li { @apply rounded-surface border border-neutral-200 bg-white p-5 font-semibold; }
 .site-contact { @apply text-center; }
 .site-contact .site-sub { @apply mx-auto mb-8; }
+.site-contact-actions { @apply flex flex-col items-center gap-3; }
+.site-contact-address { @apply m-0 text-sm text-neutral-500; }
+.site-contact-address span { @apply font-medium text-neutral-900; }
 
 .site-foot { @apply border-t border-neutral-200 py-6 text-sm text-neutral-500; }
 .site-foot-row { @apply flex flex-wrap items-center justify-between gap-4; }

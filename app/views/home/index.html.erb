@@ -118,7 +118,12 @@
     <div class="site-wrap">
       <h2 id="contact-heading">Ready to transform medical education?</h2>
       <p class="site-sub">Join thousands of healthcare professionals already using SkillRx to advance their medical knowledge. Have questions? We're here to help you get started.</p>
-      <a class="site-button-primary" href="mailto:contact@skillrx.org">Email contact@skillrx.org</a>
+      <%# The button says what it does, like the hero's; the address is plain text beside it, so it can
+          be read and copied: a mailto: link does nothing on a computer with no mail app set up. %>
+      <div class="site-contact-actions">
+        <a class="site-button-primary" href="mailto:contact@skillrx.org">Contact us</a>
+        <p class="site-contact-address">or email <span class="select-all">contact@skillrx.org</span></p>
+      </div>
     </div>
   </section>
 </main>
