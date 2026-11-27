@@ -43,7 +43,8 @@ Topics screen, with "Today" alongside.
 
 - **A: grouped rail.** Topics and Beacons at the top level with icons; Administration a collapsible
   group of seven indented items; account and sign-out pinned at the bottom. Needs a small Stimulus
-  controller. Polaris, GitHub repository settings, Linear; and Human Essentials.
+  controller. Polaris, GitHub repository settings, Linear; and Human Essentials, for the grouped
+  rail (see the correction below: not for the account).
 - **B: flat rail.** No icons, a static "Administration" heading, every link always visible. No
   JavaScript. Stripe settings, Vercel.
 - **C: top bar.** Administration as a menu. Full width for tables, but admin pages are a click
@@ -54,7 +55,14 @@ links, focus rings and primary buttons match the logo.
 
 ### Why this one
 
-Same shell as Human Essentials, so volunteers on both apps meet one layout. Keeps the admin pages
+Same rail as Human Essentials, so volunteers on both apps meet one layout.
+
+**Correction, 2026-11-27:** "same shell" was wrong about the account. Human Essentials has a top
+bar as well as the rail, and its account menu is the avatar at the top right of that bar; its
+rail's footer holds the organization's Settings link. SkillRx has no top bar, so its account sits
+at the bottom of the rail. Both follow the usual convention for their layout: top right with a top
+bar (GitHub, Google, Jira), bottom of the sidebar without one (Slack, Discord, VS Code). Don't copy
+SkillRx's account row into Human Essentials on the strength of this entry. Keeps the admin pages
 visible to administrators without a wall of links. Follows design.md's sidebar rules: icons on one
 level only, sentence-case group header because it's a button, account at the bottom.
 
