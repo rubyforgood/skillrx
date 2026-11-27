@@ -1,0 +1,269 @@
+<title>SkillRx account menu</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Figtree:wght@400;500;600;700;800&display=swap">
+<style>
+  /* Layout: a sticky chooser (Today / Recommended), then the desktop shell and the phone shell side by
+     side, each with the account menu open, then the three recommendations keyed to the numbered
+     markers. Single light look on purpose: it previews SkillRx, which is light only. Values are
+     SkillRx's tokens (rfg-theme.css): logo blue, slate neutrals, 8px control radius. */
+  :root {
+    --brand-50: #eef6fb; --brand-100: #d5e8f4; --brand-600: #055889; --brand-700: #044a72;
+    --n-50: #f8fafc; --n-100: #f1f5f9; --n-200: #e2e8f0; --n-300: #cbd5e1; --n-500: #64748b; --n-700: #334155; --n-900: #0f172a;
+    --mark: #e11d48;
+    --font: "Figtree", ui-sans-serif, system-ui, -apple-system, "Segoe UI", sans-serif;
+    --radius: 8px; color-scheme: light;
+  }
+  * { box-sizing: border-box; }
+  body { margin: 0; font-family: var(--font); color: var(--n-900); background: var(--n-100); font-size: 14px; }
+  .wrap { max-width: 1240px; margin: 0 auto; padding-block: 0 64px; padding-left: max(16px, env(safe-area-inset-left, 0px)); padding-right: max(16px, env(safe-area-inset-right, 0px)); }
+  button { font: inherit; color: inherit; }
+  :focus-visible { outline: 2px solid var(--brand-600); outline-offset: 2px; }
+
+  .chooser { position: sticky; top: env(safe-area-inset-top, 0px); z-index: 40; background: var(--n-900); color: #fff; margin: 0 calc(-1 * max(16px, env(safe-area-inset-left, 0px))) 24px; padding: 10px max(16px, env(safe-area-inset-left, 0px)); display: flex; flex-wrap: wrap; gap: 8px 16px; align-items: center; }
+  body::before { content: ""; position: fixed; inset: 0 0 auto; height: env(safe-area-inset-top, 0px); z-index: 30; background: var(--n-900); }
+  .chooser .grp { display: flex; flex-wrap: wrap; gap: 6px; align-items: center; }
+  .chooser b { font-weight: 600; margin-right: 4px; }
+  .chooser button { background: #374151; color: #fff; border: 0; border-radius: 6px; padding: 6px 10px; cursor: pointer; }
+  .chooser button[aria-pressed="true"] { background: #fff; color: var(--n-900); font-weight: 600; }
+  .chooser label { display: inline-flex; gap: 6px; align-items: center; cursor: pointer; }
+
+  h1.doc { font-size: 26px; margin: 8px 0 6px; text-wrap: balance; }
+  .lede { color: var(--n-700); max-width: 72ch; line-height: 1.55; margin: 0 0 20px; }
+
+  .stages { display: grid; grid-template-columns: minmax(0, 1fr) 390px; gap: 24px; align-items: start; }
+  @media (max-width: 1100px) { .stages { grid-template-columns: minmax(0, 1fr); } .phone-col { max-width: 390px; } }
+  .cap { font-size: 12px; font-weight: 700; letter-spacing: .06em; text-transform: uppercase; color: var(--n-500); margin: 0 0 8px; }
+
+  /* Mock app */
+  .app { background: var(--n-50); border: 1px solid var(--n-200); border-radius: 12px; overflow: hidden; box-shadow: 0 1px 3px rgb(15 23 42 / .08); }
+  .desk { display: grid; grid-template-columns: 256px minmax(0, 1fr); height: 600px; }
+  @media (max-width: 720px) { .desk-col { display: none; } }
+  .rail { background: #fff; border-right: 1px solid var(--n-200); display: flex; flex-direction: column; min-height: 0; position: relative; }
+  .logo { height: 64px; display: flex; align-items: center; padding: 0 20px; border-bottom: 1px solid var(--n-200); font-weight: 800; color: var(--brand-600); letter-spacing: .02em; font-size: 18px; }
+  .nav { padding: 14px 12px; display: flex; flex-direction: column; gap: 2px; font-size: 15px; flex: 1; }
+  .nav a { padding: 8px 10px; border-radius: var(--radius); color: var(--n-700); text-decoration: none; font-weight: 500; }
+  .nav a.cur { background: var(--brand-50); color: var(--brand-700); font-weight: 600; }
+  .nav .grp { padding: 8px 10px; font-weight: 500; color: var(--n-700); display: flex; justify-content: space-between; }
+  .nav .sub { padding-left: 24px; font-size: 14px; font-weight: 400; }
+
+  .content { padding: 28px 32px; display: flex; flex-direction: column; gap: 16px; min-width: 0; overflow: hidden; }
+  .content h2 { margin: 0; font-size: 24px; }
+  .rows { background: #fff; border: 1px solid var(--n-200); border-radius: 16px; }
+  .rows div { padding: 14px 16px; border-bottom: 1px solid var(--n-100); }
+  .rows div:last-child { border-bottom: 0; }
+  .rows strong { display: block; color: var(--brand-700); font-size: 15px; }
+  .rows span { color: var(--n-500); font-size: 13px; }
+
+  .avatar { width: 36px; height: 36px; border-radius: 999px; background: var(--brand-100); color: var(--brand-700); display: grid; place-items: center; font-weight: 700; font-size: 13px; flex: none; }
+  .who { min-width: 0; flex: 1; text-align: left; }
+  .who .email { font-weight: 600; font-size: 14px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+  .who .role { font-size: 13px; color: var(--n-500); }
+
+  /* Account strip, today: a row with a small ⋯ button */
+  .acct { height: 64px; border-top: 1px solid var(--n-200); display: flex; align-items: center; gap: 10px; padding: 0 16px; }
+  .kebab { width: 28px; height: 28px; border-radius: 6px; border: 0; background: transparent; display: grid; place-items: center; cursor: pointer; color: var(--n-700); flex: none; }
+  .kebab:hover, .kebab[aria-expanded="true"] { background: var(--n-100); }
+
+  /* Account strip, recommended: the whole row is the button */
+  .acct-btn { height: 64px; width: 100%; border: 0; border-top: 1px solid var(--n-200); background: #fff; display: flex; align-items: center; gap: 10px; padding: 0 12px 0 16px; cursor: pointer; text-align: left; }
+  .acct-btn:hover, .acct-btn[aria-expanded="true"] { background: var(--n-50); }
+  .acct-btn:focus-visible { outline-offset: -2px; }
+  .updown { width: 16px; height: 16px; color: var(--n-500); flex: none; }
+
+  /* Menu: rfg-menu with the 0.1.9 item look */
+  .menu { position: absolute; z-index: 5; background: #fff; border: 1px solid var(--n-200); border-radius: var(--radius); box-shadow: 0 20px 25px -5px rgb(15 23 42 / .1), 0 8px 10px -6px rgb(15 23 42 / .1); padding: 4px 0; min-width: 192px; }
+  .menu[hidden] { display: none; }
+  .menu [role="menuitem"] { display: block; width: 100%; padding: 8px 12px; border: 0; background: none; text-align: left; font-size: 14px; font-weight: 500; color: var(--n-700); cursor: pointer; text-decoration: none; }
+  .menu [role="menuitem"]:hover, .menu [role="menuitem"]:focus-visible { background: var(--n-100); color: var(--n-900); }
+  .menu [role="menuitem"]:focus-visible { outline: 2px solid var(--brand-600); outline-offset: -2px; }
+  .menu-head { padding: 8px 12px 10px; border-bottom: 1px solid var(--n-200); margin-bottom: 4px; }
+  .menu-head .email { font-weight: 600; font-size: 14px; overflow-wrap: anywhere; }
+  .menu-head .role { font-size: 13px; color: var(--n-500); }
+  .menu.today { left: 212px; bottom: 44px; }
+  .menu.rec { left: 8px; right: 8px; bottom: 70px; }
+
+  /* Phone */
+  .phone { height: 600px; display: flex; flex-direction: column; position: relative; }
+  .topbar { height: 56px; flex: none; display: flex; align-items: center; gap: 12px; padding: 0 12px; background: #fff; border-bottom: 1px solid var(--n-200); }
+  .icon-btn { width: 40px; height: 40px; border: 0; border-radius: var(--radius); background: transparent; display: grid; place-items: center; cursor: pointer; color: var(--n-700); flex: none; }
+  .icon-btn:hover { background: var(--n-100); }
+  .topbar .logo-s { font-weight: 800; color: var(--brand-600); letter-spacing: .02em; font-size: 16px; flex: 1; }
+  .avatar-btn { border: 0; background: transparent; padding: 2px; border-radius: 999px; cursor: pointer; flex: none; }
+  .avatar-btn[aria-expanded="true"] .avatar { box-shadow: 0 0 0 2px #fff, 0 0 0 4px var(--brand-600); }
+  .phone .content { padding: 20px 16px; }
+  .menu.phone-menu { right: 12px; top: 54px; width: 260px; }
+
+  /* Numbered markers: each matches a recommendation below */
+  .mk { position: absolute; z-index: 6; width: 22px; height: 22px; border-radius: 999px; background: var(--mark); color: #fff; font-size: 12px; font-weight: 700; display: grid; place-items: center; box-shadow: 0 0 0 2px #fff; pointer-events: none; }
+  .no-marks .mk { display: none; }
+  [data-view="today"] .rec-only, [data-view="rec"] .today-only { display: none !important; }
+
+  .recs { margin-top: 32px; display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 16px; }
+  @media (max-width: 900px) { .recs { grid-template-columns: minmax(0, 1fr); } }
+  .rec { background: #fff; border: 1px solid var(--n-200); border-radius: 12px; padding: 18px 18px 16px; display: flex; flex-direction: column; gap: 8px; }
+  .rec h3 { margin: 0; font-size: 16px; display: flex; gap: 10px; align-items: center; text-wrap: balance; }
+  .rec h3 .n { width: 22px; height: 22px; border-radius: 999px; background: var(--mark); color: #fff; font-size: 12px; display: grid; place-items: center; flex: none; }
+  .rec p { margin: 0; line-height: 1.55; color: var(--n-700); }
+  .rec .seen { font-size: 13px; color: var(--n-500); }
+
+  .why { margin-top: 28px; max-width: 76ch; line-height: 1.6; color: var(--n-700); }
+  .why h2 { font-size: 18px; color: var(--n-900); margin: 0 0 8px; }
+  .why p { margin: 0 0 12px; }
+</style>
+
+<div class="wrap" id="root" data-view="rec">
+  <div class="chooser" role="toolbar" aria-label="Preview options">
+    <div class="grp" role="group" aria-label="Version">
+      <b>Show</b>
+      <button type="button" data-set="today" aria-pressed="false">Today</button>
+      <button type="button" data-set="rec" aria-pressed="true">Recommended</button>
+    </div>
+    <label><input type="checkbox" id="marks" checked> Numbered markers</label>
+  </div>
+
+  <h1 class="doc">Account menu</h1>
+  <p class="lede">Where SkillRx shows who's signed in, and how they sign out. The account stays at the bottom of the rail, but the whole row opens the menu, the menu says whose account it is, and on a phone the avatar moves to the top bar. Both menus start open; click the account to close and reopen them.</p>
+
+  <div class="stages">
+    <section class="desk-col" aria-label="Desktop, 1280px">
+      <p class="cap">Desktop</p>
+      <div class="app desk">
+        <aside class="rail">
+          <div class="logo">SKILL RX</div>
+          <nav class="nav" aria-label="Main (preview)">
+            <a href="#" class="cur" onclick="return false">Topics</a>
+            <a href="#" onclick="return false">Beacons</a>
+            <div class="grp">Administration <span aria-hidden="true">⌄</span></div>
+            <a href="#" class="sub" onclick="return false">Providers</a>
+            <a href="#" class="sub" onclick="return false">Regions</a>
+            <a href="#" class="sub" onclick="return false">Languages</a>
+            <a href="#" class="sub" onclick="return false">Tags</a>
+            <a href="#" class="sub" onclick="return false">Users</a>
+            <a href="#" class="sub" onclick="return false">Import reports</a>
+            <a href="#" class="sub" onclick="return false">Jobs</a>
+          </nav>
+
+          <!-- Today: avatar, email, role, and a 28px ⋯ button that opens the menu -->
+          <div class="acct today-only">
+            <div class="avatar" aria-hidden="true">AD</div>
+            <div class="who"><div class="email">admin@mail.com</div><div class="role">Administrator</div></div>
+            <button class="kebab" type="button" aria-label="Account menu" aria-haspopup="menu" aria-expanded="true" aria-controls="m-today" data-menu="m-today">
+              <svg viewBox="0 0 24 24" width="18" height="18" fill="currentColor" aria-hidden="true"><circle cx="5" cy="12" r="1.8"/><circle cx="12" cy="12" r="1.8"/><circle cx="19" cy="12" r="1.8"/></svg>
+            </button>
+          </div>
+          <div class="menu today today-only" id="m-today" role="menu" aria-label="Account">
+            <button type="button" role="menuitem">Sign out</button>
+          </div>
+
+          <!-- Recommended: the whole row is the trigger; the menu names the account -->
+          <button class="acct-btn rec-only" type="button" aria-haspopup="menu" aria-expanded="true" aria-controls="m-rec" data-menu="m-rec">
+            <div class="avatar" aria-hidden="true">AD</div>
+            <div class="who"><div class="email">admin@mail.com</div><div class="role">Administrator</div></div>
+            <svg class="updown" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m7 15 5 5 5-5"/><path d="m7 9 5-5 5 5"/></svg>
+          </button>
+          <div class="menu rec rec-only" id="m-rec" role="menu" aria-label="Account">
+            <div class="menu-head" role="presentation">
+              <div class="email">admin@mail.com</div>
+              <div class="role">Administrator</div>
+            </div>
+            <button type="button" role="menuitem">Sign out</button>
+          </div>
+          <span class="mk rec-only" style="left: 230px; bottom: 21px;">1</span>
+          <span class="mk rec-only" style="left: 236px; bottom: 120px;">2</span>
+        </aside>
+
+        <main class="content">
+          <h2>Topics</h2>
+          <div class="rows">
+            <div><strong>Antenatal care visits</strong><span>Published Sep 6, 2026</span></div>
+            <div><strong>Diabetes in primary care</strong><span>Published Aug 26, 2026</span></div>
+            <div><strong>Hypertension follow-up</strong><span>Published Aug 15, 2026</span></div>
+            <div><strong>Postpartum hemorrhage</strong><span>Published Aug 4, 2026</span></div>
+            <div><strong>Hand hygiene for clinic staff</strong><span>Published Jul 21, 2026</span></div>
+          </div>
+        </main>
+      </div>
+    </section>
+
+    <section class="phone-col" aria-label="Phone, 390px">
+      <p class="cap">Phone</p>
+      <div class="app phone">
+        <div class="topbar">
+          <button class="icon-btn" type="button" aria-label="Open menu">
+            <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M4 7h16M4 12h16M4 17h16"/></svg>
+          </button>
+          <span class="logo-s">SKILL RX</span>
+          <button class="avatar-btn rec-only" type="button" aria-label="Account: admin@mail.com" aria-haspopup="menu" aria-expanded="true" aria-controls="m-phone" data-menu="m-phone">
+            <span class="avatar">AD</span>
+          </button>
+        </div>
+        <div class="menu phone-menu rec-only" id="m-phone" role="menu" aria-label="Account">
+          <div class="menu-head" role="presentation">
+            <div class="email">admin@mail.com</div>
+            <div class="role">Administrator</div>
+          </div>
+          <button type="button" role="menuitem">Sign out</button>
+        </div>
+        <span class="mk rec-only" style="right: 8px; top: 6px;">3</span>
+        <main class="content">
+          <h2 style="font-size: 22px;">Topics</h2>
+          <div class="rows">
+            <div><strong>Antenatal care visits</strong><span>Published Sep 6, 2026</span></div>
+            <div><strong>Diabetes in primary care</strong><span>Published Aug 26, 2026</span></div>
+            <div><strong>Hypertension follow-up</strong><span>Published Aug 15, 2026</span></div>
+            <div><strong>Postpartum hemorrhage</strong><span>Published Aug 4, 2026</span></div>
+          </div>
+          <p class="today-only" style="margin: 0; color: var(--n-500); font-size: 13px; line-height: 1.5;">Today the account is only in the menu behind ☰: open it, then use the ⋯ at the bottom.</p>
+        </main>
+      </div>
+    </section>
+  </div>
+
+  <div class="recs">
+    <article class="rec">
+      <h3><span class="n">1</span>The whole row opens the menu</h3>
+      <p>Click the avatar, email or role, not a 28px ⋯. The ⌃⌄ icon says "this opens a menu about you". ⋯ usually means "more actions for this item".</p>
+      <p class="seen">As in Slack, Discord, VS Code and most sidebar admin layouts.</p>
+    </article>
+    <article class="rec">
+      <h3><span class="n">2</span>The menu says whose account it is</h3>
+      <p>Email and role at the top, then Sign out. The menu is as wide as the rail and opens above the row, so it covers nothing on the page. Settings or Help would go above Sign out later.</p>
+      <p class="seen">As in GitHub, Google and Linear account menus.</p>
+    </article>
+    <article class="rec">
+      <h3><span class="n">3</span>On a phone, the avatar is top right</h3>
+      <p>The rail is hidden behind ☰ on a phone, so the account was two taps away. The avatar sits at the right of the top bar and opens the same menu.</p>
+      <p class="seen">Where mobile web and native apps put the account.</p>
+    </article>
+  </div>
+
+  <div class="why">
+    <h2>Why it stays at the bottom on desktop</h2>
+    <p>Apps with a top bar put the account at the top right (GitHub, Google, Jira). Apps with only a sidebar put it at the bottom of the sidebar (Slack, Discord, VS Code). SkillRx chose a sidebar with no top bar on 2026-11-24, the same shell as Human Essentials. Adding a bar just for the avatar would take height from every table and break that match.</p>
+    <p>Both menus use the design system's menu: 8px corners, 8px by 12px items, gray hover, and Escape to close.</p>
+  </div>
+</div>
+
+<script>
+  const root = document.getElementById("root");
+  document.querySelectorAll("[data-set]").forEach((b) => b.addEventListener("click", () => {
+    root.dataset.view = b.dataset.set;
+    document.querySelectorAll("[data-set]").forEach((x) => x.setAttribute("aria-pressed", String(x === b)));
+  }));
+  document.getElementById("marks").addEventListener("change", (e) => root.classList.toggle("no-marks", !e.target.checked));
+  document.querySelectorAll("[data-menu]").forEach((t) => t.addEventListener("click", () => {
+    const m = document.getElementById(t.dataset.menu);
+    const open = t.getAttribute("aria-expanded") !== "true";
+    t.setAttribute("aria-expanded", String(open));
+    m.hidden = !open;
+    if (open) m.querySelector('[role="menuitem"]').focus();
+  }));
+  document.addEventListener("keydown", (e) => {
+    if (e.key !== "Escape") return;
+    const m = e.target.closest?.('[role="menu"]');
+    if (!m) return;
+    const t = document.querySelector(`[data-menu="${m.id}"]`);
+    t.setAttribute("aria-expanded", "false"); m.hidden = true; t.focus();
+  });
+</script>
