@@ -34,13 +34,18 @@ class Topic < ApplicationRecord
 
   default_scope { where(shadow_copy: false) }
 
-  belongs_to :language
+  # Validations run in declaration order, which is the order of the error summary: keep it the
+  # form's order (title, provider, language, year and month). docs/design/design.md, "Error messages".
+  validates :title, presence: true
   belongs_to :provider
+  belongs_to :language
   has_many :beacon_topics, dependent: :destroy
   has_many :beacons, through: :beacon_topics
   has_many_attached :documents, dependent: :purge
 
-  validates :title, :language_id, :provider_id, :published_at, presence: true
+  # Language and provider are required by belongs_to (errors on :language and :provider); a second
+  # presence check on the ids listed each one twice. Messages: config/locales/en.yml.
+  validates :published_at, presence: true
   validates :documents, content_type: CONTENT_TYPES, size: { less_than: 200.megabytes }
 
   enum :state, STATES.map.with_index.to_h

@@ -10,7 +10,13 @@ module FormHelper
   def form_field(form, attribute, label:, required: false, optional: false, hint: nil, for_id: nil, &block)
     object = form.object
     input_id = for_id || [form.object_name.to_s.gsub(/\]\[|[^-a-zA-Z0-9:.]/, "_").sub(/_$/, ""), attribute].join("_")
-    errors = object.respond_to?(:errors) ? object.errors.full_messages_for(attribute) : []
+    # A select of ids (language_id) also shows its association's errors (belongs_to puts "required" on
+    # :language), so the message sits at the field and not only in the summary.
+    errors = if object.respond_to?(:errors)
+      [ attribute.to_s, attribute.to_s.delete_suffix("_id") ].uniq.flat_map { object.errors.full_messages_for(_1) }
+    else
+      []
+    end
     hint_id = "#{input_id}_hint" if hint
     error_id = "#{input_id}_error" if errors.any?
     described = [hint_id, error_id].compact.join(" ").presence

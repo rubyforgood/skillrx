@@ -15,15 +15,18 @@
 #  index_users_on_email  (email) UNIQUE
 #
 class User < ApplicationRecord
-  has_secure_password
   has_many :sessions, dependent: :destroy
   has_many :contributors
   has_many :providers, through: :contributors
 
   normalizes :email, with: ->(e) { e.strip.downcase }
 
-  validates :email, presence: true, uniqueness: true, format: URI::MailTo::EMAIL_REGEXP
-  validates :password_digest, presence: true
+  # A blank email gets one message, not "blank" and "invalid". The password's presence is checked by
+  # has_secure_password (on :password, where the form shows it); checking password_digest too listed
+  # "Password digest can't be blank" as well.
+  validates :email, presence: true, uniqueness: true, format: { with: URI::MailTo::EMAIL_REGEXP, allow_blank: true }
+  # After the email validation, so the error summary lists email then password, as the form does.
+  has_secure_password
   validate :provider_must_exist
 
   scope :search_with_params, ->(params) do
@@ -37,6 +40,6 @@ class User < ApplicationRecord
     return if providers.any?
     return if is_admin
 
-    errors.add(:base, "User must have at least one provider")
+    errors.add(:provider_ids, :none_chosen)
   end
 end

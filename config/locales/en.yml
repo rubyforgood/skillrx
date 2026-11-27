@@ -32,3 +32,94 @@ en:
     submit:
       create: "Create %{model}"
       update: "Update %{model}"
+  # Validation messages (docs/design/design.md, "Error messages"). Each one says what to do, in the
+  # words on the form: "Enter a title", not "Title can't be blank". Each is a whole sentence, so its
+  # format is "%{message}" (config.active_model.i18n_customize_full_message). It shows in the summary
+  # at the top of the form and under its field, so it has no full stop.
+  activerecord:
+    errors:
+      models:
+        topic:
+          attributes:
+            title:
+              format: "%{message}"
+              blank: "Enter a title"
+            language:
+              format: "%{message}"
+              required: "Choose a language"
+            provider:
+              format: "%{message}"
+              required: "Choose a provider"
+            published_at:
+              format: "%{message}"
+              blank: "Choose the year and month it was published"
+            documents:
+              format: "%{message}"
+              content_type_invalid:
+                one: "%{filename} can't be uploaded: upload a PDF, image or audio file"
+                other: "%{filename} can't be uploaded: upload a PDF, image or audio file"
+              content_type_spoofed:
+                one: "%{filename} can't be uploaded: its contents don't match its file type"
+                other: "%{filename} can't be uploaded: its contents don't match its file type"
+              file_size_not_less_than: "%{filename} is %{file_size}: upload a file smaller than %{max}"
+        beacon:
+          attributes:
+            name:
+              format: "%{message}"
+              blank: "Enter a name"
+            language:
+              format: "%{message}"
+              required: "Choose a language"
+            region:
+              format: "%{message}"
+              required: "Choose a region"
+        language:
+          attributes:
+            name:
+              format: "%{message}"
+              blank: "Enter a name"
+              taken: "There's already a language with this name"
+              too_short: "Enter a name of at least %{count} characters"
+        provider:
+          attributes:
+            name:
+              format: "%{message}"
+              blank: "Enter a name"
+              taken: "There's already a provider with this name"
+            provider_type:
+              format: "%{message}"
+              blank: "Enter a type"
+            file_name_prefix:
+              format: "%{message}"
+              locked: "The file name prefix can't be changed: this provider's topics already use it in their file names"
+        region:
+          attributes:
+            name:
+              format: "%{message}"
+              blank: "Enter a name"
+        tag:
+          attributes:
+            name:
+              format: "%{message}"
+              blank: "Enter a name"
+              taken: "There's already a tag with this name"
+        tag_cognate:
+          own_cognate: "A tag can't be its own cognate"
+          already_cognates: "These tags are already cognates"
+        user:
+          attributes:
+            email:
+              format: "%{message}"
+              blank: "Enter an email address"
+              invalid: "Enter an email address in the right format, like name@example.com"
+              taken: "There's already a user with this email address"
+            password:
+              format: "%{message}"
+              blank: "Enter a password"
+              password_too_long: "Enter a password of 72 characters or fewer"
+            password_confirmation:
+              format: "%{message}"
+              confirmation: "The passwords don't match: enter the same password in both fields"
+            provider_ids:
+              format: "%{message}"
+              none_chosen: "Choose at least one provider, or make them an administrator"

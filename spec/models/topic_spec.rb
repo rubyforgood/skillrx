@@ -31,8 +31,11 @@ RSpec.describe Topic, type: :model do
 
   context "validations" do
     it { is_expected.to validate_presence_of(:title) }
-    it { is_expected.to validate_presence_of(:language_id) }
-    it { is_expected.to validate_presence_of(:provider_id) }
+    it "asks for a language and a provider once each" do
+      topic = described_class.new(title: "A", published_at: Time.current)
+      topic.valid?
+      expect(topic.errors.full_messages).to contain_exactly("Choose a language", "Choose a provider")
+    end
   end
 
   context "associations" do

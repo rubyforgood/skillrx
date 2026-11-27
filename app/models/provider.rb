@@ -37,10 +37,7 @@ class Provider < ApplicationRecord
 
   def file_name_prefix_may_be_changed
     if topics?
-      errors.add(
-        :file_name_prefix,
-        "can't be changed as provider has associated topics and so file names are established"
-      )
+      errors.add(:file_name_prefix, :locked)
     end
   end
 end

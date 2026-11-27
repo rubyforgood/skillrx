@@ -24,6 +24,10 @@ module Skillrx
     # config.time_zone = "Central Time (US & Canada)"
     config.eager_load_paths << Rails.root.join("lib/autorequire")
 
+    # Validation messages are whole sentences ("Enter a title"), set per attribute in
+    # config/locales/en.yml with format "%{message}". docs/design/design.md, "Error messages".
+    config.active_model.i18n_customize_full_message = true
+
     config.mission_control.jobs.http_basic_auth_enabled = false
   end
 end

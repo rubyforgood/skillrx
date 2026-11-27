@@ -27,7 +27,9 @@
     <%# Existing providers only: allow-new was true, which let someone type a name that was then
         submitted as a provider id and failed. %>
     <div data-controller="select-tags">
-      <%= form_field form, :provider_ids, label: "Providers", optional: true, hint: "They can see and edit topics from these providers." do %>
+      <%# Required for a contributor only, so it's said in the hint, not marked (design system design.md,
+          "Forms": a conditional requirement is stated in words). %>
+      <%= form_field form, :provider_ids, label: "Providers", hint: "They can see and edit topics from these providers. Required unless they're an administrator." do %>
         <%= form.select :provider_ids, options_from_collection_for_select(Provider.order(:name), :id, :name, user.providers.ids),
               { include_blank: false }, multiple: true, placeholder: "Choose providers",
               data: { "allow-new": "false", "allow-clear": "true", "select-tags-target": "tagList" } %>

@@ -125,7 +125,9 @@ RSpec.describe "/users", type: :request do
         patch user_url(user), params: { user: invalid_attributes }
 
         expect(response).to have_http_status(:unprocessable_content)
-        expect(page).to have_text("Email can't be blank")
+        expect(page).to have_text("Enter an email address")
+        expect(page).not_to have_text("right format")
+        expect(page).not_to have_text("can't be blank")
       end
     end
   end

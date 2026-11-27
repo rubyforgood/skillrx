@@ -33,7 +33,7 @@ RSpec.describe "Creating a Topic", type: :system do
       context "when failed" do
         it "renders the form with errors" do
           click_button("Save topic")
-          expect(page).to have_text("Title can't be blank")
+          expect(page).to have_text("Enter a title")
         end
       end
     end
@@ -59,7 +59,7 @@ RSpec.describe "Creating a Topic", type: :system do
       context "when failed" do
         it "renders the form with errors" do
           click_button("Save topic")
-          expect(page).to have_text("Title can't be blank")
+          expect(page).to have_text("Enter a title")
         end
       end
     end

@@ -454,6 +454,58 @@ uneven padding between beacons and admin."
   that fails at 12px), not yet released; until it is, `sm:mr-1` on the Provider field adds the 4px
   in SkillRx. Remove it on upgrade.
 
+## 2026-11-27: Validation messages say what to do
+
+**Asked:** "Title can't be blank -- this validation error copy does not sound right, does it match
+with the design system? check all validation errors and their copy and make a recommendation/changes
+based on industry std."
+
+**Before:** Rails' default messages, built as attribute + fault: "Title can't be blank", "Language
+must exist", "Name has already been taken", "Email is invalid". Some fields got two at once: a blank
+topic listed six problems for four fields ("Language must exist" and "Language can't be blank"); a
+blank email was "can't be blank" and "is invalid"; a new user also got "Password digest can't be
+blank", a column name. A contributor with no provider got "User must have at least one provider" in
+the summary only, under a field marked optional.
+
+**Does it match the design system?** The design system sets where errors go (summary at the top,
+each message at its field, `aria-invalid` and `aria-describedby`), and SkillRx did that. It said
+nothing about the wording, so Rails' defaults shipped. Its rule is now proposed there too.
+
+**Decision:** the industry standard, GOV.UK's error message guidance (also used by the US Web
+Design System): tell people what to do, in the words on the form. Every message SkillRx can show was
+listed by validating each model empty and with bad values, and each was rewritten (`en.yml`):
+
+| Was | Now |
+| --- | --- |
+| Title can't be blank | Enter a title |
+| Language must exist + Language can't be blank | Choose a language |
+| Provider must exist + Provider can't be blank | Choose a provider |
+| Published at can't be blank | Choose the year and month it was published |
+| Name can't be blank (every model) | Enter a name |
+| Name is too short (minimum is 2 characters) | Enter a name of at least 2 characters |
+| Name has already been taken | There's already a language (provider, tag) with this name |
+| Provider type can't be blank | Enter a type |
+| Region must exist | Choose a region |
+| Email can't be blank + Email is invalid | Enter an email address |
+| Email is invalid | Enter an email address in the right format, like name@example.com |
+| Email has already been taken | There's already a user with this email address |
+| Password can't be blank + Password digest can't be blank | Enter a password |
+| Password is too long | Enter a password of 72 characters or fewer |
+| User must have at least one provider | Choose at least one provider, or make them an administrator |
+| File name prefix can't be changed as provider has associated topics and so file names are established | The file name prefix can't be changed: this provider's topics already use it in their file names |
+| (file) has an invalid content type (authorized content types are …) | (file) can't be uploaded: upload a PDF, image or audio file |
+| file size must be less than 200 MB (current size is …) | (file) is … : upload a file smaller than 200 MB |
+| Passwords did not match. (password reset) | The passwords don't match. Enter the same password in both fields. |
+| Tag can't be its own cognate | A tag can't be its own cognate |
+| This cognate relationship already exists in reverse | These tags are already cognates |
+
+Also: the summary lists problems in the form's order; "Choose a language" shows under Language
+(`form_field` reads the association's errors for an `_id` field); Providers on the user form drops
+"(optional)" and says "Required unless they're an administrator."
+
+**Not changed:** the summary heading ("Fix this problem to save the topic") already follows the
+pattern. The API's `status is invalid` (beacon sync) is for machines, not people.
+
 ## 2026-11-26: Jobs in the design system
 
 **Asked:** "migrate the job page to the design system. It looks completely different at the moment."

@@ -34,7 +34,7 @@ RSpec.describe Provider, type: :model do
           provider.file_name_prefix = "updated_prefix"
           expect(provider).not_to be_valid
           expect(provider.errors[:file_name_prefix]).to match_array(
-            "can't be changed as provider has associated topics and so file names are established"
+            "The file name prefix can't be changed: this provider's topics already use it in their file names"
           )
         end
       end

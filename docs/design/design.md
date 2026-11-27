@@ -261,6 +261,24 @@ The rule for every table (decided 2026-11-25, see decisions.md):
   then Cancel.
 - **Errors:** `shared/_errors`, at the top of the form, `role="alert"`: "Fix these 2 problems to save
   the topic" and the list; each field shows its own message too.
+- <a id="error-messages"></a>**Error messages** (`config/locales/en.yml`) say what to do, in the
+  form's own words, as GOV.UK and the US Web Design System advise: "Enter a title", not Rails'
+  "Title can't be blank". The rules:
+  - **An instruction, not a fault.** "Enter …" for a text field, "Choose …" for a select (the
+    app's word, as in "Choose a provider"). For a wrong value, say what a right one looks like:
+    "Enter an email address in the right format, like name@example.com".
+  - **One message per problem.** A blank field gets "Enter …" only, not "blank" and "invalid" too
+    (`allow_blank` on the format and length checks), and a required association is checked once
+    (`belongs_to`, not also a presence check on its id).
+  - **The same text in the summary and under the field**, so it's a whole sentence: each
+    attribute's `format` is `"%{message}"` (`i18n_customize_full_message`). No full stop.
+  - **In the form's order.** Validations run, and the summary lists them, in declaration order, so
+    `Topic` and `User` declare them in the order of their fields.
+  - **A select of ids shows its association's error** (`form_field` reads `:language` for
+    `:language_id`), so "Choose a language" sits under Language, not only in the summary.
+  - **A conditional requirement is said in the hint**, not marked: Providers on the user form is
+    "Required unless they're an administrator."
+  - **US English, sentence case, contractions** ("can't", "don't"), as in the rest of the app.
 - **Messages after an action** (`shared/_flash`): `<rfg-callout>` at the top of the page, success or
   danger.
 - **Record pages:** page header with the actions (primary Edit first, then secondary, then a quiet

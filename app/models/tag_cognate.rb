@@ -31,12 +31,12 @@ class TagCognate < ApplicationRecord
   private
 
   def no_self_reference
-    errors.add(:base, "Tag can't be its own cognate") if tag_id == cognate_id
+    errors.add(:base, :own_cognate) if tag_id == cognate_id
   end
 
   def no_similar_reverse_tag_cognate
     if TagCognate.where(tag_id: cognate_id, cognate_id: tag_id).exists?
-      errors.add(:base, "This cognate relationship already exists in reverse")
+      errors.add(:base, :already_cognates)
     end
   end
 end
